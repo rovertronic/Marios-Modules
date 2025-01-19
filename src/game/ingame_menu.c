@@ -26,6 +26,7 @@
 #include "config.h"
 #include "puppycam2.h"
 #include "main.h"
+#include "module.h"
 
 #ifdef VERSION_EU
 #undef LANGUAGE_FUNCTION
@@ -2226,6 +2227,10 @@ s32 render_menus_and_dialogs(void) {
 
         render_dialog_entries();
         gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;
+    }
+
+    if (gModuleMenuOpen) {
+        print_module_menu();
     }
 
     return mode;

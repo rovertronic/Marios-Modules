@@ -32,6 +32,7 @@
 #include "puppyprint.h"
 #include "level_commands.h"
 #include "debug.h"
+#include "module.h"
 
 #include "config.h"
 
@@ -1020,6 +1021,8 @@ s32 play_mode_normal(void) {
     warp_area();
     check_instant_warp();
 
+    module_update();
+
 #ifdef PUPPYPRINT_DEBUG
 #ifdef BETTER_REVERB
     if (sPPDebugPage != PUPPYPRINT_PAGE_RAM && sPPDebugPage != PUPPYPRINT_PAGE_LEVEL_SELECT && sPPDebugPage != PUPPYPRINT_PAGE_BETTER_REVERB) {
@@ -1063,12 +1066,15 @@ s32 play_mode_normal(void) {
         } else if (sTransitionTimer != 0) {
             set_play_mode(PLAY_MODE_CHANGE_AREA);
         } else if (pressed_pause()) {
+            /*
             lower_background_noise(1);
 #if ENABLE_RUMBLE
             cancel_rumble();
 #endif
             gCameraMovementFlags |= CAM_MOVE_PAUSE_SCREEN;
             set_play_mode(PLAY_MODE_PAUSED);
+            */
+            gModuleMenuOpen = !gModuleMenuOpen;
         }
     }
     
@@ -1236,6 +1242,7 @@ s32 init_level(void) {
 #endif
 
     set_play_mode(PLAY_MODE_NORMAL);
+    init_module_inventory();
 
     sDelayedWarpOp = WARP_OP_NONE;
     sTransitionTimer = 0;
