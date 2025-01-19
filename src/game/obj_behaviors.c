@@ -32,6 +32,7 @@
 #include "spawn_object.h"
 #include "spawn_sound.h"
 #include "rumble_init.h"
+#include "module.h"
 
 /**
  * @file obj_behaviors.c
@@ -774,3 +775,16 @@ UNUSED s32 debug_sequence_tracker(s16 debugInputSequence[]) {
 #include "behaviors/treasure_chest.inc.c"
 #include "behaviors/mips.inc.c"
 #include "behaviors/yoshi.inc.c"
+
+void bhv_chest(void) {
+    switch(o->oAction) {
+        case 0:
+            o->header.gfx.animInfo.animFrame = 0;
+            if (o->oInteractStatus & INT_STATUS_INTERACTED) {
+                play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);
+                o->oAction = 1;
+                add_inventory(o->oBehParams2ndByte);
+            }
+            break;
+    }
+}

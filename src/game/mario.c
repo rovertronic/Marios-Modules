@@ -32,6 +32,7 @@
 #include "save_file.h"
 #include "sound_init.h"
 #include "rumble_init.h"
+#include "module.h"
 
 
 /**************************************************
@@ -1255,6 +1256,10 @@ void update_mario_joystick_inputs(struct MarioState *m) {
         m->intendedMag = mag / 8.0f;
     }
 
+    if (gModuleMenuOpen) {
+        m->intendedMag = 0.0f;
+    }
+
     if (m->intendedMag > 0.0f) {
         m->intendedYaw = atan2s(-controller->stickY, controller->stickX) + m->area->camera->yaw;
         m->input |= INPUT_NONZERO_ANALOG;
@@ -1338,7 +1343,7 @@ void update_mario_inputs(struct MarioState *m) {
     }
 #endif
 
-    update_mario_button_inputs(m);
+    //update_mario_button_inputs(m);
     update_mario_joystick_inputs(m);
     update_mario_geometry_inputs(m);
 #ifdef VANILLA_DEBUG

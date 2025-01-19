@@ -14,6 +14,7 @@
 #include "memory.h"
 #include "behavior_data.h"
 #include "rumble_init.h"
+#include "module.h"
 
 #include "config.h"
 
@@ -1966,6 +1967,8 @@ s32 check_common_moving_cancels(struct MarioState *m) {
 
 s32 mario_execute_moving_action(struct MarioState *m) {
     s32 cancel = FALSE;
+
+    handle_module_inputs();
 
     if (check_common_moving_cancels(m)) {
         return TRUE;

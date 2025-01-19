@@ -32,3 +32,6 @@
 #endif
 
 #include "micons/model.inc.c"
+#include "chest/model.inc.c"
+#include "chest/anims/data.inc.c"
+#include "chest/anims/table.inc.c"

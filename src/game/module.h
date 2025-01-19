@@ -10,6 +10,7 @@ struct module_execution_thread {
     u8 x;
     u8 y;
     u8 timer;
+    u8 spd;
 
     u8 executing:1;
     u8 halted:1;
@@ -26,7 +27,12 @@ struct module_info {
     void * tex;
     char * desc;
     char * mod_desc;
-    void (*func)(struct module_execution_thread * met);
+    void (*func)(struct module_execution_thread * met, u8 call_context);
+};
+
+enum module_call_context {
+    MCC_INVOKE,
+    MCC_HALTED,
 };
 
 struct module_type_info {
@@ -49,8 +55,13 @@ enum module_id {
     MOD_POW,
     MOD_HIT_GROUND,
     MOD_HIT_WALL,
+    MOD_TIMER,
+    MOD_ATTACK,
+    MOD_INPUT,
+    MOD_SPD,
 };
 
+void add_inventory(s8 module);
 void module_update(void);
 void print_module_menu(void);
 void init_module_inventory(void);

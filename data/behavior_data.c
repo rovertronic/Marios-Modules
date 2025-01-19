@@ -6074,4 +6074,18 @@ const BehaviorScript bhvIntroScene[] = {
     END_LOOP(),
 };
 
-
+extern void bhv_chest(void);
+const BehaviorScript bhvChest[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    LOAD_ANIMATIONS(oAnimations, chest_anims),
+    ANIMATE(0),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    SET_INTERACT_TYPE(INTERACT_IGLOO_BARRIER),
+    SET_HITBOX(/*Radius*/ 100, /*Height*/ 200),
+    SET_INT(oIntangibleTimer, 0),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_chest),
+        SET_INT(oInteractStatus, INT_STATUS_NONE),
+    END_LOOP(),
+};

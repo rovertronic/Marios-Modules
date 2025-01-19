@@ -14,7 +14,7 @@ u8 gModuleMenuOpen = FALSE;
 
 struct module_execution_thread module_execution_threads[MODULE_EXEC_COUNT];
 
-void module_jump(struct module_execution_thread * met) {
+void module_jump(struct module_execution_thread * met, u8 call_context) {
     switch(met->mod) {
         case 0:
             set_mario_action(gMarioState, ACT_JUMP, 0);
@@ -27,19 +27,111 @@ void module_jump(struct module_execution_thread * met) {
             break;
     }
     met->mod = 0;
+
+    gMarioState->forwardVel += 10.0f*met->spd;
+    met->spd = 0;
+
+    met->x++;
 }
 
-void module_pow(struct module_execution_thread * met) {
+void module_attack(struct module_execution_thread * met, u8 call_context) {
+    if ((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY) {
+        set_mario_action(gMarioState, ACT_PUNCHING, 0);
+    }
+    if ((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING) {
+        set_mario_action(gMarioState, ACT_MOVE_PUNCHING, 0);
+    }
+    if ((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_AIRBORNE) {
+        set_mario_action(gMarioState, ACT_JUMP_KICK, 0);
+    }
+    gMarioState->forwardVel += 10.0f*met->spd;
+    met->spd = 0;
+
+    met->x++;
+}
+
+void module_pow(struct module_execution_thread * met, u8 call_context) {
     met->mod++;
+    met->x++;
+}
+
+void module_spd(struct module_execution_thread * met, u8 call_context) {
+    met->spd++;
+    met->x++;
+}
+
+void module_floor(struct module_execution_thread * met, u8 call_context) {
+    switch(call_context) {
+        case MCC_INVOKE:
+            met->halted = TRUE;
+            break;
+        case MCC_HALTED:
+            if (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING)) {
+                met->halted = FALSE;
+                met->x++;
+                break;
+            }
+            break;
+    }
+}
+
+void module_wall(struct module_execution_thread * met, u8 call_context) {
+    switch(call_context) {
+        case MCC_INVOKE:
+            met->halted = TRUE;
+            break;
+        case MCC_HALTED:
+            if (gMarioState->action == ACT_AIR_HIT_WALL) {
+                met->halted = FALSE;
+                met->x++;
+                break;
+            }
+            if (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING)) {
+                met->executing = FALSE;
+                //premature exit due to unmet condition
+                break;
+            }
+            break;
+    }
+}
+
+void module_timer(struct module_execution_thread * met, u8 call_context) {
+    switch(call_context) {
+        case MCC_INVOKE:
+            met->halted = TRUE;
+            met->timer = 0;
+            break;
+        case MCC_HALTED:
+            if (met->timer >= 15 + (10*met->mod)) {
+                met->halted = FALSE;
+                met->x++;
+                met->mod = 0;
+                break;
+            }
+            break;
+    }
+}
+
+void module_input(struct module_execution_thread * met, u8 call_context) {
+    if (gPlayer1Controller->buttonDown & A_BUTTON) {
+        met->x++;
+    } else {
+        met->halted = TRUE;
+        met->executing = FALSE;
+    }
 }
 
 struct module_info module_infos[] = {
     [MOD_BUTTON_A] = {MTYPE_INPUT,micons_abtn_rgba16,NULL,NULL,NULL},
     [MOD_BUTTON_B] = {MTYPE_INPUT,micons_bbtn_rgba16,NULL,NULL,NULL},
-    [MOD_JUMP] = {MTYPE_MOVE,micons_jump_rgba16,"Makes Mario jump.","Increases jump tier, caps at 3.",module_jump},
+    [MOD_JUMP] = {MTYPE_MOVE,micons_jump_rgba16,"Makes Mario jump.","Increases jump tier per MOD.",module_jump},
     [MOD_POW] = {MTYPE_BUFF,micons_onepow_rgba16,"Adds 1 to the MOD of the next piece.",NULL,module_pow},
-    [MOD_HIT_GROUND] = {MTYPE_COND,micons_ground_rgba16,"Continues when Mario touches the ground.",NULL,NULL},
-    [MOD_HIT_WALL] = {MTYPE_COND,micons_wall_rgba16,"Continues when Mario hits a wall.",NULL,NULL},
+    [MOD_HIT_GROUND] = {MTYPE_COND,micons_ground_rgba16,"Continues when Mario touches the ground.",NULL,module_floor},
+    [MOD_HIT_WALL] = {MTYPE_COND,micons_wall_rgba16,"Continues when Mario hits a wall.",NULL,module_wall},
+    [MOD_TIMER] = {MTYPE_COND,micons_clock_rgba16,"Continues after half a second.","Adds 1/3 a second per MOD.",module_timer},
+    [MOD_ATTACK] = {MTYPE_MOVE,micons_pow_rgba16,"Makes Mario attack.",NULL,module_attack},
+    [MOD_INPUT] = {MTYPE_COND,micons_abtn_rgba16,"Continues if button held, otherwise cancels.","Inverts this condition.",module_input},
+    [MOD_SPD] = {MTYPE_BUFF,micons_spd_rgba16,"Adds speed to next action block.",NULL,module_spd}
 };
 
 struct module_type_info module_type_infos[] = {
@@ -71,6 +163,17 @@ s8 get_inventory(int x, int y) {
     return inventory[y][x];
 }
 
+void add_inventory(s8 module) {
+    for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
+        for (int y = 2; y<INVENTORY_SLOTS_Y; y++) {
+            if (inventory[y][x] == MOD_EMPTY) {
+                inventory[y][x] = module;
+                return;
+            }
+        }
+    }
+}
+
 void init_module_inventory(void) {
     for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
         for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
@@ -83,6 +186,11 @@ void init_module_inventory(void) {
     inventory[2][3] = MOD_POW;
     inventory[2][4] = MOD_HIT_GROUND;
     inventory[2][5] = MOD_HIT_WALL;
+    inventory[2][6] = MOD_TIMER;
+    inventory[2][7] = MOD_ATTACK;
+    inventory[3][0] = MOD_INPUT;
+    inventory[3][1] = MOD_SPD;
+    inventory[3][2] = MOD_SPD;
 
     module_execution_threads[MODULE_EXEC_A].executing = FALSE;
     module_execution_threads[MODULE_EXEC_B].executing = FALSE;
@@ -90,49 +198,60 @@ void init_module_inventory(void) {
 
 void module_update(void) {
     for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
-        struct module_execution_thread * met = module_execution_threads[i];
+        struct module_execution_thread * met = &module_execution_threads[i];
         if (met->executing) {
             s8 read_mod = get_inventory(met->x,met->y);
-            if (!met->healted) {
+            if (!met->halted) {
                 while(read_mod != MOD_EMPTY) {
-                    module_infos[read_mod].func(met);
-                    met->x++;
+                    module_infos[read_mod].func(met,MCC_INVOKE);
                     read_mod = get_inventory(met->x,met->y);
+                    if (met->halted) {
+                        return;
+                    }
                 }
+                met->executing = FALSE;
             } else {
-                module_infos[read_mod].func(met);
+                module_infos[read_mod].func(met,MCC_HALTED);
+                met->timer++;
             }
         }
     }
 }
 
 void execute_module_in_inventory(struct module_execution_thread * met, int x, int y) {
-    met->mod = 0;
-    met->x = x;
-    met->y = y;
-    met->executing = TRUE;
-    met->halted = FALSE;
+    if (!met->executing) {
+        met->mod = 0;
+        met->spd = 0;
+        met->x = x;
+        met->y = y;
+        met->timer = 0;
+        met->executing = TRUE;
+        met->halted = FALSE;
+    }
 }
 
 s32 handle_module_inputs(void) {
     if (!gModuleMenuOpen) {
         if (gPlayer1Controller->buttonPressed & A_BUTTON) {
             execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_A],0,0);
-            return TRUE;
         }
         if (gPlayer1Controller->buttonPressed & B_BUTTON) {
             execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_B],0,1);
-            return TRUE;
         }
     }
     return FALSE;
 }
 
 void control_module_menu(void) {
-    if (gPlayer1Controller->buttonPressed & U_JPAD) {
-        inventory_y --;
+    for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
+        struct module_execution_thread * met = &module_execution_threads[i];
+        if (met->executing) {
+            //no editing while running
+            return;
+        }
     }
-    else if (gPlayer1Controller->buttonPressed & L_JPAD) {
+
+    if (gPlayer1Controller->buttonPressed & L_JPAD) {
         inventory_x --;
     }
     else if (gPlayer1Controller->buttonPressed & R_JPAD) {
@@ -140,6 +259,8 @@ void control_module_menu(void) {
     }
     else if (gPlayer1Controller->buttonPressed & D_JPAD) {
         inventory_y ++;
+    } else if (gPlayer1Controller->buttonPressed & U_JPAD) {
+        inventory_y --;
     }
 
     inventory_x = (INVENTORY_SLOTS_X+inventory_x)%INVENTORY_SLOTS_X;

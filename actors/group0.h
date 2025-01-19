@@ -333,4 +333,8 @@ extern const Gfx white_particle_small_unused_dl[];
 
 #include "micons/header.h"
 
+#include "chest/geo_header.h"
+
+
+#include "chest/anim_header.h"
 #endif

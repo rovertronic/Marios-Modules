@@ -16,6 +16,7 @@
 #include "sound_init.h"
 #include "surface_terrains.h"
 #include "rumble_init.h"
+#include "module.h"
 
 s32 check_common_idle_cancels(struct MarioState *m) {
     mario_drop_held_object(m);
@@ -1082,6 +1083,8 @@ s32 check_common_stationary_cancels(struct MarioState *m) {
 
 s32 mario_execute_stationary_action(struct MarioState *m) {
     s32 cancel;
+
+    handle_module_inputs();
 
     if (check_common_stationary_cancels(m)) {
         return TRUE;
