@@ -18,3 +18,4 @@
 #include "mario/geo.inc.c"
 
 #include "chest/geo.inc.c"
+#include "hover/geo.inc.c"

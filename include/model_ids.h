@@ -574,7 +574,7 @@
 
 enum new_models {
     MODEL_CHEST = 0xFF,
-    
+    MODEL_HOVER,
 };
 
 #endif // MODEL_IDS_H

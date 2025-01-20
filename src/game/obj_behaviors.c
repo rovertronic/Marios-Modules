@@ -788,3 +788,23 @@ void bhv_chest(void) {
             break;
     }
 }
+
+void bhv_hover(void) {
+    o->oPosX = gMarioState->pos[0];
+    o->oPosZ = gMarioState->pos[2];
+    
+    if (o->oAction == 0) {
+        if (o->oOpacity < 250) {
+            o->oOpacity = approach_f32_asymptotic(o->oOpacity,255,0.3f);
+        } else {
+            o->oAction = 1;
+        }
+    } else {
+        if (o->oTimer >= 30 + (o->oBehParams2ndByte * 15)) {
+            o->oOpacity *= .7f;
+            if (o->oOpacity < 5) {
+                obj_mark_for_deletion(o);
+            }
+        }
+    }
+}

@@ -1994,6 +1994,8 @@ s32 check_common_airborne_cancels(struct MarioState *m) {
 s32 mario_execute_airborne_action(struct MarioState *m) {
     u32 cancel = FALSE;
 
+    handle_module_inputs();
+
     if (check_common_airborne_cancels(m)) {
         return TRUE;
     }

@@ -6089,3 +6089,15 @@ const BehaviorScript bhvChest[] = {
         SET_INT(oInteractStatus, INT_STATUS_NONE),
     END_LOOP(),
 };
+
+extern void bhv_hover(void);
+const BehaviorScript bhvHover[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT)),
+    LOAD_COLLISION_DATA(cannon_lid_seg8_collision_08004950),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_hover),
+        CALL_NATIVE(load_object_collision_model),
+    END_LOOP(),
+};

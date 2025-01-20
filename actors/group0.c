@@ -35,3 +35,4 @@
 #include "chest/model.inc.c"
 #include "chest/anims/data.inc.c"
 #include "chest/anims/table.inc.c"
+#include "hover/model.inc.c"

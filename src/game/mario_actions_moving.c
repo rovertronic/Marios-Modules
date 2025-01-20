@@ -798,7 +798,7 @@ s32 act_walking(struct MarioState *m) {
     m->actionState = ACT_STATE_WALKING_NO_WALL;
 
     vec3f_copy(startPos, m->pos);
-    update_walking_speed(m);
+update_walking_speed(m);
 
     switch (perform_ground_step(m)) {
         case GROUND_STEP_LEFT_GROUND:
@@ -1771,7 +1771,7 @@ s32 common_landing_cancels(struct MarioState *m, struct LandingAction *landingAc
     }
 
     if (m->input & INPUT_A_PRESSED) {
-        return setAPressAction(m, landingAction->aPressedAction, 0);
+        return set_jump_from_landing(m);//setAPressAction(m, landingAction->aPressedAction, 0);
     }
 
     if (m->input & INPUT_OFF_FLOOR) {

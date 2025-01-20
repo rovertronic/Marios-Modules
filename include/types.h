@@ -388,6 +388,7 @@ struct MarioState {
     /*0x08*/ u32 particleFlags;
     /*0x0C*/ u32 action;
     /*0x10*/ u32 prevAction;
+             u32 actionMod;
     /*0x14*/ u32 terrainSoundAddend;
     /*0x18*/ u16 actionState;
     /*0x1A*/ u16 actionTimer;

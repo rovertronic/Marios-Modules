@@ -29,7 +29,7 @@ s32 check_common_idle_cancels(struct MarioState *m) {
     }
 
     if (m->input & INPUT_A_PRESSED) {
-        return set_jumping_action(m, ACT_JUMP, 0);
+        return set_jump_from_landing(m);
     }
 
     if (m->input & INPUT_OFF_FLOOR) {
@@ -811,6 +811,8 @@ s32 landing_step(struct MarioState *m, s32 animID, u32 action) {
 }
 
 s32 check_common_landing_cancels(struct MarioState *m, u32 action) {
+    u32 carry_action_mod = m->actionMod;
+
     if (m->input & INPUT_STOMPED) {
         return set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     }

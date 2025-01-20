@@ -9,23 +9,27 @@
 #include "audio/external.h"
 #include "engine/math_util.h"
 #include "mario.h"
+#include "behavior_data.h"
 
 u8 gModuleMenuOpen = FALSE;
 
 struct module_execution_thread module_execution_threads[MODULE_EXEC_COUNT];
 
 void module_jump(struct module_execution_thread * met, u8 call_context) {
-    switch(met->mod) {
+    gMarioState->input |= INPUT_A_PRESSED;
+    
+    met->jump_tier = (met->jump_tier+met->mod)%3;
+    switch(met->jump_tier) {
         case 0:
-            set_mario_action(gMarioState, ACT_JUMP, 0);
             break;
         case 1:
-            set_mario_action(gMarioState, ACT_DOUBLE_JUMP, 0);
+            gMarioState->actionMod = ACT_DOUBLE_JUMP;
             break;
         default:
-            set_mario_action(gMarioState, ACT_TRIPLE_JUMP, 0);
+            gMarioState->actionMod = ACT_TRIPLE_JUMP;
             break;
     }
+    met->jump_tier = (met->jump_tier+1)%3;
     met->mod = 0;
 
     gMarioState->forwardVel += 10.0f*met->spd;
@@ -35,15 +39,9 @@ void module_jump(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_attack(struct module_execution_thread * met, u8 call_context) {
-    if ((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY) {
-        set_mario_action(gMarioState, ACT_PUNCHING, 0);
-    }
-    if ((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING) {
-        set_mario_action(gMarioState, ACT_MOVE_PUNCHING, 0);
-    }
-    if ((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_AIRBORNE) {
-        set_mario_action(gMarioState, ACT_JUMP_KICK, 0);
-    }
+
+    gMarioState->input |= INPUT_B_PRESSED;
+
     gMarioState->forwardVel += 10.0f*met->spd;
     met->spd = 0;
 
@@ -58,6 +56,15 @@ void module_pow(struct module_execution_thread * met, u8 call_context) {
 void module_spd(struct module_execution_thread * met, u8 call_context) {
     met->spd++;
     met->x++;
+}
+
+void module_repeat(struct module_execution_thread * met, u8 call_context) {
+    if (met->repeat) {
+        met->x++;
+    } else {
+        met->x=0;
+        met->repeat=TRUE;
+    }
 }
 
 void module_floor(struct module_execution_thread * met, u8 call_context) {
@@ -79,17 +86,21 @@ void module_wall(struct module_execution_thread * met, u8 call_context) {
     switch(call_context) {
         case MCC_INVOKE:
             met->halted = TRUE;
+            met->timer = 0;
             break;
         case MCC_HALTED:
-            if (gMarioState->action == ACT_AIR_HIT_WALL) {
+            if (gMarioState->wall != NULL) {
                 met->halted = FALSE;
                 met->x++;
                 break;
             }
-            if (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING)) {
-                met->executing = FALSE;
-                //premature exit due to unmet condition
+            if (!(((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING))) {
+                met->timer = 0;
                 break;
+            }
+            if (met->timer >= 15) {
+                met->timer = 0;
+                met->cooldown = TRUE;
             }
             break;
     }
@@ -113,25 +124,72 @@ void module_timer(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_input(struct module_execution_thread * met, u8 call_context) {
-    if (gPlayer1Controller->buttonDown & A_BUTTON) {
-        met->x++;
-    } else {
-        met->halted = TRUE;
-        met->executing = FALSE;
+    switch(call_context) {
+        case MCC_INVOKE:
+            if (gPlayer1Controller->buttonPressed & met->input) {
+                met->halted = FALSE;
+                met->input_notify = FALSE;
+                met->x++;
+                break;
+            }
+            met->halted = TRUE;
+            met->timer = 0;
+            met->input_notify = TRUE;
+            break;
+        case MCC_HALTED:
+            if (gPlayer1Controller->buttonPressed & met->input) {
+                met->halted = FALSE;
+                met->input_notify = FALSE;
+                met->x++;
+                break;
+            }
+            if (met->timer >= 30) {
+                met->input_notify = FALSE;
+                met->cooldown = TRUE;
+                met->timer = 0;
+            }
+            break;
     }
+}
+
+void module_platform(struct module_execution_thread * met, u8 call_context) {
+    switch(call_context) {
+        case MCC_INVOKE:
+            met->halted = TRUE;
+            met->timer = 0;
+
+            play_sound(SOUND_ACTION_TELEPORT, gGlobalSoundSource);
+            struct Object * hover = spawn_object(gMarioState->marioObj,MODEL_HOVER,bhvHover);
+            hover->oBehParams2ndByte = met->mod;
+            if (gMarioState->vel[1] < 0.0f) {
+                gMarioState->vel[1] = 0.0f;
+            }
+            break;
+        case MCC_HALTED:
+            if (met->timer >= 1) {
+                met->halted = FALSE;
+                met->x++;
+                met->mod = 0;
+                break;
+            }
+            break;
+    }
+
 }
 
 struct module_info module_infos[] = {
     [MOD_BUTTON_A] = {MTYPE_INPUT,micons_abtn_rgba16,NULL,NULL,NULL},
     [MOD_BUTTON_B] = {MTYPE_INPUT,micons_bbtn_rgba16,NULL,NULL,NULL},
-    [MOD_JUMP] = {MTYPE_MOVE,micons_jump_rgba16,"Makes Mario jump.","Increases jump tier per MOD.",module_jump},
+    [MOD_JUMP] = {MTYPE_MOVE,micons_jump_rgba16,"Makes Mario attempt to jump.","Increases jump tier per MOD.",module_jump},
     [MOD_POW] = {MTYPE_BUFF,micons_onepow_rgba16,"Adds 1 to the MOD of the next piece.",NULL,module_pow},
     [MOD_HIT_GROUND] = {MTYPE_COND,micons_ground_rgba16,"Continues when Mario touches the ground.",NULL,module_floor},
-    [MOD_HIT_WALL] = {MTYPE_COND,micons_wall_rgba16,"Continues when Mario hits a wall.",NULL,module_wall},
-    [MOD_TIMER] = {MTYPE_COND,micons_clock_rgba16,"Continues after half a second.","Adds 1/3 a second per MOD.",module_timer},
-    [MOD_ATTACK] = {MTYPE_MOVE,micons_pow_rgba16,"Makes Mario attack.",NULL,module_attack},
-    [MOD_INPUT] = {MTYPE_COND,micons_abtn_rgba16,"Continues if button held, otherwise cancels.","Inverts this condition.",module_input},
-    [MOD_SPD] = {MTYPE_BUFF,micons_spd_rgba16,"Adds speed to next action block.",NULL,module_spd}
+    [MOD_HIT_WALL] = {MTYPE_COND,micons_wall_rgba16,"Continues when Mario touches a wall.",NULL,module_wall},
+    [MOD_TIMER] = {MTYPE_COND,micons_clock_rgba16,"Continues after a 1/2 second.","Adds 1/3 a second per MOD.",module_timer},
+    [MOD_ATTACK] = {MTYPE_MOVE,micons_pow_rgba16,"Makes Mario attempt to attack.",NULL,module_attack},
+    [MOD_INPUT] = {MTYPE_COND,micons_btngen_rgba16,"Checks for a button press for one second.",NULL,module_input},
+    [MOD_SPD] = {MTYPE_BUFF,micons_spd_rgba16,"Adds speed to next action block.",NULL,module_spd},
+    [MOD_PLATFORM] = {MTYPE_MOVE,micons_hover_rgba16,"Mario hovers for one second. Can jump.","Extend hover time by 1/2.",module_platform},
+    [MOD_REPEAT] = {MTYPE_BUFF,micons_repeat_rgba16,"Repeats from the start.",NULL,module_repeat},
 };
 
 struct module_type_info module_type_infos[] = {
@@ -157,7 +215,7 @@ f32 inventory_vis_y = 0.0f;
 s8 module_in_hand = MOD_EMPTY;
 
 s8 get_inventory(int x, int y) {
-    if ((x >= INVENTORY_SLOTS_X-1)||(x < 0)||(y >= INVENTORY_SLOTS_Y-1)||(y < 0)) {
+    if ((x >= INVENTORY_SLOTS_X)||(x < 0)||(y >= INVENTORY_SLOTS_Y)||(y < 0)) {
         return MOD_EMPTY;
     }
     return inventory[y][x];
@@ -191,6 +249,8 @@ void init_module_inventory(void) {
     inventory[3][0] = MOD_INPUT;
     inventory[3][1] = MOD_SPD;
     inventory[3][2] = MOD_SPD;
+    inventory[3][3] = MOD_PLATFORM;
+    inventory[3][4] = MOD_REPEAT;
 
     module_execution_threads[MODULE_EXEC_A].executing = FALSE;
     module_execution_threads[MODULE_EXEC_B].executing = FALSE;
@@ -199,7 +259,17 @@ void init_module_inventory(void) {
 void module_update(void) {
     for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
         struct module_execution_thread * met = &module_execution_threads[i];
-        if (met->executing) {
+        if (met->cooldown) {
+            if (met->timer >= 15) {
+                met->executing = FALSE;
+            }
+            if (
+                (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING))
+                && (count_objects_with_behavior(bhvHover) == 0) 
+            ) {
+                met->timer++;
+            }
+        } else if (met->executing) {
             s8 read_mod = get_inventory(met->x,met->y);
             if (!met->halted) {
                 while(read_mod != MOD_EMPTY) {
@@ -209,7 +279,8 @@ void module_update(void) {
                         return;
                     }
                 }
-                met->executing = FALSE;
+                met->cooldown = TRUE;
+                met->timer = 0;
             } else {
                 module_infos[read_mod].func(met,MCC_HALTED);
                 met->timer++;
@@ -218,7 +289,7 @@ void module_update(void) {
     }
 }
 
-void execute_module_in_inventory(struct module_execution_thread * met, int x, int y) {
+void execute_module_in_inventory(struct module_execution_thread * met, u32 input, int x, int y) {
     if (!met->executing) {
         met->mod = 0;
         met->spd = 0;
@@ -227,16 +298,23 @@ void execute_module_in_inventory(struct module_execution_thread * met, int x, in
         met->timer = 0;
         met->executing = TRUE;
         met->halted = FALSE;
+        met->input = input;
+        met->cooldown = FALSE;
+        met->jump_tier = 0;
+        met->input_notify = FALSE;
+        met->repeat = FALSE;
+
+        gMarioState->actionMod = 0;
     }
 }
 
 s32 handle_module_inputs(void) {
     if (!gModuleMenuOpen) {
         if (gPlayer1Controller->buttonPressed & A_BUTTON) {
-            execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_A],0,0);
+            execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_A],A_BUTTON,0,0);
         }
         if (gPlayer1Controller->buttonPressed & B_BUTTON) {
-            execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_B],0,1);
+            execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_B],B_BUTTON,0,1);
         }
     }
     return FALSE;
@@ -280,8 +358,8 @@ void control_module_menu(void) {
 void print_texture(void * tex, int size, int x, int y) {
     gDPPipeSync(gDisplayListHead++);
     gDPLoadTextureBlock(gDisplayListHead++, tex, G_IM_FMT_RGBA, G_IM_SIZ_16b, size,size, 0, 0, 0, 0, 0, 0, 0);
-    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + (size-1)) << 2,
-                        (y + (size-1)) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + (size)) << 2,
+                        (y + (size)) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 }
 
 void print_module(int id, int x, int y) {
@@ -350,7 +428,7 @@ void print_module_menu(void) {
         hand_tex = micons_small_hand_2_rgba16;
     }
     print_texture(hand_tex,16,inventory_vis_x+8, inventory_vis_y+8);
-    gSPDisplayList(gDisplayListHead++, dl_hud_img_end);
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
     //PRINT MOD INFO
     s8 mod_inf_to_disp = MOD_EMPTY;
@@ -363,10 +441,10 @@ void print_module_menu(void) {
 
     if (mod_inf_to_disp != MOD_EMPTY) {
         print_set_envcolour(255, 255, 255, 255);
-        sprintf(&print_buffer, "%s",module_type_infos[module_infos[mod_inf_to_disp].type].name);
-        sprintf(&print_buffer, "%s:<COL_FFFFFFFF> %s\n",&print_buffer,module_infos[mod_inf_to_disp].desc);
+        sprintf(print_buffer, "%s",module_type_infos[module_infos[mod_inf_to_disp].type].name);
+        sprintf(print_buffer, "%s:<COL_FFFFFFFF> %s\n",print_buffer,module_infos[mod_inf_to_disp].desc);
         if (module_infos[mod_inf_to_disp].mod_desc != NULL) {
-            sprintf(&print_buffer, "%s<COL_FF0000FF>MOD Bonus: <COL_FFFFFFFF>%s",&print_buffer,module_infos[mod_inf_to_disp].mod_desc);
+            sprintf(print_buffer, "%s<COL_FF0000FF>MOD Bonus: <COL_FFFFFFFF>%s",print_buffer,module_infos[mod_inf_to_disp].mod_desc);
         }
 
         f32 tooltip_x = 15;
@@ -387,4 +465,23 @@ void print_module_menu(void) {
 
         print_small_text(tooltip_x+4, tooltip_y+4, print_buffer, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_VANILLA);
     }
+}
+
+void print_module_hud_status(void) {
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
+    print_module(MOD_BUTTON_A,22,209);
+    if (module_execution_threads[MODULE_EXEC_A].executing) {
+        print_texture(micons_executing_rgba16,16 ,22,209);
+    }
+    if (module_execution_threads[MODULE_EXEC_A].input_notify) {
+        print_texture(micons_inpnotif_rgba16,16 ,22,209);
+    }
+    print_module(MOD_BUTTON_B,42,209);
+    if (module_execution_threads[MODULE_EXEC_B].executing) {
+        print_texture(micons_executing_rgba16,16 ,42,209);
+    }
+    if (module_execution_threads[MODULE_EXEC_B].input_notify) {
+        print_texture(micons_inpnotif_rgba16,16 ,42,209);
+    }
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }

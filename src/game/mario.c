@@ -1020,6 +1020,13 @@ s32 set_jump_from_landing(struct MarioState *m) {
         }
     }
 
+    if (!mario_floor_is_steep(m)) {
+        if (m->actionMod != 0) {
+            set_mario_action(m, m->actionMod, 0);
+        }
+        m->actionMod = 0;
+    }
+    
     m->doubleJumpTimer = 0;
 
     return TRUE;
@@ -1333,6 +1340,9 @@ void update_mario_geometry_inputs(struct MarioState *m) {
 void update_mario_inputs(struct MarioState *m) {
     m->particleFlags = PARTICLE_NONE;
     m->input = INPUT_NONE;
+
+    module_update();
+
     m->collidedObjInteractTypes = m->marioObj->collidedObjInteractTypes;
     m->flags &= 0xFFFFFF;
 

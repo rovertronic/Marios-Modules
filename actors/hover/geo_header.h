@@ -1,0 +1,11 @@
+extern const GeoLayout hover_geo[];
+extern u8 hover_hoverwind_ia8[];
+extern Vtx hover_hover_mesh_layer_5_vtx_0[17];
+extern Gfx hover_hover_mesh_layer_5_tri_0[];
+extern Vtx hover_hover_mesh_layer_5_vtx_1[9];
+extern Gfx hover_hover_mesh_layer_5_tri_1[];
+extern Gfx mat_hover_hoverwind_layer5[];
+extern Gfx mat_revert_hover_hoverwind_layer5[];
+extern Gfx mat_hover_hilite_layer5[];
+extern Gfx mat_revert_hover_hilite_layer5[];
+extern Gfx hover_hover_mesh_layer_5[];
