@@ -1078,3 +1078,87 @@ OPTIMIZE_OS void mtxf_to_mtx_fast(s16* dst, float* src) {
     //  to set the top half.
     dst[15] = 1;
 }
+
+#define fpclassify(f) __fpclassifyf(f)
+
+extern struct GraphNodeRoot * captured_graph_node;
+
+extern Mat4 gMatStack[32];
+
+union IEEEf2bits {
+    float    f;
+    struct {
+        unsigned int    sign    :1;
+        unsigned int    exp    :8;
+        unsigned int    man    :23;
+    } bits;
+};
+enum
+  {
+    FP_NAN =
+# define FP_NAN 0
+      FP_NAN,
+    FP_INFINITE =
+# define FP_INFINITE 1
+      FP_INFINITE,
+    FP_ZERO =
+# define FP_ZERO 2
+      FP_ZERO,
+    FP_SUBNORMAL =
+# define FP_SUBNORMAL 3
+      FP_SUBNORMAL,
+    FP_NORMAL =
+# define FP_NORMAL 4
+      FP_NORMAL
+  };
+int
+__fpclassifyf(float f)
+{
+    union IEEEf2bits u;
+    u.f = f;
+    if (u.bits.exp == 0) {
+        if (u.bits.man == 0)
+            return (FP_ZERO);
+        return (FP_SUBNORMAL);
+    }
+    if (u.bits.exp == 255) {
+        if (u.bits.man == 0)
+            return (FP_INFINITE);
+        return (FP_NAN);
+    }
+    return (FP_NORMAL);
+}
+
+void mtxf_mul_vec3s(Mat4 mtx, Vec3s b) {
+    PUPPYPRINT_ADD_COUNTER(gPuppyCallCounter.matrix);
+    register f32 x = b[0];
+    register f32 y = b[1];
+    register f32 z = b[2];
+    register f32 *temp2 = (f32 *)mtx;
+    register s32 i;
+    register s16 *c = b;
+    for (i = 0; i < 3; i++) {
+        c[0] = ((x * temp2[ 0])
+              + (y * temp2[ 4])
+              + (z * temp2[ 8])
+              +      temp2[12]);
+        c++;
+        temp2++;
+    }
+}
+
+void world_pos_to_screen_pos(Vec3f world_pos, s32 * x, s32 * y) {
+    Mat4 gProjectionMatrix;
+    Vec3f cameraSpace;
+    
+    s32 halfFovVertical = (45 + 2.0f) * 91.0222222222f + 0.5f;
+    f32 vScreenEdge;
+    
+    mtxf_mul(gProjectionMatrix, gMatStack[0], gCameraTransform);
+    linear_mtxf_mul_vec3f_and_translate(gProjectionMatrix, cameraSpace, world_pos);
+
+    vScreenEdge = -cameraSpace[2] * (sins(halfFovVertical) / coss(halfFovVertical)) / 128.f;
+
+    *x = 160 + cameraSpace[0] / vScreenEdge;
+    *y = 120 + cameraSpace[1] / vScreenEdge;
+}

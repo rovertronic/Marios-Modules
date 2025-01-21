@@ -19,3 +19,4 @@
 
 #include "chest/geo.inc.c"
 #include "hover/geo.inc.c"
+#include "cchest/geo.inc.c"

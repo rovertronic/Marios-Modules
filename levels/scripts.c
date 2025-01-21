@@ -116,6 +116,7 @@ const LevelScript level_main_scripts_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_SILVER_COIN_NO_SHADOW,   silver_coin_no_shadow_geo),
 #endif
     LOAD_MODEL_FROM_GEO(MODEL_CHEST, chest_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_CCHEST, cchest_geo),
     LOAD_MODEL_FROM_GEO(MODEL_HOVER, hover_geo),
     FREE_LEVEL_POOL(),
     POP_POOL(),

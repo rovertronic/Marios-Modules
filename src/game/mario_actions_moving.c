@@ -952,7 +952,8 @@ s32 act_turning_around(struct MarioState *m) {
     }
 
     if (m->input & INPUT_A_PRESSED) {
-        return set_jumping_action(m, ACT_SIDE_FLIP, 0);
+        return set_jump_from_landing(m);
+        //return set_jumping_action(m, ACT_SIDE_FLIP, 0);
     }
 
     if (m->input & INPUT_IDLE) {
@@ -1003,7 +1004,8 @@ s32 act_finish_turning_around(struct MarioState *m) {
     }
 
     if (m->input & INPUT_A_PRESSED) {
-        return set_jumping_action(m, ACT_SIDE_FLIP, 0);
+        return set_jump_from_landing(m);
+        //return set_jumping_action(m, ACT_SIDE_FLIP, 0);
     }
 
 #ifdef RESET_DIRECTION_WHEN_TURNING_AROUND

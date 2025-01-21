@@ -2228,10 +2228,11 @@ s32 render_menus_and_dialogs(void) {
         render_dialog_entries();
         gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;
     }
-
-    print_module_hud_status();
+        
     if (gModuleMenuOpen) {
         print_module_menu();
+    } else {
+        print_module_hud_status();
     }
 
     return mode;

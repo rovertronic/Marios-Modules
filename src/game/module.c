@@ -27,6 +27,9 @@ void module_jump(struct module_execution_thread * met, u8 call_context) {
             break;
         default:
             gMarioState->actionMod = ACT_TRIPLE_JUMP;
+            if (gMarioState->flags & MARIO_WING_CAP) {
+                gMarioState->actionMod = ACT_FLYING_TRIPLE_JUMP;
+            }
             break;
     }
     met->jump_tier = (met->jump_tier+1)%3;
@@ -174,7 +177,24 @@ void module_platform(struct module_execution_thread * met, u8 call_context) {
             }
             break;
     }
+}
 
+void module_cap(struct module_execution_thread * met, u8 call_context) {
+    gMarioState->capTimer += 30;
+    switch(met->mod) {
+        case 0:
+            gMarioState->flags |= MARIO_VANISH_CAP;
+            break;
+        case 1:
+            gMarioState->flags |= MARIO_METAL_CAP;
+            break;
+        default:
+            gMarioState->flags |= MARIO_WING_CAP;
+            break;
+    }
+
+    met->mod = 0;
+    met->x++;
 }
 
 struct module_info module_infos[] = {
@@ -190,6 +210,9 @@ struct module_info module_infos[] = {
     [MOD_SPD] = {MTYPE_BUFF,micons_spd_rgba16,"Adds speed to next action block.",NULL,module_spd},
     [MOD_PLATFORM] = {MTYPE_MOVE,micons_hover_rgba16,"Mario hovers for one second. Can jump.","Extend hover time by 1/2.",module_platform},
     [MOD_REPEAT] = {MTYPE_BUFF,micons_repeat_rgba16,"Repeats from the start.",NULL,module_repeat},
+    [MOD_SWAP] = {MTYPE_MOVE,micons_swap_rgba16,"Toggles swap platforms.",NULL,NULL},
+    [MOD_CAP] = {MTYPE_MOVE,micons_cap_rgba16,"Enables cap power for one second.","0:Vanish, 1:Metal, 2:Wing.",module_cap},
+    [MOD_GRAPPLE] = {MTYPE_MOVE,micons_grapple_rgba16,"Launches a grapple hook. Must hit wood.",NULL,NULL},
 };
 
 struct module_type_info module_type_infos[] = {
@@ -199,8 +222,8 @@ struct module_type_info module_type_infos[] = {
     [MTYPE_INPUT] = {"Input",{0xC9, 0x82, 0x30}},
 };
 
-#define INVENTORY_PRINT_OFFSET_X 32
-#define INVENTORY_PRINT_OFFSET_Y 32
+#define INVENTORY_PRINT_OFFSET_X 80
+#define INVENTORY_PRINT_OFFSET_Y 70
 
 #define INVENTORY_SLOTS_Y 4
 #define INVENTORY_SLOTS_X 8
@@ -213,6 +236,19 @@ f32 inventory_vis_x = 0.0f;
 f32 inventory_vis_y = 0.0f;
 
 s8 module_in_hand = MOD_EMPTY;
+
+s32 is_inventory_slot_locked(int x, int y) {
+    gMarioState->numStars = 10;
+    switch(y) {
+        case 0://a
+            if (x >= 1+(gMarioState->numStars*2)) {return TRUE;}
+            break;
+        case 1://b
+            if (x >= -1+gMarioState->numStars) {return TRUE;}
+            break;
+    }
+    return FALSE;
+}
 
 s8 get_inventory(int x, int y) {
     if ((x >= INVENTORY_SLOTS_X)||(x < 0)||(y >= INVENTORY_SLOTS_Y)||(y < 0)) {
@@ -247,10 +283,11 @@ void init_module_inventory(void) {
     inventory[2][6] = MOD_TIMER;
     inventory[2][7] = MOD_ATTACK;
     inventory[3][0] = MOD_INPUT;
-    inventory[3][1] = MOD_SPD;
-    inventory[3][2] = MOD_SPD;
+    inventory[3][1] = MOD_SWAP;
+    inventory[3][2] = MOD_CAP;
     inventory[3][3] = MOD_PLATFORM;
     inventory[3][4] = MOD_REPEAT;
+    inventory[3][5] = MOD_GRAPPLE;
 
     module_execution_threads[MODULE_EXEC_A].executing = FALSE;
     module_execution_threads[MODULE_EXEC_B].executing = FALSE;
@@ -261,11 +298,14 @@ void module_update(void) {
         struct module_execution_thread * met = &module_execution_threads[i];
         if (met->cooldown) {
             if (met->timer >= 15) {
+                play_sound(SOUND_MENU_MESSAGE_DISAPPEAR,gGlobalSoundSource);
                 met->executing = FALSE;
+                met->cooldown = FALSE;
             }
             if (
                 (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING))
                 && (count_objects_with_behavior(bhvHover) == 0) 
+                && (gMarioState->capTimer == 0)
             ) {
                 met->timer++;
             }
@@ -305,6 +345,8 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
         met->repeat = FALSE;
 
         gMarioState->actionMod = 0;
+
+        play_sound(SOUND_MENU_MESSAGE_APPEAR,gGlobalSoundSource);
     }
 }
 
@@ -345,13 +387,17 @@ void control_module_menu(void) {
     inventory_y = (INVENTORY_SLOTS_Y+inventory_y)%INVENTORY_SLOTS_Y;
 
     if (gPlayer1Controller->buttonPressed & A_BUTTON) {
-        if (!(module_in_hand == MOD_EMPTY && inventory[inventory_y][inventory_x] == MOD_EMPTY)) {
-            play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
-        }
+        if (is_inventory_slot_locked(inventory_x,inventory_y)) {
+            play_sound(SOUND_MENU_CAMERA_BUZZ, gGlobalSoundSource);
+        } else {
+            if (!(module_in_hand == MOD_EMPTY && inventory[inventory_y][inventory_x] == MOD_EMPTY)) {
+                play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
+            }
 
-        s16 module_to_pick_up = inventory[inventory_y][inventory_x];
-        inventory[inventory_y][inventory_x] = module_in_hand;
-        module_in_hand = module_to_pick_up;
+            s16 module_to_pick_up = inventory[inventory_y][inventory_x];
+            inventory[inventory_y][inventory_x] = module_in_hand;
+            module_in_hand = module_to_pick_up;
+        }
     }
 }
 
@@ -416,6 +462,12 @@ void print_module_menu(void) {
     for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
         for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
             print_module(inventory[y][x],inv_slot_printx(x,y), inv_slot_printy(x,y));
+
+            if (is_inventory_slot_locked(x,y)) {
+                gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 150);
+                print_texture(micons_lock_rgba16,16,inv_slot_printx(x,y), inv_slot_printy(x,y));
+                gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
+            }
         }
     }
     print_module(MOD_BUTTON_A,inv_slot_printx(-1,0), inv_slot_printy(-1,0));
@@ -448,7 +500,7 @@ void print_module_menu(void) {
         }
 
         f32 tooltip_x = 15;
-        f32 tooltip_y = 200;
+        f32 tooltip_y = 150;
 
         /*
         if (tooltip_x + get_text_width(print_buffer,FONT_VANILLA) > 320) {
@@ -469,19 +521,19 @@ void print_module_menu(void) {
 
 void print_module_hud_status(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-    print_module(MOD_BUTTON_A,22,209);
+    print_module(MOD_BUTTON_A,22,15);
     if (module_execution_threads[MODULE_EXEC_A].executing) {
-        print_texture(micons_executing_rgba16,16 ,22,209);
+        print_texture(micons_executing_rgba16,16 ,22,15);
     }
     if (module_execution_threads[MODULE_EXEC_A].input_notify) {
-        print_texture(micons_inpnotif_rgba16,16 ,22,209);
+        print_texture(micons_inpnotif_rgba16,16 ,22,15);
     }
-    print_module(MOD_BUTTON_B,42,209);
+    print_module(MOD_BUTTON_B,42,15);
     if (module_execution_threads[MODULE_EXEC_B].executing) {
-        print_texture(micons_executing_rgba16,16 ,42,209);
+        print_texture(micons_executing_rgba16,16 ,42,15);
     }
     if (module_execution_threads[MODULE_EXEC_B].input_notify) {
-        print_texture(micons_inpnotif_rgba16,16 ,42,209);
+        print_texture(micons_inpnotif_rgba16,16 ,42,15);
     }
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }

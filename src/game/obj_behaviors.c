@@ -777,10 +777,26 @@ UNUSED s32 debug_sequence_tracker(s16 debugInputSequence[]) {
 #include "behaviors/yoshi.inc.c"
 
 void bhv_chest(void) {
+    u8 cost = GET_BPARAM1(o->oBehParams);
+
     switch(o->oAction) {
         case 0:
+            if (cost > 0) {
+                cur_obj_set_model(MODEL_CCHEST);
+                if (o->oDistanceToMario < 400.0f) {
+                    Vec3f chest_content_vec = {o->oPosX,o->oPosY+140.0f,o->oPosZ};
+                    s32 x;
+                    s32 y;
+
+                    world_pos_to_screen_pos(&chest_content_vec,&x,&y);
+                    print_text_fmt_int(x-16, y, "$%d", cost);
+                }
+            }
+
             o->header.gfx.animInfo.animFrame = 0;
-            if (o->oInteractStatus & INT_STATUS_INTERACTED) {
+            if ((gMarioState->numCoins >= cost) && (o->oInteractStatus & INT_STATUS_INTERACTED)) {
+                gMarioState->numCoins-=cost;
+                gHudDisplay.coins = gMarioState->numCoins;
                 play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);
                 o->oAction = 1;
                 add_inventory(o->oBehParams2ndByte);

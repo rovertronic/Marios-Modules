@@ -65,7 +65,10 @@ enum module_id {
     MOD_INPUT,
     MOD_SPD,
     MOD_PLATFORM,
-    MOD_REPEAT
+    MOD_REPEAT,
+    MOD_SWAP,
+    MOD_CAP,
+    MOD_GRAPPLE,
 };
 
 void add_inventory(s8 module);
