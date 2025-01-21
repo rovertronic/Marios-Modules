@@ -1074,6 +1074,11 @@ s32 play_mode_normal(void) {
             set_play_mode(PLAY_MODE_PAUSED);
             */
             gModuleMenuOpen = !gModuleMenuOpen;
+            if (gModuleMenuOpen) {
+                play_sound(SOUND_GENERAL_OPEN_IRON_DOOR, gGlobalSoundSource);
+            } else {
+                play_sound(SOUND_GENERAL_CLOSE_IRON_DOOR, gGlobalSoundSource);
+            }
         }
     }
     

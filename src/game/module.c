@@ -126,6 +126,21 @@ void module_timer(struct module_execution_thread * met, u8 call_context) {
     }
 }
 
+void module_grav(struct module_execution_thread * met, u8 call_context) {
+    switch(call_context) {
+        case MCC_INVOKE:
+            met->halted = TRUE;
+            break;
+        case MCC_HALTED:
+            if ((gMarioState->vel[1] < 0.0f)||(((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING))) {
+                met->halted = FALSE;
+                met->x++;
+                break;
+            }
+            break;
+    }
+}
+
 void module_input(struct module_execution_thread * met, u8 call_context) {
     switch(call_context) {
         case MCC_INVOKE:
@@ -213,6 +228,7 @@ struct module_info module_infos[] = {
     [MOD_SWAP] = {MTYPE_MOVE,micons_swap_rgba16,"Toggles swap platforms.",NULL,NULL},
     [MOD_CAP] = {MTYPE_MOVE,micons_cap_rgba16,"Enables cap power for one second.","0:Vanish, 1:Metal, 2:Wing.",module_cap},
     [MOD_GRAPPLE] = {MTYPE_MOVE,micons_grapple_rgba16,"Launches a grapple hook. Must hit wood.",NULL,NULL},
+    [MOD_GRAV] = {MTYPE_COND,micons_grav_rgba16,"Continues when Mario has downward velocity.",NULL,module_grav},
 };
 
 struct module_type_info module_type_infos[] = {
@@ -288,6 +304,7 @@ void init_module_inventory(void) {
     inventory[3][3] = MOD_PLATFORM;
     inventory[3][4] = MOD_REPEAT;
     inventory[3][5] = MOD_GRAPPLE;
+    inventory[3][6] = MOD_GRAV;
 
     module_execution_threads[MODULE_EXEC_A].executing = FALSE;
     module_execution_threads[MODULE_EXEC_B].executing = FALSE;
@@ -362,6 +379,7 @@ s32 handle_module_inputs(void) {
     return FALSE;
 }
 
+u8 control_neutral = TRUE;
 void control_module_menu(void) {
     for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
         struct module_execution_thread * met = &module_execution_threads[i];
@@ -370,6 +388,36 @@ void control_module_menu(void) {
             return;
         }
     }
+
+    //handle joystick
+    if (
+        (gPlayer1Controller->rawStickY < 60) &&
+        (gPlayer1Controller->rawStickY > -60) &&
+        (gPlayer1Controller->rawStickX < 60) &&
+        (gPlayer1Controller->rawStickX > -60)
+    ) {
+        control_neutral = TRUE;
+    }
+    if (control_neutral) {
+        if (gPlayer1Controller->rawStickY > 60) {
+            gPlayer1Controller->buttonPressed |= U_JPAD;
+            control_neutral = FALSE;
+        }
+        if (gPlayer1Controller->rawStickY < -60) {
+            gPlayer1Controller->buttonPressed |= D_JPAD;
+            control_neutral = FALSE;
+        }
+        if (gPlayer1Controller->rawStickX > 60) {
+            gPlayer1Controller->buttonPressed |= R_JPAD;
+            control_neutral = FALSE;
+        }
+        if (gPlayer1Controller->rawStickX < -60) {
+            gPlayer1Controller->buttonPressed |= L_JPAD;
+            control_neutral = FALSE;
+        }
+    }
+
+
 
     if (gPlayer1Controller->buttonPressed & L_JPAD) {
         inventory_x --;
@@ -500,7 +548,7 @@ void print_module_menu(void) {
         }
 
         f32 tooltip_x = 15;
-        f32 tooltip_y = 150;
+        f32 tooltip_y = 170;
 
         /*
         if (tooltip_x + get_text_width(print_buffer,FONT_VANILLA) > 320) {

@@ -69,6 +69,7 @@ enum module_id {
     MOD_SWAP,
     MOD_CAP,
     MOD_GRAPPLE,
+    MOD_GRAV
 };
 
 void add_inventory(s8 module);
