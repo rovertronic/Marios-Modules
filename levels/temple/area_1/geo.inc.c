@@ -6,6 +6,7 @@ const GeoLayout temple_area_1_geo[] = {
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_Cube_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_Cube_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, temple_dl_Cube_mesh_layer_5),
+		GEO_TRANSLATE_NODE_WITH_DL(LAYER_OPAQUE, -1813, 2137, 8946, temple_dl_Cube_002_mesh_layer_1),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };

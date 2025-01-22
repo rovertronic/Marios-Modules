@@ -824,3 +824,41 @@ void bhv_hover(void) {
         }
     }
 }
+
+void bhv_bdoor(void) {
+    f32 dist;
+    u8 open = FALSE;
+    vec3_get_dist(gMarioState->pos,&o->oHomeVec,&dist);
+    if (dist < 300.0f) {
+        open = TRUE;
+    }
+
+    switch(o->oAction) {
+        case 0:
+            if (open) {
+                o->oAction = 1;
+                cur_obj_play_sound_2(SOUND_GENERAL_STAR_DOOR_OPEN);
+            }
+            break;
+        case 1:
+            o->oPosY += 20.0f;
+            if (o->oPosY > o->oHomeY + 500.0f) {
+                o->oAction = 2;
+                o->oPosY = o->oHomeY + 500.0f;
+            }
+            break;
+        case 2:
+            if (!open) {
+                o->oAction = 3;
+                cur_obj_play_sound_2(SOUND_GENERAL_STAR_DOOR_CLOSE);
+            }
+            break;
+        case 3:
+            o->oPosY -= 20.0f;
+            if (o->oPosY < o->oHomeY) {
+                o->oAction = 0;
+                o->oPosY = o->oHomeY;
+            }
+            break;
+    }
+}

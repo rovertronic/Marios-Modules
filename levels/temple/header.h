@@ -8,4 +8,8 @@ extern const LevelScript level_temple_entry[];
 
 
 #include "levels/temple/header.inc.h"
+#include "levels/temple/bdoorcol/collision_header.h"
+
+#include "levels/temple/bdoor/geo_header.h"
+
 #endif

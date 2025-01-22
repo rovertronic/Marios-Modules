@@ -15,3 +15,4 @@
 
 
 #include "levels/temple/geo.inc.c"
+#include "levels/temple/bdoor/geo.inc.c"

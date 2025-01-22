@@ -53,6 +53,7 @@
 #include "levels/wf/header.h"
 #include "levels/bowser_2/header.h"
 #include "levels/ttm/header.h"
+#include "levels/temple/header.h"
 
 #include "make_const_nonconst.h"
 #include "behavior_data.h"
@@ -1225,7 +1226,7 @@ const BehaviorScript bhvFlame[] = {
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     BILLBOARD(),
     SET_HOME(),
-    SCALE(/*Unused*/ 0, /*Field*/ 700),
+    SCALE(/*Unused*/ 0, /*Field*/ 350),
     SET_INTERACT_TYPE(INTERACT_FLAME),
     SET_HITBOX_WITH_OFFSET(/*Radius*/ 50, /*Height*/ 25, /*Downwards offset*/ 25),
     SET_INT(oIntangibleTimer, 0),
@@ -6098,6 +6099,20 @@ const BehaviorScript bhvHover[] = {
     SET_HOME(),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_hover),
+        CALL_NATIVE(load_object_collision_model),
+    END_LOOP(),
+};
+
+extern void bhv_bdoor(void);
+const BehaviorScript bhvBdoor[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT)),
+    LOAD_COLLISION_DATA(bdoorcol_collision),
+    SET_FLOAT(oDrawingDistance, 20000),
+    SET_FLOAT(oCollisionDistance, 800),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_bdoor),
         CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };

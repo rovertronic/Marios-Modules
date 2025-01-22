@@ -144,6 +144,7 @@ void module_grav(struct module_execution_thread * met, u8 call_context) {
 void module_input(struct module_execution_thread * met, u8 call_context) {
     switch(call_context) {
         case MCC_INVOKE:
+            play_sound(SOUND_GENERAL_BOWSER_KEY_LAND, gGlobalSoundSource);
             if (gPlayer1Controller->buttonPressed & met->input) {
                 met->halted = FALSE;
                 met->input_notify = FALSE;
@@ -291,20 +292,20 @@ void init_module_inventory(void) {
         }
     }
     inventory[2][0] = MOD_JUMP;
-    inventory[2][1] = MOD_JUMP;
-    inventory[2][2] = MOD_POW;
-    inventory[2][3] = MOD_POW;
-    inventory[2][4] = MOD_HIT_GROUND;
-    inventory[2][5] = MOD_HIT_WALL;
-    inventory[2][6] = MOD_TIMER;
-    inventory[2][7] = MOD_ATTACK;
-    inventory[3][0] = MOD_INPUT;
-    inventory[3][1] = MOD_SWAP;
-    inventory[3][2] = MOD_CAP;
-    inventory[3][3] = MOD_PLATFORM;
-    inventory[3][4] = MOD_REPEAT;
-    inventory[3][5] = MOD_GRAPPLE;
-    inventory[3][6] = MOD_GRAV;
+    //inventory[2][1] = MOD_JUMP;
+    //inventory[2][2] = MOD_POW;
+    //inventory[2][3] = MOD_POW;
+    //inventory[2][4] = MOD_HIT_GROUND;
+    //inventory[2][5] = MOD_HIT_WALL;
+    //inventory[2][6] = MOD_TIMER;
+    //inventory[2][7] = MOD_ATTACK;
+    //inventory[3][0] = MOD_INPUT;
+    //inventory[3][1] = MOD_SWAP;
+    //inventory[3][2] = MOD_CAP;
+    //inventory[3][3] = MOD_PLATFORM;
+    //inventory[3][4] = MOD_REPEAT;
+    //inventory[3][5] = MOD_GRAPPLE;
+    //inventory[3][6] = MOD_GRAV;
 
     module_execution_threads[MODULE_EXEC_A].executing = FALSE;
     module_execution_threads[MODULE_EXEC_B].executing = FALSE;

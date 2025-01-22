@@ -12,3 +12,5 @@
 
 
 #include "levels/temple/leveldata.inc.c"
+#include "levels/temple/bdoorcol/collision.inc.c"
+#include "levels/temple/bdoor/model.inc.c"
