@@ -165,7 +165,8 @@ struct ObjectNode gObjectListArray[16];
 /**
  * The order that object lists are processed in a frame.
  */
-s8 sObjectListUpdateOrder[] = { OBJ_LIST_SPAWNER,
+s8 sObjectListUpdateOrder[] = {
+                                OBJ_LIST_SPAWNER,
                                 OBJ_LIST_SURFACE,
                                 OBJ_LIST_POLELIKE,
                                 OBJ_LIST_PLAYER,

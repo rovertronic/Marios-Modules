@@ -6106,13 +6106,32 @@ const BehaviorScript bhvHover[] = {
 extern void bhv_bdoor(void);
 const BehaviorScript bhvBdoor[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT)),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT | OBJ_FLAG_DONT_CALC_COLL_DIST)),
     LOAD_COLLISION_DATA(bdoorcol_collision),
     SET_FLOAT(oDrawingDistance, 20000),
-    SET_FLOAT(oCollisionDistance, 800),
+    SET_FLOAT(oCollisionDistance, 3000),
     SET_HOME(),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_bdoor),
         CALL_NATIVE(load_object_collision_model),
+    END_LOOP(),
+};
+
+//all volumes in the game are hardcoded to 800x800 units. it's shit i know.
+extern void bhv_volume(void);
+const BehaviorScript bhvVolume[] = {
+    BEGIN(OBJ_LIST_SPAWNER),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_volume),
+    END_LOOP(),
+};
+
+extern void bhv_dungeon_manager(void);
+const BehaviorScript bhvDungeonManager[] = {
+    BEGIN(OBJ_LIST_SPAWNER),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_dungeon_manager),
     END_LOOP(),
 };

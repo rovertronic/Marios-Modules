@@ -230,6 +230,7 @@ struct module_info module_infos[] = {
     [MOD_CAP] = {MTYPE_MOVE,micons_cap_rgba16,"Enables cap power for one second.","0:Vanish, 1:Metal, 2:Wing.",module_cap},
     [MOD_GRAPPLE] = {MTYPE_MOVE,micons_grapple_rgba16,"Launches a grapple hook. Must hit wood.",NULL,NULL},
     [MOD_GRAV] = {MTYPE_COND,micons_grav_rgba16,"Continues when Mario has downward velocity.",NULL,module_grav},
+    [MOD_NONMOD_KEY] = {MTYPE_NONMOD, micons_grav_rgba16,NULL,NULL,NULL},
 };
 
 struct module_type_info module_type_infos[] = {
@@ -255,7 +256,7 @@ f32 inventory_vis_y = 0.0f;
 s8 module_in_hand = MOD_EMPTY;
 
 s32 is_inventory_slot_locked(int x, int y) {
-    gMarioState->numStars = 10;
+    //gMarioState->numStars = 10;
     switch(y) {
         case 0://a
             if (x >= 1+(gMarioState->numStars*2)) {return TRUE;}
@@ -568,21 +569,22 @@ void print_module_menu(void) {
     }
 }
 
+#define MODULE_HUD_STATUS_Y 205
 void print_module_hud_status(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-    print_module(MOD_BUTTON_A,22,15);
+    print_module(MOD_BUTTON_A,22,MODULE_HUD_STATUS_Y);
     if (module_execution_threads[MODULE_EXEC_A].executing) {
-        print_texture(micons_executing_rgba16,16 ,22,15);
+        print_texture(micons_executing_rgba16,16 ,22,MODULE_HUD_STATUS_Y);
     }
     if (module_execution_threads[MODULE_EXEC_A].input_notify) {
-        print_texture(micons_inpnotif_rgba16,16 ,22,15);
+        print_texture(micons_inpnotif_rgba16,16 ,205,MODULE_HUD_STATUS_Y);
     }
-    print_module(MOD_BUTTON_B,42,15);
+    print_module(MOD_BUTTON_B,42,MODULE_HUD_STATUS_Y);
     if (module_execution_threads[MODULE_EXEC_B].executing) {
-        print_texture(micons_executing_rgba16,16 ,42,15);
+        print_texture(micons_executing_rgba16,16 ,42,MODULE_HUD_STATUS_Y);
     }
     if (module_execution_threads[MODULE_EXEC_B].input_notify) {
-        print_texture(micons_inpnotif_rgba16,16 ,42,15);
+        print_texture(micons_inpnotif_rgba16,16 ,42,MODULE_HUD_STATUS_Y);
     }
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }

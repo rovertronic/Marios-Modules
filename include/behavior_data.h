@@ -543,5 +543,7 @@ extern const BehaviorScript bhvUnusedFakeStar[];
 extern const BehaviorScript bhvChest[];
 extern const BehaviorScript bhvHover[];
 extern const BehaviorScript bhvBdoor[];
+extern const BehaviorScript bhvVolume[];
+extern const BehaviorScript bhvDungeonManager[];
 
 #endif // BEHAVIOR_DATA_H

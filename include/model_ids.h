@@ -577,6 +577,7 @@ enum new_models {
     MODEL_CCHEST,
     MODEL_HOVER,
     MODEL_BDOOR,
+    MODEL_BDOOR_LOCKED,
 };
 
 #endif // MODEL_IDS_H

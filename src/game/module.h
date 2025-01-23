@@ -50,6 +50,7 @@ enum module_type {
     MTYPE_COND,
     MTYPE_BUFF,
     MTYPE_INPUT,
+    MTYPE_NONMOD,
 };
 
 #define MOD_EMPTY -1

@@ -799,7 +799,12 @@ void bhv_chest(void) {
                 gHudDisplay.coins = gMarioState->numCoins;
                 play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);
                 o->oAction = 1;
-                add_inventory(o->oBehParams2ndByte);
+
+                if (o->oBehParams2ndByte != MOD_NONMOD_KEY) {
+                    add_inventory(o->oBehParams2ndByte);
+                } else {
+                    gMarioState->numKeys++;
+                }
             }
             break;
     }
@@ -825,12 +830,72 @@ void bhv_hover(void) {
     }
 }
 
+u8 force_door_shut = FALSE;
+
+void bhv_dungeon_manager(void) {
+    force_door_shut = FALSE;
+}
+
+void bhv_volume(void) {
+    if (
+        (ABS(gMarioState->pos[0] - o->oPosX) < 400.0f)&&
+        (ABS(gMarioState->pos[1] - o->oPosY) < 400.0f)&&
+        (ABS(gMarioState->pos[2] - o->oPosZ) < 400.0f)
+    ) {
+        switch(o->oBehParams2ndByte) {
+            case VOLUME_RESPAWN:
+                ;struct Object * respawn = cur_obj_nearest_object_with_behavior(bhvDeathWarp);
+                if (respawn) {
+                    f32 y = find_floor_height(gMarioState->pos[0],gMarioState->pos[1],gMarioState->pos[2]);
+                    respawn->oPosX = gMarioState->pos[0];
+                    respawn->oPosY = y;
+                    respawn->oPosZ = gMarioState->pos[2];
+                    respawn->oFaceAngleYaw = gMarioState->faceAngle[1];
+                    respawn->oMoveAngleYaw = gMarioState->faceAngle[1];
+                }
+                break;
+            case VOLUME_SCUTTLE_BATTLE:
+                {
+                    struct Object * enemy = cur_obj_nearest_object_with_behavior(bhvScuttlebug);
+                    if (enemy) {
+                        force_door_shut = TRUE;
+                    }
+                }
+                break;
+            case VOLUME_SNUFIT_BATTLE:
+                {
+                    struct Object * enemy = cur_obj_nearest_object_with_behavior(bhvSnufit);
+                    if (enemy) {
+                        force_door_shut = TRUE;
+                    }
+                }
+                break;
+        }
+    }
+}
+
 void bhv_bdoor(void) {
     f32 dist;
+    u8 needs_key = (o->oBehParams2ndByte==1);
     u8 open = FALSE;
     vec3_get_dist(gMarioState->pos,&o->oHomeVec,&dist);
     if (dist < 300.0f) {
         open = TRUE;
+
+        if (needs_key && gMarioState->numKeys > 0) {
+            gMarioState->numKeys--;
+            o->oBehParams2ndByte = 0;
+            cur_obj_play_sound_2(SOUND_GENERAL_DOOR_TURN_KEY);
+            cur_obj_set_model(MODEL_BDOOR);
+            needs_key = FALSE;
+        }
+    }
+    if (force_door_shut) {
+        open = FALSE;
+    }
+    if (needs_key) {
+        open = FALSE;
+        cur_obj_set_model(MODEL_BDOOR_LOCKED);
     }
 
     switch(o->oAction) {

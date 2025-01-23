@@ -12,4 +12,6 @@ extern const LevelScript level_temple_entry[];
 
 #include "levels/temple/bdoor/geo_header.h"
 
+#include "levels/temple/bdoorl/geo_header.h"
+
 #endif

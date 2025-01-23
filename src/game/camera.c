@@ -885,6 +885,7 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
         camYaw = clamp_positions_and_find_yaw(pos, focus, 6839.f, 995.f, 5994.f, -3945.f);
     }
 #endif
+
     return camYaw;
 }
 
@@ -1157,6 +1158,56 @@ void mode_8_directions_camera(struct Camera *c) {
     c->pos[2] = pos[2];
     sAreaYawChange = sAreaYaw - oldAreaYaw;
     set_camera_height(c, pos[1]);
+
+    struct Surface * surf;
+    Vec3f camdir;
+    Vec3f origin;
+    Vec3f thick;
+    Vec3f hitpos;
+    Vec3f camera_looknormal;
+
+    // CEILING COLLISION
+    // Standard camera raycast check for ceiling collision. No special shenanigans here!
+    vec3f_copy(origin,gMarioState->pos);
+    origin[1] += 50.0f;
+    vec3f_diff(camdir,c->pos,origin);
+    find_surface_on_ray(origin, camdir, &surf, &hitpos, RAYCAST_FIND_CEIL);
+
+    if (surf) {
+        vec3f_copy(c->pos,hitpos);
+    }
+
+    // WALL COLLISION
+    // More complex; does an initial check to disqualify 300 unit high walls. If there are walls taller than 300 units,
+    // then do a standard camera raycast and test for walls. If successful, set the camera position to the wall hit location
+    // and push the camera inward if Mario is close to the wall.
+
+    vec3f_copy(origin,gMarioState->pos);
+    origin[1] += 50.0f;
+    vec3f_diff(camdir,c->pos,origin);
+
+    find_surface_on_ray(origin, camdir, &surf, &hitpos, RAYCAST_FIND_WALL);
+
+    Vec3f camera_hit_diff;
+    vec3f_diff(camera_hit_diff,origin,hitpos);
+    f32 hit_to_mario_dist = vec3_mag(camera_hit_diff);
+
+    if (surf) {
+        vec3f_diff(camera_looknormal,c->focus,c->pos);
+        vec3f_normalize(camera_looknormal);
+
+        f32 thickMul = 35.0f;
+
+        if (hit_to_mario_dist < 300.0f) {
+            thickMul -= 300.0f-hit_to_mario_dist;
+        }
+
+        thick[0] = camera_looknormal[0] * thickMul;
+        thick[1] = camera_looknormal[1] * thickMul;
+        thick[2] = camera_looknormal[2] * thickMul;
+        vec3f_add(hitpos,thick);
+        vec3f_copy(c->pos,hitpos);
+    }
 }
 
 /**

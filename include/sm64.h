@@ -724,4 +724,10 @@ enum MarioActionFlags {
 
 #define JPAD_BUTTONS  (U_JPAD     | D_JPAD     | L_JPAD     | R_JPAD       )
 
+enum {
+    VOLUME_RESPAWN,
+    VOLUME_SCUTTLE_BATTLE,
+    VOLUME_SNUFIT_BATTLE,
+};
+
 #endif // SM64_H

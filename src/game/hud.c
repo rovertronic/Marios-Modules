@@ -404,9 +404,9 @@ void render_hud_breath_meter(void) {
  * Renders the amount of lives Mario has.
  */
 void render_hud_mario_lives(void) {
-    print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(22), HUD_TOP_Y, ","); // 'Mario Head' glyph
+    print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(22), HUD_TOP_Y, "|"); // 'Mario key' glyph
     print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(38), HUD_TOP_Y, "*"); // 'X' glyph
-    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(54), HUD_TOP_Y, "%d", gHudDisplay.lives);
+    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(54), HUD_TOP_Y, "%d", gMarioState->numKeys);
 }
 
 #ifdef VANILLA_STYLE_CUSTOM_DEBUG
@@ -571,11 +571,11 @@ void render_hud(void) {
             render_hud_cannon_reticle();
         }
 
-#ifdef ENABLE_LIVES
+//#ifdef ENABLE_LIVES
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_LIVES) {
             render_hud_mario_lives();
         }
-#endif
+//#endif
 
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_COIN_COUNT) {
             render_hud_coins();
@@ -586,7 +586,7 @@ void render_hud(void) {
         }
 
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_KEYS) {
-            render_hud_keys();
+            //render_hud_keys();
         }
 
 #ifdef BREATH_METER
