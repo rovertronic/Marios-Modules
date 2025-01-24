@@ -394,7 +394,7 @@ void init_mario_after_warp(void) {
     switch (marioSpawnType) {
         case MARIO_SPAWN_DOOR_WARP:
         case MARIO_SPAWN_SPIN_AIRBORNE_CIRCLE:
-            play_transition(WARP_TRANSITION_FADE_FROM_CIRCLE, 0x10, 0x00, 0x00, 0x00);
+            play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x10, 0x00, 0x00, 0x00);
             break;
         case MARIO_SPAWN_TELEPORT:
             play_transition(WARP_TRANSITION_FADE_FROM_COLOR, 0x14, 0xFF, 0xFF, 0xFF);
@@ -406,7 +406,7 @@ void init_mario_after_warp(void) {
             play_transition(WARP_TRANSITION_FADE_FROM_COLOR, 0x10, 0x00, 0x00, 0x00);
             break;
         default:
-            play_transition(WARP_TRANSITION_FADE_FROM_STAR, 0x10, 0x00, 0x00, 0x00);
+            play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x10, 0x00, 0x00, 0x00);
             break;
     }
 
@@ -738,7 +738,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 sSourceWarpNodeId = WARP_NODE_DEFAULT;
                 gSavedCourseNum = COURSE_NONE;
                 fadeMusic = FALSE;
-                play_transition(WARP_TRANSITION_FADE_INTO_STAR, sDelayedWarpTimer, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 break;
 
             case WARP_OP_CREDITS_END:
@@ -825,7 +825,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 sDelayedWarpTimer = 20;
                 sSourceWarpNodeId = GET_BPARAM2(m->usedObj->oBehParams);
                 fadeMusic = !music_unchanged_through_warp(sSourceWarpNodeId);
-                play_transition(WARP_TRANSITION_FADE_INTO_STAR, sDelayedWarpTimer, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 break;
 
             case WARP_OP_CREDITS_START:
@@ -1006,6 +1006,7 @@ void basic_update(void) {
     }
 }
 
+extern u8 title_or_game;
 s32 play_mode_normal(void) {
 #ifndef DISABLE_DEMO
     if (gCurrDemoInput != NULL) {
@@ -1073,11 +1074,13 @@ s32 play_mode_normal(void) {
             gCameraMovementFlags |= CAM_MOVE_PAUSE_SCREEN;
             set_play_mode(PLAY_MODE_PAUSED);
             */
-            gModuleMenuOpen = !gModuleMenuOpen;
-            if (gModuleMenuOpen) {
-                play_sound(SOUND_GENERAL_OPEN_IRON_DOOR, gGlobalSoundSource);
-            } else {
-                play_sound(SOUND_GENERAL_CLOSE_IRON_DOOR, gGlobalSoundSource);
+            if (title_or_game == 1) {
+                gModuleMenuOpen = !gModuleMenuOpen;
+                if (gModuleMenuOpen) {
+                    play_sound(SOUND_GENERAL_OPEN_IRON_DOOR, gGlobalSoundSource);
+                } else {
+                    play_sound(SOUND_GENERAL_CLOSE_IRON_DOOR, gGlobalSoundSource);
+                }
             }
         }
     }
@@ -1314,7 +1317,7 @@ s32 init_level(void) {
         if (fadeFromColor) {
             play_transition(WARP_TRANSITION_FADE_FROM_COLOR, 0x5A, 0xFF, 0xFF, 0xFF);
         } else {
-            play_transition(WARP_TRANSITION_FADE_FROM_STAR, 0x10, 0xFF, 0xFF, 0xFF);
+            play_transition(WARP_TRANSITION_FADE_FROM_COLOR, 0x30, 0xFF, 0xFF, 0xFF);
         }
 
         if (gCurrDemoInput == NULL) {

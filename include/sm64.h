@@ -701,7 +701,7 @@ enum MarioActionFlags {
 #define ACT_UNUSED_1BC                 0x000001BC // (0x1BC)
 #define ACT_UNUSED_1BD                 0x000001BD // (0x1BD)
 #define ACT_UNUSED_1BE                 0x000001BE // (0x1BE)
-#define ACT_UNUSED_1BF                 0x000001BF // (0x1BF)
+#define ACT_TITLE                      0x000001BF // (0x1BF)
 
 // group 0x1C0: custom actions
 // 0x1C0 - 0x1FF

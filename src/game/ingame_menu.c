@@ -27,6 +27,7 @@
 #include "puppycam2.h"
 #include "main.h"
 #include "module.h"
+#include "actors/group0.h"
 
 #ifdef VERSION_EU
 #undef LANGUAGE_FUNCTION
@@ -2196,10 +2197,29 @@ s32 render_course_complete_screen(void) {
     return MENU_OPT_NONE;
 }
 
+u8 title_dl_alpha = 255;
+u8 title_progress = FALSE;
+u8 title_or_game = 0;
+
 s32 render_menus_and_dialogs(void) {
     s32 mode = MENU_OPT_NONE;
 
     create_dl_ortho_matrix();
+
+    if (title_dl_alpha > 0) {
+        gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
+        print_set_envcolour(255, 255, 255, title_dl_alpha);
+        render_multi_image(micons_mmodules_title_rgba16, 0, 50, 320, 124, 1, 1, G_CYC_1CYCLE);
+        if (title_progress) {
+            title_dl_alpha -= 5;
+        }
+        if (gPlayer1Controller->buttonPressed & START_BUTTON) {
+            title_progress = TRUE;
+        }
+    }
+    if (title_or_game == 0) {
+        return mode;
+    }
 
     if (gMenuMode != MENU_MODE_NONE) {
         switch (gMenuMode) {
@@ -2228,12 +2248,11 @@ s32 render_menus_and_dialogs(void) {
         render_dialog_entries();
         gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;
     }
-        
+
     if (gModuleMenuOpen) {
         print_module_menu();
-    } else {
-        print_module_hud_status();
     }
+    print_module_hud_status();
 
     return mode;
 }

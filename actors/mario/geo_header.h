@@ -66,7 +66,7 @@ extern u8 mario_vine1_ci8[];
 extern u8 mario_vine1_pal_rgba16[];
 extern u8 mario_mario_face_2_rgba16[];
 extern u8 mario_mario_face_3_rgba16[];
-extern u8 mario_mario_face_4_rgba16[];
+extern u8 mario_dedeyes_rgba16[];
 extern u8 mario_wing_2_rgba16[];
 extern u8 mario_wing1_rgba16[];
 extern Vtx mario_000_offset_mesh_layer_1_vtx_0[53];

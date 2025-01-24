@@ -132,7 +132,7 @@ const LevelScript level_intro_mario_head_dizzy[] = {
     BLACKOUT(/*active*/ FALSE),
     LOAD_AREA(/*area*/ 1),
     SET_MENU_MUSIC(/*seq*/ SEQ_MENU_GAME_OVER),
-    TRANSITION(/*transType*/ WARP_TRANSITION_FADE_FROM_STAR, /*time*/ 20, /*color*/ 0x00, 0x00, 0x00),
+    TRANSITION(/*transType*/ WARP_TRANSITION_FADE_FROM_COLOR, /*time*/ 20, /*color*/ 0x00, 0x00, 0x00),
     SLEEP(/*frames*/ 20),
     CALL_LOOP(/*arg*/ LVL_INTRO_GAME_OVER, /*func*/ lvl_intro_update),
     JUMP_IF(/*op*/ OP_EQ, /*arg*/ LEVEL_FILE_SELECT,  script_intro_file_select),

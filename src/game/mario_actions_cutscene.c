@@ -640,7 +640,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
     } else if (m->actionState == ACT_STATE_STAR_DANCE_RETURN && is_anim_at_end(m)) {
         disable_time_stop();
         enable_background_sound();
-        s32 dialogID = get_star_collection_dialog(m);
+        s32 dialogID = 0;//get_star_collection_dialog(m);
         if (dialogID) {
             // look up for dialog
             set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, dialogID);

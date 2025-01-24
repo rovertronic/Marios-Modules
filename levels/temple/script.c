@@ -38,7 +38,7 @@ const LevelScript level_temple_entry[] = {
 
 	AREA(1, temple_area_1),
 		WARP_NODE(0xF1, LEVEL_TEMPLE, 0x01, 0x01, WARP_NO_CHECKPOINT),
-		MARIO_POS(0x01, 0, 0, 674, 10746),
+		MARIO_POS(0x01, 0, 6866, 4180, -6827),
 		OBJECT(MODEL_CHEST, 4520, 199, 10551, 0, -180, 0, (MOD_JUMP << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -900, 279, 3878, 0, 90, 0, (MOD_HIT_GROUND << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -100, 279, 3878, 0, -90, 0, (5 << 24) | (MOD_JUMP << 16), bhvChest),
@@ -48,7 +48,7 @@ const LevelScript level_temple_entry[] = {
 		OBJECT(MODEL_CHEST, -7344, 1819, -199, 0, 90, 0, (MOD_GRAV << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -49, 389, -781, 0, -45, 0, (15 << 24) | (MOD_INPUT << 16), bhvChest),
 		OBJECT(MODEL_CHEST, 6935, 847, -305, 0, -90, 0, (MOD_ATTACK << 16), bhvChest),
-		OBJECT(MODEL_CHEST, 3237, 1826, -6927, 0, 90, 0, (MOD_REPEAT << 16), bhvChest),
+		OBJECT(MODEL_CHEST, 2776, 1926, -2281, 0, -180, 0, (MOD_REPEAT << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -6852, 989, 2566, 0, -180, 0, (25 << 24) | (MOD_JUMP << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -683, 789, -3069, 0, 0, 0, (MOD_POW << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -1485, 1286, -3059, 0, 90, 0, (MOD_NONMOD_KEY << 16), bhvChest),
@@ -170,7 +170,7 @@ const LevelScript level_temple_entry[] = {
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 	FREE_LEVEL_POOL(),
-	MARIO_POS(0x01, 0, 0, 674, 10746),
+	MARIO_POS(0x01, 0, 6866, 4180, -6827),
 	CALL(0, lvl_init_or_update),
 	CALL_LOOP(1, lvl_init_or_update),
 	CLEAR_LEVEL(),

@@ -230,7 +230,7 @@ struct module_info module_infos[] = {
     [MOD_CAP] = {MTYPE_MOVE,micons_cap_rgba16,"Enables cap power for one second.","0:Vanish, 1:Metal, 2:Wing.",module_cap},
     [MOD_GRAPPLE] = {MTYPE_MOVE,micons_grapple_rgba16,"Launches a grapple hook. Must hit wood.",NULL,NULL},
     [MOD_GRAV] = {MTYPE_COND,micons_grav_rgba16,"Continues when Mario has downward velocity.",NULL,module_grav},
-    [MOD_NONMOD_KEY] = {MTYPE_NONMOD, micons_grav_rgba16,NULL,NULL,NULL},
+    [MOD_NONMOD_KEY] = {MTYPE_NONMOD, micons_key_rgba16,NULL,NULL,NULL},
 };
 
 struct module_type_info module_type_infos[] = {
@@ -238,12 +238,13 @@ struct module_type_info module_type_infos[] = {
     [MTYPE_BUFF] = {"<COL_C80000FF>Modifier",{200, 0, 0}},
     [MTYPE_COND] = {"<COL_00AA00FF>Condition",{0, 170, 0}},
     [MTYPE_INPUT] = {"Input",{0xC9, 0x82, 0x30}},
+    [MTYPE_NONMOD] = {NULL,{0x00, 0x00, 0x00}}
 };
 
 #define INVENTORY_PRINT_OFFSET_X 80
 #define INVENTORY_PRINT_OFFSET_Y 70
 
-#define INVENTORY_SLOTS_Y 4
+#define INVENTORY_SLOTS_Y 5
 #define INVENTORY_SLOTS_X 8
 s8 inventory[INVENTORY_SLOTS_Y][INVENTORY_SLOTS_X];
 
@@ -256,7 +257,7 @@ f32 inventory_vis_y = 0.0f;
 s8 module_in_hand = MOD_EMPTY;
 
 s32 is_inventory_slot_locked(int x, int y) {
-    //gMarioState->numStars = 10;
+    gMarioState->numStars = 10;
     switch(y) {
         case 0://a
             if (x >= 1+(gMarioState->numStars*2)) {return TRUE;}
@@ -293,20 +294,20 @@ void init_module_inventory(void) {
         }
     }
     inventory[2][0] = MOD_JUMP;
-    //inventory[2][1] = MOD_JUMP;
-    //inventory[2][2] = MOD_POW;
-    //inventory[2][3] = MOD_POW;
-    //inventory[2][4] = MOD_HIT_GROUND;
-    //inventory[2][5] = MOD_HIT_WALL;
-    //inventory[2][6] = MOD_TIMER;
-    //inventory[2][7] = MOD_ATTACK;
-    //inventory[3][0] = MOD_INPUT;
-    //inventory[3][1] = MOD_SWAP;
-    //inventory[3][2] = MOD_CAP;
-    //inventory[3][3] = MOD_PLATFORM;
-    //inventory[3][4] = MOD_REPEAT;
-    //inventory[3][5] = MOD_GRAPPLE;
-    //inventory[3][6] = MOD_GRAV;
+    inventory[2][1] = MOD_JUMP;
+    inventory[2][2] = MOD_POW;
+    inventory[2][3] = MOD_POW;
+    inventory[2][4] = MOD_HIT_GROUND;
+    inventory[2][5] = MOD_HIT_WALL;
+    inventory[2][6] = MOD_TIMER;
+    inventory[2][7] = MOD_ATTACK;
+    inventory[3][0] = MOD_INPUT;
+    inventory[3][1] = MOD_SWAP;
+    inventory[3][2] = MOD_CAP;
+    inventory[3][3] = MOD_PLATFORM;
+    inventory[3][4] = MOD_REPEAT;
+    inventory[3][5] = MOD_GRAPPLE;
+    inventory[3][6] = MOD_GRAV;
 
     module_execution_threads[MODULE_EXEC_A].executing = FALSE;
     module_execution_threads[MODULE_EXEC_B].executing = FALSE;
@@ -464,7 +465,9 @@ void print_module(int id, int x, int y) {
     u8 g = module_type_infos[module_infos[id].type].color[1];
     u8 b = module_type_infos[module_infos[id].type].color[2];
     gDPSetEnvColor(gDisplayListHead++, r,g,b, 255);
-    print_texture(micons_piece_rgba16,32,x,y);
+    if (module_infos[id].type != MTYPE_NONMOD) {
+        print_texture(micons_piece_rgba16,32,x,y);
+    }
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     print_texture(module_infos[id].tex,16,x,y);
 }
@@ -482,6 +485,9 @@ int inv_slot_printx_w(int x, int y) {
     return inv_slot_printx(x,y)+20;
 }
 int inv_slot_printy(int x, int y) {
+    if (y > 1) {
+        return y*18+INVENTORY_PRINT_OFFSET_Y;
+    }
     return y*17+INVENTORY_PRINT_OFFSET_Y;
 }
 
@@ -569,6 +575,10 @@ void print_module_menu(void) {
     }
 }
 
+u8 world_module_timer = 0;
+Vec3f world_module_pos;
+s8 world_module_id = -1;
+
 #define MODULE_HUD_STATUS_Y 205
 void print_module_hud_status(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
@@ -577,7 +587,7 @@ void print_module_hud_status(void) {
         print_texture(micons_executing_rgba16,16 ,22,MODULE_HUD_STATUS_Y);
     }
     if (module_execution_threads[MODULE_EXEC_A].input_notify) {
-        print_texture(micons_inpnotif_rgba16,16 ,205,MODULE_HUD_STATUS_Y);
+        print_texture(micons_inpnotif_rgba16,16 ,22,MODULE_HUD_STATUS_Y);
     }
     print_module(MOD_BUTTON_B,42,MODULE_HUD_STATUS_Y);
     if (module_execution_threads[MODULE_EXEC_B].executing) {
@@ -586,5 +596,21 @@ void print_module_hud_status(void) {
     if (module_execution_threads[MODULE_EXEC_B].input_notify) {
         print_texture(micons_inpnotif_rgba16,16 ,42,MODULE_HUD_STATUS_Y);
     }
+
+    if (world_module_id != -1) {
+        s32 x;
+        s32 y;
+
+        world_module_pos[1] -= 5.0f;
+        world_pos_to_screen_pos(&world_module_pos,&x,&y);
+        print_module(world_module_id,x,y);
+
+        if (world_module_timer > 30) {
+            world_module_id = -1;
+        }
+        world_module_timer++;
+    }
+
+
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }

@@ -1719,8 +1719,21 @@ void queue_rumble_particles(struct MarioState *m) {
 /**
  * Main function for executing Mario's behavior. Returns particleFlags.
  */
+extern u8 title_or_game;
 s32 execute_mario_action(UNUSED struct Object *obj) {
     s32 inLoop = TRUE;
+
+    if (title_or_game == 0) {
+        gMarioState->faceAngle[1] = 0x8000;
+        gMarioState->action = ACT_TITLE;
+        gMarioState->marioObj->header.gfx.angle[1] = 0x8000;
+        gMarioState->marioObj->header.gfx.animInfo.animFrame = 0;
+        set_mario_animation(gMarioState, MARIO_ANIM_IDLE_HEAD_CENTER);
+    } else {
+        if (gMarioState->action == ACT_TITLE) {
+            gMarioState->action = ACT_IDLE;
+        }
+    }
 
     // Updates once per frame:
     vec3f_get_dist_and_angle(gMarioState->prevPos, gMarioState->pos, &gMarioState->moveSpeed, &gMarioState->movePitch, &gMarioState->moveYaw);
@@ -1806,6 +1819,10 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 #if ENABLE_RUMBLE
         queue_rumble_particles(gMarioState);
 #endif
+
+        if (title_or_game == 0) {
+            gMarioState->marioBodyState->eyeState = MARIO_EYES_DEAD;
+        }
 
         return gMarioState->particleFlags;
     }

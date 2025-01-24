@@ -33,6 +33,7 @@
 #include "spawn_sound.h"
 #include "rumble_init.h"
 #include "module.h"
+#include "levels/temple/header.h"
 
 /**
  * @file obj_behaviors.c
@@ -776,6 +777,10 @@ UNUSED s32 debug_sequence_tracker(s16 debugInputSequence[]) {
 #include "behaviors/mips.inc.c"
 #include "behaviors/yoshi.inc.c"
 
+extern u8 world_module_timer;
+extern Vec3f world_module_pos;
+extern s8 world_module_id;
+
 void bhv_chest(void) {
     u8 cost = GET_BPARAM1(o->oBehParams);
 
@@ -799,6 +804,12 @@ void bhv_chest(void) {
                 gHudDisplay.coins = gMarioState->numCoins;
                 play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);
                 o->oAction = 1;
+
+                world_module_timer = 0;
+                vec3f_copy(world_module_pos,&o->oPosVec);
+                world_module_id = o->oBehParams2ndByte;
+                world_module_pos[1] += 50.0f;
+
 
                 if (o->oBehParams2ndByte != MOD_NONMOD_KEY) {
                     add_inventory(o->oBehParams2ndByte);
@@ -831,8 +842,24 @@ void bhv_hover(void) {
 }
 
 u8 force_door_shut = FALSE;
-
+s16 spline_seg = 0;
+f32 spline_prog = 0;
+extern u8 title_progress;
+extern u8 title_or_game;
 void bhv_dungeon_manager(void) {
+    if (title_or_game == 0) {
+        gCamera->cutscene = 1;
+        if (!title_progress) {
+            spline_prog = 0;
+            spline_seg = 0;
+        }
+        if (move_point_along_spline(gLakituState.goalPos,segmented_to_virtual(temple_area_1_spline_ic_pos),&spline_seg,&spline_prog)) {
+            gCamera->cutscene = 0;
+            title_or_game = 1;
+        }
+    }
+
+
     force_door_shut = FALSE;
 }
 
