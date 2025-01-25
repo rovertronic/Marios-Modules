@@ -12,6 +12,69 @@
 #define SCRAM "scram--"
 #endif
 
+DEFINE_DIALOG(DIALOG_TUTORIAL_1, 1, 4, 95, 200, _("\
+Press START to open the\n\
+module menu.\n\
+\n\
+\n\
+You can use the analog\n\
+stick to move the cursor\n\
+and [A] to pick up or\n\
+place modules.\n\
+When you press [A] or [B],\n\
+their corresponding\n\
+sockets will activate.\n\
+\n\
+You can find new modules\n\
+in treasure chests to\n\
+craft progressively more\n\
+advanced actions."))
+
+DEFINE_DIALOG(DIALOG_TUTORIAL_2, 1, 5, 95, 200, _("\
+Collecting power stars\n\
+will open up more socket\n\
+slots in the module menu,\n\
+allowing for increasingly\n\
+complex recipes."))
+
+DEFINE_DIALOG(DIALOG_TUTORIAL_3, 1, 5, 95, 200, _("\
+Condition modules will\n\
+halt the socket sequence\n\
+and only continue once\n\
+a certain condition is\n\
+met.\n\
+A few modules can time\n\
+out and cancel the\n\
+socket sequence if the\n\
+condition takes too\n\
+long to meet."))
+
+DEFINE_DIALOG(DIALOG_TUTORIAL_4, 1, 6, 95, 200, _("\
+Socket sequences flow\n\
+from left to right.\n\
+The order in which\n\
+modules are placed\n\
+affect the action's\n\
+behavior.\n\
+Try placing 2 jump\n\
+modules next to each\n\
+other, or place a\n\
+ground condition in\n\
+the center, and see\n\
+what happens."))
+
+DEFINE_DIALOG(DIALOG_TAUNT_1, 1, 2, 95, 200, _("\
+A gargantuan wall towers\n\
+before thee.\n\
+Well, better get your\n\
+shit together and lock in!"))
+
+DEFINE_DIALOG(DIALOG_TAUNT_2, 1, 3, 95, 200, _("\
+A great chasm stands\n\
+between you and your\n\
+destiny.\n\
+How will you cross it?"))
+
 DEFINE_DIALOG(DIALOG_000, 1, 6, 30, 200, _("\
 Wow! You're smack in the\n\
 middle of the battlefield.\n\

@@ -406,7 +406,7 @@ void init_mario_after_warp(void) {
             play_transition(WARP_TRANSITION_FADE_FROM_COLOR, 0x10, 0x00, 0x00, 0x00);
             break;
         default:
-            play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x10, 0x00, 0x00, 0x00);
+            play_transition(WARP_TRANSITION_FADE_FROM_COLOR, 0x10, 0x00, 0x00, 0x00);
             break;
     }
 

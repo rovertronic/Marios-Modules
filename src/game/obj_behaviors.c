@@ -857,6 +857,7 @@ void bhv_dungeon_manager(void) {
             gCamera->cutscene = 0;
             title_or_game = 1;
         }
+        move_point_along_spline(gLakituState.goalFocus,segmented_to_virtual(temple_area_1_spline_ic_foc),&spline_seg,&spline_prog);
     }
 
 

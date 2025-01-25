@@ -2209,7 +2209,7 @@ s32 render_menus_and_dialogs(void) {
     if (title_dl_alpha > 0) {
         gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
         print_set_envcolour(255, 255, 255, title_dl_alpha);
-        render_multi_image(micons_mmodules_title_rgba16, 0, 50, 320, 124, 1, 1, G_CYC_1CYCLE);
+        render_multi_image(micons_mmodules_title_rgba16, 0, 40, 320, 124, 1, 1, G_CYC_1CYCLE);
         if (title_progress) {
             title_dl_alpha -= 5;
         }
