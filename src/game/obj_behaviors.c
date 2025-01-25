@@ -808,7 +808,6 @@ void bhv_chest(void) {
                 world_module_timer = 0;
                 vec3f_copy(world_module_pos,&o->oPosVec);
                 world_module_id = o->oBehParams2ndByte;
-                world_module_pos[1] += 50.0f;
 
 
                 if (o->oBehParams2ndByte != MOD_NONMOD_KEY) {
@@ -934,7 +933,7 @@ void bhv_bdoor(void) {
             }
             break;
         case 1:
-            o->oPosY += 20.0f;
+            o->oPosY += 25.0f;
             if (o->oPosY > o->oHomeY + 500.0f) {
                 o->oAction = 2;
                 o->oPosY = o->oHomeY + 500.0f;
@@ -947,7 +946,7 @@ void bhv_bdoor(void) {
             }
             break;
         case 3:
-            o->oPosY -= 20.0f;
+            o->oPosY -= 25.0f;
             if (o->oPosY < o->oHomeY) {
                 o->oAction = 0;
                 o->oPosY = o->oHomeY;

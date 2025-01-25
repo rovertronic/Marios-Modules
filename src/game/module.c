@@ -601,9 +601,8 @@ void print_module_hud_status(void) {
         s32 x;
         s32 y;
 
-        world_module_pos[1] -= 5.0f;
         world_pos_to_screen_pos(&world_module_pos,&x,&y);
-        print_module(world_module_id,x,y);
+        print_module(world_module_id,x-8,y-world_module_timer);
 
         if (world_module_timer > 30) {
             world_module_id = -1;

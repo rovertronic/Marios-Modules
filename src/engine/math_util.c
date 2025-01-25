@@ -1154,7 +1154,10 @@ void world_pos_to_screen_pos(Vec3f world_pos, s32 * x, s32 * y) {
     s32 halfFovVertical = (45 + 2.0f) * 91.0222222222f + 0.5f;
     f32 vScreenEdge;
     
-    mtxf_mul(gProjectionMatrix, gMatStack[0], gCameraTransform);
+    Mat4 idMatrix;
+    mtxf_identity(idMatrix);
+
+    mtxf_mul(gProjectionMatrix, idMatrix, gCameraTransform);
     linear_mtxf_mul_vec3f_and_translate(gProjectionMatrix, cameraSpace, world_pos);
 
     vScreenEdge = -cameraSpace[2] * (sins(halfFovVertical) / coss(halfFovVertical)) / 128.f;

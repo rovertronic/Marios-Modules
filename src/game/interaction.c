@@ -24,6 +24,7 @@
 #include "sound_init.h"
 #include "rumble_init.h"
 #include "config.h"
+#include "module.h"
 
 u8  sDelayInvincTimer;
 s16 sInvulnerable;
@@ -1724,7 +1725,7 @@ u32 check_read_sign(struct MarioState *m, struct Object *obj) {
 #endif
         if (m->input & READ_MASK) {
 #else
-    if ((gPlayer1Controller->buttonPressed & (A_BUTTON|B_BUTTON)) && mario_can_talk(m, 0) && object_facing_mario(m, obj, SIGN_RANGE)) {
+    if ((gModuleMenuOpen == FALSE)&&(gPlayer1Controller->buttonPressed & (A_BUTTON|B_BUTTON)) && mario_can_talk(m, 0) && object_facing_mario(m, obj, SIGN_RANGE)) {
         s16 facingDYaw = (s16)(obj->oMoveAngleYaw + 0x8000) - m->faceAngle[1];
         if (facingDYaw >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE) {
 #endif
