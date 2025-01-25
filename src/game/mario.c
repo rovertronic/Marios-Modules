@@ -1720,6 +1720,9 @@ void queue_rumble_particles(struct MarioState *m) {
  * Main function for executing Mario's behavior. Returns particleFlags.
  */
 extern u8 title_or_game;
+extern u8 title_progress;
+u16 flickergoon_timer = 0;
+
 s32 execute_mario_action(UNUSED struct Object *obj) {
     s32 inLoop = TRUE;
 
@@ -1822,6 +1825,19 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 
         if (title_or_game == 0) {
             gMarioState->marioBodyState->eyeState = MARIO_EYES_DEAD;
+            if (title_progress) {
+                flickergoon_timer ++;
+            }
+            if (flickergoon_timer > 120) {
+                if (random_u16() % 2 == 0) {
+                    gMarioState->marioBodyState->eyeState = MARIO_EYES_OPEN;
+                } else {
+                    gMarioState->marioBodyState->eyeState = MARIO_EYES_DEAD;
+                }
+            }
+            if (flickergoon_timer > 160) {
+                gMarioState->marioBodyState->eyeState = MARIO_EYES_OPEN;
+            }
         }
 
         return gMarioState->particleFlags;

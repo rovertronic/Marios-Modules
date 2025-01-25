@@ -19,12 +19,12 @@ module menu.\n\
 \n\
 You can use the analog\n\
 stick to move the cursor\n\
-and [A] to pick up or\n\
-place modules.\n\
-When you press [A] or [B],\n\
-their corresponding\n\
-sockets will activate.\n\
-\n\
+and [A] to pick up or place\n\
+modules.\n\
+Outside the menu,\n\
+when you press [A] or [B],\n\
+the corresponding sockets\n\
+will activate.\n\
 You can find new modules\n\
 in treasure chests to\n\
 craft progressively more\n\
