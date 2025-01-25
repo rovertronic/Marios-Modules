@@ -914,14 +914,25 @@ void bhv_volume(void) {
                 }
                 break;
             case VOLUME_SEQ_CHANGE:
-                if (dungeon_seq_change != GET_BPARAM1(o->oBehParams)  && dungeon_seq_timer == 0) {
-                    dungeon_seq_change = GET_BPARAM1(o->oBehParams);
-                    dungeon_seq_timer = 0;
-                    if (dungeon_seq_cur == -1) {
-                        dungeon_seq_timer = 120;
+                if (dungeon_seq_timer == 0) {
+                    if (dungeon_seq_change != GET_BPARAM1(o->oBehParams)) {
+                        dungeon_seq_change = GET_BPARAM1(o->oBehParams);
+                        dungeon_seq_timer = 0;
+                        if (dungeon_seq_cur == -1) {
+                            dungeon_seq_timer = 120;
+                        }
+                        //fadeout_level_music(1000);
+                        seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL,600,0);
                     }
-                    //fadeout_level_music(1000);
-                    seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL,600,0);
+                } else {
+                    if (dungeon_seq_change != GET_BPARAM1(o->oBehParams)) {
+                        dungeon_seq_change = GET_BPARAM1(o->oBehParams);
+                        stop_background_music(SEQUENCE_ARGS(4, dungeon_seq_cur));
+                        play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, dungeon_seq_change), 0);
+                        seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL,100,255);
+                        dungeon_seq_cur = dungeon_seq_change;
+                        dungeon_seq_timer = 0;
+                    }
                 }
                 //fadeout_level_music(126);
                 //play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, dungeon_seq_change), 0);

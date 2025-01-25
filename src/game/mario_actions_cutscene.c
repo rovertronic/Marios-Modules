@@ -1179,10 +1179,14 @@ s32 act_exit_land_save_dialog(struct MarioState *m) {
     return FALSE;
 }
 
+extern s8 dungeon_seq_cur;
+extern u8 dungeon_seq_timer;
 s32 act_death_exit(struct MarioState *m) {
     if (15 < m->actionTimer++
         && launch_mario_until_land(m, ACT_DEATH_EXIT_LAND, MARIO_ANIM_GENERAL_FALL, -32.0f)) {
         play_sound(SOUND_MARIO_OOOF2, m->marioObj->header.gfx.cameraToObject);
+        dungeon_seq_cur = -1;
+        dungeon_seq_timer = 120;
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
@@ -1219,6 +1223,8 @@ s32 act_unused_death_exit(struct MarioState *m) {
 
 s32 act_falling_death_exit(struct MarioState *m) {
     if (launch_mario_until_land(m, ACT_DEATH_EXIT_LAND, MARIO_ANIM_GENERAL_FALL, 0.0f)) {
+        dungeon_seq_cur = -1;
+        dungeon_seq_timer = 120;
         play_sound(SOUND_MARIO_OOOF2, m->marioObj->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);

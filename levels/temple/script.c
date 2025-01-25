@@ -182,6 +182,8 @@ const LevelScript level_temple_entry[] = {
 		OBJECT(MODEL_NONE, -621, 1103, -1704, 0, 0, 0, (SEQ_MM64_MAIN << 24) | (VOLUME_SEQ_CHANGE << 16), bhvVolume),
 		OBJECT(MODEL_NONE, -621, 1103, -2542, 0, 0, 0, (SEQ_MM64_UPPER << 24) | (VOLUME_SEQ_CHANGE << 16), bhvVolume),
 		OBJECT(MODEL_NONE, -3308, 2222, -6786, 0, 0, 0, (SEQ_MM64_UPPER << 24) | (VOLUME_SEQ_CHANGE << 16), bhvVolume),
+		OBJECT(MODEL_NONE, 2746, 2154, -6815, 0, 0, 0, (VOLUME_RESPAWN << 16), bhvVolume),
+		OBJECT(MODEL_NONE, -1277, 2154, -6836, 0, 0, 0, (VOLUME_RESPAWN << 16), bhvVolume),
 		OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, 0x00000000, bhvDungeonManager),
 		TERRAIN(temple_area_1_collision),
 		MACRO_OBJECTS(temple_area_1_macro_objs),

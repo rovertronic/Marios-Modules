@@ -66,11 +66,13 @@ what happens."))
 DEFINE_DIALOG(DIALOG_TAUNT_1, 1, 2, 95, 200, _("\
 A gargantuan wall towers\n\
 before thee.\n\
+Unfortunately, there's no\n\
+other way but to scale it.\n\
 Well, better get your\n\
 shit together and lock in!"))
 
 DEFINE_DIALOG(DIALOG_TAUNT_2, 1, 3, 95, 200, _("\
-A great chasm stands\n\
+A vast chasm stands\n\
 between you and your\n\
 destiny.\n\
 How will you cross it?"))
@@ -100,7 +102,15 @@ Let me know if you'd\n\
 like to see a larger\n\
 scale project using\n\
 the idea of modules\n\
-and crafting."))
+and crafting.\n\
+If you want to get\n\
+everything in this\n\
+hack, here's a list\n\
+of every collectible:\n\
+\n\
+-10 stars\n\
+-18 modules\n\
+-3 keys"))
 
 DEFINE_DIALOG(DIALOG_000, 1, 6, 30, 200, _("\
 Wow! You're smack in the\n\
