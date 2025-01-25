@@ -75,6 +75,33 @@ between you and your\n\
 destiny.\n\
 How will you cross it?"))
 
+DEFINE_DIALOG(DIALOG_CREDITS, 1, 5, 95, 200, _("\
+Thank you for playing\n\
+Mario's Modules, made\n\
+by Rovertronic!\n\
+\n\
+\n\
+This hack was made for\n\
+a competition,\n\
+Mario Jams 7: Element.\n\
+\n\
+\n\
+Soundtrack used:\n\
+SwApFell: I Hate You.\n\
+\n\
+An Undertale fangame by\n\
+Igorsantusa and Calem28.\n\
+I really liked the\n\
+idea behind this project\n\
+and think it could be\n\
+expanded upon.\n\
+\n\
+Let me know if you'd\n\
+like to see a larger\n\
+scale project using\n\
+the idea of modules\n\
+and crafting."))
+
 DEFINE_DIALOG(DIALOG_000, 1, 6, 30, 200, _("\
 Wow! You're smack in the\n\
 middle of the battlefield.\n\
@@ -1535,10 +1562,7 @@ make him lower his head.\n\
 Don't become his lunch."))
 
 DEFINE_DIALOG(DIALOG_128, 1, 4, 95, 200, _("\
-You must fight with\n\
-honor! It is against the\n\
-royal rules to throw the\n\
-king out of the ring!"))
+Stultus es!"))
 
 DEFINE_DIALOG(DIALOG_129, 1, 5, 30, 200, _("\
 Welcome to the Vanish\n\

@@ -9,6 +9,7 @@ enum DialogId {
     DIALOG_TUTORIAL_4,
     DIALOG_TAUNT_1,
     DIALOG_TAUNT_2,
+    DIALOG_CREDITS,
     DIALOG_000,
     DIALOG_001,
     DIALOG_002,

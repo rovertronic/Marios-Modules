@@ -31,6 +31,10 @@
 #include FONT_C_FILE
 #endif
 
+#include "king_bobomb/model.inc.c"
+#include "king_bobomb/anims/data.inc.c"
+#include "king_bobomb/anims/table.inc.c"
+
 #include "micons/model.inc.c"
 #include "chest/model.inc.c"
 #include "chest/anims/data.inc.c"

@@ -527,7 +527,7 @@ const BehaviorScript bhvKingBobomb[] = {
     SET_HOME(),
     SPAWN_OBJ(/*Model*/ MODEL_NONE, /*Behavior*/ bhvBobombAnchorMario),
     SET_INT(oHealth, 3),
-    SET_INT(oDamageOrCoinValue, 1),
+    SET_INT(oDamageOrCoinValue, 3),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_king_bobomb_loop),
     END_LOOP(),
@@ -3812,11 +3812,11 @@ const BehaviorScript bhvCirclingAmp[] = {
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_MOVE_XZ_USING_FVEL | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     LOAD_ANIMATIONS(oAnimations, dAmpAnimsList),
     ANIMATE(AMP_ANIM_DEFAULT),
-    SET_FLOAT(oGraphYOffset, 40),
-    SET_INT(oIntangibleTimer, 0),
+    //SET_FLOAT(oGraphYOffset, 40),
+    //SET_INT(oIntangibleTimer, 0),
     CALL_NATIVE(bhv_circling_amp_init),
     BEGIN_LOOP(),
-        CALL_NATIVE(bhv_circling_amp_loop),
+        //CALL_NATIVE(bhv_circling_amp_loop),
     END_LOOP(),
 };
 

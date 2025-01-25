@@ -17,6 +17,8 @@ void bhv_bobomb_anchor_mario_loop(void) {
     common_anchor_mario_behavior(50.0f, 50.0f, INT_STATUS_MARIO_DROPPED_BY_OBJ);
 }
 
+struct Object * my_shock = NULL;
+
 void king_bobomb_act_inactive(void) { // act 0
     o->oForwardVel = 0.0f;
     o->oVelY = 0.0f;
@@ -30,12 +32,15 @@ void king_bobomb_act_inactive(void) { // act 0
 
         if (cur_obj_can_mario_activate_textbox_2(500.0f, 100.0f)) {
             o->oSubAction++;
-            seq_player_lower_volume(SEQ_PLAYER_LEVEL, 60, 40);
+            seq_player_lower_volume(SEQ_MM64_BOSS, 60, 40);
         }
     } else if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP,
         DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, DIALOG_017)) {
         o->oAction = KING_BOBOMB_ACT_ACTIVE;
         o->oFlags |= OBJ_FLAG_HOLDABLE;
+
+        my_shock = spawn_object(o,MODEL_AMP,bhvCirclingAmp);
+        obj_scale(my_shock,4.0f);
     }
 }
 
@@ -82,7 +87,7 @@ void king_bobomb_act_active(void) { // act 2
 
     if (mario_is_far_below_object(1200.0f)) {
         o->oAction = KING_BOBOMB_ACT_INACTIVE;
-        stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));
+        stop_background_music(SEQUENCE_ARGS(4, SEQ_MM64_BOSS));
     }
 }
 
@@ -148,7 +153,7 @@ void king_bobomb_act_activate(void) { // act 1
 
     if (mario_is_far_below_object(1200.0f)) {
         o->oAction = KING_BOBOMB_ACT_INACTIVE;
-        stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));
+        stop_background_music(SEQUENCE_ARGS(4, SEQ_MM64_BOSS));
     }
 }
 
@@ -203,7 +208,15 @@ void king_bobomb_act_death(void) { // act 7
         spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 3.0f, TINY_DIRT_PARTICLE_ANIM_STATE_YELLOW);
         cur_obj_shake_screen(SHAKE_POS_SMALL);
 
-        cur_obj_spawn_star_at_y_offset(2000.0f, 4500.0f, -4500.0f, 200.0f);
+        cur_obj_spawn_star_at_y_offset(o->oHomeX,o->oHomeY+500.0f,o->oHomeZ, 200.0f);
+
+        struct Object * sign = spawn_object(o,MODEL_WOODEN_SIGNPOST,bhvMessagePanel);
+        sign->oBehParams2ndByte = DIALOG_CREDITS;
+        sign->oPosX = o->oHomeX;
+        sign->oPosY = o->oHomeY;
+        sign->oPosZ = o->oHomeZ;
+
+        obj_mark_for_deletion(my_shock);
 
         o->oAction = KING_BOBOMB_ACT_STOP_MUSIC;
     }
@@ -211,7 +224,7 @@ void king_bobomb_act_death(void) { // act 7
 
 void king_bobomb_act_stop_music(void) { // act 8
     if (o->oTimer == 60) {
-        stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));
+        stop_background_music(SEQUENCE_ARGS(4, SEQ_MM64_BOSS));
     }
 }
 
@@ -293,7 +306,7 @@ void king_bobomb_act_return_home(void) { // act 5
         case KING_BOBOMB_SUB_ACT_RETURN_HOME_WAIT_FOR_DIALOG:
             if (mario_is_far_below_object(1200.0f)) {
                 o->oAction = KING_BOBOMB_ACT_INACTIVE;
-                stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));
+                stop_background_music(SEQUENCE_ARGS(4, SEQ_MM64_BOSS));
             }
 
             if (cur_obj_can_mario_activate_textbox_2(500.0f, 100.0f)) {
@@ -359,6 +372,13 @@ void king_bobomb_move(void) {
 void bhv_king_bobomb_loop(void) {
     o->oInteractionSubtype |= INT_SUBTYPE_GRABS_MARIO;
 
+    if ((o->oInteractType == INTERACT_GRABBABLE) && (!(gMarioState->flags & MARIO_METAL_CAP))) {
+        o->oInteractType = INTERACT_SHOCK;
+    }
+    if ((o->oInteractType == INTERACT_SHOCK) && (gMarioState->flags & MARIO_METAL_CAP)) {
+        o->oInteractType = INTERACT_GRABBABLE;
+    }
+
     switch (o->oHeldState) {
         case HELD_FREE:
             king_bobomb_move();
@@ -373,6 +393,19 @@ void bhv_king_bobomb_loop(void) {
             o->oPosY += 20.0f;
             break;
     }
+
+    if (my_shock != NULL) {
+        vec3_copy(&my_shock->oPosVec,&o->oPosVec);
+        my_shock->oPosY+= 90.0f;
+
+        if (o->oHeldState == HELD_HELD) {
+            my_shock->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
+        } else {
+            my_shock->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
+        }
+    }
+
+
 
     o->oInteractStatus = INT_STATUS_NONE;
     curr_obj_random_blink(&o->oKingBobombBlinkTimer);

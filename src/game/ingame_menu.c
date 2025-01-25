@@ -1070,7 +1070,7 @@ void handle_special_dialog_text(s16 dialogID) { // dialog ID tables, in order
     for (i = 0; i < (s16) ARRAY_COUNT(dialogBossStart); i++) {
         if (dialogBossStart[i] == dialogID) {
             seq_player_unlower_volume(SEQ_PLAYER_LEVEL, 60);
-            play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_EVENT_BOSS), 0);
+            play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_BOSS), 0);
             return;
         }
     }
@@ -2214,6 +2214,7 @@ s32 render_menus_and_dialogs(void) {
             title_dl_alpha -= 5;
         }
         if (gPlayer1Controller->buttonPressed & START_BUTTON) {
+            play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
             title_progress = TRUE;
         }
     }
