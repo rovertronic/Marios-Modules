@@ -1,4 +1,4 @@
-![](https://imgur.com/a/qBj1VtD.png)
+![](https://imgur.com/TVJWmhP.png)
 # Mario's Modules
 Mario is an ancient automaton that must explore the manufacturing dungeon and collect modules to craft its moves from scratch.
 
