@@ -1,3 +1,14 @@
+![](https://imgur.com/AWocMn4)
+# Mario's Modules
+Mario is an ancient automaton that must explore the manufacturing dungeon and collect modules to craft its moves from scratch.
+
+The soundtrack used in the hack is from an Undertale fangame called SwApFell: I Hate You., by Igorsantusa and Calem28.
+https://www.youtube.com/playlist?list=PLM6qCncRLG0_SwKbZqDP5u5POkj3H1IcU
+
+**Module System**
+You can find the code for the module system in `module.c` in case you want to use it in your own project.
+Custom dungeon objects are at the bottom of `obj_behaviors.c`.
+
 # ![](https://i.imgur.com/CeOukzk.gif) HackerSM64 ![](https://i.imgur.com/s0LUbTo.gif)
 
 **AFTER CLONING THE REPO, CHECK OUT THE `include/config` FOLDER BEFORE ANYTHING ELSE! THERE'S A LOT OF STUFF IN THIS REPO THAT CAN BE TOGGLED THERE.**

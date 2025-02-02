@@ -1462,7 +1462,7 @@ er, grovel. Here, you win.\n\
 Take this with you!"))
 
 DEFINE_DIALOG(DIALOG_116, 1, 1, 95, 200, _("\
-Te ipsum occidere."))
+Cacas te."))
 
 DEFINE_DIALOG(DIALOG_117, 1, 1, 95, 200, _("\
 Who...walk...here?\n\
