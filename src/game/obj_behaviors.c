@@ -946,7 +946,7 @@ void bhv_bdoor(void) {
     u8 needs_key = (o->oBehParams2ndByte==1);
     u8 open = FALSE;
     vec3_get_dist(gMarioState->pos,&o->oHomeVec,&dist);
-    if (dist < 300.0f) {
+    if (dist < 400.0f) {
         open = TRUE;
 
         if (needs_key && gMarioState->numKeys > 0) {
