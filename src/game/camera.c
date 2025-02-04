@@ -1118,6 +1118,9 @@ s32 snap_to_45_degrees(s16 angle) {
     return angle;
 }
 
+Vec3f camera_override_vec;
+u8 camera_override = FALSE;
+
 /**
  * A mode that only has 8 camera angles, 45 degrees apart
  */
@@ -1159,6 +1162,8 @@ void mode_8_directions_camera(struct Camera *c) {
     sAreaYawChange = sAreaYaw - oldAreaYaw;
     set_camera_height(c, pos[1]);
 
+    camera_override = FALSE;
+
     struct Surface * surf;
     Vec3f camdir;
     Vec3f origin;
@@ -1174,12 +1179,14 @@ void mode_8_directions_camera(struct Camera *c) {
     find_surface_on_ray(origin, camdir, &surf, &hitpos, RAYCAST_FIND_CEIL);
 
     if (surf) {
-        vec3f_copy(c->pos,hitpos);
+        camera_override = TRUE;
+        vec3f_copy(camera_override_vec,hitpos);
+        c->pos[0] = hitpos[0];
+        c->pos[2] = hitpos[2];
     }
 
     // WALL COLLISION
-    // More complex; does an initial check to disqualify 300 unit high walls. If there are walls taller than 300 units,
-    // then do a standard camera raycast and test for walls. If successful, set the camera position to the wall hit location
+    // Set the camera position to the wall hit location
     // and push the camera inward if Mario is close to the wall.
 
     vec3f_copy(origin,gMarioState->pos);
@@ -1206,7 +1213,11 @@ void mode_8_directions_camera(struct Camera *c) {
         thick[1] = camera_looknormal[1] * thickMul;
         thick[2] = camera_looknormal[2] * thickMul;
         vec3f_add(hitpos,thick);
-        vec3f_copy(c->pos,hitpos);
+        
+        camera_override = TRUE;
+        c->pos[0] = hitpos[0];
+        c->pos[2] = hitpos[2];
+        vec3f_copy(camera_override_vec,hitpos);
     }
 }
 
@@ -2912,6 +2923,10 @@ void update_lakitu(struct Camera *c) {
         }
 
         vec3f_copy(sModeTransition.marioPos, sMarioCamState->pos);
+
+        if (camera_override) {
+            gLakituState.pos[1] = camera_override_vec[1];
+        }
     }
     clamp_pitch(gLakituState.pos, gLakituState.focus, 0x3E00, -0x3E00);
     gLakituState.mode = c->mode;
