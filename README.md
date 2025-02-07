@@ -1,6 +1,6 @@
 ![](https://imgur.com/TVJWmhP.png)
 # Mario's Modules
-Mario is an ancient automaton that must explore the manufacturing dungeon and collect modules to craft its moves from scratch.
+Mario is an ancient automaton that must explore the manufacturing dungeon and collect modules to craft moves from scratch.
 
 The soundtrack used in the hack is from an Undertale fangame called SwApFell: I Hate You., by Igorsantusa and Calem28.
 https://www.youtube.com/playlist?list=PLM6qCncRLG0_SwKbZqDP5u5POkj3H1IcU
