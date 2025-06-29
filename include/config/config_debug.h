@@ -76,11 +76,6 @@
 // #define COMPLETE_SAVE_FILE
 
 /**
- * Removes the limit on FPS.
- */
-// #define UNLOCK_FPS
-
-/**
  * Includes vanilla debug functionality.
  */
 // #define VANILLA_DEBUG
