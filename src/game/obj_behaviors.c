@@ -797,7 +797,10 @@ void bhv_chest(void) {
             }
 
             o->header.gfx.animInfo.animFrame = 0;
+            o->header.gfx.animInfo.animFrameF = 0.0f;
+            o->header.gfx.animInfo.animAccelF = 0.0f;
             if ((gMarioState->numCoins >= cost) && (o->oInteractStatus & INT_STATUS_INTERACTED)) {
+                o->header.gfx.animInfo.animAccelF = 1.0f;
                 gMarioState->numCoins-=cost;
                 gHudDisplay.coins = gMarioState->numCoins;
                 play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);

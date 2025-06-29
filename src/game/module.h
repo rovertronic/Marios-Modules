@@ -80,5 +80,6 @@ void print_module_menu(void);
 void print_module_hud_status(void);
 void init_module_inventory(void);
 s32 handle_module_inputs(void);
+void control_module_menu(void);
 
 #endif

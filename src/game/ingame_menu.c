@@ -2316,7 +2316,7 @@ s32 render_menus_and_dialogs(void) {
         }
     }
     if (title_or_game == 0) {
-        return mode;
+        return 0;
     }
 
     if (gMenuMode != MENU_MODE_NONE) {
@@ -2347,11 +2347,20 @@ s32 render_menus_and_dialogs(void) {
         //gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;
     }
 
+    if (gModuleMenuOpen) {
+        print_module_menu();
+    }
+    print_module_hud_status();
+
     return 0;
 }
 
 s32 logic_menus_and_dialogs(void) {
     s32 mode = MENU_OPT_NONE;
+
+    if (gModuleMenuOpen) {
+        control_module_menu();
+    }
 
     if (gMenuMode != MENU_MODE_NONE) {
         switch (gMenuMode) {
@@ -2369,11 +2378,6 @@ s32 logic_menus_and_dialogs(void) {
         logic_dialog_entries();
         gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;
     }
-
-    if (gModuleMenuOpen) {
-        print_module_menu();
-    }
-    print_module_hud_status();
 
     return mode;
 }

@@ -477,8 +477,6 @@ int inv_slot_printy(int x, int y) {
 
 char print_buffer[500];
 void print_module_menu(void) {
-    control_module_menu();
-
     inventory_vis_x = approach_f32_asymptotic(inventory_vis_x,inv_slot_printx(inventory_x,inventory_y),.3f);
     inventory_vis_y = approach_f32_asymptotic(inventory_vis_y,inv_slot_printy(inventory_x,inventory_y),.3f);
 
