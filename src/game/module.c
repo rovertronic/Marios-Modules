@@ -10,6 +10,8 @@
 #include "engine/math_util.h"
 #include "mario.h"
 #include "behavior_data.h"
+#include "actors/group0.h"
+#include <PR/os_internal_reg.h>
 
 u8 gModuleMenuOpen = FALSE;
 
@@ -62,11 +64,11 @@ void module_spd(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_repeat(struct module_execution_thread * met, u8 call_context) {
-    if (met->repeat) {
+    if (met->used_flags & (1 << met->x)) {
         met->x++;
     } else {
+        met->used_flags |= (1 << met->x);
         met->x=0;
-        met->repeat=TRUE;
     }
 }
 
@@ -216,6 +218,9 @@ void module_cap(struct module_execution_thread * met, u8 call_context) {
 struct module_info module_infos[] = {
     [MOD_BUTTON_A] = {MTYPE_INPUT,micons_abtn_rgba16,NULL,NULL,NULL},
     [MOD_BUTTON_B] = {MTYPE_INPUT,micons_bbtn_rgba16,NULL,NULL,NULL},
+    [MOD_VANITY] = {MTYPE_INPUT,micons_vanity_rgba16,NULL,NULL,NULL},
+    [MOD_SETTINGS] = {MTYPE_INPUT,micons_gear_rgba16,NULL,NULL,NULL},
+
     [MOD_JUMP] = {MTYPE_MOVE,micons_jump_rgba16,"Makes Mario attempt to jump.","Increases jump tier per MOD.",module_jump},
     [MOD_POW] = {MTYPE_BUFF,micons_onepow_rgba16,"Adds 1 to the MOD of the next piece.",NULL,module_pow},
     [MOD_HIT_GROUND] = {MTYPE_COND,micons_ground_rgba16,"Continues when Mario touches the ground.",NULL,module_floor},
@@ -238,14 +243,58 @@ struct module_type_info module_type_infos[] = {
     [MTYPE_BUFF] = {"<COL_C80000FF>Modifier",{200, 0, 0}},
     [MTYPE_COND] = {"<COL_00AA00FF>Condition",{0, 170, 0}},
     [MTYPE_INPUT] = {"Input",{0xC9, 0x82, 0x30}},
-    [MTYPE_NONMOD] = {NULL,{0x00, 0x00, 0x00}}
+    [MTYPE_NONMOD] = {NULL,{0x00, 0x00, 0x00}},
+    [MTYPE_VANITY] = {"",{0x9A, 0x00, 0xD0}},
 };
 
 #define INVENTORY_PRINT_OFFSET_X 80
 #define INVENTORY_PRINT_OFFSET_Y 70
 
-#define INVENTORY_SLOTS_Y 5
+#define INVENTORY_SLOTS_Y 50
 #define INVENTORY_SLOTS_X 8
+
+
+// INVENTORY STRUCTURE DECLARATIONS
+#define INVENTORY_PANEL_CT 3
+struct module_panel module_panel_info[] = {
+    [PANEL_SETTINGS] = {
+        .name = "Settings",
+        .offset = 48,
+        .size = 2,
+        .unlock_flag = -1,
+    },
+    [PANEL_ACTIONS] = {
+        .name = "Actions",
+        .offset = 0,
+        .size = 5,
+        .unlock_flag = -1,
+    },
+    [PANEL_VANITY] = {
+        .name = "Vanity",
+        .offset = 45,
+        .size = 3,
+        .unlock_flag = -1,
+    },
+};
+
+struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
+     // Actions
+    [0] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_A},
+    [1] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_B},
+    [2] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [3] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [4] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+
+     // Vanity
+    [45] = {.type = ROW_SOCKET, .icon = MOD_VANITY},
+    [46] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
+    [47] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
+
+     // Settings
+    [48] = {.type = ROW_SOCKET, .icon = MOD_SETTINGS},
+    [49] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+};
+
 s8 inventory[INVENTORY_SLOTS_Y][INVENTORY_SLOTS_X];
 
 int inventory_x = 0;
@@ -256,7 +305,11 @@ f32 inventory_vis_y = 0.0f;
 
 s8 module_in_hand = MOD_EMPTY;
 
+struct module_panel * icp = &module_panel_info[PANEL_ACTIONS];
+int inventory_panel = PANEL_ACTIONS;
+
 s32 is_inventory_slot_locked(int x, int y) {
+    return FALSE;
     switch(y) {
         case 0://a
             if (x >= 1+(gMarioState->numStars*2)) {return TRUE;}
@@ -277,8 +330,8 @@ s8 get_inventory(int x, int y) {
 
 void add_inventory(s8 module) {
     for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
-        for (int y = 2; y<INVENTORY_SLOTS_Y; y++) {
-            if (inventory[y][x] == MOD_EMPTY) {
+        for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
+            if (inventory[y][x] == MOD_EMPTY && inventory_row_info[y].type == ROW_STORAGE) {
                 inventory[y][x] = module;
                 return;
             }
@@ -292,6 +345,17 @@ void init_module_inventory(void) {
             inventory[y][x] = MOD_EMPTY;
         }
     }
+
+    inventory[4][0] = MOD_REPEAT;
+    inventory[3][0] = MOD_REPEAT;
+    inventory[2][0] = MOD_JUMP;
+    inventory[2][1] = MOD_JUMP;
+    inventory[2][2] = MOD_PLATFORM;
+    inventory[2][3] = MOD_TIMER;
+    inventory[2][4] = MOD_TIMER;
+    inventory[2][5] = MOD_INPUT;
+    inventory[2][6] = MOD_INPUT;
+
 
     module_execution_threads[MODULE_EXEC_A].executing = FALSE;
     module_execution_threads[MODULE_EXEC_B].executing = FALSE;
@@ -346,7 +410,7 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
         met->cooldown = FALSE;
         met->jump_tier = 0;
         met->input_notify = FALSE;
-        met->repeat = FALSE;
+        met->used_flags = 0;
 
         gMarioState->actionMod = 0;
 
@@ -366,6 +430,7 @@ s32 handle_module_inputs(void) {
     return FALSE;
 }
 
+#define ANALOG_MENU_THRESH 30
 u8 control_neutral = TRUE;
 void control_module_menu(void) {
     for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
@@ -378,27 +443,27 @@ void control_module_menu(void) {
 
     //handle joystick
     if (
-        (gPlayer1Controller->rawStickY < 60) &&
-        (gPlayer1Controller->rawStickY > -60) &&
-        (gPlayer1Controller->rawStickX < 60) &&
-        (gPlayer1Controller->rawStickX > -60)
+        (gPlayer1Controller->rawStickY < ANALOG_MENU_THRESH) &&
+        (gPlayer1Controller->rawStickY > -ANALOG_MENU_THRESH) &&
+        (gPlayer1Controller->rawStickX < ANALOG_MENU_THRESH) &&
+        (gPlayer1Controller->rawStickX > -ANALOG_MENU_THRESH)
     ) {
         control_neutral = TRUE;
     }
     if (control_neutral) {
-        if (gPlayer1Controller->rawStickY > 60) {
+        if (gPlayer1Controller->rawStickY > ANALOG_MENU_THRESH) {
             gPlayer1Controller->buttonPressed |= U_JPAD;
             control_neutral = FALSE;
         }
-        if (gPlayer1Controller->rawStickY < -60) {
+        if (gPlayer1Controller->rawStickY < -ANALOG_MENU_THRESH) {
             gPlayer1Controller->buttonPressed |= D_JPAD;
             control_neutral = FALSE;
         }
-        if (gPlayer1Controller->rawStickX > 60) {
+        if (gPlayer1Controller->rawStickX > ANALOG_MENU_THRESH) {
             gPlayer1Controller->buttonPressed |= R_JPAD;
             control_neutral = FALSE;
         }
-        if (gPlayer1Controller->rawStickX < -60) {
+        if (gPlayer1Controller->rawStickX < -ANALOG_MENU_THRESH) {
             gPlayer1Controller->buttonPressed |= L_JPAD;
             control_neutral = FALSE;
         }
@@ -418,19 +483,31 @@ void control_module_menu(void) {
         inventory_y --;
     }
 
+    if (gPlayer1Controller->buttonPressed & R_TRIG) {
+        inventory_panel++;
+    }
+    if (gPlayer1Controller->buttonPressed & L_TRIG) {
+        inventory_panel--;
+    }
+    inventory_panel = (INVENTORY_PANEL_CT+inventory_panel)%INVENTORY_PANEL_CT;
+
+    icp = &module_panel_info[inventory_panel];
+
     inventory_x = (INVENTORY_SLOTS_X+inventory_x)%INVENTORY_SLOTS_X;
-    inventory_y = (INVENTORY_SLOTS_Y+inventory_y)%INVENTORY_SLOTS_Y;
+    inventory_y = (icp->size+inventory_y)%icp->size;
+
+    int true_inventory_y = inventory_y + icp->offset;
 
     if (gPlayer1Controller->buttonPressed & A_BUTTON) {
         if (is_inventory_slot_locked(inventory_x,inventory_y)) {
             play_sound(SOUND_MENU_CAMERA_BUZZ, gGlobalSoundSource);
         } else {
-            if (!(module_in_hand == MOD_EMPTY && inventory[inventory_y][inventory_x] == MOD_EMPTY)) {
+            if (!(module_in_hand == MOD_EMPTY && inventory[true_inventory_y][inventory_x] == MOD_EMPTY)) {
                 play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
             }
 
-            s16 module_to_pick_up = inventory[inventory_y][inventory_x];
-            inventory[inventory_y][inventory_x] = module_in_hand;
+            s16 module_to_pick_up = inventory[true_inventory_y][inventory_x];
+            inventory[true_inventory_y][inventory_x] = module_in_hand;
             module_in_hand = module_to_pick_up;
         }
     }
@@ -457,13 +534,13 @@ void print_module(int id, int x, int y) {
 }
 
 int inv_slot_printx(int x, int y) {
-    if (y < 2) {
+    if (inventory_row_info[y+icp->offset].type == ROW_SOCKET) {
         return x*16+INVENTORY_PRINT_OFFSET_X+22;
     }
     return x*21+INVENTORY_PRINT_OFFSET_X;
 }
 int inv_slot_printx_w(int x, int y) {
-    if (y < 2) {
+    if (inventory_row_info[y+icp->offset].type == ROW_SOCKET) {
         return inv_slot_printx(x,y)+16;
     }
     return inv_slot_printx(x,y)+20;
@@ -482,7 +559,7 @@ void print_module_menu(void) {
 
     prepare_blank_box();
     for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
-        for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
+        for (int y = 0; y<icp->size; y++) {
             u8 brightness = 10;
             u8 alpha = 150;
             if (x == inventory_x && y == inventory_y) {
@@ -498,18 +575,25 @@ void print_module_menu(void) {
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
-        for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
-            print_module(inventory[y][x],inv_slot_printx(x,y), inv_slot_printy(x,y));
+        for (int y = 0; y<icp->size; y++) {
+            int true_y = y + icp->offset;
+
+            print_module(inventory[true_y][x],inv_slot_printx(x,y), inv_slot_printy(x,y));
+            if (get_inventory(x,true_y) > -1 && get_inventory(x-1,true_y) == -1 && x != 0 && inventory_row_info[true_y].type == ROW_SOCKET) {
+                print_texture(micons_warn_rgba16,16,inv_slot_printx(x,y), inv_slot_printy(x,y));
+            }
 
             if (is_inventory_slot_locked(x,y)) {
                 gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 150);
                 print_texture(micons_lock_rgba16,16,inv_slot_printx(x,y), inv_slot_printy(x,y));
                 gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
             }
+
+            if (inventory_row_info[true_y].type == ROW_SOCKET) {
+                print_module(inventory_row_info[true_y].icon,inv_slot_printx(-1,y), inv_slot_printy(-1,y));
+            }
         }
     }
-    print_module(MOD_BUTTON_A,inv_slot_printx(-1,0), inv_slot_printy(-1,0));
-    print_module(MOD_BUTTON_B,inv_slot_printx(-1,1), inv_slot_printy(-1,1));
 
     //PRINT HAND and GRAB
     print_module(module_in_hand,inventory_vis_x,inventory_vis_y);
@@ -526,7 +610,7 @@ void print_module_menu(void) {
     if (module_in_hand != MOD_EMPTY) {
         mod_inf_to_disp = module_in_hand;
     } else {
-        mod_inf_to_disp = inventory[inventory_y][inventory_x];
+        mod_inf_to_disp = inventory[inventory_y + icp->offset][inventory_x];
     }
 
     if (mod_inf_to_disp != MOD_EMPTY) {

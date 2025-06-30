@@ -5,6 +5,31 @@
 
 extern u8 gModuleMenuOpen;
 
+struct module_panel {
+    char * name;
+    u8 offset;
+    u8 size;
+    s8 unlock_flag;
+};
+
+enum {
+    ROW_UNUSED,
+    ROW_STORAGE,
+    ROW_SOCKET
+};
+
+struct inventory_row {
+    u8 type;
+    s8 icon;
+    s8 mod_type_prio;
+};
+
+enum {
+    PANEL_SETTINGS,
+    PANEL_ACTIONS,
+    PANEL_VANITY,
+};
+
 struct module_execution_thread {
     u32 input;
     u8 mod;
@@ -17,8 +42,9 @@ struct module_execution_thread {
     u8 halted:1;
     u8 cooldown:1;
     u8 input_notify:1;
-    u8 repeat:1;
     u8 jump_tier:2;
+
+    u16 used_flags;
 };
 
 enum module_execution_ids {
@@ -51,6 +77,7 @@ enum module_type {
     MTYPE_BUFF,
     MTYPE_INPUT,
     MTYPE_NONMOD,
+    MTYPE_VANITY
 };
 
 #define MOD_EMPTY -1
@@ -71,7 +98,11 @@ enum module_id {
     MOD_CAP,
     MOD_GRAPPLE,
     MOD_GRAV,
-    MOD_NONMOD_KEY
+    MOD_NONMOD_KEY,
+    MOD_VANITY,
+    MOD_SETTINGS,
+    MOD_VAN_CAP,
+    MOD_VAN_
 };
 
 void add_inventory(s8 module);
