@@ -391,8 +391,8 @@ s8 get_inventory(int x, int y) {
 }
 
 void add_inventory(s8 module) {
-    for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
-        for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
+    for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
+        for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
             if (inventory[y][x] == MOD_EMPTY && inventory_row_info[y].type == ROW_STORAGE) {
                 inventory[y][x] = module;
                 return;
@@ -622,11 +622,12 @@ void print_texture(void * tex, int size, int x, int y) {
                         (y + (size)) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 }
 
+u8 gPrintModuleDarken=1;
 void print_module(int id, int x, int y) {
     if (id == MOD_EMPTY) return;
-    u8 r = module_type_infos[module_infos[id].type].color[0];
-    u8 g = module_type_infos[module_infos[id].type].color[1];
-    u8 b = module_type_infos[module_infos[id].type].color[2];
+    u8 r = module_type_infos[module_infos[id].type].color[0]/gPrintModuleDarken;
+    u8 g = module_type_infos[module_infos[id].type].color[1]/gPrintModuleDarken;
+    u8 b = module_type_infos[module_infos[id].type].color[2]/gPrintModuleDarken;
     gDPSetEnvColor(gDisplayListHead++, r,g,b, 255);
     if (module_infos[id].type != MTYPE_NONMOD) {
         print_texture(micons_piece_rgba16,32,x,y);
@@ -684,6 +685,7 @@ int module_is_invalid(int x, int y, s8 mod) {
 
 char print_buffer[500];
 void print_module_menu(void) {
+    gPrintModuleDarken=1;
     inventory_vis_x = approach_f32_asymptotic(inventory_vis_x,inv_slot_printx(inventory_x,inventory_y),.3f);
     inventory_vis_y = approach_f32_asymptotic(inventory_vis_y,inv_slot_printy(inventory_x,inventory_y),.3f);
 
@@ -708,9 +710,14 @@ void print_module_menu(void) {
         for (int y = 0; y<icp->size; y++) {
             int true_y = y + icp->offset;
 
+            int invalid = module_is_invalid(x,true_y,get_inventory(x,true_y));
+            if (invalid) {
+                gPrintModuleDarken=2;
+            }
             print_module(inventory[true_y][x],inv_slot_printx(x,y), inv_slot_printy(x,y));
-            if (module_is_invalid(x,true_y,get_inventory(x,true_y))) {
+            if (invalid) {
                 print_texture(micons_warn_rgba16,16,inv_slot_printx(x,y), inv_slot_printy(x,y));
+                gPrintModuleDarken=1;
             }
 
             if (is_inventory_slot_locked(x,y)) {
