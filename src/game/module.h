@@ -13,18 +13,6 @@ struct module_panel {
 };
 
 enum {
-    ROW_UNUSED,
-    ROW_STORAGE,
-    ROW_SOCKET
-};
-
-struct inventory_row {
-    u8 type;
-    s8 icon;
-    s8 mod_type_prio;
-};
-
-enum {
     PANEL_SETTINGS,
     PANEL_ACTIONS,
     PANEL_VANITY,
@@ -43,13 +31,16 @@ struct module_execution_thread {
     u8 cooldown:1;
     u8 input_notify:1;
     u8 jump_tier:2;
+    u8 manual:1;
 
     u16 used_flags;
+    void * extra_data;
 };
 
 enum module_execution_ids {
     MODULE_EXEC_A,
     MODULE_EXEC_B,
+    MODULE_EXEC_VANITY,
     MODULE_EXEC_COUNT,
 };
 
@@ -59,6 +50,7 @@ struct module_info {
     char * desc;
     char * mod_desc;
     void (*func)(struct module_execution_thread * met, u8 call_context);
+    void * extra_data;
 };
 
 enum module_call_context {
@@ -77,7 +69,8 @@ enum module_type {
     MTYPE_BUFF,
     MTYPE_INPUT,
     MTYPE_NONMOD,
-    MTYPE_VANITY
+    MTYPE_VANITY,
+    MTYPE_SETTING,
 };
 
 #define MOD_EMPTY -1
@@ -102,8 +95,31 @@ enum module_id {
     MOD_VANITY,
     MOD_SETTINGS,
     MOD_VAN_CAP,
-    MOD_VAN_
+    MOD_VAN_PANTS,
+    MOD_RED,
+    MOD_BLUE,
+    MOD_GREEN,
+    MOD_YELLOW,
+    MOD_WHITE,
+    MOD_BLACK,
 };
+
+// Inventory
+enum {
+    ROW_UNUSED,
+    ROW_STORAGE,
+    ROW_SOCKET
+};
+
+struct inventory_row {
+    u8 type;
+    s8 icon;
+    s8 mod_type_prio;
+    u8 whitelist_flags;
+};
+
+#define WHITELIST_VANITY ((1 << MTYPE_BUFF) | (1 << MTYPE_VANITY))
+#define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY))
 
 void add_inventory(s8 module);
 void module_update(void);
@@ -112,5 +128,6 @@ void print_module_hud_status(void);
 void init_module_inventory(void);
 s32 handle_module_inputs(void);
 void control_module_menu(void);
+void update_vanity(void);
 
 #endif

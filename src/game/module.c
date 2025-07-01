@@ -215,27 +215,89 @@ void module_cap(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+Vec3f colorBlendStack[10];
+int colorBlendCount = 0;
+
+void module_clothes_color(struct module_execution_thread * met, u8 call_context) {
+    // Somewhat hacky, inject mario's material dls with new color
+    // won't crash N64 i think and that's all that matters
+
+    Gfx * dlhead = segmented_to_virtual(met->extra_data);
+
+    f32 lum = 0.0f;
+    Vec3f final = {0.0f,0.0f,0.0f};
+    for (int i = 0; i < colorBlendCount; i++) {
+        for (int j = 0; j < 3; j++) {
+            final[j] += colorBlendStack[i][j] * (1.0f/colorBlendCount);
+        }
+    }
+
+    u8 r = final[0]*255.0f;
+    u8 g = final[1]*255.0f;
+    u8 b = final[2]*255.0f;
+    
+    gSPLightColor(dlhead++,LIGHT_1, (r<<24) | (g<<16) | (b<<8) | 0xFF);
+    gSPLightColor(dlhead++,LIGHT_2, (r/2<<24) | (g/2<<16) | (b/2<<8) | 0xFF);
+
+    colorBlendCount = 0;
+    met->x++;
+}
+
+void module_color(struct module_execution_thread * met, u8 call_context) {
+    vec3f_copy(colorBlendStack[colorBlendCount],*((Vec3f *)met->extra_data));
+    colorBlendCount++;
+
+    met->x++;
+}
+
+Vec3f moduleRed = {1.0f,0.0f,0.0f};
+Vec3f moduleBlue = {0.0f,0.0f,1.0f};
+Vec3f moduleGreen = {0.0f,1.0f,0.0f};
+Vec3f moduleYellow = {1.0f,1.0f,0.0f};
+Vec3f moduleWhite = {1.0f,1.0f,1.0f};
+Vec3f moduleBlack = {0.02f,0.02f,0.02f};
+
 struct module_info module_infos[] = {
+    // Sockets
     [MOD_BUTTON_A] = {MTYPE_INPUT,micons_abtn_rgba16,NULL,NULL,NULL},
     [MOD_BUTTON_B] = {MTYPE_INPUT,micons_bbtn_rgba16,NULL,NULL,NULL},
     [MOD_VANITY] = {MTYPE_INPUT,micons_vanity_rgba16,NULL,NULL,NULL},
     [MOD_SETTINGS] = {MTYPE_INPUT,micons_gear_rgba16,NULL,NULL,NULL},
 
+    // Actions
     [MOD_JUMP] = {MTYPE_MOVE,micons_jump_rgba16,"Makes Mario attempt to jump.","Increases jump tier per MOD.",module_jump},
-    [MOD_POW] = {MTYPE_BUFF,micons_onepow_rgba16,"Adds 1 to the MOD of the next piece.",NULL,module_pow},
-    [MOD_HIT_GROUND] = {MTYPE_COND,micons_ground_rgba16,"Continues when Mario touches the ground.",NULL,module_floor},
-    [MOD_HIT_WALL] = {MTYPE_COND,micons_wall_rgba16,"Continues when Mario touches a wall.",NULL,module_wall},
-    [MOD_TIMER] = {MTYPE_COND,micons_clock_rgba16,"Continues after a 1/2 second.","Adds 1/3 a second per MOD.",module_timer},
     [MOD_ATTACK] = {MTYPE_MOVE,micons_pow_rgba16,"Makes Mario attempt to attack.",NULL,module_attack},
     [MOD_INPUT] = {MTYPE_COND,micons_btngen_rgba16,"Checks for a button press for one second.",NULL,module_input},
-    [MOD_SPD] = {MTYPE_BUFF,micons_spd_rgba16,"Adds speed to next action block.",NULL,module_spd},
     [MOD_PLATFORM] = {MTYPE_MOVE,micons_hover_rgba16,"Mario hovers for one second. Can jump.","Extend hover time by 1/2.",module_platform},
-    [MOD_REPEAT] = {MTYPE_BUFF,micons_repeat_rgba16,"Repeats from the start.",NULL,module_repeat},
     [MOD_SWAP] = {MTYPE_MOVE,micons_swap_rgba16,"Toggles swap platforms.",NULL,NULL},
     [MOD_CAP] = {MTYPE_MOVE,micons_cap_rgba16,"Enables cap power for one second.","0:Vanish, 1:Metal, 2:Wing.",module_cap},
     [MOD_GRAPPLE] = {MTYPE_MOVE,micons_grapple_rgba16,"Launches a grapple hook. Must hit wood.",NULL,NULL},
+
+    // Modifiers
+    [MOD_POW] = {MTYPE_BUFF,micons_onepow_rgba16,"Adds 1 to the MOD of the next piece.",NULL,module_pow},
+    [MOD_REPEAT] = {MTYPE_BUFF,micons_repeat_rgba16,"Repeats from the start.",NULL,module_repeat},
+    [MOD_SPD] = {MTYPE_BUFF,micons_spd_rgba16,"Adds speed to next action block.",NULL,module_spd},
+
+    // Conditions
+    [MOD_HIT_GROUND] = {MTYPE_COND,micons_ground_rgba16,"Continues when Mario touches the ground.",NULL,module_floor},
+    [MOD_HIT_WALL] = {MTYPE_COND,micons_wall_rgba16,"Continues when Mario touches a wall.",NULL,module_wall},
+    [MOD_TIMER] = {MTYPE_COND,micons_clock_rgba16,"Continues after a 1/2 second.","Adds 1/3 a second per MOD.",module_timer},
     [MOD_GRAV] = {MTYPE_COND,micons_grav_rgba16,"Continues when Mario has downward velocity.",NULL,module_grav},
+
+    // Non modifiers
     [MOD_NONMOD_KEY] = {MTYPE_NONMOD, micons_key_rgba16,NULL,NULL,NULL},
+
+    // Vanity
+    [MOD_VAN_CAP] = {MTYPE_VANITY,micons_cap_rgba16,"Mixes colors into cap & shirt.",NULL,module_clothes_color,&mat_mario_cap_v3},
+    [MOD_VAN_PANTS] = {MTYPE_VANITY,micons_pants_rgba16,"Mixes colors into overalls.",NULL,module_clothes_color,&mat_mario_body_v3},
+
+    [MOD_RED] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes red into palette.",NULL,module_color,&moduleRed},
+    [MOD_BLUE] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes blue into palette.",NULL,module_color,&moduleBlue},
+    [MOD_GREEN] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes green into palette.",NULL,module_color,&moduleGreen},
+    [MOD_YELLOW] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes yellow into palette.",NULL,module_color,&moduleYellow},
+    [MOD_WHITE] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes white into palette.",NULL,module_color,&moduleWhite},
+    [MOD_BLACK] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes black into palette.",NULL,module_color,&moduleBlack},
+    
 };
 
 struct module_type_info module_type_infos[] = {
@@ -244,7 +306,7 @@ struct module_type_info module_type_infos[] = {
     [MTYPE_COND] = {"<COL_00AA00FF>Condition",{0, 170, 0}},
     [MTYPE_INPUT] = {"Input",{0xC9, 0x82, 0x30}},
     [MTYPE_NONMOD] = {NULL,{0x00, 0x00, 0x00}},
-    [MTYPE_VANITY] = {"",{0x9A, 0x00, 0xD0}},
+    [MTYPE_VANITY] = {"<COL_D381FCFF>Vanity",{0xD3,0x81,0xFC}},
 };
 
 #define INVENTORY_PRINT_OFFSET_X 80
@@ -279,14 +341,14 @@ struct module_panel module_panel_info[] = {
 
 struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
      // Actions
-    [0] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_A},
-    [1] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_B},
+    [0] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_A, .whitelist_flags = WHITELIST_ACTION},
+    [1] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_B, .whitelist_flags = WHITELIST_ACTION},
     [2] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [3] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [4] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 
      // Vanity
-    [45] = {.type = ROW_SOCKET, .icon = MOD_VANITY},
+    [45] = {.type = ROW_SOCKET, .icon = MOD_VANITY, .whitelist_flags = WHITELIST_VANITY},
     [46] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
     [47] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
 
@@ -355,10 +417,24 @@ void init_module_inventory(void) {
     inventory[2][4] = MOD_TIMER;
     inventory[2][5] = MOD_INPUT;
     inventory[2][6] = MOD_INPUT;
+    inventory[2][7] = MOD_VAN_CAP;
+    inventory[4][7] = MOD_VAN_PANTS;
+    inventory[4][6] = MOD_VAN_PANTS;
+
+    inventory[4][5] = MOD_RED;
+    inventory[4][4] = MOD_BLUE;
+    inventory[4][3] = MOD_GREEN;
+    inventory[4][2] = MOD_RED;
+    inventory[4][1] = MOD_GREEN;
+    inventory[4][0] = MOD_BLUE;
+    inventory[3][1] = MOD_YELLOW;
+    inventory[3][2] = MOD_BLACK;
+    inventory[3][3] = MOD_WHITE;
 
 
-    module_execution_threads[MODULE_EXEC_A].executing = FALSE;
-    module_execution_threads[MODULE_EXEC_B].executing = FALSE;
+    for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
+        module_execution_threads[i].executing = FALSE;
+    }
 }
 
 void module_update(void) {
@@ -366,7 +442,9 @@ void module_update(void) {
         struct module_execution_thread * met = &module_execution_threads[i];
         if (met->cooldown) {
             if (met->timer >= 15) {
-                play_sound(SOUND_MENU_MESSAGE_DISAPPEAR,gGlobalSoundSource);
+                if (met->manual) {
+                    play_sound(SOUND_MENU_MESSAGE_DISAPPEAR,gGlobalSoundSource);
+                }
                 met->executing = FALSE;
                 met->cooldown = FALSE;
             }
@@ -381,13 +459,25 @@ void module_update(void) {
             s8 read_mod = get_inventory(met->x,met->y);
             if (!met->halted) {
                 while(read_mod != MOD_EMPTY) {
-                    module_infos[read_mod].func(met,MCC_INVOKE);
-                    read_mod = get_inventory(met->x,met->y);
-                    if (met->halted) {
-                        return;
+                    if (1 << module_infos[read_mod].type & inventory_row_info[met->y].whitelist_flags) {
+                        met->extra_data = module_infos[read_mod].extra_data;
+                        module_infos[read_mod].func(met,MCC_INVOKE);
+                        read_mod = get_inventory(met->x,met->y);
+                        if (met->halted) {
+                            return;
+                        }
+                    } else {
+                        // module incompatible with row, NOP
+                        met->x++;
+                        read_mod = get_inventory(met->x,met->y);
                     }
                 }
-                met->cooldown = TRUE;
+                update_vanity();
+                if (met->manual) {
+                    met->cooldown = TRUE;
+                } else {
+                    met->executing = FALSE;
+                }
                 met->timer = 0;
             } else {
                 module_infos[read_mod].func(met,MCC_HALTED);
@@ -397,7 +487,7 @@ void module_update(void) {
     }
 }
 
-void execute_module_in_inventory(struct module_execution_thread * met, u32 input, int x, int y) {
+void execute_module_in_inventory(struct module_execution_thread * met, u32 input, int x, int y, int manual) {
     if (!met->executing) {
         met->mod = 0;
         met->spd = 0;
@@ -411,23 +501,32 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
         met->jump_tier = 0;
         met->input_notify = FALSE;
         met->used_flags = 0;
+        met->extra_data = NULL;
+        met->manual = manual;
 
         gMarioState->actionMod = 0;
+        colorBlendCount = 0;
 
-        play_sound(SOUND_MENU_MESSAGE_APPEAR,gGlobalSoundSource);
+        if (manual) {
+            play_sound(SOUND_MENU_MESSAGE_APPEAR,gGlobalSoundSource);
+        }
     }
 }
 
 s32 handle_module_inputs(void) {
     if (!gModuleMenuOpen) {
         if (gPlayer1Controller->buttonPressed & A_BUTTON) {
-            execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_A],A_BUTTON,0,0);
+            execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_A],A_BUTTON,0,0,TRUE);
         }
         if (gPlayer1Controller->buttonPressed & B_BUTTON) {
-            execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_B],B_BUTTON,0,1);
+            execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_B],B_BUTTON,0,1,TRUE);
         }
     }
     return FALSE;
+}
+
+void update_vanity(void) {
+    execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY],0,0,45,FALSE);
 }
 
 #define ANALOG_MENU_THRESH 30
@@ -510,6 +609,9 @@ void control_module_menu(void) {
             inventory[true_inventory_y][inventory_x] = module_in_hand;
             module_in_hand = module_to_pick_up;
         }
+        if (true_inventory_y == 45) {
+            update_vanity();
+        }
     }
 }
 
@@ -530,7 +632,15 @@ void print_module(int id, int x, int y) {
         print_texture(micons_piece_rgba16,32,x,y);
     }
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
+    if (module_infos[id].func == module_color) {
+        // Terry davis would have a select few words for this
+        gDPSetEnvColor(gDisplayListHead++,
+            ((f32 *)module_infos[id].extra_data)[0]*255.0f,
+            ((f32 *)module_infos[id].extra_data)[1]*255.0f,
+            ((f32 *)module_infos[id].extra_data)[2]*255.0f, 255);
+    }
     print_texture(module_infos[id].tex,16,x,y);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
 }
 
 int inv_slot_printx(int x, int y) {
@@ -551,6 +661,26 @@ int inv_slot_printy(int x, int y) {
     }
     return y*17+INVENTORY_PRINT_OFFSET_Y;
 }
+
+int module_is_invalid(int x, int y, s8 mod) {
+    // Blank spaces are never invalid
+    if (mod == -1) {
+        return FALSE;
+    }
+
+    // Missing a module to the left? Is invalid!
+    if (x != 0 && get_inventory(x-1,y) == -1 && inventory_row_info[y].type == ROW_SOCKET) {
+        return TRUE;
+    }
+
+    // Not on the socket whitelist? Is invalid!
+    if (inventory_row_info[y].type == ROW_SOCKET && !(1 << module_infos[mod].type & inventory_row_info[y].whitelist_flags)) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 
 char print_buffer[500];
 void print_module_menu(void) {
@@ -579,7 +709,7 @@ void print_module_menu(void) {
             int true_y = y + icp->offset;
 
             print_module(inventory[true_y][x],inv_slot_printx(x,y), inv_slot_printy(x,y));
-            if (get_inventory(x,true_y) > -1 && get_inventory(x-1,true_y) == -1 && x != 0 && inventory_row_info[true_y].type == ROW_SOCKET) {
+            if (module_is_invalid(x,true_y,get_inventory(x,true_y))) {
                 print_texture(micons_warn_rgba16,16,inv_slot_printx(x,y), inv_slot_printy(x,y));
             }
 
@@ -679,3 +809,9 @@ void print_module_hud_status(void) {
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
+
+char * changelog = "\
+* Increased max framerate to 60\n\
+* Added vanity and settings panels\n\
+* Added module warnings\n\
+* Fixed thwomp death softlock";
