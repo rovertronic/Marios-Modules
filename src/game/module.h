@@ -4,6 +4,7 @@
 #include "types.h"
 
 extern u8 gModuleMenuOpen;
+extern u8 gGameSettings[];
 
 struct module_panel {
     char * name;
@@ -41,6 +42,7 @@ enum module_execution_ids {
     MODULE_EXEC_A,
     MODULE_EXEC_B,
     MODULE_EXEC_VANITY,
+    MODULE_EXEC_SETTINGS,
     MODULE_EXEC_COUNT,
 };
 
@@ -70,7 +72,7 @@ enum module_type {
     MTYPE_INPUT,
     MTYPE_NONMOD,
     MTYPE_VANITY,
-    MTYPE_SETTING,
+    MTYPE_SETTINGS,
 };
 
 #define MOD_EMPTY -1
@@ -102,6 +104,10 @@ enum module_id {
     MOD_YELLOW,
     MOD_WHITE,
     MOD_BLACK,
+
+    MOD_CAMERA_COLLISION,
+    MOD_WIDESCREEN,
+    MOD_60HZ,
 };
 
 // Inventory
@@ -121,6 +127,14 @@ struct inventory_row {
 #define WHITELIST_VANITY ((1 << MTYPE_BUFF) | (1 << MTYPE_VANITY))
 #define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY))
 
+
+enum {
+    SETTING_60HZ,
+    SETTING_CAMERA_COLLISION,
+    SETTING_WIDE,
+    SETTING_COUNT,
+};
+
 void add_inventory(s8 module);
 void module_update(void);
 void print_module_menu(void);
@@ -129,5 +143,6 @@ void init_module_inventory(void);
 s32 handle_module_inputs(void);
 void control_module_menu(void);
 void update_vanity(void);
+void update_settings(void);
 
 #endif

@@ -31,6 +31,7 @@
 #include "vc_ultra.h"
 #include "profiling.h"
 #include "emutest.h"
+#include "module.h"
 #include "frame_lerp.h"
 #include "level_update.h"
 #include <PR/os_internal_reg.h>
@@ -892,7 +893,9 @@ void thread10_graphics_loop(UNUSED void *arg) {
 
         display_and_vsync();
 
-        //osRecvMesg(&gGraphicsVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK); Uncomment for 30 FPS
+        if (!gGameSettings[SETTING_60HZ]) {
+            osRecvMesg(&gGraphicsVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+        }
         osRecvMesg(&gGraphicsVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
     }
 }

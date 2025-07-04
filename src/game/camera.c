@@ -1162,62 +1162,64 @@ void mode_8_directions_camera(struct Camera *c) {
     sAreaYawChange = sAreaYaw - oldAreaYaw;
     set_camera_height(c, pos[1]);
 
-    camera_override = FALSE;
+    if (gGameSettings[SETTING_CAMERA_COLLISION]) {
+        camera_override = FALSE;
 
-    struct Surface * surf;
-    Vec3f camdir;
-    Vec3f origin;
-    Vec3f thick;
-    Vec3f hitpos;
-    Vec3f camera_looknormal;
+        struct Surface * surf;
+        Vec3f camdir;
+        Vec3f origin;
+        Vec3f thick;
+        Vec3f hitpos;
+        Vec3f camera_looknormal;
 
-    // CEILING COLLISION
-    // Standard camera raycast check for ceiling collision. No special shenanigans here!
-    vec3f_copy(origin,gMarioState->pos);
-    origin[1] += 50.0f;
-    vec3f_diff(camdir,c->pos,origin);
-    find_surface_on_ray(origin, camdir, &surf, &hitpos, RAYCAST_FIND_CEIL);
+        // CEILING COLLISION
+        // Standard camera raycast check for ceiling collision. No special shenanigans here!
+        vec3f_copy(origin,gMarioState->pos);
+        origin[1] += 50.0f;
+        vec3f_diff(camdir,c->pos,origin);
+        find_surface_on_ray(origin, camdir, &surf, &hitpos, RAYCAST_FIND_CEIL);
 
-    if (surf) {
-        camera_override = TRUE;
-        vec3f_copy(camera_override_vec,hitpos);
-        c->pos[0] = hitpos[0];
-        c->pos[2] = hitpos[2];
-    }
-
-    // WALL COLLISION
-    // Set the camera position to the wall hit location
-    // and push the camera inward if Mario is close to the wall.
-
-    vec3f_copy(origin,gMarioState->pos);
-    origin[1] += 50.0f;
-    vec3f_diff(camdir,c->pos,origin);
-
-    find_surface_on_ray(origin, camdir, &surf, &hitpos, RAYCAST_FIND_WALL);
-
-    Vec3f camera_hit_diff;
-    vec3f_diff(camera_hit_diff,origin,hitpos);
-    f32 hit_to_mario_dist = vec3_mag(camera_hit_diff);
-
-    if (surf) {
-        vec3f_diff(camera_looknormal,c->focus,c->pos);
-        vec3f_normalize(camera_looknormal);
-
-        f32 thickMul = 35.0f;
-
-        if (hit_to_mario_dist < 300.0f) {
-            thickMul -= 300.0f-hit_to_mario_dist;
+        if (surf) {
+            camera_override = TRUE;
+            vec3f_copy(camera_override_vec,hitpos);
+            c->pos[0] = hitpos[0];
+            c->pos[2] = hitpos[2];
         }
 
-        thick[0] = camera_looknormal[0] * thickMul;
-        thick[1] = camera_looknormal[1] * thickMul;
-        thick[2] = camera_looknormal[2] * thickMul;
-        vec3f_add(hitpos,thick);
-        
-        camera_override = TRUE;
-        c->pos[0] = hitpos[0];
-        c->pos[2] = hitpos[2];
-        vec3f_copy(camera_override_vec,hitpos);
+        // WALL COLLISION
+        // Set the camera position to the wall hit location
+        // and push the camera inward if Mario is close to the wall.
+
+        vec3f_copy(origin,gMarioState->pos);
+        origin[1] += 50.0f;
+        vec3f_diff(camdir,c->pos,origin);
+
+        find_surface_on_ray(origin, camdir, &surf, &hitpos, RAYCAST_FIND_WALL);
+
+        Vec3f camera_hit_diff;
+        vec3f_diff(camera_hit_diff,origin,hitpos);
+        f32 hit_to_mario_dist = vec3_mag(camera_hit_diff);
+
+        if (surf) {
+            vec3f_diff(camera_looknormal,c->focus,c->pos);
+            vec3f_normalize(camera_looknormal);
+
+            f32 thickMul = 35.0f;
+
+            if (hit_to_mario_dist < 300.0f) {
+                thickMul -= 300.0f-hit_to_mario_dist;
+            }
+
+            thick[0] = camera_looknormal[0] * thickMul;
+            thick[1] = camera_looknormal[1] * thickMul;
+            thick[2] = camera_looknormal[2] * thickMul;
+            vec3f_add(hitpos,thick);
+            
+            camera_override = TRUE;
+            c->pos[0] = hitpos[0];
+            c->pos[2] = hitpos[2];
+            vec3f_copy(camera_override_vec,hitpos);
+        }
     }
 }
 

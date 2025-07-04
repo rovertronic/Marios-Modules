@@ -250,6 +250,14 @@ void module_color(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+void module_settings(struct module_execution_thread * met, u8 call_context) {
+    *((u8 *)met->extra_data) = 1;
+
+    met->x++;
+}
+
+u8 gGameSettings[SETTING_COUNT];
+
 Vec3f moduleRed = {1.0f,0.0f,0.0f};
 Vec3f moduleBlue = {0.0f,0.0f,1.0f};
 Vec3f moduleGreen = {0.0f,1.0f,0.0f};
@@ -298,6 +306,9 @@ struct module_info module_infos[] = {
     [MOD_WHITE] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes white into palette.",NULL,module_color,&moduleWhite},
     [MOD_BLACK] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes black into palette.",NULL,module_color,&moduleBlack},
     
+    [MOD_60HZ] = {MTYPE_SETTINGS,micons_sixty_rgba16,"Sets maximum framerate to 60.",NULL,module_settings,&gGameSettings[SETTING_60HZ]},
+    [MOD_WIDESCREEN] = {MTYPE_SETTINGS,micons_wide_rgba16,"Changes viewing resolution to 16:9.",NULL,module_settings,&gGameSettings[SETTING_WIDE]},
+    [MOD_CAMERA_COLLISION] = {MTYPE_SETTINGS,micons_camcol_rgba16,"Camera collides with walls.",NULL,module_settings,&gGameSettings[SETTING_CAMERA_COLLISION]},
 };
 
 struct module_type_info module_type_infos[] = {
@@ -307,6 +318,7 @@ struct module_type_info module_type_infos[] = {
     [MTYPE_INPUT] = {"Input",{0xC9, 0x82, 0x30}},
     [MTYPE_NONMOD] = {NULL,{0x00, 0x00, 0x00}},
     [MTYPE_VANITY] = {"<COL_D381FCFF>Vanity",{0xD3,0x81,0xFC}},
+    [MTYPE_SETTINGS] = {"<COL_AAAAAAFF>Option",{0xAA,0xAA,0xAA}},
 };
 
 #define INVENTORY_PRINT_OFFSET_X 80
@@ -353,7 +365,7 @@ struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
     [47] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
 
      // Settings
-    [48] = {.type = ROW_SOCKET, .icon = MOD_SETTINGS},
+    [48] = {.type = ROW_SOCKET, .icon = MOD_SETTINGS, .whitelist_flags = (1 << MTYPE_SETTINGS)},
     [49] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 };
 
@@ -407,6 +419,13 @@ void init_module_inventory(void) {
             inventory[y][x] = MOD_EMPTY;
         }
     }
+
+    // Settings
+    inventory[48][0] = MOD_CAMERA_COLLISION;
+    inventory[49][0] = MOD_WIDESCREEN;
+    inventory[49][1] = MOD_60HZ;
+
+    update_settings();
 
     inventory[4][0] = MOD_REPEAT;
     inventory[3][0] = MOD_REPEAT;
@@ -529,6 +548,13 @@ void update_vanity(void) {
     execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY],0,0,45,FALSE);
 }
 
+void update_settings(void) {
+    for (int i = 0; i < SETTING_COUNT; i++) {
+        gGameSettings[i] = 0;
+    }
+    execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_SETTINGS],0,0,48,FALSE);
+}
+
 #define ANALOG_MENU_THRESH 30
 u8 control_neutral = TRUE;
 void control_module_menu(void) {
@@ -611,6 +637,9 @@ void control_module_menu(void) {
         }
         if (true_inventory_y == 45) {
             update_vanity();
+        }
+        if (true_inventory_y == 48) {
+            update_settings();
         }
     }
 }
