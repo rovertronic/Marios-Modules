@@ -1162,9 +1162,8 @@ void mode_8_directions_camera(struct Camera *c) {
     sAreaYawChange = sAreaYaw - oldAreaYaw;
     set_camera_height(c, pos[1]);
 
+    camera_override = FALSE;
     if (gGameSettings[SETTING_CAMERA_COLLISION]) {
-        camera_override = FALSE;
-
         struct Surface * surf;
         Vec3f camdir;
         Vec3f origin;

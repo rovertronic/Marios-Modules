@@ -108,6 +108,7 @@ enum module_id {
     MOD_CAMERA_COLLISION,
     MOD_WIDESCREEN,
     MOD_60HZ,
+    MOD_AA,
 };
 
 // Inventory
@@ -132,6 +133,7 @@ enum {
     SETTING_60HZ,
     SETTING_CAMERA_COLLISION,
     SETTING_WIDE,
+    SETTING_AA,
     SETTING_COUNT,
 };
 

@@ -9,6 +9,7 @@
 #include "audio/external.h"
 #include "engine/math_util.h"
 #include "mario.h"
+#include "emutest.h"
 #include "behavior_data.h"
 #include "actors/group0.h"
 #include <PR/os_internal_reg.h>
@@ -19,6 +20,7 @@ struct module_execution_thread module_execution_threads[MODULE_EXEC_COUNT];
 
 void module_jump(struct module_execution_thread * met, u8 call_context) {
     gMarioState->input |= INPUT_A_PRESSED;
+    gMarioState->actionMod = 0;
     
     met->jump_tier = (met->jump_tier+met->mod)%3;
     switch(met->jump_tier) {
@@ -309,6 +311,7 @@ struct module_info module_infos[] = {
     [MOD_60HZ] = {MTYPE_SETTINGS,micons_sixty_rgba16,"Sets maximum framerate to 60.",NULL,module_settings,&gGameSettings[SETTING_60HZ]},
     [MOD_WIDESCREEN] = {MTYPE_SETTINGS,micons_wide_rgba16,"Changes viewing resolution to 16:9.",NULL,module_settings,&gGameSettings[SETTING_WIDE]},
     [MOD_CAMERA_COLLISION] = {MTYPE_SETTINGS,micons_camcol_rgba16,"Camera collides with walls.",NULL,module_settings,&gGameSettings[SETTING_CAMERA_COLLISION]},
+    [MOD_AA] = {MTYPE_SETTINGS,micons_aa_rgba16,"Enables anti-aliasing (Smooth triangles).",NULL,module_settings,&gGameSettings[SETTING_AA]},
 };
 
 struct module_type_info module_type_infos[] = {
@@ -420,10 +423,21 @@ void init_module_inventory(void) {
         }
     }
 
+    for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
+        module_execution_threads[i].executing = FALSE;
+    }
+
     // Settings
     inventory[48][0] = MOD_CAMERA_COLLISION;
     inventory[49][0] = MOD_WIDESCREEN;
-    inventory[49][1] = MOD_60HZ;
+    if (gEmulator & EMU_CONSOLE) {
+        // N64 specific configuration
+        inventory[49][1] = MOD_60HZ;
+        inventory[49][2] = MOD_AA;
+    } else {
+        inventory[48][1] = MOD_60HZ;
+        inventory[48][2] = MOD_AA;
+    }
 
     update_settings();
 
@@ -449,11 +463,6 @@ void init_module_inventory(void) {
     inventory[3][1] = MOD_YELLOW;
     inventory[3][2] = MOD_BLACK;
     inventory[3][3] = MOD_WHITE;
-
-
-    for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
-        module_execution_threads[i].executing = FALSE;
-    }
 }
 
 void module_update(void) {
@@ -522,8 +531,6 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
         met->used_flags = 0;
         met->extra_data = NULL;
         met->manual = manual;
-
-        gMarioState->actionMod = 0;
         colorBlendCount = 0;
 
         if (manual) {
@@ -556,7 +563,7 @@ void update_settings(void) {
 }
 
 #define ANALOG_MENU_THRESH 30
-u8 control_neutral = TRUE;
+u16 joystick_hold_timer = 0;
 void control_module_menu(void) {
     for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
         struct module_execution_thread * met = &module_execution_threads[i];
@@ -573,24 +580,22 @@ void control_module_menu(void) {
         (gPlayer1Controller->rawStickX < ANALOG_MENU_THRESH) &&
         (gPlayer1Controller->rawStickX > -ANALOG_MENU_THRESH)
     ) {
-        control_neutral = TRUE;
+        joystick_hold_timer = 0;
+    } else {
+        joystick_hold_timer++;
     }
-    if (control_neutral) {
+    if (joystick_hold_timer==1 || (joystick_hold_timer>15&&(gGlobalTimer%4==0))) {
         if (gPlayer1Controller->rawStickY > ANALOG_MENU_THRESH) {
             gPlayer1Controller->buttonPressed |= U_JPAD;
-            control_neutral = FALSE;
         }
         if (gPlayer1Controller->rawStickY < -ANALOG_MENU_THRESH) {
             gPlayer1Controller->buttonPressed |= D_JPAD;
-            control_neutral = FALSE;
         }
         if (gPlayer1Controller->rawStickX > ANALOG_MENU_THRESH) {
             gPlayer1Controller->buttonPressed |= R_JPAD;
-            control_neutral = FALSE;
         }
         if (gPlayer1Controller->rawStickX < -ANALOG_MENU_THRESH) {
             gPlayer1Controller->buttonPressed |= L_JPAD;
-            control_neutral = FALSE;
         }
     }
 
@@ -850,4 +855,5 @@ char * changelog = "\
 * Increased max framerate to 60\n\
 * Added vanity and settings panels\n\
 * Added module warnings\n\
-* Fixed thwomp death softlock";
+* Fixed thwomp death softlock\n\
+* Hold to navigate menus added";
