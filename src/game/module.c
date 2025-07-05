@@ -433,10 +433,8 @@ void init_module_inventory(void) {
     if (gEmulator & EMU_CONSOLE) {
         // N64 specific configuration
         inventory[49][1] = MOD_60HZ;
-        inventory[49][2] = MOD_AA;
     } else {
         inventory[48][1] = MOD_60HZ;
-        inventory[48][2] = MOD_AA;
     }
 
     update_settings();
@@ -469,7 +467,7 @@ void module_update(void) {
     for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
         struct module_execution_thread * met = &module_execution_threads[i];
         if (met->cooldown) {
-            if (met->timer >= 15) {
+            if (met->timer >= 5) {
                 if (met->manual) {
                     play_sound(SOUND_MENU_MESSAGE_DISAPPEAR,gGlobalSoundSource);
                 }
@@ -856,4 +854,5 @@ char * changelog = "\
 * Added vanity and settings panels\n\
 * Added module warnings\n\
 * Fixed thwomp death softlock\n\
-* Hold to navigate menus added";
+* Hold to navigate menus added\n\
+* Shortened module cooldown";
