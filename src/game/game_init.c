@@ -105,6 +105,12 @@ struct DemoInput *gCurrDemoInput = NULL;
 u16 gDemoInputListID = 0;
 struct DemoInput gRecordedDemoInput = { 0 };
 
+// Thread Variables
+u8 sSingleThreadOtherFrame = FALSE;
+u8 sSingleThreaded = TRUE;
+u8 sFrameCap60 = TRUE;
+u8 sVideoThreadStarted = FALSE;
+
 // Display
 // ----------------------------------------------------------------------------------------------------
 
@@ -796,58 +802,109 @@ void thread5_game_loop(UNUSED void *arg) {
 #endif
 
     while (TRUE) {
-        profiler_frame_setup();
-        // If the reset timer is active, run the process to reset the game.
-        if (gResetTimer != 0) {
-            draw_reset_bars();
-            continue;
-        }
+        if (sSingleThreadOtherFrame) {
+            profiler_frame_setup();
+            // If the reset timer is active, run the process to reset the game.
+            if (gResetTimer != 0) {
+                draw_reset_bars();
+                continue;
+            }
 #ifdef PUPPYPRINT_DEBUG
-    bzero(&gPuppyCallCounter, sizeof(gPuppyCallCounter));
+        bzero(&gPuppyCallCounter, sizeof(gPuppyCallCounter));
 #endif
-        // If any controllers are plugged in, start read the data for when
-        // read_controller_inputs is called later.
-        if (gControllerBits) {
+            // If any controllers are plugged in, start read the data for when
+            // read_controller_inputs is called later.
+            if (gControllerBits) {
 #if ENABLE_RUMBLE
-            block_until_rumble_pak_free();
+                block_until_rumble_pak_free();
 #endif
-            osContStartReadDataEx(&gSIEventMesgQueue);
-        }
+                osContStartReadDataEx(&gSIEventMesgQueue);
+            }
 
-        audio_game_loop_tick();
-        read_controller_inputs(THREAD_5_GAME_LOOP);
-        profiler_update(PROFILER_TIME_CONTROLLERS, 0);
-        profiler_collision_reset();
-        addr = level_script_execute(addr);
-        profiler_collision_completed();
+            audio_game_loop_tick();
+            read_controller_inputs(THREAD_5_GAME_LOOP);
+            profiler_update(PROFILER_TIME_CONTROLLERS, 0);
+            profiler_collision_reset();
+            addr = level_script_execute(addr);
+            profiler_collision_completed();
 #if !defined(PUPPYPRINT_DEBUG) && defined(VISUAL_DEBUG)
-        debug_box_input();
+            debug_box_input();
 #endif
 #ifdef PUPPYPRINT_DEBUG
-        puppyprint_profiler_process();
+            puppyprint_profiler_process();
 #endif
 
 #ifdef VANILLA_DEBUG
-        // when debug info is enabled, print the "BUF %d" information.
-        if (gShowDebugText) {
-            // subtract the end of the gfx pool with the display list to obtain the
-            // amount of free space remaining.
-            print_text_fmt_int(180, 20, "BUF %d", gGfxPoolEnd - (u8 *) gDisplayListHead);
-        }
+            // when debug info is enabled, print the "BUF %d" information.
+            if (gShowDebugText) {
+                // subtract the end of the gfx pool with the display list to obtain the
+                // amount of free space remaining.
+                print_text_fmt_int(180, 20, "BUF %d", gGfxPoolEnd - (u8 *) gDisplayListHead);
+            }
 #endif
-        static u8 t10s = FALSE;
-        if (!t10s) {
-            t10s=TRUE;
-            osStartThread(&gGraphicsThread);
+        gGlobalTimer++;
         }
 
-        gGlobalTimer++;
-        osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
-        osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+        if (gEmulator & (EMU_CONSOLE|EMU_ARES)) {
+            sSingleThreaded = FALSE;
+            if (gEmulator & EMU_ARES) {
+                sFrameCap60 = FALSE; // Ares flickers at 60HZ for some reason
+            }
+        }
+
+        if (!sVideoThreadStarted) {
+            sVideoThreadStarted=TRUE;
+            if (!sSingleThreaded) {
+                sSingleThreadOtherFrame = TRUE;
+                osStartThread(&gGraphicsThread);
+            } else {
+                // Single threaded mode for emulators
+                osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+                osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+                render_init();
+            }
+        }
+
+        if (sSingleThreaded) {
+            if (sFrameCap60) {
+                gFrameLerpRenderFrame = FRAMELERP_NORMAL;
+                if (sSingleThreadOtherFrame) {
+                    gFrameLerpRenderFrame = FRAMELERP_BETWEEN;
+                }
+                gFrameLerpDeltaTime = .5f;
+            } else {
+                gFrameLerpRenderFrame = FRAMELERP_NORMAL;
+                gFrameLerpDeltaTime = 1.0f;
+            }
+
+            // Render
+            select_gfx_pool();
+            init_rcp(CLEAR_ZBUFFER);
+
+            render_game();
+
+            end_master_display_list();
+            alloc_display_list(0);
+
+            display_and_vsync();
+            // End Render
+
+            if (sFrameCap60) {
+                sSingleThreadOtherFrame = !sSingleThreadOtherFrame;
+                osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+            } else {
+                sSingleThreadOtherFrame = TRUE;
+                osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+                osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+            }
+        } else {
+            sSingleThreadOtherFrame = TRUE;
+            osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+            osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+        }
     }
 }
 
-f32 gDeltaProgress = 0.f;
 void thread10_graphics_loop(UNUSED void *arg) {
     u32 lastRenderedFrame = 0xFFFFFFFF;
     u32 prevTime = 0;
@@ -860,17 +917,14 @@ void thread10_graphics_loop(UNUSED void *arg) {
     while (gResetTimer == 0) {
         u32 deltaTime = osGetCount() - prevTime;
         prevTime = osGetCount();
-        gFrameLerpDeltaTime = (f32)deltaTime/(f32)OS_USEC_TO_CYCLES(33333);
-        gDeltaProgress += gFrameLerpDeltaTime;
-        if (gDeltaProgress > 1.0) {
-            gDeltaProgress -= 1.0f;
-        }
 
         if (deltaTime < OS_USEC_TO_CYCLES(33333)) { // > 30 fps
             if (gGlobalTimer == lastRenderedFrame + 1) {
                 gFrameLerpRenderFrame = FRAMELERP_NORMAL;
+                gFrameLerpDeltaTime = 1.0f;
             } else {
                 gFrameLerpRenderFrame = FRAMELERP_BETWEEN;
+                gFrameLerpDeltaTime = 0.5f;
             }
         } else if (deltaTime > OS_USEC_TO_CYCLES(66666)) { // < 15fps
             if (gGlobalTimer == lastRenderedFrame + 1) {
@@ -878,8 +932,10 @@ void thread10_graphics_loop(UNUSED void *arg) {
             } else {
                 gFrameLerpRenderFrame = FRAMELERP_NORMAL;
             }
+            gFrameLerpDeltaTime = 1.0f;
         } else {
             gFrameLerpRenderFrame = FRAMELERP_NORMAL;
+            gFrameLerpDeltaTime = 1.0f;
         }
         lastRenderedFrame = gGlobalTimer;
 
@@ -893,9 +949,9 @@ void thread10_graphics_loop(UNUSED void *arg) {
 
         display_and_vsync();
 
-        if (!gGameSettings[SETTING_60HZ]) {
+        osRecvMesg(&gGraphicsVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+        if (!sFrameCap60) {
             osRecvMesg(&gGraphicsVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
         }
-        osRecvMesg(&gGraphicsVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
     }
 }
