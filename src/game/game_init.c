@@ -845,6 +845,8 @@ void thread5_game_loop(UNUSED void *arg) {
         gGlobalTimer++;
         }
 
+        sFrameCap60 = gGameSettings[SETTING_60HZ];
+
         if (gEmulator & (EMU_CONSOLE|EMU_ARES)) {
             sSingleThreaded = FALSE;
             if (gEmulator & EMU_ARES) {
