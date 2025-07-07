@@ -12,6 +12,7 @@
 #include "emutest.h"
 #include "behavior_data.h"
 #include "actors/group0.h"
+#include "area.h"
 #include <PR/os_internal_reg.h>
 
 u8 gModuleMenuOpen = FALSE;
@@ -264,6 +265,11 @@ void module_settings(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+void module_woman(struct module_execution_thread * met, u8 call_context) {
+    gMarioState->marioObj->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_WOMAN];
+    met->x++;
+}
+
 Vec3f moduleRed = {1.0f,0.0f,0.0f};
 Vec3f moduleBlue = {0.0f,0.0f,1.0f};
 Vec3f moduleGreen = {0.0f,1.0f,0.0f};
@@ -273,17 +279,20 @@ Vec3f moduleBlack = {0.02f,0.02f,0.02f};
 
 Gfx * capLights[] = {
     &mat_mario_cap_v3,
+    &mat_woman_cap_v3,
     NULL,
 };
 
 Gfx * jeanLights[] = {
     &mat_mario_body_v3,
+    &mat_woman_body_v3,
     NULL,
 };
 
 Gfx * hairLights[] = {
     &mat_mario_sideburns_v3_001,
     &mat_mario_hair_v3_001,
+    &mat_woman_hair_v3_001,
     NULL,
 };
 
@@ -292,6 +301,11 @@ Gfx * skinLights[] = {
     &mat_mario_face_1___eye_half_v3_001,
     &mat_mario_face_2___eye_closed_v3_001,
     &mat_mario_mustache_v3_001,
+
+    &mat_woman_womanEye1,
+    &mat_woman_womanEye2,
+    &mat_woman_womanEye3,
+    &mat_woman_mouth,
     NULL,
 };
 
@@ -337,7 +351,9 @@ struct module_info module_infos[] = {
     [MOD_YELLOW] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes yellow into palette.",NULL,module_color,&moduleYellow},
     [MOD_WHITE] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes white into palette.",NULL,module_color,&moduleWhite},
     [MOD_BLACK] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes black into palette.",NULL,module_color,&moduleBlack},
+    [MOD_WOMAN] = {MTYPE_VANITY,micons_woman_rgba16,"Changes Mario's gender to woman.",NULL,module_woman,NULL},
     
+    // Settings
     [MOD_60HZ] = {MTYPE_SETTINGS,micons_sixty_rgba16,"Sets maximum framerate to 60.",NULL,module_settings,&gGameSettings[SETTING_60HZ]},
     [MOD_WIDESCREEN] = {MTYPE_SETTINGS,micons_wide_rgba16,"Changes viewing resolution to 16:9.",NULL,module_settings,&gGameSettings[SETTING_WIDE]},
     [MOD_CAMERA_COLLISION] = {MTYPE_SETTINGS,micons_camcol_rgba16,"Camera collides with walls.",NULL,module_settings,&gGameSettings[SETTING_CAMERA_COLLISION]},
@@ -494,6 +510,7 @@ void init_module_inventory(void) {
     inventory[3][3] = MOD_WHITE;
     inventory[3][4] = MOD_VAN_HAIR;
     inventory[3][5] = MOD_VAN_SKIN;
+    inventory[3][6] = MOD_WOMAN;
 }
 
 void module_update(void) {
@@ -583,6 +600,7 @@ s32 handle_module_inputs(void) {
 }
 
 void update_vanity(void) {
+    gMarioState->marioObj->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_MARIO];
     execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY],0,0,45,FALSE);
     execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY_2],0,0,44,FALSE);
 }

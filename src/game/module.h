@@ -107,7 +107,7 @@ enum module_id {
     MOD_YELLOW,
     MOD_WHITE,
     MOD_BLACK,
-
+    MOD_WOMAN,
     MOD_CAMERA_COLLISION,
     MOD_WIDESCREEN,
     MOD_60HZ,
