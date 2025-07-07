@@ -25,6 +25,8 @@
 #include "skybox.h"
 #include "sound_init.h"
 #include "puppycam2.h"
+#include "module.h"
+#include "frame_lerp.h"
 
 #include "config.h"
 
@@ -640,4 +642,19 @@ Gfx *geo_mirror_mario_backface_culling(s32 callContext, struct GraphNode *node, 
         SET_GRAPH_NODE_LAYER(asGenerated->fnNode.node.flags, LAYER_OPAQUE);
     }
     return gfx;
+}
+
+Gfx *geo_mario_gate_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+    struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
+    struct MarioBodyState *bodyState = &gBodyStates[asGenerated->parameter];
+    s32 action = bodyState->action;
+
+    if (callContext == GEO_CONTEXT_RENDER) {
+        struct GraphNodeRotation *rotNode = (struct GraphNodeRotation *) node->next;
+
+        rotNode->rotation[0] = gMarioState->gateAngle;
+        rotNode->rotation[1] = 0;
+        rotNode->rotation[2] = 0;
+    }
+    return NULL;
 }

@@ -1829,6 +1829,13 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
         queue_rumble_particles(gMarioState);
 #endif
 
+        
+        s16 target_angle = 0xA000;
+        if (gModuleMenuOpen) {
+            target_angle = 0x0;
+        }
+        gMarioState->gateAngle = approach_s16_asymptotic(gMarioState->gateAngle,target_angle,4);
+
         if (title_or_game == 0) {
             gMarioState->marioBodyState->eyeState = MARIO_EYES_DEAD;
             if (title_progress) {

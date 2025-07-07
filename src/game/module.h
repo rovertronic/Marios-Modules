@@ -42,6 +42,7 @@ enum module_execution_ids {
     MODULE_EXEC_A,
     MODULE_EXEC_B,
     MODULE_EXEC_VANITY,
+    MODULE_EXEC_VANITY_2,
     MODULE_EXEC_SETTINGS,
     MODULE_EXEC_COUNT,
 };
@@ -98,6 +99,8 @@ enum module_id {
     MOD_SETTINGS,
     MOD_VAN_CAP,
     MOD_VAN_PANTS,
+    MOD_VAN_HAIR,
+    MOD_VAN_SKIN,
     MOD_RED,
     MOD_BLUE,
     MOD_GREEN,

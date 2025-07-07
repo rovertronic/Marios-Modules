@@ -15,6 +15,7 @@
 #include <PR/os_internal_reg.h>
 
 u8 gModuleMenuOpen = FALSE;
+u8 gGameSettings[SETTING_COUNT];
 
 struct module_execution_thread module_execution_threads[MODULE_EXEC_COUNT];
 
@@ -224,22 +225,27 @@ void module_clothes_color(struct module_execution_thread * met, u8 call_context)
     // Somewhat hacky, inject mario's material dls with new color
     // won't crash N64 i think and that's all that matters
 
-    Gfx * dlhead = segmented_to_virtual(met->extra_data);
+    Gfx ** lightList = met->extra_data;
 
-    f32 lum = 0.0f;
-    Vec3f final = {0.0f,0.0f,0.0f};
-    for (int i = 0; i < colorBlendCount; i++) {
-        for (int j = 0; j < 3; j++) {
-            final[j] += colorBlendStack[i][j] * (1.0f/colorBlendCount);
+    while (*lightList != NULL) {
+        Gfx * dlhead = segmented_to_virtual(*lightList);
+
+        Vec3f final = {0.0f,0.0f,0.0f};
+        for (int i = 0; i < colorBlendCount; i++) {
+            for (int j = 0; j < 3; j++) {
+                final[j] += colorBlendStack[i][j] * (1.0f/colorBlendCount);
+            }
         }
-    }
 
-    u8 r = final[0]*255.0f;
-    u8 g = final[1]*255.0f;
-    u8 b = final[2]*255.0f;
-    
-    gSPLightColor(dlhead++,LIGHT_1, (r<<24) | (g<<16) | (b<<8) | 0xFF);
-    gSPLightColor(dlhead++,LIGHT_2, (r/2<<24) | (g/2<<16) | (b/2<<8) | 0xFF);
+        u8 r = final[0]*255.0f;
+        u8 g = final[1]*255.0f;
+        u8 b = final[2]*255.0f;
+        
+        gSPLightColor(dlhead++,LIGHT_1, (r<<24) | (g<<16) | (b<<8) | 0xFF);
+        gSPLightColor(dlhead++,LIGHT_2, (r/2<<24) | (g/2<<16) | (b/2<<8) | 0xFF);
+
+        lightList++;
+    }
 
     colorBlendCount = 0;
     met->x++;
@@ -258,14 +264,36 @@ void module_settings(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
-u8 gGameSettings[SETTING_COUNT];
-
 Vec3f moduleRed = {1.0f,0.0f,0.0f};
 Vec3f moduleBlue = {0.0f,0.0f,1.0f};
 Vec3f moduleGreen = {0.0f,1.0f,0.0f};
 Vec3f moduleYellow = {1.0f,1.0f,0.0f};
 Vec3f moduleWhite = {1.0f,1.0f,1.0f};
 Vec3f moduleBlack = {0.02f,0.02f,0.02f};
+
+Gfx * capLights[] = {
+    &mat_mario_cap_v3,
+    NULL,
+};
+
+Gfx * jeanLights[] = {
+    &mat_mario_body_v3,
+    NULL,
+};
+
+Gfx * hairLights[] = {
+    &mat_mario_sideburns_v3_001,
+    &mat_mario_hair_v3_001,
+    NULL,
+};
+
+Gfx * skinLights[] = {
+    &mat_mario_face_0___eye_open_v3_001,
+    &mat_mario_face_1___eye_half_v3_001,
+    &mat_mario_face_2___eye_closed_v3_001,
+    &mat_mario_mustache_v3_001,
+    NULL,
+};
 
 struct module_info module_infos[] = {
     // Sockets
@@ -298,8 +326,10 @@ struct module_info module_infos[] = {
     [MOD_NONMOD_KEY] = {MTYPE_NONMOD, micons_key_rgba16,NULL,NULL,NULL},
 
     // Vanity
-    [MOD_VAN_CAP] = {MTYPE_VANITY,micons_cap_rgba16,"Mixes colors into cap & shirt.",NULL,module_clothes_color,&mat_mario_cap_v3},
-    [MOD_VAN_PANTS] = {MTYPE_VANITY,micons_pants_rgba16,"Mixes colors into overalls.",NULL,module_clothes_color,&mat_mario_body_v3},
+    [MOD_VAN_CAP] = {MTYPE_VANITY,micons_cap_rgba16,"Mixes colors into cap & shirt.",NULL,module_clothes_color,capLights},
+    [MOD_VAN_PANTS] = {MTYPE_VANITY,micons_pants_rgba16,"Mixes colors into overalls.",NULL,module_clothes_color,jeanLights},
+    [MOD_VAN_HAIR] = {MTYPE_VANITY,micons_hair_rgba16,"Mixes colors into hair.",NULL,module_clothes_color,hairLights},
+    [MOD_VAN_SKIN] = {MTYPE_VANITY,micons_skin_rgba16,"Mixes colors into skin tone.",NULL,module_clothes_color,skinLights},
 
     [MOD_RED] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes red into palette.",NULL,module_color,&moduleRed},
     [MOD_BLUE] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes blue into palette.",NULL,module_color,&moduleBlue},
@@ -348,8 +378,8 @@ struct module_panel module_panel_info[] = {
     },
     [PANEL_VANITY] = {
         .name = "Vanity",
-        .offset = 45,
-        .size = 3,
+        .offset = 44,
+        .size = 4,
         .unlock_flag = -1,
     },
 };
@@ -363,6 +393,7 @@ struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
     [4] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 
      // Vanity
+    [44] = {.type = ROW_SOCKET, .icon = MOD_VANITY, .whitelist_flags = WHITELIST_VANITY},
     [45] = {.type = ROW_SOCKET, .icon = MOD_VANITY, .whitelist_flags = WHITELIST_VANITY},
     [46] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
     [47] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
@@ -461,6 +492,8 @@ void init_module_inventory(void) {
     inventory[3][1] = MOD_YELLOW;
     inventory[3][2] = MOD_BLACK;
     inventory[3][3] = MOD_WHITE;
+    inventory[3][4] = MOD_VAN_HAIR;
+    inventory[3][5] = MOD_VAN_SKIN;
 }
 
 void module_update(void) {
@@ -498,7 +531,7 @@ void module_update(void) {
                         read_mod = get_inventory(met->x,met->y);
                     }
                 }
-                update_vanity();
+                //update_vanity();
                 if (met->manual) {
                     met->cooldown = TRUE;
                 } else {
@@ -551,6 +584,7 @@ s32 handle_module_inputs(void) {
 
 void update_vanity(void) {
     execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY],0,0,45,FALSE);
+    execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY_2],0,0,44,FALSE);
 }
 
 void update_settings(void) {
@@ -638,7 +672,7 @@ void control_module_menu(void) {
             inventory[true_inventory_y][inventory_x] = module_in_hand;
             module_in_hand = module_to_pick_up;
         }
-        if (true_inventory_y == 45) {
+        if (true_inventory_y == 45 || true_inventory_y == 44) {
             update_vanity();
         }
         if (true_inventory_y == 48) {
