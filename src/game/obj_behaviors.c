@@ -1019,7 +1019,7 @@ void bhv_save_box(void) {
             obj_set_hitbox(o, &sSaveBoxHitbox);
             o->oAction = 1;
             //cur_obj_init_animation_with_accel_and_sound(0, 1.0f);
-            //o->header.gfx.animInfo.animAccelF = 0.1f;
+            o->header.gfx.animInfo.animAccelF = 0.33f;
             break;
         case 1:
             if (cur_obj_was_attacked_or_ground_pounded()) {

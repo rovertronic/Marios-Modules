@@ -382,4 +382,6 @@ extern const struct Animation *const king_bobomb_seg5_anims_0500FE30[];
 
 #include "savec/collision_header.h"
 
+
+#include "saveanim/anim_header.h"
 #endif

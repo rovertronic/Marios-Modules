@@ -47,3 +47,5 @@
 #include "save/anims/table.inc.c"
 #include "save/model.inc.c"
 #include "savec/collision.inc.c"
+#include "saveanim/anims/data.inc.c"
+#include "saveanim/anims/table.inc.c"

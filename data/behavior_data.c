@@ -6154,7 +6154,7 @@ const BehaviorScript bhvSaveBox[] = {
     SET_FLOAT(oCollisionDistance, 300),
     SET_HOME(),
     CALL_NATIVE(bhv_init_room),
-    LOAD_ANIMATIONS(oAnimations, save_anims),
+    LOAD_ANIMATIONS(oAnimations, saveanim_anims),
     ANIMATE(0),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_save_box),

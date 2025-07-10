@@ -7,7 +7,7 @@ void scroll_save_block_mesh_layer_1_vtx_1() {
 	int deltaX;
 	Vtx *vertices = segmented_to_virtual(save_block_mesh_layer_1_vtx_1);
 
-	deltaX = (int)(0.5 * 0x20) % width;
+	deltaX = (int)(1.0 * 0x20) % width;
 
 	if (absi(currentX) > width) {
 		deltaX -= (int)(absi(currentX) / width) * width * signum_positive(deltaX);
