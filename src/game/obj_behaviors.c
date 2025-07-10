@@ -995,3 +995,7 @@ void bhv_bdoor(void) {
             break;
     }
 }
+
+void bhv_module_preview_box(void) {
+    vec3f_copy(gModulePreviewPos,&o->oPosVec);
+}

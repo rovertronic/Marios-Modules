@@ -6135,3 +6135,12 @@ const BehaviorScript bhvDungeonManager[] = {
         CALL_NATIVE(bhv_dungeon_manager),
     END_LOOP(),
 };
+
+extern void bhv_module_preview_box(void);
+const BehaviorScript bhvModulePreviewBox[] = {
+    BEGIN(OBJ_LIST_SPAWNER),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    CALL_NATIVE(bhv_module_preview_box),
+    BEGIN_LOOP(),
+    END_LOOP(),
+};

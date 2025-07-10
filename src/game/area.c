@@ -24,6 +24,7 @@
 #include "dialog_ids.h"
 #include "puppyprint.h"
 #include "debug_box.h"
+#include "module.h"
 #include "engine/colors.h"
 #include "profiling.h"
 #ifdef S2DEX_TEXT_ENGINE
@@ -388,11 +389,13 @@ void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 b
     play_transition(transType, time, red, green, blue);
 }
 
+u8 gRenderPass = 0;
 extern u8 title_or_game;
 void render_game(void) {
     PROFILER_GET_SNAPSHOT_TYPE(PROFILER_DELTA_COLLISION);
     if (gCurrentArea != NULL && !gWarpTransition.pauseRendering) {
         if (gCurrentArea->graphNode) {
+            gRenderPass = 0;
             geo_process_root(gCurrentArea->graphNode, gViewportOverride, gViewportClip, gFBSetColor);
         }
 #ifdef PUPPYPRINT
@@ -404,7 +407,7 @@ void render_game(void) {
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH,
                       SCREEN_HEIGHT - gBorderHeight);
 
-        if (title_or_game == 1) {
+        if (title_or_game == 1 && !gModuleMenuOpen) {
             render_hud();
         }
 
@@ -440,6 +443,12 @@ void render_game(void) {
                 gWarpTransDelay--;
             }
         }
+
+        if (gModuleMenuOpen && gCurrentArea->graphNode) {
+            gRenderPass = 1;
+            geo_process_root(gCurrentArea->graphNode, gViewportOverride, gViewportClip, gFBSetColor);
+        }
+
 #ifdef S2DEX_TEXT_ENGINE
         s2d_init();
 

@@ -2296,9 +2296,13 @@ s32 render_course_complete_screen(void) {
     return MENU_OPT_NONE;
 }
 
-u8 title_dl_alpha = 255;
-u8 title_progress = FALSE;
-u8 title_or_game = 0;
+//u8 title_dl_alpha = 255;
+//u8 title_progress = FALSE;
+//u8 title_or_game = 0;
+
+u8 title_dl_alpha = 0;
+u8 title_progress = TRUE;
+u8 title_or_game = 1;
 
 s32 render_menus_and_dialogs(void) {
     create_dl_ortho_matrix();
@@ -2349,8 +2353,9 @@ s32 render_menus_and_dialogs(void) {
 
     if (gModuleMenuOpen) {
         print_module_menu();
+    } else {
+        print_module_hud_status();
     }
-    print_module_hud_status();
 
     return 0;
 }

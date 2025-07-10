@@ -77,6 +77,7 @@ static s8 gMarioAttackScaleAnimation[3 * 6] = {
 
 struct MarioBodyState gBodyStates[2]; // 2nd is never accessed in practice, most likely Luigi related
 struct GraphNodeObject gMirrorMario;  // copy of Mario's geo node for drawing mirror Mario
+struct GraphNodeObject gPreviewMario;
 
 // This whole file is weirdly organized. It has to be the same file due
 // to rodata boundaries and function aligns, which means the programmer
@@ -655,6 +656,41 @@ Gfx *geo_mario_gate_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat
         rotNode->rotation[0] = gMarioState->gateAngle;
         rotNode->rotation[1] = 0;
         rotNode->rotation[2] = 0;
+    }
+    return NULL;
+}
+
+Gfx *geo_render_preview_mario(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+    f32 mirroredX;
+    struct Object *mario = gMarioStates[0].marioObj;
+
+    switch (callContext) {
+        case GEO_CONTEXT_CREATE:
+            init_graph_node_object(NULL, &gPreviewMario, NULL, gVec3fZero, gVec3sZero, gVec3fOne);
+            break;
+        case GEO_CONTEXT_AREA_LOAD:
+            geo_add_child(node, &gPreviewMario.node);
+            break;
+        case GEO_CONTEXT_AREA_UNLOAD:
+            geo_remove_child(&gPreviewMario.node);
+            break;
+        case GEO_CONTEXT_RENDER:
+            if (gRenderPass == 1) {
+                geo_add_child(node, &gPreviewMario.node);
+
+                gPreviewMario.sharedChild = mario->header.gfx.sharedChild;
+                gPreviewMario.areaIndex = mario->header.gfx.areaIndex;
+                vec3s_copy(gPreviewMario.angle, gVec3sZero);
+                vec3f_copy(gPreviewMario.pos, gModulePreviewPos);
+                vec3f_copy(gPreviewMario.scale, mario->header.gfx.scale);
+
+                gPreviewMario.animInfo = mario->header.gfx.animInfo;
+                ((struct GraphNode *) &gPreviewMario)->flags |= GRAPH_RENDER_ACTIVE;
+            } else {
+                //((struct GraphNode *) &gMirrorMario)->flags &= ~GRAPH_RENDER_ACTIVE;
+                geo_remove_child(&gPreviewMario.node);
+            }
+            break;
     }
     return NULL;
 }

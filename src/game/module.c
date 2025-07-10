@@ -17,6 +17,8 @@
 
 u8 gModuleMenuOpen = FALSE;
 u8 gGameSettings[SETTING_COUNT];
+Vec3f gModulePreviewPos;
+u8 gModuleUpdateVanity = FALSE;
 
 struct module_execution_thread module_execution_threads[MODULE_EXEC_COUNT];
 
@@ -249,6 +251,8 @@ void module_clothes_color(struct module_execution_thread * met, u8 call_context)
     }
 
     colorBlendCount = 0;
+
+    gModuleUpdateVanity = TRUE;
     met->x++;
 }
 
@@ -256,17 +260,21 @@ void module_color(struct module_execution_thread * met, u8 call_context) {
     vec3f_copy(colorBlendStack[colorBlendCount],*((Vec3f *)met->extra_data));
     colorBlendCount++;
 
+    gModuleUpdateVanity = TRUE;
     met->x++;
 }
 
 void module_settings(struct module_execution_thread * met, u8 call_context) {
     *((u8 *)met->extra_data) = 1;
 
+    gModuleUpdateVanity = TRUE;
     met->x++;
 }
 
 void module_woman(struct module_execution_thread * met, u8 call_context) {
     gMarioState->marioObj->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_WOMAN];
+
+    gModuleUpdateVanity = TRUE;
     met->x++;
 }
 
@@ -329,11 +337,11 @@ struct module_info module_infos[] = {
     [MOD_POW] = {MTYPE_BUFF,micons_onepow_rgba16,"Adds 1 to the MOD of the next piece.",NULL,module_pow},
     [MOD_REPEAT] = {MTYPE_BUFF,micons_repeat_rgba16,"Repeats from the start.",NULL,module_repeat},
     [MOD_SPD] = {MTYPE_BUFF,micons_spd_rgba16,"Adds speed to next action block.",NULL,module_spd},
+    [MOD_TIMER] = {MTYPE_BUFF,micons_clock_rgba16,"Continues after a 1/2 second.","Adds 1/3 a second per MOD.",module_timer},
 
     // Conditions
     [MOD_HIT_GROUND] = {MTYPE_COND,micons_ground_rgba16,"Continues when Mario touches the ground.",NULL,module_floor},
     [MOD_HIT_WALL] = {MTYPE_COND,micons_wall_rgba16,"Continues when Mario touches a wall.",NULL,module_wall},
-    [MOD_TIMER] = {MTYPE_COND,micons_clock_rgba16,"Continues after a 1/2 second.","Adds 1/3 a second per MOD.",module_timer},
     [MOD_GRAV] = {MTYPE_COND,micons_grav_rgba16,"Continues when Mario has downward velocity.",NULL,module_grav},
 
     // Non modifiers
@@ -370,8 +378,8 @@ struct module_type_info module_type_infos[] = {
     [MTYPE_SETTINGS] = {"<COL_AAAAAAFF>Option",{0xAA,0xAA,0xAA}},
 };
 
-#define INVENTORY_PRINT_OFFSET_X 80
-#define INVENTORY_PRINT_OFFSET_Y 70
+#define INVENTORY_PRINT_OFFSET_X 26
+#define INVENTORY_PRINT_OFFSET_Y 24
 
 #define INVENTORY_SLOTS_Y 50
 #define INVENTORY_SLOTS_X 8
@@ -394,8 +402,8 @@ struct module_panel module_panel_info[] = {
     },
     [PANEL_VANITY] = {
         .name = "Vanity",
-        .offset = 44,
-        .size = 4,
+        .offset = 45,
+        .size = 3,
         .unlock_flag = -1,
     },
 };
@@ -548,13 +556,17 @@ void module_update(void) {
                         read_mod = get_inventory(met->x,met->y);
                     }
                 }
-                //update_vanity();
                 if (met->manual) {
                     met->cooldown = TRUE;
                 } else {
                     met->executing = FALSE;
                 }
                 met->timer = 0;
+
+                if (gModuleUpdateVanity && i != MODULE_EXEC_VANITY) {
+                    gModuleUpdateVanity = FALSE;
+                    update_vanity();
+                }
             } else {
                 module_infos[read_mod].func(met,MCC_HALTED);
                 met->timer++;
@@ -602,7 +614,6 @@ s32 handle_module_inputs(void) {
 void update_vanity(void) {
     gMarioState->marioObj->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_MARIO];
     execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY],0,0,45,FALSE);
-    execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY_2],0,0,44,FALSE);
 }
 
 void update_settings(void) {
@@ -617,7 +628,7 @@ u16 joystick_hold_timer = 0;
 void control_module_menu(void) {
     for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
         struct module_execution_thread * met = &module_execution_threads[i];
-        if (met->executing) {
+        if (met->executing && met->manual) {
             //no editing while running
             return;
         }
@@ -690,7 +701,7 @@ void control_module_menu(void) {
             inventory[true_inventory_y][inventory_x] = module_in_hand;
             module_in_hand = module_to_pick_up;
         }
-        if (true_inventory_y == 45 || true_inventory_y == 44) {
+        if (true_inventory_y == 45) {
             update_vanity();
         }
         if (true_inventory_y == 48) {
@@ -769,6 +780,8 @@ int module_is_invalid(int x, int y, s8 mod) {
 
 char print_buffer[500];
 void print_module_menu(void) {
+    gSPDisplayList(gDisplayListHead++,ui_ui_mesh);
+
     gPrintModuleDarken=1;
     inventory_vis_x = approach_f32_asymptotic(inventory_vis_x,inv_slot_printx(inventory_x,inventory_y),.3f);
     inventory_vis_y = approach_f32_asymptotic(inventory_vis_y,inv_slot_printy(inventory_x,inventory_y),.3f);
@@ -902,9 +915,32 @@ void print_module_hud_status(void) {
 }
 
 char * changelog = "\
+Major Changes:\n\
 * Increased max framerate to 60\n\
-* Added vanity and settings panels\n\
+* Overhauled and refined module menu\n\
+* Added vanity, settings, and progress panels\n\
+\n\
+New Module Additions:\n\
+* Red Dye (Vanity)\n\
+* Green Dye (Vanity)\n\
+* Blue Dye (Vanity)\n\
+* Yellow Dye (Vanity)\n\
+* Black Dye (Vanity)\n\
+* White Dye (Vanity)\n\
+* Pants (Vanity)\n\
+* Cap & Shirt (Vanity)\n\
+* Skin (Vanity)\n\
+* Hair (Vanity)\n\
+* Woman (Vanity)\n\
+\n\
+* 60 FPS (Option)\n\
+* Camera Collision (Option)\n\
+* Widescreen (Option)\n\
+\n\
+Minor Changes:\n\
+* Polished level visuals\n\
 * Added module warnings\n\
 * Fixed thwomp death softlock\n\
 * Hold to navigate menus added\n\
-* Shortened module cooldown";
+* Shortened module cooldown\n\
+* Timer module now classified as modifier rather than condition";

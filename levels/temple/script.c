@@ -126,6 +126,7 @@ const LevelScript level_temple_entry[] = {
 		OBJECT(MODEL_GOOMBA, -6223, 1731, -5803, 0, -45, 0, 0x00000000, bhvGoomba),
 		OBJECT(MODEL_KINGBOBOMB_GLOBAL, 11026, 4177, -384, 0, -90, 0, (9 << 24), bhvKingBobomb),
 		OBJECT(MODEL_BDOOR, -606, 789, -2114, 0, 0, 0, (1 << 16), bhvBdoor),
+		OBJECT(MODEL_NONE, -57, 2714, 10745, 0, 0, 0, 0x00000000, bhvModulePreviewBox),
 		OBJECT(MODEL_MR_I, -1266, 1826, -6833, 0, -99, 0, 0x00000000, bhvMrI),
 		OBJECT(MODEL_MR_I, 2694, 1211, -12497, 0, 6, 0, 0x00000000, bhvMrI),
 		OBJECT(MODEL_SCUTTLEBUG, 3813, 90, -637, 0, -44, 0, 0x00000000, bhvScuttlebug),

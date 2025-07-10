@@ -3,13 +3,21 @@
 const GeoLayout temple_area_1_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_SWITCH_CASE(5, geo_switch_area),
+		GEO_SWITCH_CASE(6, geo_switch_area),
 		GEO_OPEN_NODE(),
+			GEO_BRANCH(1, temple_dl_0zroom_geo),
 			GEO_BRANCH(1, temple_dl_1room_geo),
 			GEO_BRANCH(1, temple_dl_2room_geo),
 			GEO_BRANCH(1, temple_dl_3room_geo),
 			GEO_BRANCH(1, temple_dl_4room_geo),
 		GEO_CLOSE_NODE(),
+		GEO_ASM(0, geo_render_preview_mario),
+	GEO_CLOSE_NODE(),
+	GEO_RETURN(),
+};
+const GeoLayout temple_dl_0zroom_geo[] = {
+	GEO_NODE_START(),
+	GEO_OPEN_NODE(),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };

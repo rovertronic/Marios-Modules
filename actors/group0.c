@@ -42,3 +42,4 @@
 #include "hover/model.inc.c"
 #include "cchest/model.inc.c"
 #include "woman/model.inc.c"
+#include "ui/model.inc.c"

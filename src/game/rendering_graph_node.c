@@ -580,9 +580,15 @@ void geo_process_camera(struct GraphNodeCamera *node) {
 
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(rollMtx), G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH);
 
-    mtxf_lookat(gCameraTransform, frameLerpPos(node->pos,node->posLerp), frameLerpPos(node->focus,node->focLerp), node->roll);
-    vec3f_copy(gSkyboxCameraPos,node->posLerp);
-    vec3f_copy(gSkyboxCameraFoc,node->focLerp);
+    if (gRenderPass == 1) {
+        Vec3f offsetPos = {gModulePreviewPos[0]-250.0f,gModulePreviewPos[1],gModulePreviewPos[2]+800.0f};
+        Vec3f offsetFoc = {gModulePreviewPos[0]-250.0f,gModulePreviewPos[1],gModulePreviewPos[2]};
+        mtxf_lookat(gCameraTransform, offsetPos, offsetFoc, node->roll);
+    } else {
+        mtxf_lookat(gCameraTransform, frameLerpPos(node->pos,node->posLerp), frameLerpPos(node->focus,node->focLerp), node->roll);
+        vec3f_copy(gSkyboxCameraPos,node->posLerp);
+        vec3f_copy(gSkyboxCameraFoc,node->focLerp);
+    }
 
     // Calculate the lookAt
 #ifdef F3DEX_GBI_2
@@ -610,12 +616,15 @@ void geo_process_camera(struct GraphNodeCamera *node) {
     for (int i = 0; i < 3; i++) {
         scaledCamera[3][i] /= WORLD_SCALE;
     }
-
+    if (gRenderPass == 1) {
+        scaledCamera[3][3] *= 4.0f;
+    }
     // Convert the scaled matrix to fixed-point and integrate it into the projection matrix stack
     guMtxF2L(scaledCamera, viewMtx);
 #else
     guMtxF2L(gCameraTransform, viewMtx);
 #endif
+
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(viewMtx), G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH);
     setup_global_light();
 
@@ -1139,6 +1148,9 @@ void visualise_object_hitbox(struct Object *node) {
  * Process an object node.
  */
 void geo_process_object(struct Object *node) {
+    if (gRenderPass == 1 && node != (struct Object *)&gPreviewMario) {
+        return;
+    }
     if (node->header.gfx.areaIndex == gCurGraphNodeRoot->areaIndex) {
         s32 isInvisible = (node->header.gfx.node.flags & GRAPH_RENDER_INVISIBLE);
         // Maintain throw matrix pointer if the game is paused as it won't be updated.
@@ -1371,8 +1383,10 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         gCurLookAt = (LookAt*)alloc_display_list(sizeof(LookAt));
         bzero(gCurLookAt, sizeof(LookAt));
 
-        if (!(gEmulator & (EMU_CONSOLE | EMU_ARES))) {
-            clear_framebuffer(0);
+        if (gRenderPass==0) {
+            if ((!gModuleMenuOpen)&&(!(gEmulator & (EMU_CONSOLE | EMU_ARES)))) {
+                clear_framebuffer(0);
+            }
         }
 
         gMatStackIndex = 0;

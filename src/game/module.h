@@ -5,6 +5,7 @@
 
 extern u8 gModuleMenuOpen;
 extern u8 gGameSettings[];
+extern Vec3f gModulePreviewPos;
 
 struct module_panel {
     char * name;
