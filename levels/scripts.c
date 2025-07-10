@@ -120,6 +120,7 @@ const LevelScript level_main_scripts_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_HOVER, hover_geo),
     LOAD_MODEL_FROM_GEO(MODEL_KINGBOBOMB_GLOBAL, king_bobomb_geo),
     LOAD_MODEL_FROM_GEO(MODEL_WOMAN, woman_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_SAVE, save_geo),
     FREE_LEVEL_POOL(),
     POP_POOL(),
     CALL(/*arg*/ 0, /*func*/ lvl_init_from_save_file),

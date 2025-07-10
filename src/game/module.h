@@ -113,6 +113,7 @@ enum module_id {
     MOD_WIDESCREEN,
     MOD_60HZ,
     MOD_AA,
+    MOD_WRAP,
 };
 
 // Inventory
@@ -127,6 +128,7 @@ struct inventory_row {
     s8 icon;
     s8 mod_type_prio;
     u8 whitelist_flags;
+    u8 wrap;
 };
 
 #define WHITELIST_VANITY ((1 << MTYPE_BUFF) | (1 << MTYPE_VANITY))

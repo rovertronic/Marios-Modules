@@ -323,6 +323,7 @@ struct module_info module_infos[] = {
     [MOD_BUTTON_B] = {MTYPE_INPUT,micons_bbtn_rgba16,NULL,NULL,NULL},
     [MOD_VANITY] = {MTYPE_INPUT,micons_vanity_rgba16,NULL,NULL,NULL},
     [MOD_SETTINGS] = {MTYPE_INPUT,micons_gear_rgba16,NULL,NULL,NULL},
+    [MOD_WRAP] = {MTYPE_INPUT,micons_wrap_rgba16,NULL,NULL,NULL},
 
     // Actions
     [MOD_JUMP] = {MTYPE_MOVE,micons_jump_rgba16,"Makes Mario attempt to jump.","Increases jump tier per MOD.",module_jump},
@@ -402,8 +403,8 @@ struct module_panel module_panel_info[] = {
     },
     [PANEL_VANITY] = {
         .name = "Vanity",
-        .offset = 45,
-        .size = 3,
+        .offset = 44,
+        .size = 4,
         .unlock_flag = -1,
     },
 };
@@ -417,8 +418,8 @@ struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
     [4] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 
      // Vanity
-    [44] = {.type = ROW_SOCKET, .icon = MOD_VANITY, .whitelist_flags = WHITELIST_VANITY},
-    [45] = {.type = ROW_SOCKET, .icon = MOD_VANITY, .whitelist_flags = WHITELIST_VANITY},
+    [44] = {.type = ROW_SOCKET, .icon = MOD_VANITY, .whitelist_flags = WHITELIST_VANITY, .wrap = 1},
+    [45] = {.type = ROW_SOCKET, .icon = MOD_WRAP,   .whitelist_flags = WHITELIST_VANITY},
     [46] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
     [47] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
 
@@ -461,6 +462,16 @@ s8 get_inventory(int x, int y) {
 }
 
 void add_inventory(s8 module) {
+    // Check for specialized inventory slots first, before
+    for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
+        for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
+            if (inventory[y][x] == MOD_EMPTY && inventory_row_info[y].type == ROW_STORAGE && inventory_row_info[y].mod_type_prio == module_infos[module].type) {
+                inventory[y][x] = module;
+                return;
+            }
+        }
+    }
+
     for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
         for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
             if (inventory[y][x] == MOD_EMPTY && inventory_row_info[y].type == ROW_STORAGE) {
@@ -546,6 +557,14 @@ void module_update(void) {
                     if (1 << module_infos[read_mod].type & inventory_row_info[met->y].whitelist_flags) {
                         met->extra_data = module_infos[read_mod].extra_data;
                         module_infos[read_mod].func(met,MCC_INVOKE);
+
+
+
+                        if (inventory_row_info[met->y].wrap && met->x == 8) {
+                            met->x = 0;
+                            met->y ++;
+                        }
+
                         read_mod = get_inventory(met->x,met->y);
                         if (met->halted) {
                             return;
@@ -613,7 +632,7 @@ s32 handle_module_inputs(void) {
 
 void update_vanity(void) {
     gMarioState->marioObj->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_MARIO];
-    execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY],0,0,45,FALSE);
+    execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY],0,0,44,FALSE);
 }
 
 void update_settings(void) {
@@ -701,7 +720,7 @@ void control_module_menu(void) {
             inventory[true_inventory_y][inventory_x] = module_in_hand;
             module_in_hand = module_to_pick_up;
         }
-        if (true_inventory_y == 45) {
+        if (true_inventory_y == 44 || true_inventory_y == 45) {
             update_vanity();
         }
         if (true_inventory_y == 48) {
@@ -825,6 +844,9 @@ void print_module_menu(void) {
 
             if (inventory_row_info[true_y].type == ROW_SOCKET) {
                 print_module(inventory_row_info[true_y].icon,inv_slot_printx(-1,y), inv_slot_printy(-1,y));
+                if (inventory_row_info[true_y].wrap) {
+                    print_module(MOD_WRAP,inv_slot_printx(8,y), inv_slot_printy(-1,y));
+                }
             }
         }
     }

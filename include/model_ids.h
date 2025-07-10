@@ -580,6 +580,7 @@ enum new_models {
     MODEL_BDOOR_LOCKED,
     MODEL_KINGBOBOMB_GLOBAL,
     MODEL_WOMAN,
+    MODEL_SAVE,
 };
 
 #endif // MODEL_IDS_H
