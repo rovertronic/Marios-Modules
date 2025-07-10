@@ -6144,3 +6144,19 @@ const BehaviorScript bhvModulePreviewBox[] = {
     BEGIN_LOOP(),
     END_LOOP(),
 };
+
+extern void bhv_save_box(void);
+const BehaviorScript bhvSaveBox[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    LOAD_COLLISION_DATA(savec_collision),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    SET_FLOAT(oCollisionDistance, 300),
+    SET_HOME(),
+    CALL_NATIVE(bhv_init_room),
+    LOAD_ANIMATIONS(oAnimations, save_anims),
+    ANIMATE(0),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_save_box),
+    END_LOOP(),
+};

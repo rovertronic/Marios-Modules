@@ -546,5 +546,6 @@ extern const BehaviorScript bhvBdoor[];
 extern const BehaviorScript bhvVolume[];
 extern const BehaviorScript bhvDungeonManager[];
 extern const BehaviorScript bhvModulePreviewBox[];
+extern const BehaviorScript bhvSaveBox[];
 
 #endif // BEHAVIOR_DATA_H

@@ -66,6 +66,7 @@ STATIC_ASSERT(ARRAY_COUNT(gLevelToCourseNumTable) == LEVEL_COUNT - 1,
  * osEepromLongRead. It also returns 0 if EEPROM isn't loaded correctly in the system.
  */
 static s32 read_eeprom_data(void *buffer, s32 size) {
+    return 0;
     s32 status = 0;
 
     if (gEepromProbe != 0) {
@@ -96,6 +97,7 @@ static s32 read_eeprom_data(void *buffer, s32 size) {
  * osEepromLongWrite. Unlike read_eeprom_data, return 1 if EEPROM isn't loaded.
  */
 static s32 write_eeprom_data(void *buffer, s32 size) {
+    return 0;
     s32 status = 1;
 
     if (gEepromProbe != 0) {
@@ -127,6 +129,7 @@ static s32 write_eeprom_data(void *buffer, s32 size) {
  * nuPiReadSram. It also returns 0 if SRAM isn't loaded correctly in the system.
  */
 static s32 read_eeprom_data(void *buffer, s32 size) {
+    return;
     s32 status = 0;
 
     if (gSramProbe != 0) {
@@ -155,6 +158,7 @@ static s32 read_eeprom_data(void *buffer, s32 size) {
  * nuPiWriteSram. Unlike read_eeprom_data, return 1 if SRAM isn't loaded.
  */
 static s32 write_eeprom_data(void *buffer, s32 size) {
+    return;
     s32 status = 1;
 
     if (gSramProbe != 0) {

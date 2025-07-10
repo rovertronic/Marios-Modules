@@ -1900,6 +1900,9 @@ void init_mario(void) {
     vec3s_copy(gMarioState->faceAngle, gMarioSpawnInfo->startAngle);
     vec3_zero(gMarioState->angleVel);
     vec3s_to_vec3f(gMarioState->pos, gMarioSpawnInfo->startPos);
+
+    marios_modules_savefile_load_position();
+
     vec3f_copy(gMarioState->prevPos, gMarioState->pos);
     vec3_zero(gMarioState->vel);
     gMarioState->floorHeight =

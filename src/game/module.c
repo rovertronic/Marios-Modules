@@ -13,6 +13,7 @@
 #include "behavior_data.h"
 #include "actors/group0.h"
 #include "area.h"
+#include "sram.h"
 #include <PR/os_internal_reg.h>
 
 u8 gModuleMenuOpen = FALSE;
@@ -382,9 +383,6 @@ struct module_type_info module_type_infos[] = {
 #define INVENTORY_PRINT_OFFSET_X 26
 #define INVENTORY_PRINT_OFFSET_Y 24
 
-#define INVENTORY_SLOTS_Y 50
-#define INVENTORY_SLOTS_X 8
-
 
 // INVENTORY STRUCTURE DECLARATIONS
 #define INVENTORY_PANEL_CT 3
@@ -503,8 +501,6 @@ void init_module_inventory(void) {
         inventory[48][1] = MOD_60HZ;
     }
 
-    update_settings();
-
     inventory[4][0] = MOD_REPEAT;
     inventory[3][0] = MOD_REPEAT;
     inventory[2][0] = MOD_JUMP;
@@ -530,6 +526,9 @@ void init_module_inventory(void) {
     inventory[3][4] = MOD_VAN_HAIR;
     inventory[3][5] = MOD_VAN_SKIN;
     inventory[3][6] = MOD_WOMAN;
+
+    load_marios_modules();
+    update_settings();
 }
 
 void module_update(void) {
@@ -941,6 +940,7 @@ Major Changes:\n\
 * Increased max framerate to 60\n\
 * Overhauled and refined module menu\n\
 * Added vanity, settings, and progress panels\n\
+* Added game saving via save blocks\n\
 \n\
 New Module Additions:\n\
 * Red Dye (Vanity)\n\
@@ -966,3 +966,39 @@ Minor Changes:\n\
 * Hold to navigate menus added\n\
 * Shortened module cooldown\n\
 * Timer module now classified as modifier rather than condition";
+
+struct mariosModulesSave sMariosModulesSave;
+
+void save_marios_modules(Vec3f pos) {
+    int size = sizeof(struct mariosModulesSave);
+
+    if (gSramProbe != 0) {
+        sMariosModulesSave.version = MARIOS_MODULES_GAME_VERSION;
+        for (int i = 0; i < 3; i++) {
+            sMariosModulesSave.pos[i] = pos[i];
+        }
+        sMariosModulesSave.save_magic = SAVE_MAGIC;
+        bcopy(&inventory,&sMariosModulesSave.inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+        s32 status = nuPiWriteSram(0, &sMariosModulesSave, ALIGN8(size));
+    }
+
+}
+
+void load_marios_modules(void) {
+    int size = sizeof(struct mariosModulesSave);
+
+    if (gSramProbe != 0) {
+        s32 status = nuPiReadSram(0, &sMariosModulesSave, ALIGN8(size));
+        if (sMariosModulesSave.save_magic == SAVE_MAGIC) {
+            bcopy(&sMariosModulesSave.inventory,&inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+        }
+    }
+}
+
+void marios_modules_savefile_load_position(void) {
+    if (sMariosModulesSave.save_magic == SAVE_MAGIC) {
+        for (int i = 0; i < 3; i++) {
+            gMarioState->pos[i] = sMariosModulesSave.pos[i];
+        }
+    }
+}

@@ -999,3 +999,47 @@ void bhv_bdoor(void) {
 void bhv_module_preview_box(void) {
     vec3f_copy(gModulePreviewPos,&o->oPosVec);
 }
+
+struct ObjectHitbox sSaveBoxHitbox = {
+    .interactType      = INTERACT_BREAKABLE,
+    .downOffset        = 5,
+    .damageOrCoinValue = 0,
+    .health            = 1,
+    .numLootCoins      = 0,
+    .radius            = 40,
+    .height            = 30,
+    .hurtboxRadius     = 40,
+    .hurtboxHeight     = 30,
+};
+
+
+void bhv_save_box(void) {
+    switch(o->oAction) {
+        case 0:
+            obj_set_hitbox(o, &sSaveBoxHitbox);
+            o->oAction = 1;
+            //cur_obj_init_animation_with_accel_and_sound(0, 1.0f);
+            //o->header.gfx.animInfo.animAccelF = 0.1f;
+            break;
+        case 1:
+            if (cur_obj_was_attacked_or_ground_pounded()) {
+                o->oAction = 2;
+                o->oVelY = 6.0f;
+
+                f32 floor = find_floor_height(o->oPosX, o->oPosY-200.0f, o->oPosZ);
+                Vec3f savePos = {o->oPosX,floor,o->oPosZ};
+                save_marios_modules(savePos);
+            }
+            o->oInteractStatus = 0;
+            break;
+        case 2:
+            o->oPosY += o->oVelY;
+            o->oVelY -= 2.0f;
+            if (o->oPosY < o->oHomeY) {
+                o->oPosY = o->oHomeY;
+                o->oAction = 1;
+            }
+            break;
+    }
+    load_object_collision_model();
+}

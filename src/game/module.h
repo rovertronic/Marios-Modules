@@ -3,6 +3,11 @@
 
 #include "types.h"
 
+#define MARIOS_MODULES_GAME_VERSION 1
+
+#define INVENTORY_SLOTS_Y 50
+#define INVENTORY_SLOTS_X 8
+
 extern u8 gModuleMenuOpen;
 extern u8 gGameSettings[];
 extern Vec3f gModulePreviewPos;
@@ -134,13 +139,21 @@ struct inventory_row {
 #define WHITELIST_VANITY ((1 << MTYPE_BUFF) | (1 << MTYPE_VANITY))
 #define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY))
 
-
 enum {
     SETTING_60HZ,
     SETTING_CAMERA_COLLISION,
     SETTING_WIDE,
     SETTING_AA,
     SETTING_COUNT,
+};
+
+#define SAVE_MAGIC 0x0203DD10 //my favorite rom address
+struct mariosModulesSave {
+    u64 pad;
+    u8 version;
+    Vec3s pos;
+    u8 inventory[INVENTORY_SLOTS_Y*INVENTORY_SLOTS_X];
+    u32 save_magic;
 };
 
 void add_inventory(s8 module);
@@ -152,5 +165,9 @@ s32 handle_module_inputs(void);
 void control_module_menu(void);
 void update_vanity(void);
 void update_settings(void);
+
+void save_marios_modules(Vec3f pos);
+void load_marios_modules(void);
+void marios_modules_savefile_load_position(void);
 
 #endif
