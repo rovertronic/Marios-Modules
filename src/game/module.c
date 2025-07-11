@@ -395,13 +395,13 @@ struct module_panel module_panel_info[] = {
         .unlock_flag = -1,
     },
     [PANEL_ACTIONS] = {
-        .name = "Actions",
+        .name = "@B@Actions",
         .offset = 0,
         .size = 5,
         .unlock_flag = -1,
     },
     [PANEL_VANITY] = {
-        .name = "Vanity",
+        .name = "@P@Vanity",
         .offset = 44,
         .size = 4,
         .unlock_flag = -1,
@@ -860,6 +860,21 @@ void print_module_menu(void) {
     print_texture(hand_tex,16,inventory_vis_x+8, inventory_vis_y+8);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
+    // PRINT PANEL INFO
+    gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160);
+    render_4slice(25,122,33+162,122-16);
+
+    utf8_print_reset();
+    int sx;
+    int sy;
+    utf8_size(icp->name,&sx,&sy);
+    print_utf8(icp->name, 30+(81-(sx/2)), 122-16);
+
+    print_utf8("@<@←@@𝐋", 32, 122-16);
+    print_utf8("𝐑@>@→", 33+162-16, 122-16);
+    gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
+
     //PRINT MOD INFO
     s8 mod_inf_to_disp = MOD_EMPTY;
 
@@ -876,20 +891,6 @@ void print_module_menu(void) {
         if (module_infos[mod_inf_to_disp].mod_desc != NULL) {
             sprintf(print_buffer, "%s@R@MOD Bonus: @@%s",print_buffer,module_infos[mod_inf_to_disp].mod_desc);
         }
-
-        f32 tooltip_x = 26;
-        f32 tooltip_y = 156;
-
-        /*
-        if (tooltip_x + get_text_width(print_buffer,FONT_VANILLA) > 320) {
-            tooltip_x = 320 - get_text_width(print_buffer,FONT_VANILLA);
-        }
-        */
-
-        //prepare_blank_box();
-        //render_blank_box_rounded(tooltip_x,tooltip_y, tooltip_x + 295-30, tooltip_y + 60,
-        //0,0,0,160);
-        //finish_blank_box();
 
         gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
         gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160);

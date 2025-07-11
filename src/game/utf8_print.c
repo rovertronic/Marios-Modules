@@ -11,6 +11,7 @@
 //0-2 top, 3-5 bottom
 u8 print_textcolor[6];
 u8 print_italics = 0;
+s8 horizontal_wiggle = 0;
 Texture * utf8_print_texture = NULL;
 
 // Will initialize size based on difference between last element's xUv and this, if size = 0. Otherwise, can be manually set
@@ -592,6 +593,7 @@ void print_utf8(char * str, int x, int y) {
         print_textcolor[i] = 255;
     }
     print_italics = 0;
+    horizontal_wiggle = 0;
 
     int charIndex = 0;
     int printX = 0;
@@ -614,6 +616,7 @@ void print_utf8(char * str, int x, int y) {
                 print_textcolor[i] = 255;
             }
             print_italics = 0;
+            horizontal_wiggle = 0;
 
             printHead = &str[++charIndex];
             while ((*printHead) != '@') {
@@ -669,6 +672,12 @@ void print_utf8(char * str, int x, int y) {
                     case 'I':
                         //print_italics = 4;
                         break;
+                    case '<':
+                        horizontal_wiggle = -1;
+                        break;
+                    case '>':
+                        horizontal_wiggle = 1;
+                        break;
                 }
                 printHead = &str[++charIndex];
             }
@@ -680,9 +689,13 @@ void print_utf8(char * str, int x, int y) {
         u8 size = utf8_to_codepoint(printHead,&codepoint);
         fontChar * fc = get_fontchar_from_utf8_codepoint(codepoint);
 
+        s8 xOff = 0;
+        if (horizontal_wiggle != 0) {
+            xOff = ((gGlobalTimer/6)%3)*horizontal_wiggle;
+        }
         if (fc != NULL) {
             if (fc->tex != NULL) {
-                render_fontchar(fc,x+printX,y+printY);
+                render_fontchar(fc,x+printX+xOff,y+printY);
             }
             printX += fc->size+1;
         }
