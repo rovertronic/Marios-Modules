@@ -351,7 +351,7 @@ struct module_info module_infos[] = {
     [MOD_NONMOD_KEY] = {MTYPE_NONMOD, micons_key_rgba16,NULL,NULL,NULL},
 
     // Vanity
-    [MOD_VAN_CAP] = {MTYPE_VANITY,micons_cap_rgba16,"Mixes colors into cap & shirt.",NULL,module_clothes_color,capLights},
+    [MOD_VAN_CAP] = {MTYPE_VANITY,micons_cap_rgba16,"Mixes colors into cap + shirt.",NULL,module_clothes_color,capLights},
     [MOD_VAN_PANTS] = {MTYPE_VANITY,micons_pants_rgba16,"Mixes colors into overalls.",NULL,module_clothes_color,jeanLights},
     [MOD_VAN_HAIR] = {MTYPE_VANITY,micons_hair_rgba16,"Mixes colors into hair.",NULL,module_clothes_color,hairLights},
     [MOD_VAN_SKIN] = {MTYPE_VANITY,micons_skin_rgba16,"Mixes colors into skin tone.",NULL,module_clothes_color,skinLights},
@@ -373,7 +373,7 @@ struct module_info module_infos[] = {
 
 struct module_type_info module_type_infos[] = {
     [MTYPE_MOVE] = {"@B@Action",{0x64, 0x64, 0xF0}},
-    [MTYPE_BUFF] = {"@R@Modifier",{200, 0, 0}},
+    [MTYPE_BUFF] = {"@R@Logistics",{200, 0, 0}},
     [MTYPE_COND] = {"@G@Condition",{0, 170, 0}},
     [MTYPE_INPUT] = {"Input",{0xC9, 0x82, 0x30}},
     [MTYPE_NONMOD] = {NULL,{0x00, 0x00, 0x00}},
@@ -386,7 +386,6 @@ struct module_type_info module_type_infos[] = {
 
 
 // INVENTORY STRUCTURE DECLARATIONS
-#define INVENTORY_PANEL_CT 3
 struct module_panel module_panel_info[] = {
     [PANEL_SETTINGS] = {
         .name = "Settings",
@@ -406,6 +405,12 @@ struct module_panel module_panel_info[] = {
         .size = 4,
         .unlock_flag = -1,
     },
+    [PANEL_CREATIVE] = {
+        .name = "@G@Creative",
+        .offset = 39,
+        .size = 5,
+        .unlock_flag = -1,
+    },
 };
 
 struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
@@ -415,6 +420,13 @@ struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
     [2] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [3] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [4] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+
+    // Creative
+    [39] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [40] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [41] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [42] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [43] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 
      // Vanity
     [44] = {.type = ROW_SOCKET, .icon = MOD_VANITY, .whitelist_flags = WHITELIST_VANITY, .wrap = 1},
@@ -502,31 +514,13 @@ void init_module_inventory(void) {
         inventory[48][1] = MOD_60HZ;
     }
 
-    inventory[4][0] = MOD_REPEAT;
-    inventory[3][0] = MOD_REPEAT;
-    inventory[2][0] = MOD_JUMP;
-    inventory[2][1] = MOD_JUMP;
-    inventory[2][2] = MOD_PLATFORM;
-    inventory[2][3] = MOD_TIMER;
-    inventory[2][4] = MOD_TIMER;
-    inventory[2][5] = MOD_INPUT;
-    inventory[2][6] = MOD_INPUT;
-    inventory[2][7] = MOD_VAN_CAP;
-    inventory[4][7] = MOD_VAN_PANTS;
-    inventory[4][6] = MOD_VAN_PANTS;
-
-    inventory[4][5] = MOD_RED;
-    inventory[4][4] = MOD_BLUE;
-    inventory[4][3] = MOD_GREEN;
-    inventory[4][2] = MOD_RED;
-    inventory[4][1] = MOD_GREEN;
-    inventory[4][0] = MOD_BLUE;
-    inventory[3][1] = MOD_YELLOW;
-    inventory[3][2] = MOD_BLACK;
-    inventory[3][3] = MOD_WHITE;
-    inventory[3][4] = MOD_VAN_HAIR;
-    inventory[3][5] = MOD_VAN_SKIN;
-    inventory[3][6] = MOD_WOMAN;
+    int i2 = 0;
+    for (int i = 0; i < MOD_COUNT; i++) {
+        if (module_infos[i].type != MTYPE_INPUT && module_infos[i].type != MTYPE_NONMOD) {
+            inventory[39+(i2/8)][i2%8] = i;
+            i2++;
+        }
+    }
 
     load_marios_modules();
     update_settings();
@@ -717,7 +711,9 @@ void control_module_menu(void) {
             }
 
             s16 module_to_pick_up = inventory[true_inventory_y][inventory_x];
-            inventory[true_inventory_y][inventory_x] = module_in_hand;
+            if (inventory_panel != PANEL_CREATIVE) {
+                inventory[true_inventory_y][inventory_x] = module_in_hand;
+            }
             module_in_hand = module_to_pick_up;
         }
         if (true_inventory_y == 44 || true_inventory_y == 45) {
@@ -956,7 +952,7 @@ New Module Additions:\n\
 * Black Dye (Vanity)\n\
 * White Dye (Vanity)\n\
 * Pants (Vanity)\n\
-* Cap & Shirt (Vanity)\n\
+* Cap + Shirt (Vanity)\n\
 * Skin (Vanity)\n\
 * Hair (Vanity)\n\
 * Woman (Vanity)\n\
@@ -971,7 +967,7 @@ Minor Changes:\n\
 * Fixed thwomp death softlock\n\
 * Hold to navigate menus added\n\
 * Shortened module cooldown\n\
-* Timer module now classified as modifier rather than condition";
+* Re-organized module classifications";
 
 struct mariosModulesSave sMariosModulesSave;
 

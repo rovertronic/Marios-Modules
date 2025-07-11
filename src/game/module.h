@@ -23,6 +23,8 @@ enum {
     PANEL_SETTINGS,
     PANEL_ACTIONS,
     PANEL_VANITY,
+    PANEL_CREATIVE,
+    INVENTORY_PANEL_CT,
 };
 
 struct module_execution_thread {
@@ -119,6 +121,7 @@ enum module_id {
     MOD_60HZ,
     MOD_AA,
     MOD_WRAP,
+    MOD_COUNT,
 };
 
 // Inventory
