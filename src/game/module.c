@@ -15,6 +15,7 @@
 #include "area.h"
 #include "sram.h"
 #include <PR/os_internal_reg.h>
+#include "utf8_print.h"
 
 u8 gModuleMenuOpen = FALSE;
 u8 gGameSettings[SETTING_COUNT];
@@ -355,13 +356,13 @@ struct module_info module_infos[] = {
     [MOD_VAN_HAIR] = {MTYPE_VANITY,micons_hair_rgba16,"Mixes colors into hair.",NULL,module_clothes_color,hairLights},
     [MOD_VAN_SKIN] = {MTYPE_VANITY,micons_skin_rgba16,"Mixes colors into skin tone.",NULL,module_clothes_color,skinLights},
 
-    [MOD_RED] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes red into palette.",NULL,module_color,&moduleRed},
-    [MOD_BLUE] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes blue into palette.",NULL,module_color,&moduleBlue},
-    [MOD_GREEN] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes green into palette.",NULL,module_color,&moduleGreen},
-    [MOD_YELLOW] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes yellow into palette.",NULL,module_color,&moduleYellow},
+    [MOD_RED] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes @R@red@@ into palette.",NULL,module_color,&moduleRed},
+    [MOD_BLUE] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes @B@blue@@ into palette.",NULL,module_color,&moduleBlue},
+    [MOD_GREEN] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes @G@green@@ into palette.",NULL,module_color,&moduleGreen},
+    [MOD_YELLOW] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes @Y@yellow@@ into palette.",NULL,module_color,&moduleYellow},
     [MOD_WHITE] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes white into palette.",NULL,module_color,&moduleWhite},
-    [MOD_BLACK] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes black into palette.",NULL,module_color,&moduleBlack},
-    [MOD_WOMAN] = {MTYPE_VANITY,micons_woman_rgba16,"Changes Mario's gender to woman.",NULL,module_woman,NULL},
+    [MOD_BLACK] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes @0@black@@ into palette.",NULL,module_color,&moduleBlack},
+    [MOD_WOMAN] = {MTYPE_VANITY,micons_woman_rgba16,"Changes Mario's gender to @R@WOMAN@@.",NULL,module_woman,NULL},
     
     // Settings
     [MOD_60HZ] = {MTYPE_SETTINGS,micons_sixty_rgba16,"Sets maximum framerate to 60.",NULL,module_settings,&gGameSettings[SETTING_60HZ]},
@@ -371,13 +372,13 @@ struct module_info module_infos[] = {
 };
 
 struct module_type_info module_type_infos[] = {
-    [MTYPE_MOVE] = {"<COL_6464F0FF>Action",{0x64, 0x64, 0xF0}},
-    [MTYPE_BUFF] = {"<COL_C80000FF>Modifier",{200, 0, 0}},
-    [MTYPE_COND] = {"<COL_00AA00FF>Condition",{0, 170, 0}},
+    [MTYPE_MOVE] = {"@B@Action",{0x64, 0x64, 0xF0}},
+    [MTYPE_BUFF] = {"@R@Modifier",{200, 0, 0}},
+    [MTYPE_COND] = {"@G@Condition",{0, 170, 0}},
     [MTYPE_INPUT] = {"Input",{0xC9, 0x82, 0x30}},
     [MTYPE_NONMOD] = {NULL,{0x00, 0x00, 0x00}},
-    [MTYPE_VANITY] = {"<COL_D381FCFF>Vanity",{0xD3,0x81,0xFC}},
-    [MTYPE_SETTINGS] = {"<COL_AAAAAAFF>Option",{0xAA,0xAA,0xAA}},
+    [MTYPE_VANITY] = {"@P@Vanity",{0xD3,0x81,0xFC}},
+    [MTYPE_SETTINGS] = {"@@Option",{0xAA,0xAA,0xAA}},
 };
 
 #define INVENTORY_PRINT_OFFSET_X 26
@@ -871,13 +872,13 @@ void print_module_menu(void) {
     if (mod_inf_to_disp != MOD_EMPTY) {
         print_set_envcolour(255, 255, 255, 255);
         sprintf(print_buffer, "%s",module_type_infos[module_infos[mod_inf_to_disp].type].name);
-        sprintf(print_buffer, "%s:<COL_FFFFFFFF> %s\n",print_buffer,module_infos[mod_inf_to_disp].desc);
+        sprintf(print_buffer, "%s:@@ %s\n",print_buffer,module_infos[mod_inf_to_disp].desc);
         if (module_infos[mod_inf_to_disp].mod_desc != NULL) {
-            sprintf(print_buffer, "%s<COL_FF0000FF>MOD Bonus: <COL_FFFFFFFF>%s",print_buffer,module_infos[mod_inf_to_disp].mod_desc);
+            sprintf(print_buffer, "%s@R@MOD Bonus: @@%s",print_buffer,module_infos[mod_inf_to_disp].mod_desc);
         }
 
-        f32 tooltip_x = 15;
-        f32 tooltip_y = 170;
+        f32 tooltip_x = 26;
+        f32 tooltip_y = 156;
 
         /*
         if (tooltip_x + get_text_width(print_buffer,FONT_VANILLA) > 320) {
@@ -885,14 +886,18 @@ void print_module_menu(void) {
         }
         */
 
-        prepare_blank_box();
-        render_blank_box_rounded(tooltip_x,tooltip_y,
-        //tooltip_x+get_text_width(print_buffer,FONT_VANILLA),inventory_vis_y+16+get_text_height(print_buffer),
-        tooltip_x + 295, tooltip_y + 30,
-        0,0,0,200);
-        finish_blank_box();
+        //prepare_blank_box();
+        //render_blank_box_rounded(tooltip_x,tooltip_y, tooltip_x + 295-30, tooltip_y + 60,
+        //0,0,0,160);
+        //finish_blank_box();
 
-        print_small_text(tooltip_x+4, tooltip_y+4, print_buffer, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_VANILLA);
+        gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+        gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160);
+        render_4slice(25,82,33+260,25);
+
+        utf8_print_reset();
+        print_utf8(utf8_autonewline(print_buffer,260), 30, 64);
+        gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
     }
 }
 

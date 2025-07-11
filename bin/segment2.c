@@ -3617,3 +3617,7 @@ const s16 seg2_painting_mesh_neighbor_tris[] = {
       3, 240, 242, 244,
       1, 243,
 };
+
+const Texture sm64DS_latin_i4[] = {
+    #include "textures/segment2/sm64ds_latin.ia4.inc.c"
+};

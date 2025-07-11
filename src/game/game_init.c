@@ -34,6 +34,7 @@
 #include "module.h"
 #include "frame_lerp.h"
 #include "level_update.h"
+#include "utf8_print.h"
 #include <PR/os_internal_reg.h>
 
 // Emulators that the Instant Input patch should not be applied to
@@ -800,6 +801,8 @@ void thread5_game_loop(UNUSED void *arg) {
 #ifdef WIDE
     gConfig.widescreen = save_file_get_widescreen_mode();
 #endif
+
+    utf8_initialize_table();
 
     while (TRUE) {
         if (sSingleThreadOtherFrame) {

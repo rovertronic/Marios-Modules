@@ -68,7 +68,7 @@ char *utf8_decode(char *str, uint32_t *codep)
         if (result == UTF8_ACCEPT)
             return str;
         if (result == UTF8_REJECT)
-            return NULL;
+          return NULL;
     }
     return NULL;
 }
