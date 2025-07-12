@@ -779,6 +779,38 @@ extern u8 world_module_timer;
 extern Vec3f world_module_pos;
 extern s8 world_module_id;
 
+void bhv_chest_price_number(void) {
+    u8 cost = GET_BPARAM1(o->parentObj->oBehParams);
+    u8 place = GET_BPARAM3(o->oBehParams);
+
+    f32 offset = -28.0f;
+    o->oAnimState = cost/10;
+    if (place == 1) {
+        o->oAnimState = (cost%10);
+        offset = 28.0f;
+    }
+    if (cost < 10) {
+        offset = 0.0f;
+    }
+    if (place == 2) {
+        //coin symbol
+        o->oAnimState = 10;
+        if (cost < 10) {
+            offset = -65.0f;
+        } else {
+            offset = -95.0f;
+        }
+    }
+    o->oPosX = o->parentObj->oPosX + sins(gCamera->nextYaw + 0x4000) * offset;
+    o->oPosZ = o->parentObj->oPosZ + coss(gCamera->nextYaw + 0x4000) * offset;
+    
+    o->oPosY = o->parentObj->oPosY + 200.0f;
+
+    if (o->oTimer > 0) {
+        obj_mark_for_deletion(o);
+    }
+}
+
 void bhv_chest(void) {
     u8 cost = GET_BPARAM1(o->oBehParams);
     if (o->oTimer == 0) {
@@ -800,8 +832,16 @@ void bhv_chest(void) {
                     s32 x;
                     s32 y;
 
-                    world_pos_to_screen_pos(&chest_content_vec,&x,&y);
-                    print_text_fmt_int(x-16, y, "$%d", cost);
+                    struct Object * digit;
+                    if (cost >= 10) {
+                        digit = spawn_object(o,MODEL_NUMBER,bhvChestPriceNumber);
+                        SET_BPARAM3(digit->oBehParams,0);
+                    }
+                    digit = spawn_object(o,MODEL_NUMBER,bhvChestPriceNumber);
+                    SET_BPARAM3(digit->oBehParams,1);
+
+                    digit = spawn_object(o,MODEL_NUMBER,bhvChestPriceNumber);
+                    SET_BPARAM3(digit->oBehParams,2);
                 }
             }
 

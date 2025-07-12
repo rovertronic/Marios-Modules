@@ -6160,3 +6160,13 @@ const BehaviorScript bhvSaveBox[] = {
         CALL_NATIVE(bhv_save_box),
     END_LOOP(),
 };
+
+extern void bhv_chest_price_number(void);
+const BehaviorScript bhvChestPriceNumber[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    BILLBOARD(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_chest_price_number),
+    END_LOOP(),
+};
