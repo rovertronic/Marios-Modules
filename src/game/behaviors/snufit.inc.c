@@ -160,6 +160,10 @@ void bhv_snufit_loop(void) {
             o->oSnufitScale = 1.0f;
         }
 
+        enemy_module_use_position();
+        Vec3f modulePos = {o->oPosX,o->oPosY+140.0f,o->oPosZ};
+        enemy_module_set_position(modulePos);
+
         cur_obj_scale(o->oSnufitScale);
         obj_check_attacks(&sSnufitHitbox, o->oAction);
     }

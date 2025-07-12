@@ -327,6 +327,11 @@ struct Object {
     /*0x25C*/ void *respawnInfo;
               u8 saveBinId;
               u8 saveBinType;
+
+              // Enemy module stuff
+              struct Object * enemyModuleChild;
+              struct Object * enemyModuleParent;
+              Vec3f enemyModulePosition;
 };
 
 struct ObjectHitbox {

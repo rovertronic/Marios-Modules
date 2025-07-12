@@ -108,6 +108,12 @@ void bhv_goomba_triplet_spawner_update(void) {
  * Initialization function for goomba.
  */
 void bhv_goomba_init(void) {
+    if (o->oAction == 0) {
+        o->oAction++;
+        struct Object * snufit = spawn_object(o,MODEL_SNUFIT,bhvSnufit);
+        enemy_module_use(snufit);
+    }
+
     o->oGoombaSize = o->oBehParams2ndByte & GOOMBA_BP_SIZE_MASK;
 
     o->oGoombaScale = sGoombaProperties[o->oGoombaSize].scale;
