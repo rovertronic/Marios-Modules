@@ -1952,7 +1952,7 @@ void init_mario_from_save_file(void) {
     gMarioState->animList[ANIM_LIST_LOGIC] = &gMarioAnimsBuf[ANIM_LIST_LOGIC];
 
     gMarioState->numCoins = 0;
-    gMarioState->numStars = save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
+    gMarioState->numStars = save_bin_get_flag_total(SAVE_BIN_STARS);
     gMarioState->numKeys = 0;
 #ifdef ENABLE_LIVES
     gMarioState->numLives = ENABLE_LIVES;

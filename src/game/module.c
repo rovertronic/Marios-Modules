@@ -14,6 +14,7 @@
 #include "actors/group0.h"
 #include "area.h"
 #include "sram.h"
+#include "object_list_processor.h"
 #include <PR/os_internal_reg.h>
 #include "utf8_print.h"
 
@@ -980,8 +981,10 @@ void save_marios_modules(Vec3f pos) {
             sMariosModulesSave.pos[i] = pos[i];
         }
         sMariosModulesSave.save_magic = SAVE_MAGIC;
+        sMariosModulesSave.keys = gMarioState->numKeys;
+        sMariosModulesSave.coins = gMarioState->numCoins;
         bcopy(&inventory,&sMariosModulesSave.inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
-        s32 status = nuPiWriteSram(0, &sMariosModulesSave, ALIGN8(size));
+        nuPiWriteSram(0, &sMariosModulesSave, ALIGN8(size));
     }
 
 }
@@ -990,11 +993,47 @@ void load_marios_modules(void) {
     int size = sizeof(struct mariosModulesSave);
 
     if (gSramProbe != 0) {
-        s32 status = nuPiReadSram(0, &sMariosModulesSave, ALIGN8(size));
+        nuPiReadSram(0, &sMariosModulesSave, ALIGN8(size));
         if (sMariosModulesSave.save_magic == SAVE_MAGIC) {
             bcopy(&sMariosModulesSave.inventory,&inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+        } else {
+            bzero(&sMariosModulesSave,size);
+        }
+        gMarioState->numKeys = sMariosModulesSave.keys;
+        gMarioState->numCoins = sMariosModulesSave.coins;
+    }
+}
+
+int saveBinTotal[SAVE_BIN_COUNT];
+
+void save_bin_reset(void) {
+    for (int i = 0; i < SAVE_BIN_COUNT; i++) {
+        saveBinTotal[i] = 0;
+    }
+}
+
+void obj_save_bin_count(int type) {
+    o->saveBinId = saveBinTotal[type];
+    o->saveBinType = type;
+    saveBinTotal[type]++;
+}
+
+u32 obj_save_bin_read(void) {
+    return (sMariosModulesSave.bin[o->saveBinType] & (1 << o->saveBinId));
+}
+
+void obj_save_bin_write(void) {
+    sMariosModulesSave.bin[o->saveBinType] |= (1 << o->saveBinId);
+}
+
+s32 save_bin_get_flag_total(int type) {
+    int count = 0;
+    for (int i = 0; i < 32; i++) {
+        if (sMariosModulesSave.bin[type] & (1 << i)) {
+            count++;
         }
     }
+    return count;
 }
 
 void marios_modules_savefile_load_position(void) {

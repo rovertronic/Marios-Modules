@@ -781,6 +781,15 @@ extern s8 world_module_id;
 
 void bhv_chest(void) {
     u8 cost = GET_BPARAM1(o->oBehParams);
+    if (o->oTimer == 0) {
+        obj_save_bin_count(SAVE_BIN_CHESTS);
+        if (obj_save_bin_read()) {
+            o->oAction = 1;
+            if (o->oBehParams2ndByte == MOD_NONMOD_KEY) {
+                gMarioState->numKeys++;
+            }
+        }
+    }
 
     switch(o->oAction) {
         case 0:
@@ -800,6 +809,8 @@ void bhv_chest(void) {
             o->header.gfx.animInfo.animFrameF = 0.0f;
             o->header.gfx.animInfo.animAccelF = 0.0f;
             if ((gMarioState->numCoins >= cost) && (o->oInteractStatus & INT_STATUS_INTERACTED)) {
+                obj_save_bin_write();
+
                 o->header.gfx.animInfo.animAccelF = 1.0f;
                 gMarioState->numCoins-=cost;
                 gHudDisplay.coins = gMarioState->numCoins;
@@ -943,6 +954,13 @@ void bhv_volume(void) {
 }
 
 void bhv_bdoor(void) {
+    if (o->oTimer == 0) {
+        obj_save_bin_count(SAVE_BIN_DOORS);
+        if (obj_save_bin_read()) {
+            o->oBehParams2ndByte=0;
+        }
+    }
+
     f32 dist;
     u8 needs_key = (o->oBehParams2ndByte==1);
     u8 open = FALSE;
@@ -951,6 +969,7 @@ void bhv_bdoor(void) {
         open = TRUE;
 
         if (needs_key && gMarioState->numKeys > 0) {
+            obj_save_bin_write();
             gMarioState->numKeys--;
             o->oBehParams2ndByte = 0;
             cur_obj_play_sound_2(SOUND_GENERAL_DOOR_TURN_KEY);

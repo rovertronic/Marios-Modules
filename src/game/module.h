@@ -150,12 +150,21 @@ enum {
     SETTING_COUNT,
 };
 
+enum {
+    SAVE_BIN_STARS,
+    SAVE_BIN_CHESTS,
+    SAVE_BIN_DOORS,
+    SAVE_BIN_COUNT,
+};
+
 #define SAVE_MAGIC 0x0203DD10 //my favorite rom address
 struct mariosModulesSave {
-    u64 pad;
     u8 version;
     Vec3s pos;
     u8 inventory[INVENTORY_SLOTS_Y*INVENTORY_SLOTS_X];
+    u32 bin[SAVE_BIN_COUNT];
+    u16 coins;
+    u8 keys;
     u32 save_magic;
 };
 
@@ -168,6 +177,12 @@ s32 handle_module_inputs(void);
 void control_module_menu(void);
 void update_vanity(void);
 void update_settings(void);
+
+void save_bin_reset(void);
+u32 obj_save_bin_read(void);
+void obj_save_bin_write(void);
+void obj_save_bin_count(int type);
+s32 save_bin_get_flag_total(int type);
 
 void save_marios_modules(Vec3f pos);
 void load_marios_modules(void);

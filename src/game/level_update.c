@@ -1259,6 +1259,7 @@ s32 init_level(void) {
 
     set_play_mode(PLAY_MODE_NORMAL);
     init_module_inventory();
+    save_bin_reset();
 
     sDelayedWarpOp = WARP_OP_NONE;
     sTransitionTimer = 0;
