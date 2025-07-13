@@ -588,6 +588,15 @@ s8 utf8_to_codepoint(const char *s, uint32_t *codepoint) {
     return -1;
 }
 
+void set_print_textcolor(u8 t1, u8 t2, u8 t3, u8 b1, u8 b2, u8 b3) {
+    print_textcolor[0] = t1;
+    print_textcolor[1] = t2;
+    print_textcolor[2] = t3;
+    print_textcolor[3] = b1;
+    print_textcolor[4] = b2;
+    print_textcolor[5] = b3;
+}
+
 void print_utf8(char * str, int x, int y) {
     for (int i = 0; i < 6; i++) {
         print_textcolor[i] = 255;
@@ -622,55 +631,28 @@ void print_utf8(char * str, int x, int y) {
             while ((*printHead) != '@') {
                 switch (*printHead) {
                     case 'G':
-                        print_textcolor[0] = 50;
-                        print_textcolor[1] = 255;
-                        print_textcolor[2] = 50;
-                        print_textcolor[3] = 0;
-                        print_textcolor[4] = 150;
-                        print_textcolor[5] = 0;
+                        set_print_textcolor(50,255,50,0,150,0);
                         break;
                     case 'R':
-                        print_textcolor[0] = 255;
-                        print_textcolor[1] = 50;
-                        print_textcolor[2] = 50;
-                        print_textcolor[3] = 170;
-                        print_textcolor[4] = 0;
-                        print_textcolor[5] = 0;
+                        set_print_textcolor(255,50,50,170,0,0);
                         break;
                     case 'Y':
-                        print_textcolor[0] = 255;
-                        print_textcolor[1] = 255;
-                        print_textcolor[2] = 100;
-                        print_textcolor[3] = 255;
-                        print_textcolor[4] = 255;
-                        print_textcolor[5] = 0;
+                        set_print_textcolor(255,255,100,255,255,0);
                         break;
                     case 'B':
-                        print_textcolor[0] = 0x0;
-                        print_textcolor[1] = 0x65;
-                        print_textcolor[2] = 0xFF;
-                        print_textcolor[3] = 0x0;
-                        print_textcolor[4] = 0xE3;
-                        print_textcolor[5] = 0xFF;
-                        break;
-                    case '0':
-                        print_textcolor[0] = 50;
-                        print_textcolor[1] = 50;
-                        print_textcolor[2] = 50;
-                        print_textcolor[3] = 10;
-                        print_textcolor[4] = 10;
-                        print_textcolor[5] = 10;
+                        set_print_textcolor(0x0,0x65,0xFF,0x0,0xE3,0xFF);
                         break;
                     case 'P':
-                        print_textcolor[0] = 0xF3;
-                        print_textcolor[1] = 0xC1;
-                        print_textcolor[2] = 0xFC;
-                        print_textcolor[3] = 0xD3;
-                        print_textcolor[4] = 0x81;
-                        print_textcolor[5] = 0xFC;
+                        set_print_textcolor(0xF3,0xC1,0xFC,0xD3,0x81,0xFC);
                         break;
-                    case 'I':
-                        //print_italics = 4;
+                    case 'O':
+                        set_print_textcolor(255,150,0,255,20,20);
+                        break;
+                    case '0':
+                        set_print_textcolor(50,50,50,10,10,10);
+                        break;
+                    case '1':
+                        set_print_textcolor(230,230,230,150,150,150);
                         break;
                     case '<':
                         horizontal_wiggle = -1;

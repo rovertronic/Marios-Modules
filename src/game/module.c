@@ -323,64 +323,287 @@ Gfx * skinLights[] = {
 
 struct module_info module_infos[] = {
     // Sockets
-    [MOD_BUTTON_A] = {MTYPE_INPUT,micons_abtn_rgba16,NULL,NULL,NULL},
-    [MOD_BUTTON_B] = {MTYPE_INPUT,micons_bbtn_rgba16,NULL,NULL,NULL},
-    [MOD_VANITY] = {MTYPE_INPUT,micons_vanity_rgba16,NULL,NULL,NULL},
-    [MOD_SETTINGS] = {MTYPE_INPUT,micons_gear_rgba16,NULL,NULL,NULL},
-    [MOD_WRAP] = {MTYPE_INPUT,micons_wrap_rgba16,NULL,NULL,NULL},
+    [MOD_BUTTON_A] = {MTYPE_INPUT,"",micons_abtn_rgba16,NULL,NULL,NULL},
+    [MOD_BUTTON_B] = {MTYPE_INPUT,"",micons_bbtn_rgba16,NULL,NULL,NULL},
+    [MOD_VANITY] = {MTYPE_INPUT,"",micons_vanity_rgba16,NULL,NULL,NULL},
+    [MOD_SETTINGS] = {MTYPE_INPUT,"",micons_gear_rgba16,NULL,NULL,NULL},
+    [MOD_WRAP] = {MTYPE_INPUT,"",micons_wrap_rgba16,NULL,NULL,NULL},
 
     // Actions
-    [MOD_JUMP] = {MTYPE_MOVE,micons_jump_rgba16,"Makes Mario attempt to jump.","Increases jump tier per MOD.",module_jump},
-    [MOD_ATTACK] = {MTYPE_MOVE,micons_pow_rgba16,"Makes Mario attempt to attack.",NULL,module_attack},
-    [MOD_INPUT] = {MTYPE_COND,micons_btngen_rgba16,"Checks for a button press for one second.",NULL,module_input},
-    [MOD_PLATFORM] = {MTYPE_MOVE,micons_hover_rgba16,"Mario hovers for one second. Can jump.","Extend hover time by 1/2.",module_platform},
-    [MOD_SWAP] = {MTYPE_MOVE,micons_swap_rgba16,"Toggles swap platforms.",NULL,NULL},
-    [MOD_CAP] = {MTYPE_MOVE,micons_cap_rgba16,"Enables cap power for one second.","0:Vanish, 1:Metal, 2:Wing.",module_cap},
-    [MOD_GRAPPLE] = {MTYPE_MOVE,micons_grapple_rgba16,"Launches a grapple hook. Must hit wood.",NULL,NULL},
+    [MOD_JUMP] = {
+        .name = "Jump",
+        .type = MTYPE_MOVE,
+        .tex = micons_jump_rgba16,
+        .desc = "Makes Mario attempt to jump.",
+        .upg_desc = "Jump Tier increases with @O@UPG@@.",
+        .func = module_jump,
+    },
+
+    [MOD_ATTACK] = {
+        .name = "Attack",
+        .type = MTYPE_MOVE,
+        .tex = micons_pow_rgba16,
+        .desc = "Makes Mario attempt to attack.",
+        .func = module_attack,
+    },
+
+    [MOD_INPUT] = {
+        .name = "Input",
+        .type = MTYPE_COND,
+        .tex = micons_btngen_rgba16,
+        .desc = "Checks for a button press for one second, otherwise cancels.",
+        .func = module_input,
+    },
+
+    [MOD_PLATFORM] = {
+        .name = "Hover",
+        .type = MTYPE_MOVE,
+        .tex = micons_hover_rgba16,
+        .desc = "Mario hovers for one second. Can jump.",
+        .upg_desc = "Hover time +1/2 per @O@UPG@@.",
+        .func = module_platform,
+    },
+
+    [MOD_SWAP] = {
+        .name = "Swap",
+        .type = MTYPE_MOVE,
+        .tex = micons_swap_rgba16,
+        .desc = "Toggles swap platforms.",
+    },
+
+    [MOD_CAP] = {
+        .name = "Cap",
+        .type = MTYPE_MOVE,
+        .tex = micons_cap_rgba16,
+        .desc = "Enables cap power for one second.",
+        .upg_desc = "0:Vanish, 1:Metal, 2:Wing.",
+        .cooldown = 4.0f,
+        .func = module_cap,
+    },
+
+    [MOD_GRAPPLE] = {
+        .name = "Grapple",
+        .type = MTYPE_MOVE,
+        .tex = micons_grapple_rgba16,
+        .desc = "Launches a grapple hook. Must hit wood.",
+    },
 
     // Modifiers
-    [MOD_POW] = {MTYPE_BUFF,micons_onepow_rgba16,"Adds 1 to the MOD of the next piece.",NULL,module_pow},
-    [MOD_REPEAT] = {MTYPE_BUFF,micons_repeat_rgba16,"Repeats from the start.",NULL,module_repeat},
-    [MOD_SPD] = {MTYPE_BUFF,micons_spd_rgba16,"Adds speed to next action block.",NULL,module_spd},
-    [MOD_TIMER] = {MTYPE_BUFF,micons_clock_rgba16,"Continues after a 1/2 second.","Adds 1/3 a second per MOD.",module_timer},
+    [MOD_POW] = {
+        .name = "UPG",
+        .type = MTYPE_UPGRADE,
+        .tex = micons_onepow_rgba16,
+        .desc = "+1@O@UPG@@ to the next piece.",
+        .cooldown = .5f,
+        .func = module_pow,
+    },
+
+    [MOD_REPEAT] = {
+        .name = "Repeat",
+        .type = MTYPE_BUFF,
+        .tex = micons_repeat_rgba16,
+        .desc = "Repeats from the start.",
+        .func = module_repeat,
+    },
+
+    [MOD_SPD] = {
+        .name = "Speed",
+        .type = MTYPE_BUFF,
+        .tex = micons_spd_rgba16,
+        .desc = "Adds speed to next action block.",
+        .func = module_spd,
+    },
+
+    [MOD_TIMER] = {
+        .name = "Timer",
+        .type = MTYPE_COND,
+        .tex = micons_clock_rgba16,
+        .desc = "Continues after a 1/2 second.",
+        .upg_desc = "+1/3 a second per @O@UPG@@.",
+        .func = module_timer,
+    },
 
     // Conditions
-    [MOD_HIT_GROUND] = {MTYPE_COND,micons_ground_rgba16,"Continues when Mario touches the ground.",NULL,module_floor},
-    [MOD_HIT_WALL] = {MTYPE_COND,micons_wall_rgba16,"Continues when Mario touches a wall.",NULL,module_wall},
-    [MOD_GRAV] = {MTYPE_COND,micons_grav_rgba16,"Continues when Mario has downward velocity.",NULL,module_grav},
+    [MOD_HIT_GROUND] = {
+        .name = "Ground",
+        .type = MTYPE_COND,
+        .tex = micons_ground_rgba16,
+        .desc = "Continues when Mario touches the ground.",
+        .func = module_floor,
+    },
+
+    [MOD_HIT_WALL] = {
+        .name = "Wall",
+        .type = MTYPE_COND,
+        .tex = micons_wall_rgba16,
+        .desc = "Continues when touching wall, or cancels on floor touch.",
+        .func = module_wall,
+    },
+
+    [MOD_GRAV] = {
+        .name = "Down",
+        .type = MTYPE_COND,
+        .tex = micons_grav_rgba16,
+        .desc = "Continues when Mario has downward velocity.",
+        .func = module_grav,
+    },
 
     // Non modifiers
-    [MOD_NONMOD_KEY] = {MTYPE_NONMOD, micons_key_rgba16,NULL,NULL,NULL},
+    [MOD_NONMOD_KEY] = {
+        .type = MTYPE_NONMOD,
+        .tex = micons_key_rgba16,
+    },
 
     // Vanity
-    [MOD_VAN_CAP] = {MTYPE_VANITY,micons_cap_rgba16,"Mixes colors into cap + shirt.",NULL,module_clothes_color,capLights},
-    [MOD_VAN_PANTS] = {MTYPE_VANITY,micons_pants_rgba16,"Mixes colors into overalls.",NULL,module_clothes_color,jeanLights},
-    [MOD_VAN_HAIR] = {MTYPE_VANITY,micons_hair_rgba16,"Mixes colors into hair.",NULL,module_clothes_color,hairLights},
-    [MOD_VAN_SKIN] = {MTYPE_VANITY,micons_skin_rgba16,"Mixes colors into skin tone.",NULL,module_clothes_color,skinLights},
+    [MOD_VAN_CAP] = {
+        .name = "Cap Color",
+        .type = MTYPE_VANITY,
+        .tex = micons_cap_rgba16,
+        .desc = "Mixes colors into cap + shirt.",
+        .func = module_clothes_color,
+        .extra_data = capLights,
+    },
 
-    [MOD_RED] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes @R@red@@ into palette.",NULL,module_color,&moduleRed},
-    [MOD_BLUE] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes @B@blue@@ into palette.",NULL,module_color,&moduleBlue},
-    [MOD_GREEN] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes @G@green@@ into palette.",NULL,module_color,&moduleGreen},
-    [MOD_YELLOW] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes @Y@yellow@@ into palette.",NULL,module_color,&moduleYellow},
-    [MOD_WHITE] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes white into palette.",NULL,module_color,&moduleWhite},
-    [MOD_BLACK] = {MTYPE_VANITY,micons_btngen_rgba16,"Mixes @0@black@@ into palette.",NULL,module_color,&moduleBlack},
-    [MOD_WOMAN] = {MTYPE_VANITY,micons_woman_rgba16,"Changes Mario's gender to @R@WOMAN@@.",NULL,module_woman,NULL},
-    
+    [MOD_VAN_PANTS] = {
+        .name = "Pants Color",
+        .type = MTYPE_VANITY,
+        .tex = micons_pants_rgba16,
+        .desc = "Mixes colors into overalls.",
+        .func = module_clothes_color,
+        .extra_data = jeanLights,
+    },
+
+    [MOD_VAN_HAIR] = {
+        .name = "Hair Color",
+        .type = MTYPE_VANITY,
+        .tex = micons_hair_rgba16,
+        .desc = "Mixes colors into hair.",
+        .func = module_clothes_color,
+        .extra_data = hairLights,
+    },
+
+    [MOD_VAN_SKIN] = {
+        .name = "Skin Color",
+        .type = MTYPE_VANITY,
+        .tex = micons_skin_rgba16,
+        .desc = "Mixes colors into skin tone.",
+        .func = module_clothes_color,
+        .extra_data = skinLights,
+    },
+
+    [MOD_RED] = {
+        .name = "Red",
+        .type = MTYPE_VANITY,
+        .tex = micons_btngen_rgba16,
+        .desc = "Mixes @R@red@@ into palette.",
+        .func = module_color,
+        .extra_data = &moduleRed,
+    },
+
+    [MOD_BLUE] = {
+        .name = "Blue",
+        .type = MTYPE_VANITY,
+        .tex = micons_btngen_rgba16,
+        .desc = "Mixes @B@blue@@ into palette.",
+        .func = module_color,
+        .extra_data = &moduleBlue,
+    },
+
+    [MOD_GREEN] = {
+        .name = "Green",
+        .type = MTYPE_VANITY,
+        .tex = micons_btngen_rgba16,
+        .desc = "Mixes @G@green@@ into palette.",
+        .func = module_color,
+        .extra_data = &moduleGreen,
+    },
+
+    [MOD_YELLOW] = {
+        .name = "Yellow",
+        .type = MTYPE_VANITY,
+        .tex = micons_btngen_rgba16,
+        .desc = "Mixes @Y@yellow@@ into palette.",
+        .func = module_color,
+        .extra_data = &moduleYellow,
+    },
+
+    [MOD_WHITE] = {
+        .name = "White",
+        .type = MTYPE_VANITY,
+        .tex = micons_btngen_rgba16,
+        .desc = "Mixes white into palette.",
+        .func = module_color,
+        .extra_data = &moduleWhite,
+    },
+
+    [MOD_BLACK] = {
+        .name = "Black",
+        .type = MTYPE_VANITY,
+        .tex = micons_btngen_rgba16,
+        .desc = "Mixes @0@black@@ into palette.",
+        .func = module_color,
+        .extra_data = &moduleBlack,
+    },
+
+    [MOD_WOMAN] = {
+        .name = "Woman",
+        .type = MTYPE_VANITY,
+        .tex = micons_woman_rgba16,
+        .desc = "Changes Mario's gender to @R@WOMAN@@.",
+        .func = module_woman,
+    },
+
     // Settings
-    [MOD_60HZ] = {MTYPE_SETTINGS,micons_sixty_rgba16,"Sets maximum framerate to 60.",NULL,module_settings,&gGameSettings[SETTING_60HZ]},
-    [MOD_WIDESCREEN] = {MTYPE_SETTINGS,micons_wide_rgba16,"Changes viewing resolution to 16:9.",NULL,module_settings,&gGameSettings[SETTING_WIDE]},
-    [MOD_CAMERA_COLLISION] = {MTYPE_SETTINGS,micons_camcol_rgba16,"Camera collides with walls.",NULL,module_settings,&gGameSettings[SETTING_CAMERA_COLLISION]},
-    [MOD_AA] = {MTYPE_SETTINGS,micons_aa_rgba16,"Enables anti-aliasing (Smooth triangles).",NULL,module_settings,&gGameSettings[SETTING_AA]},
+    [MOD_60HZ] = {
+        .name = "60Hz",
+        .type = MTYPE_SETTINGS,
+        .tex = micons_sixty_rgba16,
+        .desc = "Sets maximum framerate to 60.",
+        .upg_desc = NULL,
+        .func = module_settings,
+        .extra_data = &gGameSettings[SETTING_60HZ],
+    },
+
+    [MOD_WIDESCREEN] = {
+        .name = "Widescreen",
+        .type = MTYPE_SETTINGS,
+        .tex = micons_wide_rgba16,
+        .desc = "Changes viewing resolution to 16:9.",
+        .upg_desc = NULL,
+        .func = module_settings,
+        .extra_data = &gGameSettings[SETTING_WIDE],
+    },
+
+    [MOD_CAMERA_COLLISION] = {
+        .name = "Camera Collision",
+        .type = MTYPE_SETTINGS,
+        .tex = micons_camcol_rgba16,
+        .desc = "Camera collides with walls.",
+        .upg_desc = NULL,
+        .func = module_settings,
+        .extra_data = &gGameSettings[SETTING_CAMERA_COLLISION],
+    },
+
+    [MOD_AA] = {
+        .name = "Anti-Aliasing",
+        .type = MTYPE_SETTINGS,
+        .tex = micons_aa_rgba16,
+        .desc = "Enables anti-aliasing (Smooth triangles).",
+        .upg_desc = NULL,
+        .func = module_settings,
+        .extra_data = &gGameSettings[SETTING_AA],
+    },
 };
 
 struct module_type_info module_type_infos[] = {
-    [MTYPE_MOVE] = {"@B@Action",{0x64, 0x64, 0xF0}},
-    [MTYPE_BUFF] = {"@R@Logistics",{200, 0, 0}},
-    [MTYPE_COND] = {"@G@Condition",{0, 170, 0}},
-    [MTYPE_INPUT] = {"Input",{0xC9, 0x82, 0x30}},
-    [MTYPE_NONMOD] = {NULL,{0x00, 0x00, 0x00}},
-    [MTYPE_VANITY] = {"@P@Vanity",{0xD3,0x81,0xFC}},
-    [MTYPE_SETTINGS] = {"@@Option",{0xAA,0xAA,0xAA}},
+    [MTYPE_MOVE] = {"B","Action",{0x64, 0x64, 0xF0}},
+    [MTYPE_BUFF] = {"R","Logistics",{200, 0, 0}},
+    [MTYPE_COND] = {"G","Sequencing",{0, 170, 0}},
+    [MTYPE_INPUT] = {"","Input",{0xC9, 0x82, 0x30}},
+    [MTYPE_NONMOD] = {"",NULL,{0x00, 0x00, 0x00}},
+    [MTYPE_VANITY] = {"P","Vanity",{0xD3,0x81,0xFC}},
+    [MTYPE_SETTINGS] = {"1","Option",{0xAA,0xAA,0xAA}},
+    [MTYPE_UPGRADE] = {"O","Upgrade",{210,176,0}},
 };
 
 #define INVENTORY_PRINT_OFFSET_X 26
@@ -393,25 +616,25 @@ struct module_panel module_panel_info[] = {
         .name = "Settings",
         .offset = 48,
         .size = 2,
-        .unlock_flag = -1,
+        .unlock = NULL,
     },
     [PANEL_ACTIONS] = {
         .name = "@B@Actions",
         .offset = 0,
         .size = 5,
-        .unlock_flag = -1,
+        .unlock = NULL,
     },
     [PANEL_VANITY] = {
         .name = "@P@Vanity",
         .offset = 44,
         .size = 4,
-        .unlock_flag = -1,
+        .unlock = NULL,
     },
     [PANEL_CREATIVE] = {
         .name = "@G@Creative",
         .offset = 39,
         .size = 5,
-        .unlock_flag = -1,
+        .unlock = NULL,
     },
 };
 
@@ -532,7 +755,7 @@ void module_update(void) {
     for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
         struct module_execution_thread * met = &module_execution_threads[i];
         if (met->cooldown) {
-            if (met->timer >= 5) {
+            if (met->timer >= met->cooltime) {
                 if (met->manual) {
                     play_sound(SOUND_MENU_MESSAGE_DISAPPEAR,gGlobalSoundSource);
                 }
@@ -553,8 +776,7 @@ void module_update(void) {
                     if (1 << module_infos[read_mod].type & inventory_row_info[met->y].whitelist_flags) {
                         met->extra_data = module_infos[read_mod].extra_data;
                         module_infos[read_mod].func(met,MCC_INVOKE);
-
-
+                        met->cooltime += module_infos[read_mod].cooldown*30.0f;
 
                         if (inventory_row_info[met->y].wrap && met->x == 8) {
                             met->x = 0;
@@ -606,6 +828,7 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
         met->used_flags = 0;
         met->extra_data = NULL;
         met->manual = manual;
+        met->cooltime = 5;
         colorBlendCount = 0;
 
         if (manual) {
@@ -775,23 +998,25 @@ int inv_slot_printy(int x, int y) {
     return y*17+INVENTORY_PRINT_OFFSET_Y;
 }
 
-int module_is_invalid(int x, int y, s8 mod) {
+char * module_is_invalid(int x, int y) {
+    s8 mod = get_inventory(x,y);
+
     // Blank spaces are never invalid
     if (mod == -1) {
-        return FALSE;
+        return NULL;
     }
 
     // Missing a module to the left? Is invalid!
     if (x != 0 && get_inventory(x-1,y) == -1 && inventory_row_info[y].type == ROW_SOCKET) {
-        return TRUE;
+        return "@R@Unconnected";
     }
 
     // Not on the socket whitelist? Is invalid!
     if (inventory_row_info[y].type == ROW_SOCKET && !(1 << module_infos[mod].type & inventory_row_info[y].whitelist_flags)) {
-        return TRUE;
+        return "@R@Incompatbile";
     }
 
-    return FALSE;
+    return NULL;
 }
 
 
@@ -824,7 +1049,7 @@ void print_module_menu(void) {
         for (int y = 0; y<icp->size; y++) {
             int true_y = y + icp->offset;
 
-            int invalid = module_is_invalid(x,true_y,get_inventory(x,true_y));
+            char * invalid = module_is_invalid(x,true_y);
             if (invalid) {
                 gPrintModuleDarken=2;
             }
@@ -858,6 +1083,13 @@ void print_module_menu(void) {
     print_texture(hand_tex,16,inventory_vis_x+8, inventory_vis_y+8);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
+    char * errmsg = module_is_invalid(inventory_x,inventory_y+icp->offset);
+    if (errmsg) {
+        //print reason
+        utf8_print_reset();
+        print_utf8(errmsg, 15+inventory_vis_x, 230-inventory_vis_y);
+    }
+
     // PRINT PANEL INFO
     gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
     gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160);
@@ -884,10 +1116,16 @@ void print_module_menu(void) {
 
     if (mod_inf_to_disp != MOD_EMPTY) {
         print_set_envcolour(255, 255, 255, 255);
-        sprintf(print_buffer, "%s",module_type_infos[module_infos[mod_inf_to_disp].type].name);
-        sprintf(print_buffer, "%s:@@ %s\n",print_buffer,module_infos[mod_inf_to_disp].desc);
-        if (module_infos[mod_inf_to_disp].mod_desc != NULL) {
-            sprintf(print_buffer, "%s@R@MOD Bonus: @@%s",print_buffer,module_infos[mod_inf_to_disp].mod_desc);
+        sprintf(print_buffer, "@%s@%s (%s):@@ %s\n",
+            module_type_infos[module_infos[mod_inf_to_disp].type].text_color,
+            module_infos[mod_inf_to_disp].name,
+            module_type_infos[module_infos[mod_inf_to_disp].type].name,
+            module_infos[mod_inf_to_disp].desc);
+        if (module_infos[mod_inf_to_disp].upg_desc != NULL) {
+            sprintf(print_buffer, "%s@O@UPG: @@%s ",print_buffer,module_infos[mod_inf_to_disp].upg_desc);
+        }
+        if (module_infos[mod_inf_to_disp].cooldown != 0.0f) {
+            sprintf(print_buffer, "%s@1@Cooldown: %.1fs@@",print_buffer,module_infos[mod_inf_to_disp].cooldown);
         }
 
         gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
@@ -1009,7 +1247,12 @@ Minor Changes:\n\
 * Fixed thwomp death softlock\n\
 * Hold to navigate menus added\n\
 * Shortened module cooldown\n\
-* Re-organized module classifications";
+* Re-organized module classifications\n\
+* Modules in chests are now 3D\n\
+\n\
+Rebalances:\n\
+* Putting jumps together no longer increases jump tier\n\
+* Cap module incurs 4 second cooldown";
 
 struct mariosModulesSave sMariosModulesSave;
 

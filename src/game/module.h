@@ -16,7 +16,7 @@ struct module_panel {
     char * name;
     u8 offset;
     u8 size;
-    s8 unlock_flag;
+    s32 (*unlock)(void);
 };
 
 enum {
@@ -32,7 +32,6 @@ struct module_execution_thread {
     u8 mod;
     u8 x;
     u8 y;
-    u8 timer;
     u8 spd;
 
     u8 executing:1;
@@ -43,6 +42,8 @@ struct module_execution_thread {
     u8 manual:1;
 
     u16 used_flags;
+    u16 timer;
+    u16 cooltime;
     void * extra_data;
 };
 
@@ -57,11 +58,13 @@ enum module_execution_ids {
 
 struct module_info {
     u8 type;
+    char * name;
     void * tex;
     char * desc;
-    char * mod_desc;
+    char * upg_desc;
     void (*func)(struct module_execution_thread * met, u8 call_context);
     void * extra_data;
+    f32 cooldown;
 };
 
 enum module_call_context {
@@ -70,6 +73,7 @@ enum module_call_context {
 };
 
 struct module_type_info {
+    char * text_color;
     char * name;
     u8 color[3];
 };
@@ -82,6 +86,7 @@ enum module_type {
     MTYPE_NONMOD,
     MTYPE_VANITY,
     MTYPE_SETTINGS,
+    MTYPE_UPGRADE,
 };
 
 #define MOD_EMPTY -1
@@ -139,8 +144,8 @@ struct inventory_row {
     u8 wrap;
 };
 
-#define WHITELIST_VANITY ((1 << MTYPE_BUFF) | (1 << MTYPE_VANITY))
-#define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY))
+#define WHITELIST_VANITY ((1 << MTYPE_VANITY))
+#define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_UPGRADE))
 
 enum {
     SETTING_60HZ,
