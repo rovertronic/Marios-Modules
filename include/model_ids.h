@@ -581,6 +581,7 @@ enum new_models {
     MODEL_KINGBOBOMB_GLOBAL,
     MODEL_WOMAN,
     MODEL_SAVE,
+    MODEL_MODULE,
 };
 
 #endif // MODEL_IDS_H

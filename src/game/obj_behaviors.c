@@ -857,9 +857,8 @@ void bhv_chest(void) {
                 play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);
                 o->oAction = 1;
 
-                world_module_timer = 0;
-                vec3f_copy(world_module_pos,&o->oPosVec);
-                world_module_id = o->oBehParams2ndByte;
+                struct Object * moduleCollect = spawn_object(o,MODEL_MODULE,bhvModuleCollect);
+                moduleCollect->oBehParams2ndByte = o->oBehParams2ndByte;
 
 
                 if (o->oBehParams2ndByte != MOD_NONMOD_KEY) {
@@ -1101,4 +1100,18 @@ void bhv_save_box(void) {
             break;
     }
     load_object_collision_model();
+}
+
+void bhv_module_collect(void) {
+    f32 p = o->oTimer/30.0f;
+    o->oPosX = approach_f32_asymptotic(o->oHomeX,gMarioState->pos[0],p);
+    o->oPosY = 80.0f + approach_f32_asymptotic(o->oHomeY,gMarioState->pos[1],p) + (sins(p * 0x8000) * p * 300.0f);
+    o->oPosZ = approach_f32_asymptotic(o->oHomeZ,gMarioState->pos[2],p);
+
+    if (p > .8f) {
+        cur_obj_scale(1.0f-((p-.8f)*5.f));
+    }
+    if (p>=1.0f){
+        obj_mark_for_deletion(o);
+    }
 }

@@ -1,0 +1,15 @@
+extern const GeoLayout module3d_geo[];
+extern u8 module3d_piece_ia8[];
+extern u8 module3d_pow_rgba16[];
+extern Vtx module3d_module3d_mesh_layer_4_vtx_cull[8];
+extern Vtx module3d_module3d_mesh_layer_4_vtx_0[80];
+extern Gfx module3d_module3d_mesh_layer_4_tri_0[];
+extern Vtx module3d_module3d_mesh_layer_5_vtx_cull[8];
+extern Vtx module3d_module3d_mesh_layer_5_vtx_0[8];
+extern Gfx module3d_module3d_mesh_layer_5_tri_0[];
+extern Gfx mat_module3d_module[];
+extern Gfx mat_revert_module3d_module[];
+extern Gfx mat_module3d_icon[];
+extern Gfx mat_revert_module3d_icon[];
+extern Gfx module3d_module3d_mesh_layer_4[];
+extern Gfx module3d_module3d_mesh_layer_5[];

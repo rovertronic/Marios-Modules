@@ -384,4 +384,6 @@ extern const struct Animation *const king_bobomb_seg5_anims_0500FE30[];
 
 
 #include "saveanim/anim_header.h"
+#include "module3d/geo_header.h"
+
 #endif

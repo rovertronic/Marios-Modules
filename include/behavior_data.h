@@ -548,5 +548,6 @@ extern const BehaviorScript bhvDungeonManager[];
 extern const BehaviorScript bhvModulePreviewBox[];
 extern const BehaviorScript bhvSaveBox[];
 extern const BehaviorScript bhvChestPriceNumber[];
+extern const BehaviorScript bhvModuleCollect[];
 
 #endif // BEHAVIOR_DATA_H

@@ -15,6 +15,7 @@
 #include "area.h"
 #include "sram.h"
 #include "object_list_processor.h"
+#include "rendering_graph_node.h"
 #include <PR/os_internal_reg.h>
 #include "utf8_print.h"
 
@@ -936,6 +937,46 @@ void print_module_hud_status(void) {
 
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
+}
+
+Gfx *geo_module_material(s32 callContext, struct GraphNode *node, void *context) {
+    Gfx *dlStart, *dlHead;
+    struct Object *obj;
+    struct GraphNodeGenerated *currentGraphNode;
+
+    currentGraphNode = node;
+
+    if (callContext == GEO_CONTEXT_RENDER) {
+        obj = (struct Object *) gCurGraphNodeObject;
+
+        dlHead = alloc_display_list(sizeof(Gfx) * (11));
+        dlStart = dlHead;
+
+        gDPPipeSync(dlHead++);
+        gDPSetCombineLERP(dlHead++,0, 0, 0, TEXEL0, 0, 0, 0, TEXEL0, 0, 0, 0, TEXEL0, 0, 0, 0, TEXEL0);
+        gSPTexture(dlHead++,65535, 65535, 0, 0, 1);
+        gDPSetTextureImage(dlHead++,G_IM_FMT_RGBA, G_IM_SIZ_16b_LOAD_BLOCK, 1, module_infos[obj->oBehParams2ndByte].tex);
+        gDPSetTile(dlHead++,G_IM_FMT_RGBA, G_IM_SIZ_16b_LOAD_BLOCK, 0, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0);
+        gDPLoadBlock(dlHead++,7, 0, 0, 255, 512);
+        gDPSetTile(dlHead++,G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 0, 0, 0, G_TX_CLAMP | G_TX_NOMIRROR, 4, 0, G_TX_CLAMP | G_TX_NOMIRROR, 4, 0);
+        gDPSetTileSize(dlHead++,0, 0, 0, 60, 60);
+        gSPEndDisplayList(dlHead++);
+
+        geo_append_display_list(dlStart, LAYER_TRANSPARENT);
+
+        dlHead = alloc_display_list(sizeof(Gfx) * (5));
+        dlStart = dlHead;
+
+        int id = obj->oBehParams2ndByte;
+        u8 r = module_type_infos[module_infos[id].type].color[0];
+        u8 g = module_type_infos[module_infos[id].type].color[1];
+        u8 b = module_type_infos[module_infos[id].type].color[2];
+        gDPSetEnvColor(dlHead++, r,g,b, 255);
+        gSPEndDisplayList(dlHead++);
+
+        geo_append_display_list(dlStart, LAYER_ALPHA);
+    }
+    return NULL;
 }
 
 char * changelog = "\

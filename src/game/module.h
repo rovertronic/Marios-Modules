@@ -168,6 +168,8 @@ struct mariosModulesSave {
     u32 save_magic;
 };
 
+Gfx *geo_module_material(s32 callContext, struct GraphNode *node, void *context);
+
 void add_inventory(s8 module);
 void module_update(void);
 void print_module_menu(void);

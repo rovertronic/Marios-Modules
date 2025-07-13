@@ -23,3 +23,4 @@
 #include "cchest/geo.inc.c"
 #include "woman/geo.inc.c"
 #include "save/geo.inc.c"
+#include "module3d/geo.inc.c"

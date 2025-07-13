@@ -675,7 +675,7 @@
 /* G_SETOTHERMODE_H gSetAlphaDither */
 #define	G_AD_PATTERN		(0 << G_MDSFT_ALPHADITHER)
 #define	G_AD_NOTPATTERN		(1 << G_MDSFT_ALPHADITHER)
-#define	G_AD_NOISE		(2 << G_MDSFT_ALPHADITHER)
+#define	G_AD_NOISE		0//(2 << G_MDSFT_ALPHADITHER) go fuck yourself
 #define	G_AD_DISABLE		(3 << G_MDSFT_ALPHADITHER)
 
 /* G_SETOTHERMODE_L gSetAlphaCompare */

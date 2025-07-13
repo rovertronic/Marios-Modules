@@ -49,3 +49,4 @@
 #include "savec/collision.inc.c"
 #include "saveanim/anims/data.inc.c"
 #include "saveanim/anims/table.inc.c"
+#include "module3d/model.inc.c"
