@@ -11,13 +11,13 @@
 #include "mario.h"
 #include "emutest.h"
 #include "behavior_data.h"
-#include "actors/group0.h"
 #include "area.h"
 #include "sram.h"
 #include "object_list_processor.h"
 #include "rendering_graph_node.h"
 #include <PR/os_internal_reg.h>
 #include "utf8_print.h"
+#include "frame_lerp.h"
 
 u8 gModuleMenuOpen = FALSE;
 u8 gGameSettings[SETTING_COUNT];
@@ -27,29 +27,33 @@ u8 gModuleUpdateVanity = FALSE;
 struct module_execution_thread module_execution_threads[MODULE_EXEC_COUNT];
 
 void module_jump(struct module_execution_thread * met, u8 call_context) {
-    gMarioState->input |= INPUT_A_PRESSED;
-    gMarioState->actionMod = 0;
-    
-    met->jump_tier = (met->jump_tier+met->mod)%3;
-    switch(met->jump_tier) {
-        case 0:
-            break;
-        case 1:
-            gMarioState->actionMod = ACT_DOUBLE_JUMP;
-            break;
-        default:
-            gMarioState->actionMod = ACT_TRIPLE_JUMP;
-            if (gMarioState->flags & MARIO_WING_CAP) {
-                gMarioState->actionMod = ACT_FLYING_TRIPLE_JUMP;
-            }
-            break;
+    if (!mario_floor_is_steep(gMarioState) && (GROUNDED)) {
+        switch(met->mod) {
+            case 0:
+                set_mario_action(gMarioState,ACT_JUMP,0);
+                break;
+            case 1:
+                set_mario_action(gMarioState,ACT_DOUBLE_JUMP,0);
+                break;
+            default:
+                set_mario_action(gMarioState,ACT_TRIPLE_JUMP,0);
+                if (gMarioState->flags & MARIO_WING_CAP) {
+                    set_mario_action(gMarioState,ACT_FLYING_TRIPLE_JUMP,0);
+                }
+                break;
+        }
+        met->mod = 0;
+    } else {
+        gMarioState->input |= INPUT_A_PRESSED;
     }
-    met->jump_tier = (met->jump_tier+1)%3;
-    met->mod = 0;
 
-    gMarioState->forwardVel += 10.0f*met->spd;
-    met->spd = 0;
+    met->x++;
+}
 
+void module_tornado(struct module_execution_thread * met, u8 call_context) {
+    if (!(GROUNDED)) {
+        set_mario_action(gMarioState,ACT_TWIRLING,0);
+    }
     met->x++;
 }
 
@@ -88,7 +92,7 @@ void module_floor(struct module_execution_thread * met, u8 call_context) {
             met->halted = TRUE;
             break;
         case MCC_HALTED:
-            if (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING)) {
+            if (GROUNDED) {
                 met->halted = FALSE;
                 met->x++;
                 break;
@@ -323,11 +327,11 @@ Gfx * skinLights[] = {
 
 struct module_info module_infos[] = {
     // Sockets
-    [MOD_BUTTON_A] = {MTYPE_INPUT,"",micons_abtn_rgba16,NULL,NULL,NULL},
-    [MOD_BUTTON_B] = {MTYPE_INPUT,"",micons_bbtn_rgba16,NULL,NULL,NULL},
-    [MOD_VANITY] = {MTYPE_INPUT,"",micons_vanity_rgba16,NULL,NULL,NULL},
-    [MOD_SETTINGS] = {MTYPE_INPUT,"",micons_gear_rgba16,NULL,NULL,NULL},
-    [MOD_WRAP] = {MTYPE_INPUT,"",micons_wrap_rgba16,NULL,NULL,NULL},
+    [MOD_BUTTON_A] = {MTYPE_INPUT,0,0,"",micons_abtn_rgba16,NULL,NULL,NULL},
+    [MOD_BUTTON_B] = {MTYPE_INPUT,0,0,"",micons_bbtn_rgba16,NULL,NULL,NULL},
+    [MOD_VANITY] = {MTYPE_INPUT,0,0,"",micons_vanity_rgba16,NULL,NULL,NULL},
+    [MOD_SETTINGS] = {MTYPE_INPUT,0,0,"",micons_gear_rgba16,NULL,NULL,NULL},
+    [MOD_WRAP] = {MTYPE_INPUT,0,0,"",micons_wrap_rgba16,NULL,NULL,NULL},
 
     // Actions
     [MOD_JUMP] = {
@@ -335,8 +339,20 @@ struct module_info module_infos[] = {
         .type = MTYPE_MOVE,
         .tex = micons_jump_rgba16,
         .desc = "Makes Mario attempt to jump.",
-        .upg_desc = "Jump Tier increases with @O@UPG@@.",
+        .upg_desc = "Jump Tier increases per @O@UPG@@.",
+        .unchainable = TRUE,
         .func = module_jump,
+        .creative = TRUE,
+    },
+
+    [MOD_TORNADO] = {
+        .name = "Tornado",
+        .type = MTYPE_MOVE,
+        .tex = micons_tornado_rgba16,
+        .desc = "If airborne, makes Mario spin. Rises when above heat.",
+        .unchainable = TRUE,
+        .func = module_tornado,
+        .creative = TRUE,
     },
 
     [MOD_ATTACK] = {
@@ -344,7 +360,9 @@ struct module_info module_infos[] = {
         .type = MTYPE_MOVE,
         .tex = micons_pow_rgba16,
         .desc = "Makes Mario attempt to attack.",
+        .unchainable = TRUE,
         .func = module_attack,
+        .creative = TRUE,
     },
 
     [MOD_INPUT] = {
@@ -353,15 +371,18 @@ struct module_info module_infos[] = {
         .tex = micons_btngen_rgba16,
         .desc = "Checks for a button press for one second, otherwise cancels.",
         .func = module_input,
+        .creative = TRUE,
     },
 
     [MOD_PLATFORM] = {
-        .name = "Hover",
+        .name = "Air Platform",
         .type = MTYPE_MOVE,
         .tex = micons_hover_rgba16,
-        .desc = "Mario hovers for one second. Can jump.",
-        .upg_desc = "Hover time +1/2 per @O@UPG@@.",
+        .desc = "Spawns a temporary air platform for one second.",
+        .upg_desc = "Time +1/2s per @O@UPG@@.",
+        .unchainable = TRUE,
         .func = module_platform,
+        .creative = TRUE,
     },
 
     [MOD_SWAP] = {
@@ -377,8 +398,9 @@ struct module_info module_infos[] = {
         .tex = micons_cap_rgba16,
         .desc = "Enables cap power for one second.",
         .upg_desc = "0:Vanish, 1:Metal, 2:Wing.",
-        .cooldown = 4.0f,
+        .cooldown = 3.0f,
         .func = module_cap,
+        .creative = TRUE,
     },
 
     [MOD_GRAPPLE] = {
@@ -391,19 +413,21 @@ struct module_info module_infos[] = {
     // Modifiers
     [MOD_POW] = {
         .name = "UPG",
-        .type = MTYPE_UPGRADE,
+        .type = MTYPE_BUFF,
         .tex = micons_onepow_rgba16,
         .desc = "+1@O@UPG@@ to the next piece.",
         .cooldown = .5f,
         .func = module_pow,
+        .creative = TRUE,
     },
 
     [MOD_REPEAT] = {
         .name = "Repeat",
-        .type = MTYPE_BUFF,
+        .type = MTYPE_COND,
         .tex = micons_repeat_rgba16,
         .desc = "Repeats from the start.",
         .func = module_repeat,
+        .creative = TRUE,
     },
 
     [MOD_SPD] = {
@@ -421,6 +445,7 @@ struct module_info module_infos[] = {
         .desc = "Continues after a 1/2 second.",
         .upg_desc = "+1/3 a second per @O@UPG@@.",
         .func = module_timer,
+        .creative = TRUE,
     },
 
     // Conditions
@@ -429,7 +454,9 @@ struct module_info module_infos[] = {
         .type = MTYPE_COND,
         .tex = micons_ground_rgba16,
         .desc = "Continues when Mario touches the ground.",
+        .unchainable = TRUE,
         .func = module_floor,
+        .creative = TRUE,
     },
 
     [MOD_HIT_WALL] = {
@@ -437,7 +464,9 @@ struct module_info module_infos[] = {
         .type = MTYPE_COND,
         .tex = micons_wall_rgba16,
         .desc = "Continues when touching wall, or cancels on floor touch.",
+        .unchainable = TRUE,
         .func = module_wall,
+        .creative = TRUE,
     },
 
     [MOD_GRAV] = {
@@ -445,11 +474,14 @@ struct module_info module_infos[] = {
         .type = MTYPE_COND,
         .tex = micons_grav_rgba16,
         .desc = "Continues when Mario has downward velocity.",
+        .unchainable = TRUE,
         .func = module_grav,
+        .creative = TRUE,
     },
 
     // Non modifiers
     [MOD_NONMOD_KEY] = {
+        .name = "Key",
         .type = MTYPE_NONMOD,
         .tex = micons_key_rgba16,
     },
@@ -462,6 +494,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes colors into cap + shirt.",
         .func = module_clothes_color,
         .extra_data = capLights,
+        .creative = TRUE,
     },
 
     [MOD_VAN_PANTS] = {
@@ -471,6 +504,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes colors into overalls.",
         .func = module_clothes_color,
         .extra_data = jeanLights,
+        .creative = TRUE,
     },
 
     [MOD_VAN_HAIR] = {
@@ -480,6 +514,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes colors into hair.",
         .func = module_clothes_color,
         .extra_data = hairLights,
+        .creative = TRUE,
     },
 
     [MOD_VAN_SKIN] = {
@@ -489,6 +524,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes colors into skin tone.",
         .func = module_clothes_color,
         .extra_data = skinLights,
+        .creative = TRUE,
     },
 
     [MOD_RED] = {
@@ -498,6 +534,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @R@red@@ into palette.",
         .func = module_color,
         .extra_data = &moduleRed,
+        .creative = TRUE,
     },
 
     [MOD_BLUE] = {
@@ -507,6 +544,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @B@blue@@ into palette.",
         .func = module_color,
         .extra_data = &moduleBlue,
+        .creative = TRUE,
     },
 
     [MOD_GREEN] = {
@@ -516,6 +554,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @G@green@@ into palette.",
         .func = module_color,
         .extra_data = &moduleGreen,
+        .creative = TRUE,
     },
 
     [MOD_YELLOW] = {
@@ -525,6 +564,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @Y@yellow@@ into palette.",
         .func = module_color,
         .extra_data = &moduleYellow,
+        .creative = TRUE,
     },
 
     [MOD_WHITE] = {
@@ -534,6 +574,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes white into palette.",
         .func = module_color,
         .extra_data = &moduleWhite,
+        .creative = TRUE,
     },
 
     [MOD_BLACK] = {
@@ -543,6 +584,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @0@black@@ into palette.",
         .func = module_color,
         .extra_data = &moduleBlack,
+        .creative = TRUE,
     },
 
     [MOD_WOMAN] = {
@@ -551,6 +593,7 @@ struct module_info module_infos[] = {
         .tex = micons_woman_rgba16,
         .desc = "Changes Mario's gender to @R@WOMAN@@.",
         .func = module_woman,
+        .creative = TRUE,
     },
 
     // Settings
@@ -593,17 +636,53 @@ struct module_info module_infos[] = {
         .func = module_settings,
         .extra_data = &gGameSettings[SETTING_AA],
     },
+
+    [MOD_ICE] = {
+        .name = "Ice",
+        .type = MTYPE_ELEMENT,
+        .tex = micons_ice_rgba16,
+        .desc = "Next applicable module gets imbued with ice.",
+        .cooldown = .3f,
+        .func = NULL,
+        .creative = TRUE,
+    },
+
+    [MOD_STOP] = {
+        .name = "Stop",
+        .type = MTYPE_LOGIC,
+        .tex = micons_stop_rgba16,
+        .desc = "Stops the sequence prematurely.",
+        .func = NULL,
+        .creative = TRUE,
+    },
+    [MOD_IF] = {
+        .name = "If",
+        .type = MTYPE_LOGIC,
+        .tex = micons_if_rgba16,
+        .desc = "Executes block if previous condition is met.",
+        .func = NULL,
+        .creative = TRUE,
+    },
+    [MOD_ENDBLOCK] = {
+        .name = "End Block",
+        .type = MTYPE_LOGIC,
+        .tex = micons_endblock_rgba16,
+        .desc = "Marks end of a block.",
+        .func = NULL,
+        .creative = TRUE,
+    },
 };
 
 struct module_type_info module_type_infos[] = {
     [MTYPE_MOVE] = {"B","Action",{0x64, 0x64, 0xF0}},
-    [MTYPE_BUFF] = {"R","Logistics",{200, 0, 0}},
+    [MTYPE_BUFF] = {"O","Upgrade",{200, 0, 0}},
     [MTYPE_COND] = {"G","Sequencing",{0, 170, 0}},
     [MTYPE_INPUT] = {"","Input",{0xC9, 0x82, 0x30}},
     [MTYPE_NONMOD] = {"",NULL,{0x00, 0x00, 0x00}},
     [MTYPE_VANITY] = {"P","Vanity",{0xD3,0x81,0xFC}},
     [MTYPE_SETTINGS] = {"1","Option",{0xAA,0xAA,0xAA}},
-    [MTYPE_UPGRADE] = {"O","Upgrade",{210,176,0}},
+    [MTYPE_LOGIC] = {"Y","Logic",{210,176,0}},
+    [MTYPE_ELEMENT] = {"E","Element",{0,0x90,0x90}},
 };
 
 #define INVENTORY_PRINT_OFFSET_X 26
@@ -739,16 +818,19 @@ void init_module_inventory(void) {
         inventory[48][1] = MOD_60HZ;
     }
 
-    int i2 = 0;
-    for (int i = 0; i < MOD_COUNT; i++) {
-        if (module_infos[i].type != MTYPE_INPUT && module_infos[i].type != MTYPE_NONMOD) {
-            inventory[39+(i2/8)][i2%8] = i;
-            i2++;
-        }
-    }
-
     load_marios_modules();
     update_settings();
+
+    // Populate creative inventory
+    int i2 = 0;
+    for (int j = 0; j < MTYPE_COUNT; j++) {
+        for (int i = 0; i < MOD_COUNT; i++) {
+            if (module_infos[i].creative && module_infos[i].type == j) {
+                inventory[39+(i2/8)][i2%8] = i;
+                i2++;
+            }
+        }
+    }
 }
 
 void module_update(void) {
@@ -828,7 +910,7 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
         met->used_flags = 0;
         met->extra_data = NULL;
         met->manual = manual;
-        met->cooltime = 5;
+        met->cooltime = 1;
         colorBlendCount = 0;
 
         if (manual) {
@@ -863,10 +945,11 @@ void update_settings(void) {
 
 #define ANALOG_MENU_THRESH 30
 u16 joystick_hold_timer = 0;
+u8 double_tap_return = FALSE;
 void control_module_menu(void) {
     for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
         struct module_execution_thread * met = &module_execution_threads[i];
-        if (met->executing && met->manual) {
+        if (met->executing && met->manual && !met->cooldown) {
             //no editing while running
             return;
         }
@@ -882,6 +965,7 @@ void control_module_menu(void) {
         joystick_hold_timer = 0;
     } else {
         joystick_hold_timer++;
+        double_tap_return = FALSE;
     }
     if (joystick_hold_timer==1 || (joystick_hold_timer>15&&(gGlobalTimer%4==0))) {
         if (gPlayer1Controller->rawStickY > ANALOG_MENU_THRESH) {
@@ -902,14 +986,16 @@ void control_module_menu(void) {
 
     if (gPlayer1Controller->buttonPressed & L_JPAD) {
         inventory_x --;
-    }
-    else if (gPlayer1Controller->buttonPressed & R_JPAD) {
+        double_tap_return = FALSE;
+    } else if (gPlayer1Controller->buttonPressed & R_JPAD) {
         inventory_x ++;
-    }
-    else if (gPlayer1Controller->buttonPressed & D_JPAD) {
+        double_tap_return = FALSE;
+    } else if (gPlayer1Controller->buttonPressed & D_JPAD) {
         inventory_y ++;
+        double_tap_return = FALSE;
     } else if (gPlayer1Controller->buttonPressed & U_JPAD) {
         inventory_y --;
+        double_tap_return = FALSE;
     }
 
     if (gPlayer1Controller->buttonPressed & R_TRIG) {
@@ -927,6 +1013,7 @@ void control_module_menu(void) {
 
     int true_inventory_y = inventory_y + icp->offset;
 
+    int modified_inventory = FALSE;
     if (gPlayer1Controller->buttonPressed & A_BUTTON) {
         if (is_inventory_slot_locked(inventory_x,inventory_y)) {
             play_sound(SOUND_MENU_CAMERA_BUZZ, gGlobalSoundSource);
@@ -941,6 +1028,71 @@ void control_module_menu(void) {
             }
             module_in_hand = module_to_pick_up;
         }
+        modified_inventory = TRUE;
+    }
+
+    // SHORTCUTS (Not allowed in creative menu)
+    if (inventory_panel != PANEL_CREATIVE) {
+        if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
+            inventory_vis_x += 5.0f;
+            for (int i = INVENTORY_SLOTS_X-2; i >= inventory_x; i--) {
+                s8 mod = get_inventory(i,true_inventory_y);
+
+                if (get_inventory(i+1,true_inventory_y) == MOD_EMPTY) {
+                    inventory[true_inventory_y][i+1] = mod;
+                    inventory[true_inventory_y][i] = MOD_EMPTY;
+                }
+            }
+            modified_inventory = TRUE;
+        }
+
+        if (gPlayer1Controller->buttonPressed & L_CBUTTONS) {
+            inventory_vis_x -= 5.0f;
+            for (int i = 1; i <= inventory_x; i++) {
+                s8 mod = get_inventory(i,true_inventory_y);
+
+                if (get_inventory(i-1,true_inventory_y) == MOD_EMPTY) {
+                    inventory[true_inventory_y][i-1] = mod;
+                    inventory[true_inventory_y][i] = MOD_EMPTY;
+                }
+            }
+            modified_inventory = TRUE;
+        }
+
+        if (gPlayer1Controller->buttonPressed & D_CBUTTONS) {
+            if (!double_tap_return) {
+                inventory_vis_y += 10.0f;
+                s8 mod = inventory[true_inventory_y][inventory_x];
+                add_inventory(mod);
+                inventory[true_inventory_y][inventory_x] = MOD_EMPTY;
+                double_tap_return = TRUE;
+            } else {
+                for (int i = 0; i < INVENTORY_SLOTS_X; i++) {
+                    s8 mod = inventory[true_inventory_y][i];
+                    add_inventory(mod);
+                    inventory[true_inventory_y][i] = MOD_EMPTY;
+                }
+            }
+            modified_inventory = TRUE;
+        }
+
+        if (gPlayer1Controller->buttonPressed & Z_TRIG) {
+            inventory_vis_x -= 10.0f;
+            for (int j = 0; j < INVENTORY_SLOTS_X; j++) {
+                for (int i = 1; i < INVENTORY_SLOTS_X; i++) {
+                    s8 mod = get_inventory(i,true_inventory_y);
+
+                    if (get_inventory(i-1,true_inventory_y) == MOD_EMPTY) {
+                        inventory[true_inventory_y][i-1] = mod;
+                        inventory[true_inventory_y][i] = MOD_EMPTY;
+                    }
+                }
+            }
+            modified_inventory = TRUE;
+        }
+    }
+
+    if (modified_inventory) {
         if (true_inventory_y == 44 || true_inventory_y == 45) {
             update_vanity();
         }
@@ -1006,14 +1158,23 @@ char * module_is_invalid(int x, int y) {
         return NULL;
     }
 
+    // Stored modules should never have errors
+    if (inventory_row_info[y].type != ROW_SOCKET) {
+        return NULL;
+    }
+
     // Missing a module to the left? Is invalid!
-    if (x != 0 && get_inventory(x-1,y) == -1 && inventory_row_info[y].type == ROW_SOCKET) {
+    if (x != 0 && get_inventory(x-1,y) == -1) {
         return "@R@Unconnected";
     }
 
     // Not on the socket whitelist? Is invalid!
     if (inventory_row_info[y].type == ROW_SOCKET && !(1 << module_infos[mod].type & inventory_row_info[y].whitelist_flags)) {
-        return "@R@Incompatbile";
+        return "@R@Incompatbile with socket";
+    }
+
+    if (get_inventory(x-1,y) == mod && module_infos[mod].unchainable) {
+        return "@R@Module not chainable";
     }
 
     return NULL;
@@ -1086,8 +1247,7 @@ void print_module_menu(void) {
     char * errmsg = module_is_invalid(inventory_x,inventory_y+icp->offset);
     if (errmsg) {
         //print reason
-        utf8_print_reset();
-        print_utf8(errmsg, 15+inventory_vis_x, 230-inventory_vis_y);
+        print_utf8_boxed(errmsg, 15+inventory_vis_x, 230-inventory_vis_y, 1.0f, FALSE);
     }
 
     // PRINT PANEL INFO
@@ -1096,11 +1256,12 @@ void print_module_menu(void) {
     render_4slice(25,122,33+162,122-16);
 
     utf8_print_reset();
+    gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
     int sx;
     int sy;
     utf8_size(icp->name,&sx,&sy);
-    print_utf8(icp->name, 30+(81-(sx/2)), 122-16);
 
+    print_utf8(icp->name, 30+(81-(sx/2)), 122-16);
     print_utf8("@<@←@@𝐋", 32, 122-16);
     print_utf8("𝐑@>@→", 33+162-16, 122-16);
     gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
@@ -1133,14 +1294,26 @@ void print_module_menu(void) {
         render_4slice(25,82,33+260,25);
 
         utf8_print_reset();
+        gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
         print_utf8(utf8_autonewline(print_buffer,260), 30, 64);
         gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
     }
 }
 
-u8 world_module_timer = 0;
-Vec3f world_module_pos;
-s8 world_module_id = -1;
+f32 messageDisplayTimer = 0.0f;
+f32 messageDisplayAlpha = 0.0f;
+char * messageDisplayPtr = NULL;
+
+char print_buffer_t5[100];
+void display_module_message(s8 id) {
+    if (module_infos[id].type != MTYPE_NONMOD) {
+        sprintf(print_buffer_t5,"Obtained @%s@%s@@ module.",module_type_infos[module_infos[id].type].text_color,module_infos[id].name);
+    } else {
+        sprintf(print_buffer_t5,"Obtained %s.",module_infos[id].name);
+    }
+    messageDisplayTimer = 120.0f;
+    messageDisplayPtr = print_buffer_t5;
+}
 
 #define MODULE_HUD_STATUS_Y 205
 void print_module_hud_status(void) {
@@ -1160,21 +1333,19 @@ void print_module_hud_status(void) {
         print_texture(micons_inpnotif_rgba16,16 ,42,MODULE_HUD_STATUS_Y);
     }
 
-    if (world_module_id != -1) {
-        s32 x;
-        s32 y;
-
-        world_pos_to_screen_pos(&world_module_pos,&x,&y);
-        print_module(world_module_id,x-8,y-world_module_timer);
-
-        if (world_module_timer > 30) {
-            world_module_id = -1;
-        }
-        world_module_timer++;
-    }
-
-
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
+
+    if (messageDisplayTimer > 0) {
+        messageDisplayTimer -= gFrameLerpDeltaTime;
+        messageDisplayAlpha += gFrameLerpDeltaTime*.1f;
+    } else {
+        messageDisplayAlpha -= gFrameLerpDeltaTime*.1f;
+    }
+    messageDisplayAlpha = CLAMP(messageDisplayAlpha,0.0f,1.0f);
+
+    if (messageDisplayAlpha > 0.0f && messageDisplayPtr != NULL) {
+        print_utf8_boxed(messageDisplayPtr,160,10,messageDisplayAlpha,TRUE);
+    }
 }
 
 Gfx *geo_module_material(s32 callContext, struct GraphNode *node, void *context) {
@@ -1244,11 +1415,15 @@ New Module Additions:\n\
 Minor Changes:\n\
 * Polished level visuals\n\
 * Added module warnings\n\
-* Fixed thwomp death softlock\n\
 * Hold to navigate menus added\n\
+* C<+> can push modules in menu\n\
+* CV sends module back to inventory\n\
+* Double tap CV sends row back to inventory\n\
+* Z pushes all modules to the left\n\
 * Shortened module cooldown\n\
 * Re-organized module classifications\n\
 * Modules in chests are now 3D\n\
+* Fixed thwomp death softlock\n\
 \n\
 Rebalances:\n\
 * Putting jumps together no longer increases jump tier\n\
@@ -1269,6 +1444,10 @@ void save_marios_modules(Vec3f pos) {
         sMariosModulesSave.coins = gMarioState->numCoins;
         bcopy(&inventory,&sMariosModulesSave.inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
         nuPiWriteSram(0, &sMariosModulesSave, ALIGN8(size));
+
+        messageDisplayTimer = 120.0f;
+        messageDisplayPtr = "@G@Game successfully saved.";
+        play_sound(SOUND_GENERAL_HEART_SPIN, gGlobalSoundSource);
     }
 
 }

@@ -56,8 +56,12 @@ enum module_execution_ids {
     MODULE_EXEC_COUNT,
 };
 
+#define GROUNDED ((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING)
+
 struct module_info {
     u8 type;
+    u8 unchainable;
+    u8 creative;
     char * name;
     void * tex;
     char * desc;
@@ -86,7 +90,9 @@ enum module_type {
     MTYPE_NONMOD,
     MTYPE_VANITY,
     MTYPE_SETTINGS,
-    MTYPE_UPGRADE,
+    MTYPE_LOGIC,
+    MTYPE_ELEMENT,
+    MTYPE_COUNT,
 };
 
 #define MOD_EMPTY -1
@@ -126,6 +132,11 @@ enum module_id {
     MOD_60HZ,
     MOD_AA,
     MOD_WRAP,
+    MOD_TORNADO,
+    MOD_ICE,
+    MOD_STOP,
+    MOD_IF,
+    MOD_ENDBLOCK,
     MOD_COUNT,
 };
 
@@ -140,12 +151,12 @@ struct inventory_row {
     u8 type;
     s8 icon;
     s8 mod_type_prio;
-    u8 whitelist_flags;
+    u16 whitelist_flags;
     u8 wrap;
 };
 
 #define WHITELIST_VANITY ((1 << MTYPE_VANITY))
-#define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_UPGRADE))
+#define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_LOGIC))
 
 enum {
     SETTING_60HZ,
@@ -176,6 +187,7 @@ struct mariosModulesSave {
 Gfx *geo_module_material(s32 callContext, struct GraphNode *node, void *context);
 
 void add_inventory(s8 module);
+void display_module_message(s8 id);
 void module_update(void);
 void print_module_menu(void);
 void print_module_hud_status(void);

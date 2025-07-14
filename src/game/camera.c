@@ -1128,9 +1128,9 @@ void mode_8_directions_camera(struct Camera *c) {
     Vec3f pos;
     s16 oldAreaYaw = sAreaYaw;
 
-    radial_camera_input(c);
-
     if (!gModuleMenuOpen) {
+        radial_camera_input(c);
+
         if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
             s8DirModeYawOffset += DEGREES(45);
             play_sound_cbutton_side();

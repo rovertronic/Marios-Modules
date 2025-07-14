@@ -1000,15 +1000,15 @@ s32 set_jump_from_landing(struct MarioState *m) {
         } else {
             switch (m->prevAction) {
                 case ACT_JUMP_LAND:
-                    set_mario_action(m, ACT_DOUBLE_JUMP, 0);
+                    set_mario_action(m, ACT_JUMP, 0);
                     break;
 
                 case ACT_FREEFALL_LAND:
-                    set_mario_action(m, ACT_DOUBLE_JUMP, 0);
+                    set_mario_action(m, ACT_JUMP, 0);
                     break;
 
                 case ACT_SIDE_FLIP_LAND_STOP:
-                    set_mario_action(m, ACT_DOUBLE_JUMP, 0);
+                    set_mario_action(m, ACT_JUMP, 0);
                     break;
 
                 case ACT_DOUBLE_JUMP_LAND:
@@ -1017,7 +1017,7 @@ s32 set_jump_from_landing(struct MarioState *m) {
                     if (m->flags & MARIO_WING_CAP) {
                         set_mario_action(m, ACT_FLYING_TRIPLE_JUMP, 0);
                     } else if (m->forwardVel > 20.0f) {
-                        set_mario_action(m, ACT_TRIPLE_JUMP, 0);
+                        set_mario_action(m, ACT_JUMP, 0);
                     } else {
                         set_mario_action(m, ACT_JUMP, 0);
                     }
@@ -1030,12 +1030,12 @@ s32 set_jump_from_landing(struct MarioState *m) {
         }
     }
 
-    if (!mario_floor_is_steep(m)) {
-        if (m->actionMod != 0) {
-            set_mario_action(m, m->actionMod, 0);
-        }
-        m->actionMod = 0;
-    }
+    //if (!mario_floor_is_steep(m)) {
+    //    if (m->actionMod != 0) {
+    //        set_mario_action(m, m->actionMod, 0);
+    //    }
+    //    m->actionMod = 0;
+    //}
     
     m->doubleJumpTimer = 0;
 

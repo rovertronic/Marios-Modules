@@ -116,6 +116,7 @@ typedef struct {
 
 void utf8_initialize_table(void);
 void print_utf8(char * str, int x, int y);
+void print_utf8_boxed(char * str, int x, int y, f32 alpha, int centered);
 void utf8_print_reset(void);
 
 void ui_render(void);

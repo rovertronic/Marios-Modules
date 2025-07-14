@@ -7,6 +7,7 @@
 #include "ingame_menu.h"
 #include "geo_misc.h"
 #include "game_init.h"
+#include "actors/group0.h"
 
 //0-2 top, 3-5 bottom
 u8 print_textcolor[6];
@@ -495,7 +496,6 @@ void utf8_initialize_table(void) {
 }
 
 void utf8_set_texture(Texture * tex) {
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     gSPClearGeometryMode(gDisplayListHead++, G_LIGHTING);
     gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
     gDPSetCombineMode(gDisplayListHead++, G_CC_UI_TEXT, G_CC_UI_TEXT);
@@ -653,6 +653,9 @@ void print_utf8(char * str, int x, int y) {
                         break;
                     case '1':
                         set_print_textcolor(230,230,230,150,150,150);
+                        break;
+                    case 'E':
+                        set_print_textcolor(0x31,0xF6,0xFF,0XFF,0,0);
                         break;
                     case '<':
                         horizontal_wiggle = -1;
@@ -1037,4 +1040,23 @@ void ui_render(void) {
     //print_utf8("Option 1",40,108);
     //print_utf8("W FAPS",40,108-40);
     //print_utf8("Option 3",40,108-80);
+}
+
+void print_utf8_boxed(char * str, int x, int y, f32 alpha, int centered) {
+    int sx;
+    int sy;
+    utf8_size(str,&sx,&sy);
+
+    int offset = 0;
+    if (centered) {
+        offset = -(sx/2);
+    }
+
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, alpha*160.0f);
+    gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+    render_4slice(x-4+offset,y+18,x+sx+4+offset,y-2);
+
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, alpha*255.0f);
+    utf8_print_reset();
+    print_utf8(str,x+offset,y);
 }

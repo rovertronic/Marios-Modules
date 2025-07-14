@@ -816,7 +816,7 @@ void bhv_chest(void) {
     if (o->oTimer == 0) {
         obj_save_bin_count(SAVE_BIN_CHESTS);
         if (obj_save_bin_read()) {
-            o->oAction = 1;
+            o->oAction = 2;
             if (o->oBehParams2ndByte == MOD_NONMOD_KEY) {
                 gMarioState->numKeys++;
             }
@@ -851,6 +851,9 @@ void bhv_chest(void) {
             if ((gMarioState->numCoins >= cost) && (o->oInteractStatus & INT_STATUS_INTERACTED)) {
                 obj_save_bin_write();
 
+                f32 messageDisplayTimer = 120.0f;
+                char * messageDisplayPtr = "Obtained module.";
+
                 o->header.gfx.animInfo.animAccelF = 1.0f;
                 gMarioState->numCoins-=cost;
                 gHudDisplay.coins = gMarioState->numCoins;
@@ -868,13 +871,16 @@ void bhv_chest(void) {
                 }
             }
             break;
+        case 1:
+            if (o->oTimer > 30) {
+                display_module_message(o->oBehParams2ndByte);
+                o->oAction = 2;
+            }
+            break;
     }
 }
 
 void bhv_hover(void) {
-    o->oPosX = gMarioState->pos[0];
-    o->oPosZ = gMarioState->pos[2];
-    
     if (o->oAction == 0) {
         if (o->oOpacity < 250) {
             o->oOpacity = approach_f32_asymptotic(o->oOpacity,255,0.3f);
