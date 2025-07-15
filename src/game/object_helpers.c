@@ -26,6 +26,7 @@
 #include "rendering_graph_node.h"
 #include "spawn_object.h"
 #include "spawn_sound.h"
+#include "module.h"
 
 static s32 clear_move_flag(u32 *bitSet, s32 flag);
 
@@ -2400,3 +2401,5 @@ void mtxf_object_noscale(Mat4 dest, struct Object * obj) {
     dest[3][1] += obj->header.gfx.pos[1];
     dest[3][2] += obj->header.gfx.pos[2];
 }
+
+#include "elemental_interaction.inc.c"

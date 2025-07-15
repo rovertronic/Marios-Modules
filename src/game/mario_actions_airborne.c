@@ -663,6 +663,17 @@ s32 act_twirling(struct MarioState *m) {
     s16 startTwirlYaw = m->twirlYaw;
     s16 yawVelTarget;
 
+    struct ElementHitbox * element = obj_check_lateral_element_collision(ELEMENT_FLAME);
+    if (element && m->pos[1] > element->object->oPosY) {
+        f32 x = (m->pos[1] - element->object->oPosY);
+        if (x < 700.0f) {
+            f32 force = 10.0f * sqrtf( (-x+700.0f)/700.0f  );
+            if (force > 0.0f) {
+                gMarioState->vel[1] += force;
+            }
+        }
+    }
+
 #ifdef Z_TWIRL
     if (m->input & INPUT_Z_DOWN) {
         yawVelTarget = 0x2800;

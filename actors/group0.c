@@ -50,3 +50,5 @@
 #include "saveanim/anims/data.inc.c"
 #include "saveanim/anims/table.inc.c"
 #include "module3d/model.inc.c"
+#include "ice/model.inc.c"
+#include "ice/collision.inc.c"

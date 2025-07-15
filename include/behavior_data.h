@@ -549,5 +549,7 @@ extern const BehaviorScript bhvModulePreviewBox[];
 extern const BehaviorScript bhvSaveBox[];
 extern const BehaviorScript bhvChestPriceNumber[];
 extern const BehaviorScript bhvModuleCollect[];
+extern const BehaviorScript bhvFlameProjectile[];
+extern const BehaviorScript bhvIceProjectile[];
 
 #endif // BEHAVIOR_DATA_H

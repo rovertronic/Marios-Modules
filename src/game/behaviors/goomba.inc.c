@@ -108,11 +108,8 @@ void bhv_goomba_triplet_spawner_update(void) {
  * Initialization function for goomba.
  */
 void bhv_goomba_init(void) {
-    if (o->oAction == 0) {
-        o->oAction++;
-        struct Object * snufit = spawn_object(o,MODEL_SNUFIT,bhvSnufit);
-        enemy_module_use(snufit);
-    }
+    o->enemyModuleParent = NULL;
+    obj_element_init(o,ELEMENT_NORMAL,50.0f);
 
     o->oGoombaSize = o->oBehParams2ndByte & GOOMBA_BP_SIZE_MASK;
 
@@ -321,6 +318,8 @@ void bhv_goomba_update(void) {
 
     f32 animSpeed;
 
+    obj_element_enemy_loop();
+
     if (obj_update_standard_actions(o->oGoombaScale)) {
         // If this goomba has a spawner and mario moved away from the spawner, unload
         if (o->parentObj != o) {
@@ -371,6 +370,10 @@ void bhv_goomba_update(void) {
         }
 
         cur_obj_move_standard(-78);
+
+        enemy_module_use_position();
+        //Vec3f modulePos = {o->oPosX,o->oPosY+140.0f,o->oPosZ};
+        //enemy_module_set_position(modulePos);
     } else {
         o->oAnimState = GOOMBA_ANIM_STATE_EYES_CLOSED;
 #ifdef FLOOMBAS

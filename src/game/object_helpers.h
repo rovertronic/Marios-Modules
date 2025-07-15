@@ -284,4 +284,6 @@ void enemy_module_die(void);
 void enemy_module_set_position(Vec3f pos);
 void enemy_module_use_position(void);
 
+#include "elemental_interaction.inc.h"
+
 #endif // OBJECT_HELPERS_H

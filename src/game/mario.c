@@ -1937,6 +1937,7 @@ void init_mario(void) {
     }
 
     gMarioState->marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+    obj_element_init(gMarioState->marioObj,ELEMENT_NORMAL,50.0f);
 }
 
 void init_mario_from_save_file(void) {

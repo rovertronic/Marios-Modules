@@ -33,6 +33,7 @@ struct module_execution_thread {
     u8 x;
     u8 y;
     u8 spd;
+    u8 element;
 
     u8 executing:1;
     u8 halted:1;
@@ -43,7 +44,7 @@ struct module_execution_thread {
 
     u16 used_flags;
     u16 timer;
-    u16 cooltime;
+    s16 cooltime;
     void * extra_data;
 };
 
@@ -62,6 +63,7 @@ struct module_info {
     u8 type;
     u8 unchainable;
     u8 creative;
+    u8 elementable;
     char * name;
     void * tex;
     char * desc;
@@ -134,6 +136,7 @@ enum module_id {
     MOD_WRAP,
     MOD_TORNADO,
     MOD_ICE,
+    MOD_FLAME,
     MOD_STOP,
     MOD_IF,
     MOD_ENDBLOCK,
@@ -156,7 +159,7 @@ struct inventory_row {
 };
 
 #define WHITELIST_VANITY ((1 << MTYPE_VANITY))
-#define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_LOGIC))
+#define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_ELEMENT) | (1 << MTYPE_LOGIC))
 
 enum {
     SETTING_60HZ,

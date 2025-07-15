@@ -661,6 +661,7 @@ Gfx *geo_mario_gate_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat
 }
 
 Gfx *geo_render_preview_mario(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+    return NULL;
     f32 mirroredX;
     struct Object *mario = gMarioStates[0].marioObj;
 

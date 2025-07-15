@@ -328,6 +328,8 @@ struct Object {
               u8 saveBinId;
               u8 saveBinType;
 
+              struct ElementHitbox * element;
+
               // Enemy module stuff
               struct Object * enemyModuleChild;
               struct Object * enemyModuleParent;

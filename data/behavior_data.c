@@ -1221,6 +1221,7 @@ const BehaviorScript bhvLllTumblingBridge[] = {
     END_LOOP(),
 };
 
+extern void bhv_init_element_flame(void);
 const BehaviorScript bhvFlame[] = {
     BEGIN(OBJ_LIST_LEVEL),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
@@ -1231,6 +1232,7 @@ const BehaviorScript bhvFlame[] = {
     SET_HITBOX_WITH_OFFSET(/*Radius*/ 50, /*Height*/ 25, /*Downwards offset*/ 25),
     SET_INT(oIntangibleTimer, 0),
     CALL_NATIVE(bhv_init_room),
+    CALL_NATIVE(bhv_init_element_flame),
     BEGIN_LOOP(),
         SET_INT(oInteractStatus, INT_STATUS_NONE),
         ANIMATE_TEXTURE(oAnimState, 2),
@@ -6178,5 +6180,32 @@ const BehaviorScript bhvModuleCollect[] = {
     SET_HOME(),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_module_collect),
+    END_LOOP(),
+};
+
+extern void bhv_flame_projectile(void);
+const BehaviorScript bhvFlameProjectile[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    BILLBOARD(),
+    SET_HOME(),
+    SCALE(/*Unused*/ 0, /*Field*/ 350),
+    SET_INT(oIntangibleTimer, 0),
+    CALL_NATIVE(bhv_init_element_flame),
+    BEGIN_LOOP(),
+        ANIMATE_TEXTURE(oAnimState, 2),
+        CALL_NATIVE(bhv_flame_projectile),
+    END_LOOP(),
+};
+
+extern void bhv_ice_projectile(void);
+const BehaviorScript bhvIceProjectile[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_DONT_CALC_COLL_DIST)),
+    LOAD_COLLISION_DATA(ice_collision),
+    SET_FLOAT(oCollisionDistance, 500),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_ice_projectile),
+        CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };

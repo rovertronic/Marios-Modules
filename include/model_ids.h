@@ -582,6 +582,7 @@ enum new_models {
     MODEL_WOMAN,
     MODEL_SAVE,
     MODEL_MODULE,
+    MODEL_ICE,
 };
 
 #endif // MODEL_IDS_H

@@ -926,6 +926,10 @@ void geo_set_animation_globals(struct AnimInfo *node, s32 hasAnimation, struct O
         anim = gMarioState->animList[ANIM_LIST_GFX]->bufTarget;
     }
 
+    if (obj->element && (obj->element->afflict & ELEMENT_ICE)) {
+        hasAnimation = FALSE;
+    }
+
     if (hasAnimation) {
         node->animFrame = geo_update_animation_frame(node, &node->animFrameAccelAssist);
         node->animFrameF = geo_update_animation_frame_float(node);

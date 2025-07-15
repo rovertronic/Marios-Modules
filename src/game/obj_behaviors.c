@@ -814,6 +814,8 @@ void bhv_chest_price_number(void) {
 void bhv_chest(void) {
     u8 cost = GET_BPARAM1(o->oBehParams);
     if (o->oTimer == 0) {
+        obj_element_init(o,ELEMENT_NORMAL,100.0f);
+
         obj_save_bin_count(SAVE_BIN_CHESTS);
         if (obj_save_bin_read()) {
             o->oAction = 2;
@@ -878,6 +880,9 @@ void bhv_chest(void) {
             }
             break;
     }
+
+    obj_element_enemy_loop();
+    enemy_module_use_position();
 }
 
 void bhv_hover(void) {
