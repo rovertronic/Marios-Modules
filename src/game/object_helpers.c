@@ -1901,7 +1901,6 @@ s32 cur_obj_set_hitbox_and_die_if_attacked(struct ObjectHitbox *hitbox, s32 deat
             obj_spawn_loot_yellow_coins(o, o->oNumLootCoins, 20.0f);
             obj_mark_for_deletion(o);
             create_sound_spawner(deathSound);
-            enemy_module_die();
         } else {
             interacted = TRUE;
         }
@@ -2324,30 +2323,6 @@ void cur_obj_spawn_star_at_y_offset(f32 targetX, f32 targetY, f32 targetZ, f32 o
     o->oPosY += offsetY + gDebugInfo[DEBUG_PAGE_ENEMYINFO][0];
     spawn_default_star(targetX, targetY, targetZ);
     o->oPosY = objectPosY;
-}
-
-void enemy_module_use(struct Object * enemy) {
-    o->enemyModuleChild = enemy;
-    enemy->enemyModuleParent = o;
-}
-
-void enemy_module_die(void) {
-    if (o->enemyModuleChild) {
-        o->enemyModuleChild->enemyModuleParent = NULL;
-    }
-    o->enemyModuleParent = NULL;
-    o->enemyModuleChild = NULL;
-}
-
-void enemy_module_set_position(Vec3f pos) {
-    vec3f_copy(o->enemyModulePosition,pos);
-}
-
-void enemy_module_use_position(void) {
-    if (o->enemyModuleParent) {
-        vec3f_copy(&o->oPosVec,o->enemyModuleParent->enemyModulePosition);
-        vec3f_copy(&o->oHomeVec,o->enemyModuleParent->enemyModulePosition);
-    }
 }
 
 void mtxf_object_gfx(Mat4 dest, struct Object * obj) {

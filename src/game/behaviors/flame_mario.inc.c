@@ -19,7 +19,9 @@ void bhv_black_smoke_bowser_loop(void) {
 
 void bhv_black_smoke_mario_loop(void) {
     if (o->oTimer == 0) {
-        cur_obj_set_pos_relative(gMarioObject, 0, 0, -30.0f);
+        if (o->parentObj == gMarioObject) {
+            cur_obj_set_pos_relative(gMarioObject, 0, 0, -30.0f);
+        }
         o->oForwardVel = random_float() * 2 + 0.5f;
         o->oMoveAngleYaw = (gMarioObject->oMoveAngleYaw + 0x7000) + random_float() * 8192.0f;
         o->oVelY = 8.0f;

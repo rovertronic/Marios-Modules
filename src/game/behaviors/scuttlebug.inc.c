@@ -24,10 +24,16 @@ s32 update_angle_from_move_flags(s32 *angle) {
 }
 
 void bhv_scuttlebug_loop(void) {
-    if (o->oAction == 0 && o->oBehParams2ndByte == 1) {
+    if (o->oAction == 0) {
         o->oAction++;
-        struct Object * snufit = spawn_object(o,MODEL_SNUFIT,bhvSnufit);
-        enemy_module_use(snufit);
+        obj_element_init(o,ELEMENT_NORMAL,70.0f);
+        if (o->oBehParams2ndByte == 1) {
+            o->prevObj = spawn_object(o,MODEL_SNUFIT,bhvSnufit);
+        }
+    } else if (o->oAction == 1) {
+        if (o->oBehParams2ndByte == 1) {
+            enemy_module_use(o,o->prevObj);
+        }
     }
 
     cur_obj_update_floor_and_walls();
@@ -136,6 +142,8 @@ void bhv_scuttlebug_loop(void) {
     }
 
     cur_obj_move_standard(-50);
+    obj_element_enemy_loop();
+
     Vec3f modulePos = {o->oPosX,o->oPosY+140.0f,o->oPosZ};
     enemy_module_set_position(modulePos);
 }

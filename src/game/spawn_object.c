@@ -91,6 +91,8 @@ void clear_object_lists(struct ObjectNode *objLists) {
  * Free the given object.
  */
 void unload_object(struct Object *obj) {
+    object_clear_element_and_stacking(obj);
+
     obj->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     obj->prevObj = NULL;
     obj->oFloor = NULL;

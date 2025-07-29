@@ -160,7 +160,7 @@ void bhv_snufit_loop(void) {
             o->oSnufitScale = 1.0f;
         }
 
-        enemy_module_use_position();
+        obj_element_enemy_loop();
         Vec3f modulePos = {o->oPosX,o->oPosY+140.0f,o->oPosZ};
         enemy_module_set_position(modulePos);
 
@@ -207,4 +207,8 @@ void bhv_snufit_balls_loop(void) {
     } else {
         cur_obj_move_using_fvel_and_gravity();
     }
+}
+
+void bhv_snufit_init(void) {
+    obj_element_init(o,ELEMENT_NORMAL,50.0f);
 }

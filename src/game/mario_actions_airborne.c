@@ -663,7 +663,7 @@ s32 act_twirling(struct MarioState *m) {
     s16 startTwirlYaw = m->twirlYaw;
     s16 yawVelTarget;
 
-    struct ElementHitbox * element = obj_check_lateral_element_collision(ELEMENT_FLAME);
+    struct ElementHitbox * element = obj_check_element_collision(ELEMENT_FLAME,1);
     if (element && m->pos[1] > element->object->oPosY) {
         f32 x = (m->pos[1] - element->object->oPosY);
         if (x < 700.0f) {

@@ -882,7 +882,6 @@ void bhv_chest(void) {
     }
 
     obj_element_enemy_loop();
-    enemy_module_use_position();
 }
 
 void bhv_hover(void) {

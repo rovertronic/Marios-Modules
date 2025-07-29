@@ -279,11 +279,6 @@ void mtxf_object_noscale(Mat4 dest, struct Object * obj);
 
 void cur_obj_spawn_star_at_y_offset(f32 targetX, f32 targetY, f32 targetZ, f32 offsetY);
 
-void enemy_module_use(struct Object * enemy);
-void enemy_module_die(void);
-void enemy_module_set_position(Vec3f pos);
-void enemy_module_use_position(void);
-
 #include "elemental_interaction.inc.h"
 
 #endif // OBJECT_HELPERS_H

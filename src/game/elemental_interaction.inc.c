@@ -1,5 +1,7 @@
 struct ElementHitbox sElementHitboxArray[100];
 
+// Elemental Interaction System
+
 void bhv_init_element_flame(void) {
     obj_element_init(o,ELEMENT_FLAME,100.0f);
 }
@@ -19,7 +21,7 @@ void obj_element_init(struct Object * obj, u8 element, f32 radius) {
     }
 }
 
-struct ElementHitbox * obj_check_element_collision(u8 element) {
+struct ElementHitbox * obj_check_element_collision(u8 element, u8 lateral) {
     if (o->element == NULL) {return NULL;} // Object not part of element system
     if (o->element->element == element) {return NULL;} // Cannot collide with own members
     if (o->element->afflict & element) {return NULL;} // Cannot collide if afflicted with this element
@@ -35,32 +37,10 @@ struct ElementHitbox * obj_check_element_collision(u8 element) {
         Vec3f pos1; vec3f_copy(pos1, &o->oPosVec);
         Vec3f pos2; vec3f_copy(pos2, &sElementHitboxArray[i].object->oPosVec);
 
-        f32 distSqr = (sqr(pos1[0] - pos2[0])) + (sqr(pos1[2] - pos2[2])) + (sqr(pos1[1] - pos2[1]));
-        f32 touchThresh = sqr(o->element->radius + sElementHitboxArray[i].object->element->radius);
-
-        if (distSqr < touchThresh) {
-            return &sElementHitboxArray[i];
-        }
-    }
-    return NULL;
-}
-
-struct ElementHitbox * obj_check_lateral_element_collision(u8 element) {
-    if (o->element == NULL) {return NULL;} // Object not part of element system
-    if (o->element->element == element) {return NULL;} // Cannot collide with own members
-
-    for (int i = 0; i < 100; i++) {
-        if (sElementHitboxArray[i].initialized == FALSE) {continue;} // Don't collide with uninitialized
-        if (sElementHitboxArray[i].element != element) {continue;} // Don't collide if element doesn't match
-        if ((o->element->element & element)) {continue;} // Don't collide with own members
-        //if (!((sElementHitboxArray[i].afflict & element))) {continue;} // Don't collide with afflicted with own element
-        if (o->element == &sElementHitboxArray[i]) {continue;} // Don't collide with self
-
-
-        Vec3f pos1; vec3f_copy(pos1, &o->oPosVec);
-        Vec3f pos2; vec3f_copy(pos2, &sElementHitboxArray[i].object->oPosVec);
-
         f32 distSqr = (sqr(pos1[0] - pos2[0])) + (sqr(pos1[2] - pos2[2]));
+        if (!lateral) {
+            distSqr += (sqr(pos1[1] - pos2[1]));
+        }
         f32 touchThresh = sqr(o->element->radius + sElementHitboxArray[i].object->element->radius);
 
         if (distSqr < touchThresh) {
@@ -72,33 +52,51 @@ struct ElementHitbox * obj_check_lateral_element_collision(u8 element) {
 
 void obj_element_enemy_loop(void) {
     // Check collisions
-    if (obj_check_element_collision(ELEMENT_FLAME)) {
+    if (obj_check_element_collision(ELEMENT_FLAME,0)) {
         o->element->afflict |= ELEMENT_FLAME;
     }
 
-    struct ElementHitbox * iceTouch = obj_check_element_collision(ELEMENT_ICE);
-    if (iceTouch && iceTouch->object->enemyModuleChild == NULL) {
-        o->element->afflict |= ELEMENT_ICE;
-        o->enemyModuleParent = iceTouch->object;
-        iceTouch->object->enemyModuleChild = o;
-        iceTouch->radius = o->element->radius;
+    struct ElementHitbox * iceTouch = obj_check_element_collision(ELEMENT_ICE,0);
+    if (iceTouch && iceTouch->object->element->objectStackAbove == NULL) {
+        if ((o->element->objectStackBelow)&&(!obj_has_behavior(o->element->objectStackBelow,bhvIceProjectile))) {
+
+        } else {
+            o->element->afflict |= ELEMENT_ICE;
+            iceTouch->radius = o->element->radius;
+
+            Mat4 neutral;
+            struct Object * iceCube = summon_element_projectile(ELEMENT_ICE,&o->oPosVec,neutral);
+            enemy_module_use(iceCube,o);
+        }
     }
 
     // Inflictions
     if (o->element->afflict & ELEMENT_FLAME) {
-        spawn_object(o, MODEL_RED_FLAME, bhvKoopaShellFlame);
+        struct Object * particle = spawn_object(o, MODEL_RED_FLAME, bhvKoopaShellFlame);
+        //particle = 
+
+        if (o->oTimer % 10 == 0) {
+            spawn_object(o, MODEL_BURN_SMOKE, bhvBlackSmokeMario);
+        } 
         o->element->element = ELEMENT_FLAME;
         o->oInteractType = INTERACT_FLAME;
         //o->oAction = OBJ_ACT_SQUISHED;
     }
+
+    if (o->element->afflict & ELEMENT_ICE) {
+        //if (!obj_has_behavior(o->element->objectStackBelow,bhvIceProjectile)) {
+            //o->element->afflict &= ~ELEMENT_ICE;
+        //}
+    }
+
+    enemy_module_use_position();
 }
 
 struct WallCollisionData sParticleHitbox;
 
 s16 element_projectile_step(void) {
-    f32 scale = o->oTimer/10.0f;
-    scale = MIN(o->element->radius/50.0f,scale);
-    cur_obj_scale(o->element->radius/50.0f);
+    o->header.gfx.scale[1] = approach_f32_asymptotic(o->header.gfx.scale[1],o->element->radius/50.0f,.1f);
+    cur_obj_scale(o->header.gfx.scale[1]);
 
     o->oGravity = 2.5f;
     o->oFriction = 0;//0.99f;
@@ -117,7 +115,7 @@ s16 element_projectile_step(void) {
     sParticleHitbox.y = o->oPosY;
     sParticleHitbox.z = o->oPosZ;
     sParticleHitbox.offsetY = 25.0f;
-    sParticleHitbox.radius = 50.0f;
+    sParticleHitbox.radius = o->element->radius;
 
     find_wall_collisions(&sParticleHitbox);
 
@@ -152,6 +150,8 @@ s16 element_projectile_step(void) {
             }
         }
     }
+
+    enemy_module_use_position();
 }
 
 void bhv_flame_projectile(void) {
@@ -170,7 +170,7 @@ void bhv_ice_projectile(void) {
     enemy_module_set_position(&o->oPosVec);
 }
 
-void summon_element_projectile(s8 element, Vec3f origin, Mat4 projectileTransform) {
+struct Object * summon_element_projectile(s8 element, Vec3f origin, Mat4 projectileTransform) {
     if (element != ELEMENT_NORMAL) {
         u16 model;
         BehaviorScript beh;
@@ -193,6 +193,53 @@ void summon_element_projectile(s8 element, Vec3f origin, Mat4 projectileTransfor
         //projectile->oVelZ = coss(o->oFaceAngleYaw) * 15.0f;
 
         vec3f_copy(&projectile->oPosVec,origin);
-    }
 
-} 
+        return projectile;
+    }
+    return NULL;
+}
+
+// ENEMY STACKING SYSTEM
+
+void enemy_module_use(struct Object * user, struct Object * used) {
+    if (!(user->element && used->element)) {return;}
+
+    //if (used->element->objectStackBelow) {
+    //    used->element->objectStackBelow->element->objectStackAbove = NULL;
+    //}
+    //if (used->element->objectStackAbove) {
+    //    used->element->objectStackAbove->element->objectStackBelow = user;
+    //}
+
+    user->element->objectStackAbove = used;
+    used->element->objectStackBelow = user;
+}
+
+void enemy_module_set_position(Vec3f pos) {
+    if (!o->element) {return;}
+    vec3f_copy(o->element->enemyModulePosition,pos);
+}
+
+void enemy_module_use_position(void) {
+    if (!(o->element && o->element->objectStackBelow)) {return;}
+    vec3f_copy(&o->oPosVec,o->element->objectStackBelow->element->enemyModulePosition);
+    vec3f_copy(&o->oHomeVec,o->element->objectStackBelow->element->enemyModulePosition);
+    o->oVelY = 0.0f;
+}
+
+// Shared Functionality
+
+void object_clear_element_and_stacking(struct Object * obj) {
+    if (!obj->element) {return;}
+
+    obj->element->initialized = FALSE;
+
+    if (obj->element->objectStackBelow) {
+        obj->element->objectStackBelow->element->objectStackAbove = NULL;
+    }
+    if (obj->element->objectStackAbove) {
+        obj->element->objectStackAbove->element->objectStackBelow = NULL;
+    }
+    obj->element->objectStackBelow = NULL;
+    obj->element->objectStackAbove = NULL;
+}
