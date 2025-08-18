@@ -926,7 +926,7 @@ void geo_set_animation_globals(struct AnimInfo *node, s32 hasAnimation, struct O
         anim = gMarioState->animList[ANIM_LIST_GFX]->bufTarget;
     }
 
-    if (obj->element && (obj->element->afflict & ELEMENT_ICE)) {
+    if (gRenderPass == 0 && obj->element && (obj->element->afflict & ELEMENT_ICE)) {
         hasAnimation = FALSE;
     }
 
@@ -968,66 +968,66 @@ void geo_set_animation_globals(struct AnimInfo *node, s32 hasAnimation, struct O
  * the floor below it.
  */
 void geo_process_shadow(struct GraphNodeShadow *node) {
-#ifndef DISABLE_SHADOWS
-    if (gCurGraphNodeCamera != NULL && gCurGraphNodeObject != NULL) {
-        Vec3f shadowPos;
-        f32 shadowScale;
+    if (gRenderPass == 0) {
+        if (gCurGraphNodeCamera != NULL && gCurGraphNodeObject != NULL) {
+            Vec3f shadowPos;
+            f32 shadowScale;
 
-        if (gCurGraphNodeHeldObject != NULL) {
-            vec3f_copy(shadowPos, gMatStack[gMatStackIndex][3]);
-            shadowScale = node->shadowScale * gCurGraphNodeHeldObject->objNode->header.gfx.scale[0];
-        } else {
-            vec3f_copy(shadowPos, gCurGraphNodeObject->posLerp);
-            shadowScale = node->shadowScale * gCurGraphNodeObject->scale[0];
-        }
-
-        s8 shifted = (gCurrAnimEnabled
-                      && (gCurrAnimType == ANIM_TYPE_TRANSLATION
-                       || gCurrAnimType == ANIM_TYPE_LATERAL_TRANSLATION)
-        );
-
-        if (shifted) {
-            struct GraphNode *geo = node->node.children;
-            f32 objScale = 1.0f;
-            if (geo != NULL && geo->type == GRAPH_NODE_TYPE_SCALE) {
-                objScale = ((struct GraphNodeScale *) geo)->scaleLerp;
+            if (gCurGraphNodeHeldObject != NULL) {
+                vec3f_copy(shadowPos, gMatStack[gMatStackIndex][3]);
+                shadowScale = node->shadowScale * gCurGraphNodeHeldObject->objNode->header.gfx.scale[0];
+            } else {
+                vec3f_copy(shadowPos, gCurGraphNodeObject->posLerp);
+                shadowScale = node->shadowScale * gCurGraphNodeObject->scale[0];
             }
 
-            f32 animScale = gCurrAnimTranslationMultiplier * objScale;
-            Vec3f animOffset;
-            animOffset[0] = gCurrAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * animScale;
-            animOffset[1] = 0.0f;
-            gCurrAnimAttribute += 2;
-            animOffset[2] = gCurrAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * animScale;
-            gCurrAnimAttribute -= 6;
-
-            // simple matrix rotation so the shadow offset rotates along with the object
-            f32 sinAng = sins(gCurGraphNodeObject->angle[1]);
-            f32 cosAng = coss(gCurGraphNodeObject->angle[1]);
-
-            shadowPos[0] += animOffset[0] * cosAng + animOffset[2] * sinAng;
-            shadowPos[2] += -animOffset[0] * sinAng + animOffset[2] * cosAng;
-        }
-
-        u32 mask = __osDisableInt();
-        Gfx *shadowList = create_shadow_below_xyz(shadowPos, shadowScale * 0.5f,
-                                                  node->shadowSolidity, node->shadowType, shifted);
-
-        if (shadowList != NULL) {
-            mtxf_shadow(gMatStack[gMatStackIndex + 1],
-                gCurrShadow.floorNormal, shadowPos, gCurrShadow.scale, gCurGraphNodeObject->angle[1]);
-
-            inc_mat_stack();
-            geo_append_display_list(
-                (void *) VIRTUAL_TO_PHYSICAL(shadowList),
-                gCurrShadow.isDecal ? LAYER_TRANSPARENT_DECAL : LAYER_TRANSPARENT
+            s8 shifted = (gCurrAnimEnabled
+                        && (gCurrAnimType == ANIM_TYPE_TRANSLATION
+                        || gCurrAnimType == ANIM_TYPE_LATERAL_TRANSLATION)
             );
 
-            gMatStackIndex--;
+            if (shifted) {
+                struct GraphNode *geo = node->node.children;
+                f32 objScale = 1.0f;
+                if (geo != NULL && geo->type == GRAPH_NODE_TYPE_SCALE) {
+                    objScale = ((struct GraphNodeScale *) geo)->scaleLerp;
+                }
+
+                f32 animScale = gCurrAnimTranslationMultiplier * objScale;
+                Vec3f animOffset;
+                animOffset[0] = gCurrAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * animScale;
+                animOffset[1] = 0.0f;
+                gCurrAnimAttribute += 2;
+                animOffset[2] = gCurrAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * animScale;
+                gCurrAnimAttribute -= 6;
+
+                // simple matrix rotation so the shadow offset rotates along with the object
+                f32 sinAng = sins(gCurGraphNodeObject->angle[1]);
+                f32 cosAng = coss(gCurGraphNodeObject->angle[1]);
+
+                shadowPos[0] += animOffset[0] * cosAng + animOffset[2] * sinAng;
+                shadowPos[2] += -animOffset[0] * sinAng + animOffset[2] * cosAng;
+            }
+
+            u32 mask = __osDisableInt();
+            Gfx *shadowList = create_shadow_below_xyz(shadowPos, shadowScale * 0.5f,
+                                                    node->shadowSolidity, node->shadowType, shifted);
+
+            if (shadowList != NULL) {
+                mtxf_shadow(gMatStack[gMatStackIndex + 1],
+                    gCurrShadow.floorNormal, shadowPos, gCurrShadow.scale, gCurGraphNodeObject->angle[1]);
+
+                inc_mat_stack();
+                geo_append_display_list(
+                    (void *) VIRTUAL_TO_PHYSICAL(shadowList),
+                    gCurrShadow.isDecal ? LAYER_TRANSPARENT_DECAL : LAYER_TRANSPARENT
+                );
+
+                gMatStackIndex--;
+            }
+            __osRestoreInt(mask);
         }
-        __osRestoreInt(mask);
     }
-#endif
     if (node->node.children != NULL) {
         geo_process_node_and_siblings(node->node.children);
     }

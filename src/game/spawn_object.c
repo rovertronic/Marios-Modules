@@ -190,6 +190,8 @@ struct Object *allocate_object(struct ObjectNode *objList) {
     obj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
     vec3_same(obj->header.gfx.pos, -10000.0f);
 
+    obj->element = NULL;
+
     return obj;
 }
 

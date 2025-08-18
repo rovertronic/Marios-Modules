@@ -661,7 +661,6 @@ Gfx *geo_mario_gate_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat
 }
 
 Gfx *geo_render_preview_mario(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
-    return NULL;
     f32 mirroredX;
     struct Object *mario = gMarioStates[0].marioObj;
 
@@ -688,7 +687,7 @@ Gfx *geo_render_preview_mario(s32 callContext, struct GraphNode *node, UNUSED Ma
                 gPreviewMario.animInfo = mario->header.gfx.animInfo;
                 ((struct GraphNode *) &gPreviewMario)->flags |= GRAPH_RENDER_ACTIVE;
             } else {
-                //((struct GraphNode *) &gMirrorMario)->flags &= ~GRAPH_RENDER_ACTIVE;
+                ((struct GraphNode *) &gMirrorMario)->flags &= ~GRAPH_RENDER_ACTIVE;
                 geo_remove_child(&gPreviewMario.node);
             }
             break;
