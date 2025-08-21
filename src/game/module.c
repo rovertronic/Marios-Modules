@@ -477,6 +477,10 @@ char * module_is_invalid(int x, int y) {
         return "@R@Module not chainable";
     }
 
+    if (get_inventory(x-1,y) == MOD_GRAV && mod == MOD_FLIP_VEL) {
+        return "@R@Negative 0 is still 0.";
+    }
+
     return NULL;
 }
 
