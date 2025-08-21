@@ -291,6 +291,43 @@ void module_flip(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+void module_if(struct module_execution_thread * met, u8 call_context) {
+    if (met->ifbool) {
+        met->x++;
+        met->ifbool = FALSE;
+    } else {
+        u8 revertX = met->x+1;
+        while(get_inventory(met->x,met->y) != MOD_ENDBLOCK) {
+            met->x++;
+            if (met->x >= INVENTORY_SLOTS_X) {
+                met->x = revertX;
+                break;
+            }
+        }
+    }
+}
+
+void module_if_floor(struct module_execution_thread * met, u8 call_context) {
+    if (GROUNDED) {
+        met->ifbool = TRUE;
+    } else {
+        met->ifbool = FALSE;
+    }
+    met->x++;
+}
+
+void module_if_down(struct module_execution_thread * met, u8 call_context) {
+    if (gMarioState->vel[1] < 0.0f) {
+        met->ifbool = TRUE;
+    } else {
+        met->ifbool = FALSE;
+    }
+    met->x++;
+}
+
+void module_stop(struct module_execution_thread * met, u8 call_context) {
+    met->x = INVENTORY_SLOTS_X; // OOB = MOD_EMPTY
+}
 
 Vec3f moduleRed = {1.0f,0.0f,0.0f};
 Vec3f moduleBlue = {0.0f,0.0f,1.0f};
@@ -704,15 +741,15 @@ struct module_info module_infos[] = {
         .type = MTYPE_LOGIC,
         .tex = micons_stop_rgba16,
         .desc = "Stops the sequence prematurely.",
-        .func = NULL,
+        .func = module_stop,
         .creative = TRUE,
     },
     [MOD_IF] = {
-        .name = "If",
+        .name = "Start If Block",
         .type = MTYPE_LOGIC,
         .tex = micons_if_rgba16,
-        .desc = "Executes block if previous condition is met.",
-        .func = NULL,
+        .desc = "Executes block if @G@condition@@ is @B@TRUE@@.",
+        .func = module_if,
         .creative = TRUE,
     },
     [MOD_ENDBLOCK] = {
@@ -721,6 +758,22 @@ struct module_info module_infos[] = {
         .tex = micons_endblock_rgba16,
         .desc = "Marks end of a block.",
         .func = NULL,
+        .creative = TRUE,
+    },
+    [MOD_IF_FLOOR] = {
+        .name = "If Grounded",
+        .type = MTYPE_LOGIC,
+        .tex = micons_ground_rgba16,
+        .desc = "Sets @G@condition@@ to @B@TRUE@@ if Mario is touching floor.",
+        .func = module_if_floor,
+        .creative = TRUE,
+    },
+    [MOD_IF_DOWN] = {
+        .name = "If Falling",
+        .type = MTYPE_LOGIC,
+        .tex = micons_grav_rgba16,
+        .desc = "Sets @G@condition@@ to @B@TRUE@@ if Mario is falling.",
+        .func = module_if_down,
         .creative = TRUE,
     },
 };
@@ -755,6 +808,12 @@ struct module_panel module_panel_info[] = {
         .size = 5,
         .unlock = NULL,
     },
+    [PANEL_PASSIVE] = {
+        .name = "@Y@Passive",
+        .offset = 5,
+        .size = 5,
+        .unlock = NULL,
+    },
     [PANEL_VANITY] = {
         .name = "@P@Vanity",
         .offset = 44,
@@ -777,12 +836,19 @@ struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
     [3] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [4] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 
-    // Storage
-    [5] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    [6] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+     // Actions
+    [5] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_A, .whitelist_flags = WHITELIST_ACTION, .wrap = 1},
+    [6] = {.type = ROW_SOCKET, .icon = MOD_WRAP, .whitelist_flags = WHITELIST_ACTION},
     [7] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [8] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [9] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+
+    // Storage
+    //[5] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    //[6] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    //[7] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    //[8] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    //[9] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 
     // Creative
     [39] = {.type = ROW_STORAGE, .mod_type_prio = -1},

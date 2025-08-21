@@ -22,6 +22,7 @@ struct module_panel {
 enum {
     PANEL_SETTINGS,
     PANEL_ACTIONS,
+    PANEL_PASSIVE,
     PANEL_VANITY,
     PANEL_CREATIVE,
     INVENTORY_PANEL_CT,
@@ -39,9 +40,11 @@ struct module_execution_thread {
     u8 halted:1;
     u8 cooldown:1;
     u8 input_notify:1;
-    u8 jump_tier:2;
     u8 manual:1;
     u8 mario_ground_listener:1;
+    u8 jump_tier:2;
+
+    u8 ifbool:1;
 
     u8 landing_count;
 
@@ -55,8 +58,8 @@ enum module_execution_ids {
     MODULE_EXEC_A,
     MODULE_EXEC_B,
     MODULE_EXEC_VANITY,
-    MODULE_EXEC_VANITY_2,
     MODULE_EXEC_SETTINGS,
+    MODULE_EXEC_PASSIVE,
     MODULE_EXEC_COUNT,
 };
 
@@ -146,6 +149,8 @@ enum module_id {
     MOD_FLIP_VEL,
     MOD_ZACTION,
     MOD_GROUND_UPG,
+    MOD_IF_FLOOR,
+    MOD_IF_DOWN,
     MOD_COUNT,
 };
 
@@ -194,6 +199,8 @@ struct mariosModulesSave {
 };
 
 Gfx *geo_module_material(s32 callContext, struct GraphNode *node, void *context);
+
+s8 get_inventory(int x, int y);
 
 void add_inventory(s8 module);
 void display_module_message(s8 id);

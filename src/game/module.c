@@ -147,7 +147,12 @@ void module_update(void) {
                 while(read_mod != MOD_EMPTY) {
                     if (1 << module_infos[read_mod].type & inventory_row_info[met->y].whitelist_flags) {
                         met->extra_data = module_infos[read_mod].extra_data;
-                        module_infos[read_mod].func(met,MCC_INVOKE);
+                        if (module_infos[read_mod].func != NULL) {
+                            module_infos[read_mod].func(met,MCC_INVOKE);
+                        } else {
+                            // No function = passthrough
+                            met->x++;
+                        }
                         met->cooltime += module_infos[read_mod].cooldown*30.0f;
                         met->cooltime = MAX(met->cooltime,1);
 
@@ -211,6 +216,7 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
         met->element = ELEMENT_NORMAL;
         met->landing_count = 0;
         met->mario_ground_listener = TRUE;
+        met->ifbool = FALSE;
         colorBlendCount = 0;
 
         if (manual) {
@@ -227,6 +233,7 @@ s32 handle_module_inputs(void) {
         if (gPlayer1Controller->buttonPressed & B_BUTTON) {
             execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_B],B_BUTTON,0,1,TRUE);
         }
+        execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_PASSIVE],Z_TRIG,0,5,FALSE);
     }
     return FALSE;
 }
