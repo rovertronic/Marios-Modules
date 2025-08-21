@@ -128,6 +128,11 @@ void module_update(void) {
                 }
                 met->executing = FALSE;
                 met->cooldown = FALSE;
+
+                if (gModuleUpdateVanity && i != MODULE_EXEC_VANITY) {
+                    gModuleUpdateVanity = FALSE;
+                    update_vanity();
+                }
             }
             if (
                 (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING))
@@ -144,7 +149,7 @@ void module_update(void) {
                         met->extra_data = module_infos[read_mod].extra_data;
                         module_infos[read_mod].func(met,MCC_INVOKE);
                         met->cooltime += module_infos[read_mod].cooldown*30.0f;
-                        met->cooltime = MIN(met->cooltime,1);
+                        met->cooltime = MAX(met->cooltime,1);
 
                         if (inventory_row_info[met->y].wrap && met->x == 8) {
                             met->x = 0;
@@ -167,12 +172,18 @@ void module_update(void) {
                     met->executing = FALSE;
                 }
                 met->timer = 0;
-
-                if (gModuleUpdateVanity && i != MODULE_EXEC_VANITY) {
-                    gModuleUpdateVanity = FALSE;
-                    update_vanity();
-                }
             } else {
+                if (!met->mario_ground_listener) {
+                    if (GROUNDED) {
+                        met->mario_ground_listener = TRUE;
+                        met->landing_count ++;
+                    }
+                } else {
+                    if (!GROUNDED) {
+                        met->mario_ground_listener = FALSE;
+                    }
+                }
+
                 module_infos[read_mod].func(met,MCC_HALTED);
                 met->timer++;
             }
@@ -198,6 +209,8 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
         met->manual = manual;
         met->cooltime = 1;
         met->element = ELEMENT_NORMAL;
+        met->landing_count = 0;
+        met->mario_ground_listener = TRUE;
         colorBlendCount = 0;
 
         if (manual) {

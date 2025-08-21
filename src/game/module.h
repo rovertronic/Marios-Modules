@@ -41,6 +41,9 @@ struct module_execution_thread {
     u8 input_notify:1;
     u8 jump_tier:2;
     u8 manual:1;
+    u8 mario_ground_listener:1;
+
+    u8 landing_count;
 
     u16 used_flags;
     u16 timer;
@@ -140,6 +143,9 @@ enum module_id {
     MOD_STOP,
     MOD_IF,
     MOD_ENDBLOCK,
+    MOD_FLIP_VEL,
+    MOD_ZACTION,
+    MOD_GROUND_UPG,
     MOD_COUNT,
 };
 

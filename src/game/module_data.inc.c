@@ -47,6 +47,16 @@ void module_attack(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+void module_zaction(struct module_execution_thread * met, u8 call_context) {
+    if (GROUNDED) {
+        set_mario_action(gMarioState,ACT_LONG_JUMP,0);
+    } else {
+        set_mario_action(gMarioState,ACT_GROUND_POUND,0);
+    }
+    met->x++;
+}
+
+
 void module_pow(struct module_execution_thread * met, u8 call_context) {
     met->mod++;
     met->x++;
@@ -79,6 +89,11 @@ void module_floor(struct module_execution_thread * met, u8 call_context) {
             }
             break;
     }
+}
+
+void module_floor_upg(struct module_execution_thread * met, u8 call_context) {
+    met->x++;
+    met->mod+=met->landing_count;
 }
 
 void module_wall(struct module_execution_thread * met, u8 call_context) {
@@ -271,6 +286,12 @@ void module_woman(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+void module_flip(struct module_execution_thread * met, u8 call_context) {
+    gMarioState->vel[1] = -gMarioState->vel[1];
+    met->x++;
+}
+
+
 Vec3f moduleRed = {1.0f,0.0f,0.0f};
 Vec3f moduleBlue = {0.0f,0.0f,1.0f};
 Vec3f moduleGreen = {0.0f,1.0f,0.0f};
@@ -323,7 +344,7 @@ struct module_info module_infos[] = {
         .name = "Jump",
         .type = MTYPE_MOVE,
         .tex = micons_jump_rgba16,
-        .desc = "Makes Mario attempt to jump.",
+        .desc = "Makes Mario jump if possible.",
         .upg_desc = "Jump Tier increases per @O@UPG@@.",
         .unchainable = TRUE,
         .elementable = TRUE,
@@ -346,7 +367,7 @@ struct module_info module_infos[] = {
         .name = "Attack",
         .type = MTYPE_MOVE,
         .tex = micons_pow_rgba16,
-        .desc = "Makes Mario attempt to attack.",
+        .desc = "Makes Mario punch, kick, or dive, if possible.",
         .unchainable = TRUE,
         .func = module_attack,
         .elementable = TRUE,
@@ -398,9 +419,29 @@ struct module_info module_infos[] = {
         .desc = "Launches a grapple hook. Must hit wood.",
     },
 
+    [MOD_FLIP_VEL] = {
+        .name = "Velocity Flip",
+        .type = MTYPE_MOVE,
+        .tex = micons_grav_rgba16,
+        .desc = "Inverts Mario's Y velocity.",
+        .unchainable = TRUE,
+        .func = module_flip,
+        .creative = TRUE,
+    },
+
+    [MOD_ZACTION] = {
+        .name = "Crouch Move",
+        .type = MTYPE_MOVE,
+        .tex = micons_ground_rgba16,
+        .desc = "Ground pound in air, long jump on floor.",
+        .unchainable = TRUE,
+        .func = module_zaction,
+        .creative = TRUE,
+    },
+
     // Modifiers
     [MOD_POW] = {
-        .name = "UPG",
+        .name = "+1 Upgrade",
         .type = MTYPE_BUFF,
         .tex = micons_onepow_rgba16,
         .desc = "+1@O@UPG@@ to the next piece.",
@@ -408,6 +449,17 @@ struct module_info module_infos[] = {
         .func = module_pow,
         .creative = TRUE,
     },
+
+    [MOD_GROUND_UPG] = {
+        .name = "Ground Upgrade",
+        .type = MTYPE_BUFF,
+        .tex = micons_ground_rgba16,
+        .desc = "@O@UPG@@+ times landed during sequence.",
+        .unchainable = TRUE,
+        .func = module_floor_upg,
+        .creative = TRUE,
+    },
+
 
     [MOD_REPEAT] = {
         .name = "Repeat",
@@ -438,16 +490,6 @@ struct module_info module_infos[] = {
     },
 
     // Conditions
-    [MOD_HIT_GROUND] = {
-        .name = "Ground",
-        .type = MTYPE_COND,
-        .tex = micons_ground_rgba16,
-        .desc = "Continues when Mario touches the ground.",
-        .unchainable = TRUE,
-        .func = module_floor,
-        .creative = TRUE,
-    },
-
     [MOD_HIT_WALL] = {
         .name = "Wall",
         .type = MTYPE_COND,
@@ -465,6 +507,16 @@ struct module_info module_infos[] = {
         .desc = "Continues when Mario has downward velocity.",
         .unchainable = TRUE,
         .func = module_grav,
+        .creative = TRUE,
+    },
+
+    [MOD_HIT_GROUND] = {
+        .name = "Ground",
+        .type = MTYPE_COND,
+        .tex = micons_ground_rgba16,
+        .desc = "Continues when Mario touches the ground.",
+        .unchainable = TRUE,
+        .func = module_floor,
         .creative = TRUE,
     },
 

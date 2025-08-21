@@ -40,7 +40,7 @@ const LevelScript level_temple_entry[] = {
 		WARP_NODE(0xF1, LEVEL_TEMPLE, 0x01, 0x01, WARP_NO_CHECKPOINT),
 		MARIO_POS(0x01, 0, 0, 674, 10746),
 		OBJECT(MODEL_CHEST, 4520, 199, 10551, 0, -180, 0, (MOD_JUMP << 16), bhvChest),
-		OBJECT(MODEL_CHEST, -900, 279, 3878, 0, 90, 0, (MOD_HIT_GROUND << 16), bhvChest),
+		OBJECT(MODEL_CHEST, -900, 279, 3878, 0, 90, 0, (MOD_POW << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -100, 279, 3878, 0, -90, 0, (5 << 24) | (MOD_JUMP << 16), bhvChest),
 		OBJECT(MODEL_CHEST, 105, 1080, 5463, 0, -90, 0, (MOD_POW << 16), bhvChest),
 		OBJECT(MODEL_CHEST, 3910, 419, 12311, 0, -90, 0, (MOD_ATTACK << 16), bhvChest),

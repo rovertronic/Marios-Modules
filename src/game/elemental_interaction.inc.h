@@ -21,6 +21,7 @@ struct ElementHitbox {
 void obj_element_init(struct Object * obj, u8 element, f32 radius);
 struct ElementHitbox * obj_check_element_collision(u8 element, u8 lateral);
 struct Object * summon_element_projectile(s8 element, Vec3f origin, Mat4 projectileTransform);
+void obj_element_enemy_loop(void);
 
 // Object Stacking System
 

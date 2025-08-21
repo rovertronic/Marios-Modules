@@ -28,11 +28,11 @@ void bhv_scuttlebug_loop(void) {
         o->oAction++;
         obj_element_init(o,ELEMENT_NORMAL,70.0f);
         if (o->oBehParams2ndByte == 1) {
-            o->prevObj = spawn_object(o,MODEL_SNUFIT,bhvSnufit);
+            //o->prevObj = spawn_object(o,MODEL_SNUFIT,bhvSnufit);
         }
     } else if (o->oAction == 1) {
         if (o->oBehParams2ndByte == 1) {
-            enemy_module_use(o,o->prevObj);
+            //enemy_module_use(o,o->prevObj);
         }
     }
 
