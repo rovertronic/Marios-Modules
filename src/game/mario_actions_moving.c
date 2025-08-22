@@ -1361,7 +1361,7 @@ void common_slide_action(struct MarioState *m, u32 endAction, u32 airAction, s32
         case GROUND_STEP_LEFT_GROUND:
             set_mario_action(m, airAction, 0);
             if (m->forwardVel < -50.0f || 50.0f < m->forwardVel) {
-                play_sound(SOUND_MARIO_HOOHOO, m->marioObj->header.gfx.cameraToObject);
+                play_sound(get_mario_sound_id(MARIO_SND_HOOHOO), m->marioObj->header.gfx.cameraToObject);
             }
             break;
 
@@ -1582,7 +1582,7 @@ s32 common_ground_knockback_action(struct MarioState *m, s32 animation, s32 chec
     }
 
     if (actionArg > 0) {
-        play_sound_if_no_flag(m, SOUND_MARIO_ATTACKED, MARIO_MARIO_SOUND_PLAYED);
+        play_sound_if_no_flag(m, get_mario_sound_id(MARIO_SND_ATTACKED), MARIO_MARIO_SOUND_PLAYED);
     } else {
         play_sound_if_no_flag(m, SOUND_MARIO_OOOF2, MARIO_MARIO_SOUND_PLAYED);
     }
@@ -1870,7 +1870,7 @@ s32 act_triple_jump_land(struct MarioState *m) {
     }
 
     if (!(m->input & INPUT_NONZERO_ANALOG)) {
-        play_sound_if_no_flag(m, SOUND_MARIO_HAHA, MARIO_MARIO_SOUND_PLAYED);
+        play_sound_if_no_flag(m, get_mario_sound_id(MARIO_SND_HAHA), MARIO_MARIO_SOUND_PLAYED);
     }
 
     common_landing_action(m, MARIO_ANIM_TRIPLE_JUMP_LAND, ACT_FREEFALL);
@@ -1887,7 +1887,7 @@ s32 act_backflip_land(struct MarioState *m) {
     }
 
     if (!(m->input & INPUT_NONZERO_ANALOG)) {
-        play_sound_if_no_flag(m, SOUND_MARIO_HAHA, MARIO_MARIO_SOUND_PLAYED);
+        play_sound_if_no_flag(m, get_mario_sound_id(MARIO_SND_HAHA), MARIO_MARIO_SOUND_PLAYED);
     }
 
     common_landing_action(m, MARIO_ANIM_TRIPLE_JUMP_LAND, ACT_FREEFALL);

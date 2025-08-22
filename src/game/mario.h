@@ -6,6 +6,39 @@
 #include "macros.h"
 #include "types.h"
 
+enum marioSounds {
+    MARIO_SND_YAH_WAH_HOO,
+    MARIO_SND_HOOHOO,
+    MARIO_SND_YAHOO,
+    MARIO_SND_UH,
+    MARIO_SND_HRMM,
+    MARIO_SND_WAH2,
+    MARIO_SND_WHOA,
+    MARIO_SND_EEUH,
+    MARIO_SND_ATTACKED,
+    MARIO_SND_OOOF,
+    MARIO_SND_OOOF2,
+    MARIO_SND_HERE_WE_GO,
+    MARIO_SND_YAWNING,
+    MARIO_SND_SNORING1,
+    MARIO_SND_SNORING2,
+    MARIO_SND_WAAAOOOW,
+    MARIO_SND_HAHA,
+    MARIO_SND_HAHA_WATER,
+    MARIO_SND_UH_LEDGE_CLIMB_FAST,
+    MARIO_SND_UH_LONG_JUMP_LAND,
+    MARIO_SND_ON_FIRE,
+    MARIO_SND_DYING,
+    MARIO_SND_PANTING_COLD,
+
+    MARIO_SND_YAHOO_WAHA_YIPPEE,
+};
+
+#define SOUND_NONE 0
+
+u32 get_mario_sound_id(int marioSoundEnum);
+
+
 s32 is_anim_at_end(struct MarioState *m);
 s32 is_anim_past_end(struct MarioState *m);
 s16 set_mario_animation(struct MarioState *m, s32 targetAnimID);

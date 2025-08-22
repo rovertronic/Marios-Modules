@@ -186,7 +186,7 @@ s32 act_picking_up(struct MarioState *m) {
         // to unload. This allows you to pick up a vacant or newly loaded object
         // slot (cloning via fake object).
         mario_grab_used_object(m);
-        play_sound_if_no_flag(m, SOUND_MARIO_HRMM, MARIO_MARIO_SOUND_PLAYED);
+        play_sound_if_no_flag(m, get_mario_sound_id(MARIO_SND_HRMM), MARIO_MARIO_SOUND_PLAYED);
         m->actionState = ACT_STATE_PICKING_UP_HOLDING;
     }
 
@@ -271,7 +271,7 @@ s32 act_throwing(struct MarioState *m) {
 
     if (++m->actionTimer == 7) {
         mario_throw_held_object(m);
-        play_sound_if_no_flag(m, SOUND_MARIO_WAH2, MARIO_MARIO_SOUND_PLAYED);
+        play_sound_if_no_flag(m, get_mario_sound_id(MARIO_SND_WAH2), MARIO_MARIO_SOUND_PLAYED);
         play_sound_if_no_flag(m, SOUND_ACTION_THROW, MARIO_ACTION_SOUND_PLAYED);
 #if ENABLE_RUMBLE
         queue_rumble_data(3, 50);
@@ -293,7 +293,7 @@ s32 act_heavy_throw(struct MarioState *m) {
 
     if (++m->actionTimer == 13) {
         mario_drop_held_object(m);
-        play_sound_if_no_flag(m, SOUND_MARIO_WAH2, MARIO_MARIO_SOUND_PLAYED);
+        play_sound_if_no_flag(m, get_mario_sound_id(MARIO_SND_WAH2), MARIO_MARIO_SOUND_PLAYED);
         play_sound_if_no_flag(m, SOUND_ACTION_THROW, MARIO_ACTION_SOUND_PLAYED);
 #if ENABLE_RUMBLE
         queue_rumble_data(3, 50);
@@ -330,7 +330,7 @@ s32 act_picking_up_bowser(struct MarioState *m) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
-        play_sound(SOUND_MARIO_HRMM, m->marioObj->header.gfx.cameraToObject);
+        play_sound(get_mario_sound_id(MARIO_SND_HRMM), m->marioObj->header.gfx.cameraToObject);
     }
 
     set_mario_animation(m, MARIO_ANIM_GRAB_BOWSER);
@@ -349,7 +349,7 @@ s32 act_holding_bowser(struct MarioState *m) {
         if (m->angleVel[1] <= -0xE00 || m->angleVel[1] >= 0xE00) {
             play_sound(SOUND_MARIO_SO_LONGA_BOWSER, m->marioObj->header.gfx.cameraToObject);
         } else {
-            play_sound(SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
+            play_sound(get_mario_sound_id(MARIO_SND_HERE_WE_GO), m->marioObj->header.gfx.cameraToObject);
         }
         return set_mario_action(m, ACT_RELEASING_BOWSER, 0);
     }

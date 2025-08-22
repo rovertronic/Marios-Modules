@@ -34,6 +34,47 @@
 #include "rumble_init.h"
 #include "module.h"
 
+u32 sMarioCharacterSoundTable[][2] = {
+    [MARIO_SND_YAH_WAH_HOO]          = { SOUND_MARIO_YAH_WAH_HOO,         SOUND_NONE },
+    [MARIO_SND_HOOHOO]               = { SOUND_MARIO_HOOHOO,              SOUND_NONE },
+    [MARIO_SND_YAHOO]                = { SOUND_MARIO_YAHOO,               SOUND_NONE },
+    [MARIO_SND_UH]                   = { SOUND_MARIO_UH,                  SOUND_NONE },
+    [MARIO_SND_HRMM]                 = { SOUND_MARIO_HRMM,                SOUND_NONE },
+    [MARIO_SND_WAH2]                 = { SOUND_MARIO_WAH2,                SOUND_NONE },
+    [MARIO_SND_WHOA]                 = { SOUND_MARIO_WHOA,                SOUND_NONE },
+    [MARIO_SND_EEUH]                 = { SOUND_MARIO_EEUH,                SOUND_NONE },
+    [MARIO_SND_ATTACKED]             = { SOUND_MARIO_ATTACKED,            SOUND_NONE },
+    [MARIO_SND_OOOF]                 = { SOUND_MARIO_OOOF,                SOUND_NONE },
+    [MARIO_SND_OOOF2]                = { SOUND_MARIO_OOOF2,               SOUND_NONE },
+    [MARIO_SND_HERE_WE_GO]           = { SOUND_MARIO_HERE_WE_GO,          SOUND_NONE },
+    [MARIO_SND_YAWNING]              = { SOUND_MARIO_YAWNING,             SOUND_NONE },
+    [MARIO_SND_SNORING1]             = { SOUND_MARIO_SNORING1,            SOUND_NONE },
+    [MARIO_SND_SNORING2]             = { SOUND_MARIO_SNORING2,            SOUND_NONE },
+    [MARIO_SND_WAAAOOOW]             = { SOUND_MARIO_WAAAOOOW,            SOUND_NONE },
+    [MARIO_SND_HAHA]                 = { SOUND_MARIO_HAHA,                SOUND_NONE },
+    [MARIO_SND_HAHA_WATER]           = { SOUND_MARIO_HAHA_WATER,          SOUND_NONE },
+    [MARIO_SND_UH_LEDGE_CLIMB_FAST]  = { SOUND_MARIO_UH_LEDGE_CLIMB_FAST, SOUND_NONE },
+    [MARIO_SND_UH_LONG_JUMP_LAND]    = { SOUND_MARIO_UH_LONG_JUMP_LAND,   SOUND_NONE },
+    [MARIO_SND_ON_FIRE]              = { SOUND_MARIO_ON_FIRE,             SOUND_NONE },
+    [MARIO_SND_DYING]                = { SOUND_MARIO_DYING,               SOUND_NONE },
+    [MARIO_SND_PANTING_COLD]         = { SOUND_MARIO_PANTING_COLD,        SOUND_NONE },
+    [MARIO_SND_YAHOO_WAHA_YIPPEE]    = { SOUND_MARIO_YAHOO_WAHA_YIPPEE,   SOUND_NONE },
+};
+
+u32 get_mario_sound_id(int marioSoundEnum) {
+    u8 characterId = (gMarioState->marioObj->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_WOMAN]);
+    if (characterId == 0) {
+        switch(marioSoundEnum) {
+            case MARIO_SND_YAHOO_WAHA_YIPPEE:
+                return SOUND_MARIO_YAHOO_WAHA_YIPPEE + ((gAudioRandom % 5) << 16) ;
+                break;
+            case MARIO_SND_YAH_WAH_HOO:
+                return SOUND_MARIO_YAH_WAH_HOO + ((gAudioRandom % 3) << 16);
+                break;
+        }
+    }
+    return sMarioCharacterSoundTable[marioSoundEnum][1];
+}
 
 /**************************************************
  *                    ANIMATIONS                  *
@@ -258,10 +299,10 @@ void play_sound_if_no_flag(struct MarioState *m, u32 soundBits, u32 flags) {
 void play_mario_jump_sound(struct MarioState *m) {
     if (!(m->flags & MARIO_MARIO_SOUND_PLAYED)) {
         if (m->action == ACT_TRIPLE_JUMP) {
-            play_sound(SOUND_MARIO_YAHOO_WAHA_YIPPEE + ((gAudioRandom % 5) << 16),
+            play_sound( get_mario_sound_id(MARIO_SND_YAHOO_WAHA_YIPPEE),
                        m->marioObj->header.gfx.cameraToObject);
         } else {
-            play_sound(SOUND_MARIO_YAH_WAH_HOO + ((gAudioRandom % 3) << 16),
+            play_sound(get_mario_sound_id(MARIO_SND_YAH_WAH_HOO),
                        m->marioObj->header.gfx.cameraToObject);
         }
         m->flags |= MARIO_MARIO_SOUND_PLAYED;
