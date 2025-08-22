@@ -51,7 +51,9 @@ void module_zaction(struct module_execution_thread * met, u8 call_context) {
     if (GROUNDED) {
         set_mario_action(gMarioState,ACT_LONG_JUMP,0);
     } else {
-        set_mario_action(gMarioState,ACT_GROUND_POUND,0);
+        if (gMarioState->action != ACT_GROUND_POUND) {
+            set_mario_action(gMarioState,ACT_GROUND_POUND,0);
+        }
     }
     met->x++;
 }
