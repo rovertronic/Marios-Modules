@@ -313,8 +313,23 @@ void module_if(struct module_execution_thread * met, u8 call_context) {
         met->ifbool = FALSE;
     } else {
         u8 revertX = met->x+1;
-        while(get_inventory(met->x,met->y) != MOD_ENDBLOCK) {
+        s8 curModId = get_inventory(met->x,met->y);
+        s8 stackLevel = 0;
+        while(curModId != MOD_ENDBLOCK && stackLevel == 1) {
+
+            switch(curModId) {
+                case MOD_IF:
+                    stackLevel++;
+                    break;
+                case MOD_ENDBLOCK:
+                    stackLevel--;
+                    break;
+            }
+
             met->x++;
+            curModId = get_inventory(met->x,met->y);
+
+            // Escape sequence, ie no valid endblock
             if (met->x >= INVENTORY_SLOTS_X) {
                 met->x = revertX;
                 break;
