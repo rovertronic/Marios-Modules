@@ -598,9 +598,11 @@ void print_module_menu(void) {
         if (module_infos[mod_inf_to_disp].cooldown != 0.0f) {
             sprintf(print_buffer, "%s@1@(Cooldown: %.1fs)@@ ",print_buffer,module_infos[mod_inf_to_disp].cooldown);
         }
+        /*
         if (module_infos[mod_inf_to_disp].elementable == TRUE) {
             sprintf(print_buffer, "%s@E@(Imbuable)@@ ", print_buffer);
         }
+        */
 
         gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
         gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160);
@@ -709,6 +711,8 @@ Major Changes:\n\
 * Added post-game creative mode\n\
 \n\
 New Module Additions:\n\
+* Ground Upgrade (Upgrade)\n\
+\n\
 * Red Dye (Vanity)\n\
 * Green Dye (Vanity)\n\
 * Blue Dye (Vanity)\n\
@@ -748,7 +752,8 @@ Minor Changes:\n\
 Rebalances:\n\
 * Putting jumps together no longer increases jump tier\n\
 * Cap module incurs 4 second cooldown\n\
-* Hover module changed to air platform, no longer follows Mario";
+* Hover module changed to air platform, no longer follows Mario\n\
+* Down module behavior now consistent with Wall module";
 
 struct mariosModulesSave sMariosModulesSave;
 
@@ -806,8 +811,8 @@ u32 obj_save_bin_read(void) {
     return (sMariosModulesSave.bin[o->saveBinType] & (1 << o->saveBinId));
 }
 
-void obj_save_bin_write(void) {
-    sMariosModulesSave.bin[o->saveBinType] |= (1 << o->saveBinId);
+void obj_save_bin_write(struct Object * obj) {
+    sMariosModulesSave.bin[obj->saveBinType] |= (1 << obj->saveBinId);
 }
 
 s32 save_bin_get_flag_total(int type) {

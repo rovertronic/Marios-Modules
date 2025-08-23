@@ -64,7 +64,7 @@ enum module_execution_ids {
     MODULE_EXEC_COUNT,
 };
 
-#define GROUNDED ((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING)
+#define GROUNDED (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING))
 
 struct module_info {
     u8 type;
@@ -217,7 +217,7 @@ void update_settings(void);
 
 void save_bin_reset(void);
 u32 obj_save_bin_read(void);
-void obj_save_bin_write(void);
+void obj_save_bin_write(struct Object * obj);
 void obj_save_bin_count(int type);
 s32 save_bin_get_flag_total(int type);
 

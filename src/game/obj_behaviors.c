@@ -851,10 +851,7 @@ void bhv_chest(void) {
             o->header.gfx.animInfo.animFrameF = 0.0f;
             o->header.gfx.animInfo.animAccelF = 0.0f;
             if ((gMarioState->numCoins >= cost) && (o->oInteractStatus & INT_STATUS_INTERACTED)) {
-                obj_save_bin_write();
-
-                f32 messageDisplayTimer = 120.0f;
-                char * messageDisplayPtr = "Obtained module.";
+                obj_save_bin_write(o);
 
                 o->header.gfx.animInfo.animAccelF = 1.0f;
                 gMarioState->numCoins-=cost;
@@ -941,10 +938,11 @@ void bhv_dungeon_manager(void) {
 }
 
 void bhv_volume(void) {
+    f32 scale = 400.0f;
     if (
-        (ABS(gMarioState->pos[0] - o->oPosX) < 400.0f)&&
-        (ABS(gMarioState->pos[1] - o->oPosY) < 400.0f)&&
-        (ABS(gMarioState->pos[2] - o->oPosZ) < 400.0f)
+        (ABS(gMarioState->pos[0] - o->oPosX) < scale)&&
+        (ABS(gMarioState->pos[1] - o->oPosY) < scale)&&
+        (ABS(gMarioState->pos[2] - o->oPosZ) < scale)
     ) {
         switch(o->oBehParams2ndByte) {
             case VOLUME_RESPAWN:
@@ -1018,7 +1016,7 @@ void bhv_bdoor(void) {
         open = TRUE;
 
         if (needs_key && gMarioState->numKeys > 0) {
-            obj_save_bin_write();
+            obj_save_bin_write(o);
             gMarioState->numKeys--;
             o->oBehParams2ndByte = 0;
             cur_obj_play_sound_2(SOUND_GENERAL_DOOR_TURN_KEY);

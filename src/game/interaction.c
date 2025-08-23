@@ -828,6 +828,7 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
 
         gStarModelLastCollected = obj_get_model_id(obj);
 
+        obj_save_bin_write(obj);
         m->numStars = save_bin_get_flag_total(SAVE_BIN_STARS);
 
         if (!noExit) {

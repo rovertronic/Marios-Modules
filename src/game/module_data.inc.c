@@ -150,10 +150,17 @@ void module_grav(struct module_execution_thread * met, u8 call_context) {
             met->halted = TRUE;
             break;
         case MCC_HALTED:
-            if ((gMarioState->vel[1] < 0.0f)||(((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING))) {
+            if (gMarioState->vel[1] < 0.0) {
                 met->halted = FALSE;
                 met->x++;
                 break;
+            }
+            if (!GROUNDED) {
+                met->timer = 0;
+            }
+            if (met->timer >= 15) {
+                met->timer = 0;
+                met->cooldown = TRUE;
             }
             break;
     }

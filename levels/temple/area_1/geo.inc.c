@@ -45,6 +45,7 @@ const GeoLayout temple_dl_2room_geo[] = {
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room3_001_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room3_001_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, temple_dl_vis_room3_001_mesh_layer_5),
+		GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL, temple_dl_vis_room3_001_mesh_layer_2),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
@@ -57,6 +58,7 @@ const GeoLayout temple_dl_3room_geo[] = {
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room3_001_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room3_001_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, temple_dl_vis_room3_001_mesh_layer_5),
+		GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL, temple_dl_vis_room3_001_mesh_layer_2),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room4_001_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room4_001_mesh_layer_4),
 	GEO_CLOSE_NODE(),
@@ -68,6 +70,7 @@ const GeoLayout temple_dl_4room_geo[] = {
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room3_001_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room3_001_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, temple_dl_vis_room3_001_mesh_layer_5),
+		GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL, temple_dl_vis_room3_001_mesh_layer_2),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room4_001_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room4_001_mesh_layer_4),
 	GEO_CLOSE_NODE(),
