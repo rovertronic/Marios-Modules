@@ -1,4 +1,6 @@
 void module_jump(struct module_execution_thread * met, u8 call_context) {
+    met->doaircooldown = TRUE;
+
     u8 force = FALSE;
     if (met->element != ELEMENT_NORMAL) {
         Mat4 direction;
@@ -33,12 +35,14 @@ void module_jump(struct module_execution_thread * met, u8 call_context) {
 
 void module_tornado(struct module_execution_thread * met, u8 call_context) {
     if (!(GROUNDED)) {
+        met->doaircooldown = TRUE;
         set_mario_action(gMarioState,ACT_TWIRLING,0);
     }
     met->x++;
 }
 
 void module_attack(struct module_execution_thread * met, u8 call_context) {
+    met->doaircooldown = TRUE;
     gMarioState->input |= INPUT_B_PRESSED;
 
     gMarioState->forwardVel += 10.0f*met->spd;
@@ -48,6 +52,7 @@ void module_attack(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_zaction(struct module_execution_thread * met, u8 call_context) {
+    met->doaircooldown = TRUE;
     if (GROUNDED) {
         set_mario_action(gMarioState,ACT_LONG_JUMP,0);
     } else {
@@ -187,6 +192,7 @@ void module_input(struct module_execution_thread * met, u8 call_context) {
 void module_platform(struct module_execution_thread * met, u8 call_context) {
     switch(call_context) {
         case MCC_INVOKE:
+            met->doaircooldown = TRUE;
             met->halted = TRUE;
             met->timer = 0;
 
@@ -377,6 +383,7 @@ struct module_info module_infos[] = {
     [MOD_VANITY] = {MTYPE_INPUT,0,0,0,"",micons_vanity_rgba16,NULL,NULL,NULL},
     [MOD_SETTINGS] = {MTYPE_INPUT,0,0,0,"",micons_gear_rgba16,NULL,NULL,NULL},
     [MOD_WRAP] = {MTYPE_INPUT,0,0,0,"",micons_wrap_rgba16,NULL,NULL,NULL},
+    [MOD_PASSIVE] = {MTYPE_INPUT,0,0,0,"",micons_p__rgba16,NULL,NULL,NULL},
 
     // Actions
     [MOD_JUMP] = {
@@ -839,7 +846,7 @@ struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
     [4] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 
      // Actions
-    [5] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_A, .whitelist_flags = WHITELIST_ACTION, .wrap = 1},
+    [5] = {.type = ROW_SOCKET, .icon = MOD_PASSIVE, .whitelist_flags = WHITELIST_ACTION, .wrap = 1},
     [6] = {.type = ROW_SOCKET, .icon = MOD_WRAP, .whitelist_flags = WHITELIST_ACTION},
     [7] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [8] = {.type = ROW_STORAGE, .mod_type_prio = -1},

@@ -171,7 +171,7 @@ void module_update(void) {
                         read_mod = get_inventory(met->x,met->y);
                     }
                 }
-                if (met->manual) {
+                if (met->doaircooldown || met->cooltime > 1) {
                     met->cooldown = TRUE;
                 } else {
                     met->executing = FALSE;
@@ -217,6 +217,7 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
         met->landing_count = 0;
         met->mario_ground_listener = TRUE;
         met->ifbool = FALSE;
+        met->doaircooldown = FALSE;
         colorBlendCount = 0;
 
         if (manual) {
@@ -254,14 +255,6 @@ void update_settings(void) {
 u16 joystick_hold_timer = 0;
 u8 double_tap_return = FALSE;
 void control_module_menu(void) {
-    for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
-        struct module_execution_thread * met = &module_execution_threads[i];
-        if (met->executing && met->manual && !met->cooldown) {
-            //no editing while running
-            return;
-        }
-    }
-
     //handle joystick
     if (
         (gPlayer1Controller->rawStickY < ANALOG_MENU_THRESH) &&
@@ -288,8 +281,6 @@ void control_module_menu(void) {
             gPlayer1Controller->buttonPressed |= L_JPAD;
         }
     }
-
-
 
     if (gPlayer1Controller->buttonPressed & L_JPAD) {
         inventory_x --;
@@ -319,6 +310,14 @@ void control_module_menu(void) {
     inventory_y = (icp->size+inventory_y)%icp->size;
 
     int true_inventory_y = inventory_y + icp->offset;
+
+    for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
+        struct module_execution_thread * met = &module_execution_threads[i];
+        if (met->y == true_inventory_y && met->executing && !met->cooldown) {
+            //no editing while running
+            return;
+        }
+    }
 
     int modified_inventory = FALSE;
     if (gPlayer1Controller->buttonPressed & A_BUTTON) {
@@ -630,22 +629,21 @@ void display_module_message(s8 id) {
 }
 
 #define MODULE_HUD_STATUS_Y 205
+void print_execution_status(int x, int y, int execthread, int module) {
+    print_module(module,x,y);
+    if (module_execution_threads[execthread].executing) {
+        print_texture(micons_executing_rgba16,16 ,x,y);
+    }
+    if (module_execution_threads[execthread].input_notify) {
+        print_texture(micons_inpnotif_rgba16,16 ,x,y);
+    }
+}
+
 void print_module_hud_status(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-    print_module(MOD_BUTTON_A,22,MODULE_HUD_STATUS_Y);
-    if (module_execution_threads[MODULE_EXEC_A].executing) {
-        print_texture(micons_executing_rgba16,16 ,22,MODULE_HUD_STATUS_Y);
-    }
-    if (module_execution_threads[MODULE_EXEC_A].input_notify) {
-        print_texture(micons_inpnotif_rgba16,16 ,22,MODULE_HUD_STATUS_Y);
-    }
-    print_module(MOD_BUTTON_B,42,MODULE_HUD_STATUS_Y);
-    if (module_execution_threads[MODULE_EXEC_B].executing) {
-        print_texture(micons_executing_rgba16,16 ,42,MODULE_HUD_STATUS_Y);
-    }
-    if (module_execution_threads[MODULE_EXEC_B].input_notify) {
-        print_texture(micons_inpnotif_rgba16,16 ,42,MODULE_HUD_STATUS_Y);
-    }
+    print_execution_status(22,MODULE_HUD_STATUS_Y,MODULE_EXEC_A,MOD_BUTTON_A);
+    print_execution_status(42,MODULE_HUD_STATUS_Y,MODULE_EXEC_B,MOD_BUTTON_B);
+    //print_execution_status(62,MODULE_HUD_STATUS_Y,MODULE_EXEC_PASSIVE,MOD_TIMER);
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
@@ -706,8 +704,9 @@ char * changelog = "\
 Major Changes:\n\
 * Increased max framerate to 60\n\
 * Overhauled and refined module menu\n\
-* Added vanity, settings, and progress panels\n\
+* Added vanity, settings, passive, and progress panels\n\
 * Added game saving via save blocks\n\
+* Added post-game creative mode\n\
 \n\
 New Module Additions:\n\
 * Red Dye (Vanity)\n\
@@ -726,6 +725,12 @@ New Module Additions:\n\
 * Camera Collision (Option)\n\
 * Widescreen (Option)\n\
 \n\
+* If Block (Logic)\n\
+* End Block (Logic)\n\
+* Stop (Logic)\n\
+* If Grounded (Logic)\n\
+* If Falling (Logic)\n\
+\n\
 Minor Changes:\n\
 * Polished level visuals\n\
 * Added module warnings\n\
@@ -737,11 +742,13 @@ Minor Changes:\n\
 * Shortened module cooldown\n\
 * Re-organized module classifications\n\
 * Modules in chests are now 3D\n\
+* Can move cursor in menu even when modules are executing\n\
 * Fixed thwomp death softlock\n\
 \n\
 Rebalances:\n\
 * Putting jumps together no longer increases jump tier\n\
-* Cap module incurs 4 second cooldown";
+* Cap module incurs 4 second cooldown\n\
+* Hover module changed to air platform, no longer follows Mario";
 
 struct mariosModulesSave sMariosModulesSave;
 

@@ -45,6 +45,7 @@ struct module_execution_thread {
     u8 jump_tier:2;
 
     u8 ifbool:1;
+    u8 doaircooldown:1;
 
     u8 landing_count;
 
@@ -151,6 +152,7 @@ enum module_id {
     MOD_GROUND_UPG,
     MOD_IF_FLOOR,
     MOD_IF_DOWN,
+    MOD_PASSIVE,
     MOD_COUNT,
 };
 

@@ -73,7 +73,7 @@ u32 get_mario_sound_id(int marioSoundEnum) {
                 break;
         }
     }
-    return sMarioCharacterSoundTable[marioSoundEnum][1];
+    return sMarioCharacterSoundTable[marioSoundEnum][characterId];
 }
 
 /**************************************************
