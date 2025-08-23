@@ -551,5 +551,6 @@ extern const BehaviorScript bhvChestPriceNumber[];
 extern const BehaviorScript bhvModuleCollect[];
 extern const BehaviorScript bhvFlameProjectile[];
 extern const BehaviorScript bhvIceProjectile[];
+extern const BehaviorScript bhvModuleSign[];
 
 #endif // BEHAVIOR_DATA_H

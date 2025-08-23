@@ -91,10 +91,20 @@ void scroll_gfx_mat_temple_dl_lava_layer1() {
 
 };
 
+void scroll_gfx_mat_temple_dl_lavafade_layer1() {
+	Gfx *mat = segmented_to_virtual(mat_temple_dl_lavafade_layer1);
+
+
+	shift_s(mat, 15, PACK_TILESIZE(0, 1));
+	shift_t(mat, 20, PACK_TILESIZE(0, 1));
+
+};
+
 void scroll_temple() {
 	scroll_temple_dl_vis_room1_mesh_layer_5_vtx_0();
 	scroll_temple_dl_vis_room1_mesh_layer_5_vtx_1();
 	scroll_temple_dl_vis_room2_001_mesh_layer_5_vtx_0();
 	scroll_temple_dl_vis_room3_001_mesh_layer_5_vtx_0();
 	scroll_gfx_mat_temple_dl_lava_layer1();
+	scroll_gfx_mat_temple_dl_lavafade_layer1();
 };

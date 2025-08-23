@@ -49,7 +49,9 @@ s16 tilt_body_running(struct MarioState *m) {
 
 void play_step_sound(struct MarioState *m, s16 frame1, s16 frame2) {
     if (is_anim_past_frame(m, frame1) || is_anim_past_frame(m, frame2)) {
-        if (m->flags & MARIO_METAL_CAP) {
+        if (m->floor && (m->floor->type == SURFACE_VANISH_CAP_WALLS || m->floor->type == SURFACE_METAL_SOUND )) {
+            play_sound(SOUND_ACTION_METAL_STEP, m->marioObj->header.gfx.cameraToObject);
+        } else if (m->flags & MARIO_METAL_CAP) {
             if (m->marioObj->header.gfx.animInfo.animID == MARIO_ANIM_TIPTOE) {
                 play_sound_and_spawn_particles(m, SOUND_ACTION_METAL_STEP_TIPTOE, 0);
             } else {

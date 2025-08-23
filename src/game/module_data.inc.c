@@ -302,6 +302,7 @@ void module_woman(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_flip(struct module_execution_thread * met, u8 call_context) {
+    met->doaircooldown = TRUE;
     gMarioState->vel[1] = -gMarioState->vel[1];
     met->x++;
 }
@@ -475,7 +476,7 @@ struct module_info module_infos[] = {
     [MOD_FLIP_VEL] = {
         .name = "Velocity Flip",
         .type = MTYPE_MOVE,
-        .tex = micons_grav_rgba16,
+        .tex = micons_swapule_rgba16,
         .desc = "Inverts Mario's Y velocity.",
         .unchainable = TRUE,
         .func = module_flip,
@@ -557,7 +558,7 @@ struct module_info module_infos[] = {
         .name = "Down",
         .type = MTYPE_COND,
         .tex = micons_grav_rgba16,
-        .desc = "Continues when Mario has downward velocity.",
+        .desc = "Continues when Mario has downward velocity, cancels on floor.",
         .unchainable = TRUE,
         .func = module_grav,
         .creative = TRUE,
