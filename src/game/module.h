@@ -46,6 +46,7 @@ struct module_execution_thread {
 
     u8 ifbool:1;
     u8 doaircooldown:1;
+    u8 debug_monitor:1;
 
     u8 landing_count;
 
@@ -64,7 +65,7 @@ enum module_execution_ids {
     MODULE_EXEC_COUNT,
 };
 
-#define GROUNDED (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING))
+#define GROUNDED (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_AUTOMATIC))
 
 struct module_info {
     u8 type;
@@ -153,6 +154,7 @@ enum module_id {
     MOD_IF_FLOOR,
     MOD_IF_DOWN,
     MOD_PASSIVE,
+    MOD_MONITOR,
     MOD_COUNT,
 };
 
@@ -203,6 +205,8 @@ struct mariosModulesSave {
 Gfx *geo_module_material(s32 callContext, struct GraphNode *node, void *context);
 
 s8 get_inventory(int x, int y);
+void module_log_message(struct module_execution_thread * met,  char * logmsg, int num);
+void module_log_clear(void);
 
 void add_inventory(s8 module);
 void display_module_message(s8 id);

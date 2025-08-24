@@ -41,6 +41,34 @@ s8 module_in_hand = MOD_EMPTY;
 struct module_panel * icp = &module_panel_info[PANEL_ACTIONS];
 int inventory_panel = PANEL_ACTIONS;
 
+#define DEBUG_LOG_MAX 12
+char * sDebugLogStrs[DEBUG_LOG_MAX];
+int sDebugLogModuleDisplays[DEBUG_LOG_MAX][2];
+int sDebugLogModuleNumber[DEBUG_LOG_MAX];
+u8 sDebugLogIndex = 0;
+
+void module_log_message(struct module_execution_thread * met, char * logmsg, int num) {
+    if (met->debug_monitor == TRUE) {
+        sDebugLogStrs[sDebugLogIndex] = logmsg;
+        s8 setModIcon = MOD_PASSIVE;
+        if (met == &module_execution_threads[MODULE_EXEC_A] ) {
+            setModIcon = MOD_BUTTON_A;
+        } else if (met == &module_execution_threads[MODULE_EXEC_B]) {
+            setModIcon = MOD_BUTTON_B;
+        }
+        sDebugLogModuleDisplays[sDebugLogIndex][0] = setModIcon;
+        sDebugLogModuleDisplays[sDebugLogIndex][1] = get_inventory(met->x,met->y);
+        sDebugLogModuleNumber[sDebugLogIndex] = num;
+        sDebugLogIndex=(sDebugLogIndex+1)%DEBUG_LOG_MAX;
+    }
+}
+
+void module_log_clear(void) {
+    for (int i = 0; i < DEBUG_LOG_MAX; i++) {
+        sDebugLogStrs[i] = NULL;
+    } 
+}
+
 s32 is_inventory_slot_locked(int x, int y) {
     return FALSE;
     switch(y) {
@@ -103,6 +131,12 @@ void init_module_inventory(void) {
         inventory[48][1] = MOD_60HZ;
     }
 
+    // Vanity
+    inventory[46][0] = MOD_WOMAN;
+
+    // Starter inventory
+    inventory[4][7] = MOD_MONITOR;
+
     load_marios_modules();
     update_settings();
 
@@ -156,7 +190,7 @@ void module_update(void) {
                         met->cooltime += module_infos[read_mod].cooldown*30.0f;
                         met->cooltime = MAX(met->cooltime,1);
 
-                        if (inventory_row_info[met->y].wrap && met->x == 8) {
+                        if (inventory_row_info[met->y].wrap && met->x == INVENTORY_SLOTS_X) {
                             met->x = 0;
                             met->y ++;
                         }
@@ -218,6 +252,7 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
         met->mario_ground_listener = TRUE;
         met->ifbool = FALSE;
         met->doaircooldown = FALSE;
+        met->debug_monitor = FALSE;
         colorBlendCount = 0;
 
         if (manual) {
@@ -641,6 +676,7 @@ void print_execution_status(int x, int y, int execthread, int module) {
     }
 }
 
+char sDebugLogStringBuffer[100];
 void print_module_hud_status(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     print_execution_status(22,MODULE_HUD_STATUS_Y,MODULE_EXEC_A,MOD_BUTTON_A);
@@ -659,6 +695,24 @@ void print_module_hud_status(void) {
 
     if (messageDisplayAlpha > 0.0f && messageDisplayPtr != NULL) {
         print_utf8_boxed(messageDisplayPtr,160,10,messageDisplayAlpha,TRUE);
+    }
+
+    int y = 0;
+    for (int i = 0; i < DEBUG_LOG_MAX; i++) {
+        int index = (sDebugLogIndex - 1 - i + DEBUG_LOG_MAX) % DEBUG_LOG_MAX;
+        if (sDebugLogStrs[index] != NULL) {
+            y+=16;
+
+            sprintf(sDebugLogStringBuffer, sDebugLogStrs[index], sDebugLogModuleNumber[index], sDebugLogModuleNumber[index]);
+
+            utf8_print_reset();
+            gDPSetEnvColor(gDisplayListHead++, 255,255,255, 200);
+            print_utf8(sDebugLogStringBuffer,64,23+y);
+            gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
+            print_module(sDebugLogModuleDisplays[index][0],20,200-y);
+            print_module(sDebugLogModuleDisplays[index][1],36,200-y);
+            gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
+        }
     }
 }
 
@@ -775,7 +829,6 @@ void save_marios_modules(Vec3f pos) {
         messageDisplayPtr = "@G@Game successfully saved.";
         play_sound(SOUND_GENERAL_HEART_SPIN, gGlobalSoundSource);
     }
-
 }
 
 void load_marios_modules(void) {

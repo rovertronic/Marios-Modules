@@ -1,3 +1,94 @@
+// INVENTORY STRUCTURE DECLARATIONS
+struct module_panel module_panel_info[] = {
+    [PANEL_SETTINGS] = {
+        .name = "Settings",
+        .offset = 48,
+        .size = 2,
+        .unlock = NULL,
+    },
+    [PANEL_ACTIONS] = {
+        .name = "@B@Actions",
+        .offset = 0,
+        .size = 5,
+        .unlock = NULL,
+    },
+    [PANEL_PASSIVE] = {
+        .name = "@Y@Passive",
+        .offset = 5,
+        .size = 5,
+        .unlock = NULL,
+    },
+    [PANEL_VANITY] = {
+        .name = "@P@Vanity",
+        .offset = 44,
+        .size = 4,
+        .unlock = NULL,
+    },
+    [PANEL_CREATIVE] = {
+        .name = "@G@Creative",
+        .offset = 39,
+        .size = 5,
+        .unlock = NULL,
+    },
+};
+
+struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
+     // Actions
+    [0] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_A, .whitelist_flags = WHITELIST_ACTION},
+    [1] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_B, .whitelist_flags = WHITELIST_ACTION},
+    [2] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [3] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [4] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+
+     // Actions
+    [5] = {.type = ROW_SOCKET, .icon = MOD_PASSIVE, .whitelist_flags = WHITELIST_ACTION, .wrap = 1},
+    [6] = {.type = ROW_SOCKET, .icon = MOD_WRAP, .whitelist_flags = WHITELIST_ACTION},
+    [7] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [8] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [9] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+
+    // Storage
+    //[5] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    //[6] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    //[7] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    //[8] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    //[9] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+
+    // Creative
+    [39] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [40] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [41] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [42] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [43] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+
+     // Vanity
+    [44] = {.type = ROW_SOCKET, .icon = MOD_VANITY, .whitelist_flags = WHITELIST_VANITY, .wrap = 1},
+    [45] = {.type = ROW_SOCKET, .icon = MOD_WRAP,   .whitelist_flags = WHITELIST_VANITY},
+    [46] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
+    [47] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
+
+     // Settings
+    [48] = {.type = ROW_SOCKET, .icon = MOD_SETTINGS, .whitelist_flags = (1 << MTYPE_SETTINGS)},
+    [49] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+};
+
+struct module_type_info module_type_infos[] = {
+    [MTYPE_MOVE] = {"B","Action",{0x64, 0x64, 0xF0}},
+    [MTYPE_BUFF] = {"O","Upgrade",{200, 0, 0}},
+    [MTYPE_COND] = {"G","Sequencing",{0, 170, 0}},
+    [MTYPE_INPUT] = {"","Input",{0xC9, 0x82, 0x30}},
+    [MTYPE_NONMOD] = {"",NULL,{0x00, 0x00, 0x00}},
+    [MTYPE_VANITY] = {"P","Vanity",{0xD3,0x81,0xFC}},
+    [MTYPE_SETTINGS] = {"1","Option",{0xAA,0xAA,0xAA}},
+    [MTYPE_LOGIC] = {"Y","Logic",{210,176,0}},
+    [MTYPE_ELEMENT] = {"E","Element",{0,0x90,0x90}},
+};
+
+#define INVENTORY_PRINT_OFFSET_X 26
+#define INVENTORY_PRINT_OFFSET_Y 24
+
+// MODULE FUNCTIONS
+
 void module_jump(struct module_execution_thread * met, u8 call_context) {
     met->doaircooldown = TRUE;
 
@@ -13,12 +104,15 @@ void module_jump(struct module_execution_thread * met, u8 call_context) {
     if ((force)||(!mario_floor_is_steep(gMarioState) && (GROUNDED))) {
         switch(met->mod) {
             case 0:
+                module_log_message(met,"UPG is 0, single jump action performed.",0);
                 set_mario_action(gMarioState,ACT_JUMP,0);
                 break;
             case 1:
+                module_log_message(met,"UPG is 1, double jump action performed.",0);
                 set_mario_action(gMarioState,ACT_DOUBLE_JUMP,0);
                 break;
             default:
+                module_log_message(met,"UPG is 2+, triple jump action performed.",0);
                 set_mario_action(gMarioState,ACT_TRIPLE_JUMP,0);
                 if (gMarioState->flags & MARIO_WING_CAP) {
                     set_mario_action(gMarioState,ACT_FLYING_TRIPLE_JUMP,0);
@@ -27,6 +121,7 @@ void module_jump(struct module_execution_thread * met, u8 call_context) {
         }
         met->mod = 0;
     } else {
+        module_log_message(met,"Not on valid ground, pressed A instead.",0);
         gMarioState->input |= INPUT_A_PRESSED;
     }
 
@@ -37,15 +132,19 @@ void module_tornado(struct module_execution_thread * met, u8 call_context) {
     if (!(GROUNDED)) {
         met->doaircooldown = TRUE;
         set_mario_action(gMarioState,ACT_TWIRLING,0);
+        module_log_message(met,"Twirl action performed.",0);
+    } else {
+        module_log_message(met,"Failed to initiate twirl.",0);
     }
     met->x++;
 }
 
 void module_attack(struct module_execution_thread * met, u8 call_context) {
+    module_log_message(met,"Pressed B.",0);
+
     met->doaircooldown = TRUE;
     gMarioState->input |= INPUT_B_PRESSED;
 
-    gMarioState->forwardVel += 10.0f*met->spd;
     met->spd = 0;
 
     met->x++;
@@ -54,9 +153,11 @@ void module_attack(struct module_execution_thread * met, u8 call_context) {
 void module_zaction(struct module_execution_thread * met, u8 call_context) {
     met->doaircooldown = TRUE;
     if (GROUNDED) {
+        module_log_message(met,"On ground, do long jump.",0);
         set_mario_action(gMarioState,ACT_LONG_JUMP,0);
     } else {
         if (gMarioState->action != ACT_GROUND_POUND) {
+            module_log_message(met,"In air, do ground pound.",0);
             set_mario_action(gMarioState,ACT_GROUND_POUND,0);
         }
     }
@@ -65,6 +166,7 @@ void module_zaction(struct module_execution_thread * met, u8 call_context) {
 
 
 void module_pow(struct module_execution_thread * met, u8 call_context) {
+    module_log_message(met,"UPG Increased by 1.",0);
     met->mod++;
     met->x++;
 }
@@ -76,8 +178,12 @@ void module_spd(struct module_execution_thread * met, u8 call_context) {
 
 void module_repeat(struct module_execution_thread * met, u8 call_context) {
     if (met->used_flags & (1 << met->x)) {
+        module_log_message(met,"Already repeated, so pass through.",0);
+
         met->x++;
     } else {
+        module_log_message(met,"Repeat from start.",0);
+
         met->used_flags |= (1 << met->x);
         met->x=0;
     }
@@ -86,10 +192,12 @@ void module_repeat(struct module_execution_thread * met, u8 call_context) {
 void module_floor(struct module_execution_thread * met, u8 call_context) {
     switch(call_context) {
         case MCC_INVOKE:
+            module_log_message(met,"Waiting for floor touch...",0);
             met->halted = TRUE;
             break;
         case MCC_HALTED:
             if (GROUNDED) {
+                module_log_message(met,"Floor touched, continue.",0);
                 met->halted = FALSE;
                 met->x++;
                 break;
@@ -99,6 +207,8 @@ void module_floor(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_floor_upg(struct module_execution_thread * met, u8 call_context) {
+    module_log_message(met,"UPG+%d, since landed %d times.",met->landing_count);
+
     met->x++;
     met->mod+=met->landing_count;
 }
@@ -108,9 +218,12 @@ void module_wall(struct module_execution_thread * met, u8 call_context) {
         case MCC_INVOKE:
             met->halted = TRUE;
             met->timer = 0;
+            module_log_message(met,"Waiting for wall touch...",0);
             break;
         case MCC_HALTED:
             if (gMarioState->wall != NULL) {
+                module_log_message(met,"Wall touched, continue.",0);
+
                 met->halted = FALSE;
                 met->x++;
                 break;
@@ -120,6 +233,7 @@ void module_wall(struct module_execution_thread * met, u8 call_context) {
                 break;
             }
             if (met->timer >= 15) {
+                module_log_message(met,"Wall module timed out, cancel sequence.",0);
                 met->timer = 0;
                 met->cooldown = TRUE;
             }
@@ -132,9 +246,12 @@ void module_timer(struct module_execution_thread * met, u8 call_context) {
         case MCC_INVOKE:
             met->halted = TRUE;
             met->timer = 0;
+            module_log_message(met,"Timer waiting %d frames.", 15 + (10*met->mod));
             break;
         case MCC_HALTED:
             if (met->timer >= 15 + (10*met->mod)) {
+                module_log_message(met,"Timer finished.",0);
+
                 met->halted = FALSE;
                 met->x++;
                 met->mod = 0;
@@ -148,9 +265,11 @@ void module_grav(struct module_execution_thread * met, u8 call_context) {
     switch(call_context) {
         case MCC_INVOKE:
             met->halted = TRUE;
+            module_log_message(met,"Waiting for Mario to fall...",0);
             break;
         case MCC_HALTED:
             if (gMarioState->vel[1] < 0.0) {
+                module_log_message(met,"Mario fell, continue.",0);
                 met->halted = FALSE;
                 met->x++;
                 break;
@@ -161,6 +280,8 @@ void module_grav(struct module_execution_thread * met, u8 call_context) {
             if (met->timer >= 15) {
                 met->timer = 0;
                 met->cooldown = TRUE;
+
+                module_log_message(met,"Down module timed out, cancel sequence.",0);
             }
             break;
     }
@@ -170,7 +291,10 @@ void module_input(struct module_execution_thread * met, u8 call_context) {
     switch(call_context) {
         case MCC_INVOKE:
             play_sound(SOUND_GENERAL_BOWSER_KEY_LAND, gGlobalSoundSource);
+            module_log_message(met,"Polling for player input.",0);
             if (gPlayer1Controller->buttonPressed & met->input) {
+                module_log_message(met,"Player input accepted, continue.",0);
+
                 met->halted = FALSE;
                 met->input_notify = FALSE;
                 met->x++;
@@ -182,12 +306,16 @@ void module_input(struct module_execution_thread * met, u8 call_context) {
             break;
         case MCC_HALTED:
             if (gPlayer1Controller->buttonPressed & met->input) {
+                module_log_message(met,"Player input accepted, continue.",0);
+
                 met->halted = FALSE;
                 met->input_notify = FALSE;
                 met->x++;
                 break;
             }
             if (met->timer >= 30) {
+                module_log_message(met,"Player input rejected, cancel.",0);
+
                 met->input_notify = FALSE;
                 met->cooldown = TRUE;
                 met->timer = 0;
@@ -199,6 +327,8 @@ void module_input(struct module_execution_thread * met, u8 call_context) {
 void module_platform(struct module_execution_thread * met, u8 call_context) {
     switch(call_context) {
         case MCC_INVOKE:
+            module_log_message(met,"Spawned air platform.",0);
+
             met->doaircooldown = TRUE;
             met->halted = TRUE;
             met->timer = 0;
@@ -225,12 +355,15 @@ void module_cap(struct module_execution_thread * met, u8 call_context) {
     gMarioState->capTimer += 30;
     switch(met->mod) {
         case 0:
+            module_log_message(met,"UPG is 0, enable vanish cap.",0);
             gMarioState->flags |= MARIO_VANISH_CAP;
             break;
         case 1:
+            module_log_message(met,"UPG is 1, enable metal cap.",0);
             gMarioState->flags |= MARIO_METAL_CAP;
             break;
         default:
+            module_log_message(met,"UPG is 2+, enable wing cap.",0);
             gMarioState->flags |= MARIO_WING_CAP;
             break;
     }
@@ -275,6 +408,8 @@ void module_clothes_color(struct module_execution_thread * met, u8 call_context)
 
     colorBlendCount = 0;
 
+    module_log_message(met,"Applying colors to clothes.",0);
+
     gModuleUpdateVanity = TRUE;
     met->x++;
 }
@@ -282,6 +417,8 @@ void module_clothes_color(struct module_execution_thread * met, u8 call_context)
 void module_color(struct module_execution_thread * met, u8 call_context) {
     vec3f_copy(colorBlendStack[colorBlendCount],*((Vec3f *)met->extra_data));
     colorBlendCount++;
+
+    module_log_message(met,"Mixing color into pallete.",0);
 
     gModuleUpdateVanity = TRUE;
     met->x++;
@@ -302,6 +439,8 @@ void module_woman(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_flip(struct module_execution_thread * met, u8 call_context) {
+    module_log_message(met,"Y velocity set to %d.",-gMarioState->vel[1]);
+
     met->doaircooldown = TRUE;
     gMarioState->vel[1] = -gMarioState->vel[1];
     met->x++;
@@ -309,29 +448,39 @@ void module_flip(struct module_execution_thread * met, u8 call_context) {
 
 void module_if(struct module_execution_thread * met, u8 call_context) {
     if (met->ifbool) {
+        module_log_message(met,"@G@Condition@@ is @B@TRUE@@, continue.",0);
         met->x++;
         met->ifbool = FALSE;
     } else {
-        u8 revertX = met->x+1;
+        u8 revertX = met->x;
         s8 curModId = get_inventory(met->x,met->y);
-        s8 stackLevel = 0;
+        s8 stackLevel = 1;
+
+        module_log_message(met,"@G@Condition@@ is @R@FALSE@@, go to end block.",0);
         while(curModId != MOD_ENDBLOCK && stackLevel == 1) {
 
-            switch(curModId) {
-                case MOD_IF:
-                    stackLevel++;
-                    break;
-                case MOD_ENDBLOCK:
-                    stackLevel--;
-                    break;
-            }
+            //switch(curModId) {
+            //    case MOD_IF:
+            //        stackLevel++;
+            //        break;
+            //    case MOD_ENDBLOCK:
+            //        stackLevel--;
+            //        break;
+            //}
+            //if (stackLevel < 1) {stackLevel = 1;}
 
             met->x++;
+            if (inventory_row_info[met->y].wrap && met->x == INVENTORY_SLOTS_X) {
+                met->x = 0;
+                met->y ++;
+            }
             curModId = get_inventory(met->x,met->y);
 
             // Escape sequence, ie no valid endblock
             if (met->x >= INVENTORY_SLOTS_X) {
                 met->x = revertX;
+                module_log_message(met,"No end block found, ignore.",0);
+                met->x++;
                 break;
             }
         }
@@ -340,8 +489,10 @@ void module_if(struct module_execution_thread * met, u8 call_context) {
 
 void module_if_floor(struct module_execution_thread * met, u8 call_context) {
     if (GROUNDED) {
+        module_log_message(met,"On floor, condition set to @B@TRUE@@.",0);
         met->ifbool = TRUE;
     } else {
+        module_log_message(met,"Off floor, condition set to @R@FALSE@@.",0);
         met->ifbool = FALSE;
     }
     met->x++;
@@ -349,15 +500,26 @@ void module_if_floor(struct module_execution_thread * met, u8 call_context) {
 
 void module_if_down(struct module_execution_thread * met, u8 call_context) {
     if (gMarioState->vel[1] < 0.0f) {
+        module_log_message(met,"Falling, condition set to @B@TRUE@@.",0);
         met->ifbool = TRUE;
     } else {
+        module_log_message(met,"Not falling, condition set to @R@FALSE@@.",0);
         met->ifbool = FALSE;
     }
     met->x++;
 }
 
 void module_stop(struct module_execution_thread * met, u8 call_context) {
-    met->x = INVENTORY_SLOTS_X; // OOB = MOD_EMPTY
+    module_log_message(met,"Sequence stopped prematurely.",0);
+    met->x = INVENTORY_SLOTS_X+1; // OOB = MOD_EMPTY
+}
+
+void module_monitor(struct module_execution_thread * met, u8 call_context) {
+    if (!met->debug_monitor) {
+        met->debug_monitor = TRUE;
+        module_log_message(met,"Begin monitoring socket.",0);
+    }
+    met->x++;
 }
 
 Vec3f moduleRed = {1.0f,0.0f,0.0f};
@@ -478,6 +640,15 @@ struct module_info module_infos[] = {
         .upg_desc = "0:Vanish, 1:Metal, 2:Wing.",
         .cooldown = 3.0f,
         .func = module_cap,
+        .creative = TRUE,
+    },
+
+    [MOD_MONITOR] = {
+        .name = "Debug Monitor",
+        .type = MTYPE_MOVE,
+        .tex = micons_script_rgba16,
+        .desc = "Displays a verbose breakdown of the actions of all following modules. Press START to clear log.",
+        .func = module_monitor,
         .creative = TRUE,
     },
 
@@ -808,94 +979,4 @@ struct module_info module_infos[] = {
         .func = module_if_down,
         .creative = TRUE,
     },
-};
-
-struct module_type_info module_type_infos[] = {
-    [MTYPE_MOVE] = {"B","Action",{0x64, 0x64, 0xF0}},
-    [MTYPE_BUFF] = {"O","Upgrade",{200, 0, 0}},
-    [MTYPE_COND] = {"G","Sequencing",{0, 170, 0}},
-    [MTYPE_INPUT] = {"","Input",{0xC9, 0x82, 0x30}},
-    [MTYPE_NONMOD] = {"",NULL,{0x00, 0x00, 0x00}},
-    [MTYPE_VANITY] = {"P","Vanity",{0xD3,0x81,0xFC}},
-    [MTYPE_SETTINGS] = {"1","Option",{0xAA,0xAA,0xAA}},
-    [MTYPE_LOGIC] = {"Y","Logic",{210,176,0}},
-    [MTYPE_ELEMENT] = {"E","Element",{0,0x90,0x90}},
-};
-
-#define INVENTORY_PRINT_OFFSET_X 26
-#define INVENTORY_PRINT_OFFSET_Y 24
-
-
-// INVENTORY STRUCTURE DECLARATIONS
-struct module_panel module_panel_info[] = {
-    [PANEL_SETTINGS] = {
-        .name = "Settings",
-        .offset = 48,
-        .size = 2,
-        .unlock = NULL,
-    },
-    [PANEL_ACTIONS] = {
-        .name = "@B@Actions",
-        .offset = 0,
-        .size = 5,
-        .unlock = NULL,
-    },
-    [PANEL_PASSIVE] = {
-        .name = "@Y@Passive",
-        .offset = 5,
-        .size = 5,
-        .unlock = NULL,
-    },
-    [PANEL_VANITY] = {
-        .name = "@P@Vanity",
-        .offset = 44,
-        .size = 4,
-        .unlock = NULL,
-    },
-    [PANEL_CREATIVE] = {
-        .name = "@G@Creative",
-        .offset = 39,
-        .size = 5,
-        .unlock = NULL,
-    },
-};
-
-struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
-     // Actions
-    [0] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_A, .whitelist_flags = WHITELIST_ACTION},
-    [1] = {.type = ROW_SOCKET, .icon = MOD_BUTTON_B, .whitelist_flags = WHITELIST_ACTION},
-    [2] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    [3] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    [4] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-
-     // Actions
-    [5] = {.type = ROW_SOCKET, .icon = MOD_PASSIVE, .whitelist_flags = WHITELIST_ACTION, .wrap = 1},
-    [6] = {.type = ROW_SOCKET, .icon = MOD_WRAP, .whitelist_flags = WHITELIST_ACTION},
-    [7] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    [8] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    [9] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-
-    // Storage
-    //[5] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    //[6] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    //[7] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    //[8] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    //[9] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-
-    // Creative
-    [39] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    [40] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    [41] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    [42] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-    [43] = {.type = ROW_STORAGE, .mod_type_prio = -1},
-
-     // Vanity
-    [44] = {.type = ROW_SOCKET, .icon = MOD_VANITY, .whitelist_flags = WHITELIST_VANITY, .wrap = 1},
-    [45] = {.type = ROW_SOCKET, .icon = MOD_WRAP,   .whitelist_flags = WHITELIST_VANITY},
-    [46] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
-    [47] = {.type = ROW_STORAGE, .mod_type_prio = MTYPE_VANITY},
-
-     // Settings
-    [48] = {.type = ROW_SOCKET, .icon = MOD_SETTINGS, .whitelist_flags = (1 << MTYPE_SETTINGS)},
-    [49] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 };

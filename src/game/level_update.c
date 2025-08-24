@@ -1080,6 +1080,7 @@ s32 play_mode_normal(void) {
             if (title_or_game == 1) {
                 gModuleMenuOpen = !gModuleMenuOpen;
                 if (gModuleMenuOpen) {
+                    module_log_clear();
                     play_sound(SOUND_GENERAL_OPEN_IRON_DOOR, gGlobalSoundSource);
                 } else {
                     play_sound(SOUND_GENERAL_CLOSE_IRON_DOOR, gGlobalSoundSource);
