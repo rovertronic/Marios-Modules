@@ -24,6 +24,12 @@ struct module_panel module_panel_info[] = {
         .size = 4,
         .unlock = NULL,
     },
+    [PANEL_PROGRESS] = {
+        .name = "Progress",
+        .offset = 0,
+        .size = 0,
+        .unlock = NULL,
+    },
     [PANEL_CREATIVE] = {
         .name = "@G@Creative",
         .offset = 39,
@@ -40,9 +46,9 @@ struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
     [3] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [4] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 
-     // Actions
-    [5] = {.type = ROW_SOCKET, .icon = MOD_PASSIVE, .whitelist_flags = WHITELIST_ACTION, .wrap = 1},
-    [6] = {.type = ROW_SOCKET, .icon = MOD_WRAP, .whitelist_flags = WHITELIST_ACTION},
+     // Passive
+    [5] = {.type = ROW_SOCKET, .icon = MOD_PASSIVE, .whitelist_flags = WHITELIST_PASSIVE, .wrap = 1},
+    [6] = {.type = ROW_SOCKET, .icon = MOD_WRAP, .whitelist_flags = WHITELIST_PASSIVE},
     [7] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [8] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [9] = {.type = ROW_STORAGE, .mod_type_prio = -1},
@@ -82,6 +88,7 @@ struct module_type_info module_type_infos[] = {
     [MTYPE_SETTINGS] = {"1","Option",{0xAA,0xAA,0xAA}},
     [MTYPE_LOGIC] = {"Y","Logic",{210,176,0}},
     [MTYPE_ELEMENT] = {"E","Element",{0,0x90,0x90}},
+    [MTYPE_PASSIVE] = {"E","Passive",{0,0x90,0x90}},
 };
 
 #define INVENTORY_PRINT_OFFSET_X 26
@@ -352,7 +359,7 @@ void module_platform(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_cap(struct module_execution_thread * met, u8 call_context) {
-    gMarioState->capTimer += 30;
+    gMarioState->capTimer += 60;
     switch(met->mod) {
         case 0:
             module_log_message(met,"UPG is 0, enable vanish cap.",0);
@@ -522,6 +529,11 @@ void module_monitor(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+void module_passive_effect(struct module_execution_thread * met, u8 call_context) {
+    gMarioState->passiveFlag |= (1 << (u32)(met->extra_data));
+    met->x++;
+}
+
 Vec3f moduleRed = {1.0f,0.0f,0.0f};
 Vec3f moduleBlue = {0.0f,0.0f,1.0f};
 Vec3f moduleGreen = {0.0f,1.0f,0.0f};
@@ -636,7 +648,7 @@ struct module_info module_infos[] = {
         .name = "Cap",
         .type = MTYPE_MOVE,
         .tex = micons_cap_rgba16,
-        .desc = "Enables cap power for one second.",
+        .desc = "Enables cap power for two seconds. Can stack caps and time.",
         .upg_desc = "0:Vanish, 1:Metal, 2:Wing.",
         .cooldown = 3.0f,
         .func = module_cap,
@@ -869,10 +881,12 @@ struct module_info module_infos[] = {
     },
 
     [MOD_WOMAN] = {
-        .name = "Woman",
+        .name = "Body Type B",
         .type = MTYPE_VANITY,
         .tex = micons_woman_rgba16,
-        .desc = "Changes Mario's gender to @R@WOMAN@@.",
+        .desc = "Swaps to alternative hardware + voicebox.",
+        //Ryan left twitter... rip
+        //.desc = "Changes Mario's gender to @R@WOMAN@@.",
         .func = module_woman,
         .creative = TRUE,
     },
@@ -925,7 +939,6 @@ struct module_info module_infos[] = {
         .desc = "Next applicable module gets imbued with ice.",
         .cooldown = .3f,
         .func = module_element,
-        .creative = TRUE,
         .extra_data = ELEMENT_ICE,
     },
     [MOD_FLAME] = {
@@ -935,7 +948,6 @@ struct module_info module_infos[] = {
         .desc = "Next applicable module gets imbued with flame.",
         .cooldown = .3f,
         .func = module_element,
-        .creative = TRUE,
         .extra_data = ELEMENT_FLAME,
     },
 
@@ -977,6 +989,16 @@ struct module_info module_infos[] = {
         .tex = micons_grav_rgba16,
         .desc = "Sets @G@condition@@ to @B@TRUE@@ if Mario is falling.",
         .func = module_if_down,
+        .creative = TRUE,
+    },
+
+    [MOD_SPD] = {
+        .name = "Move",
+        .type = MTYPE_PASSIVE,
+        .tex = micons_spd_rgba16,
+        .desc = "Makes Mario walk forward.",
+        .func = module_passive_effect,
+        .extra_data = PASSIVE_FLAG_RUN,
         .creative = TRUE,
     },
 };

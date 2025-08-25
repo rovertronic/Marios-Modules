@@ -813,20 +813,18 @@ void bhv_chest_price_number(void) {
 
 void bhv_chest(void) {
     u8 cost = GET_BPARAM1(o->oBehParams);
-    if (o->oTimer == 0) {
-        obj_element_init(o,ELEMENT_NORMAL,100.0f);
-
-        obj_save_bin_count(SAVE_BIN_CHESTS);
-        if (obj_save_bin_read()) {
-            o->oAction = 2;
-            if (o->oBehParams2ndByte == MOD_NONMOD_KEY) {
-                gMarioState->numKeys++;
-            }
-        }
-    }
 
     switch(o->oAction) {
         case 0:
+            obj_element_init(o,ELEMENT_NORMAL,100.0f);
+            obj_save_bin_count(SAVE_BIN_CHESTS);
+
+            if (obj_save_bin_read()) {
+                o->oAction = 3;
+            }
+            o->oAction = 1;
+            break;
+        case 1:
             if (cost > 0) {
                 cur_obj_set_model(MODEL_CCHEST);
                 if (o->oDistanceToMario < 400.0f) {
@@ -857,7 +855,8 @@ void bhv_chest(void) {
                 gMarioState->numCoins-=cost;
                 gHudDisplay.coins = gMarioState->numCoins;
                 play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);
-                o->oAction = 1;
+                o->oAction = 2;
+                gMessageDisplayTimer = 0.0f;
 
                 struct Object * moduleCollect = spawn_object(o,MODEL_MODULE,bhvModuleCollect);
                 moduleCollect->oBehParams2ndByte = o->oBehParams2ndByte;
@@ -870,10 +869,10 @@ void bhv_chest(void) {
                 }
             }
             break;
-        case 1:
+        case 2:
             if (o->oTimer > 30) {
                 display_module_message(o->oBehParams2ndByte);
-                o->oAction = 2;
+                o->oAction = 3;
             }
             break;
     }

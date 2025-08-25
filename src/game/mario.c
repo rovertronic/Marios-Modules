@@ -1327,6 +1327,11 @@ void update_mario_joystick_inputs(struct MarioState *m) {
     } else {
         m->intendedYaw = m->faceAngle[1];
     }
+
+    if (m->passiveFlag & (1 << PASSIVE_FLAG_RUN)) {
+        m->intendedMag = 32.0f;
+        m->input |= INPUT_NONZERO_ANALOG;
+    }
 }
 
 /**

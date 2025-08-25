@@ -3009,6 +3009,9 @@ void update_camera(struct Camera *c) {
             }
         }
     }
+
+    camera_override = FALSE;
+
     // If not in a cutscene, do mode processing
     if (c->cutscene == CUTSCENE_NONE) {
         sYawSpeed = 0x400;

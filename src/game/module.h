@@ -12,6 +12,8 @@ extern u8 gModuleMenuOpen;
 extern u8 gGameSettings[];
 extern Vec3f gModulePreviewPos;
 
+extern f32 gMessageDisplayTimer;
+
 struct module_panel {
     char * name;
     u8 offset;
@@ -24,6 +26,7 @@ enum {
     PANEL_ACTIONS,
     PANEL_PASSIVE,
     PANEL_VANITY,
+    PANEL_PROGRESS,
     PANEL_CREATIVE,
     INVENTORY_PANEL_CT,
 };
@@ -102,6 +105,7 @@ enum module_type {
     MTYPE_SETTINGS,
     MTYPE_LOGIC,
     MTYPE_ELEMENT,
+    MTYPE_PASSIVE,
     MTYPE_COUNT,
 };
 
@@ -175,6 +179,7 @@ struct inventory_row {
 
 #define WHITELIST_VANITY ((1 << MTYPE_VANITY))
 #define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_ELEMENT) | (1 << MTYPE_LOGIC))
+#define WHITELIST_PASSIVE ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_ELEMENT) | (1 << MTYPE_LOGIC)) | (1 << MTYPE_PASSIVE)
 
 enum {
     SETTING_60HZ,
@@ -182,6 +187,10 @@ enum {
     SETTING_WIDE,
     SETTING_AA,
     SETTING_COUNT,
+};
+
+enum {
+    PASSIVE_FLAG_RUN,
 };
 
 enum {
@@ -224,6 +233,7 @@ u32 obj_save_bin_read(void);
 void obj_save_bin_write(struct Object * obj);
 void obj_save_bin_count(int type);
 s32 save_bin_get_flag_total(int type);
+s32 save_bin_get_max_total(int type);
 
 void save_marios_modules(Vec3f pos);
 void load_marios_modules(void);

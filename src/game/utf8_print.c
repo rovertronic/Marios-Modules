@@ -132,7 +132,7 @@ fontChar utf8Table[] = {
     },
     [UTF8_9] = {
         .utf8code = '9',
-        .xUv = 394,
+        .xUv = 294,
         .tex = sm64DS_latin_i4,
         .size = 6
     },
@@ -655,7 +655,7 @@ void print_utf8(char * str, int x, int y) {
                         set_print_textcolor(230,230,230,150,150,150);
                         break;
                     case 'E':
-                        set_print_textcolor(0x31,0xF6,0xFF,0XFF,0,0);
+                        set_print_textcolor(0x31,0xF6,0xFF,0,0x90,0x90);
                         break;
                     case '<':
                         horizontal_wiggle = -1;

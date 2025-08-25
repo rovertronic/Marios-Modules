@@ -474,6 +474,7 @@ struct MarioState {
              s16 ceilYaw;
              s16 wallYaw;
              s16 gateAngle;
+             u32 passiveFlag;
 
              struct Animation * queueTargetAnim;
              s32 queueTargetAnimID;

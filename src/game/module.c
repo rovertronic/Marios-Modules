@@ -232,6 +232,10 @@ void module_update(void) {
 
 void execute_module_in_inventory(struct module_execution_thread * met, u32 input, int x, int y, int manual) {
     if (!met->executing) {
+        if (met == &module_execution_threads[MODULE_EXEC_PASSIVE]) {
+            gMarioState->passiveFlag = 0;
+        }
+
         met->mod = 0;
         met->spd = 0;
         met->x = x;
@@ -290,6 +294,24 @@ void update_settings(void) {
 u16 joystick_hold_timer = 0;
 u8 double_tap_return = FALSE;
 void control_module_menu(void) {
+    // Always turn off passive effects when in menu
+    gMarioState->passiveFlag = 0;
+
+    // handle panel changing
+    if (gPlayer1Controller->buttonPressed & R_TRIG) {
+        inventory_panel++;
+    }
+    if (gPlayer1Controller->buttonPressed & L_TRIG) {
+        inventory_panel--;
+    }
+    inventory_panel = (INVENTORY_PANEL_CT+inventory_panel)%INVENTORY_PANEL_CT;
+
+    icp = &module_panel_info[inventory_panel];
+
+    if (icp == &module_panel_info[PANEL_PROGRESS]) {
+        return;
+    }
+
     //handle joystick
     if (
         (gPlayer1Controller->rawStickY < ANALOG_MENU_THRESH) &&
@@ -330,16 +352,6 @@ void control_module_menu(void) {
         inventory_y --;
         double_tap_return = FALSE;
     }
-
-    if (gPlayer1Controller->buttonPressed & R_TRIG) {
-        inventory_panel++;
-    }
-    if (gPlayer1Controller->buttonPressed & L_TRIG) {
-        inventory_panel--;
-    }
-    inventory_panel = (INVENTORY_PANEL_CT+inventory_panel)%INVENTORY_PANEL_CT;
-
-    icp = &module_panel_info[inventory_panel];
 
     inventory_x = (INVENTORY_SLOTS_X+inventory_x)%INVENTORY_SLOTS_X;
     inventory_y = (icp->size+inventory_y)%icp->size;
@@ -528,6 +540,8 @@ char * module_is_invalid(int x, int y) {
 
 char print_buffer[500];
 void print_module_menu(void) {
+    int showProgress = (icp == &module_panel_info[PANEL_PROGRESS]);
+
     gSPDisplayList(gDisplayListHead++,ui_ui_mesh);
 
     gPrintModuleDarken=1;
@@ -581,18 +595,34 @@ void print_module_menu(void) {
     }
 
     //PRINT HAND and GRAB
-    print_module(module_in_hand,inventory_vis_x,inventory_vis_y);
-    void * hand_tex = micons_small_hand_1_rgba16;
-    if (module_in_hand != MOD_EMPTY) {
-        hand_tex = micons_small_hand_2_rgba16;
-    }
-    print_texture(hand_tex,16,inventory_vis_x+8, inventory_vis_y+8);
-    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
+    if (!showProgress) {
+        print_module(module_in_hand,inventory_vis_x,inventory_vis_y);
+        void * hand_tex = micons_small_hand_1_rgba16;
+        if (module_in_hand != MOD_EMPTY) {
+            hand_tex = micons_small_hand_2_rgba16;
+        }
+        print_texture(hand_tex,16,inventory_vis_x+8, inventory_vis_y+8);
+        gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
-    char * errmsg = module_is_invalid(inventory_x,inventory_y+icp->offset);
-    if (errmsg) {
-        //print reason
-        print_utf8_boxed(errmsg, 15+inventory_vis_x, 230-inventory_vis_y, 1.0f, FALSE);
+        char * errmsg = module_is_invalid(inventory_x,inventory_y+icp->offset);
+        if (errmsg) {
+            //print reason
+            print_utf8_boxed(errmsg, 15+inventory_vis_x, 230-inventory_vis_y, 1.0f, FALSE);
+        }
+    } else {
+        gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
+
+        gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+        gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160);
+        render_4slice(25,215,195,130);
+
+        utf8_print_reset();
+        gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
+
+        sprintf(print_buffer,"Modules: %d/%d\nStars: %d/%d",
+        save_bin_get_flag_total(SAVE_BIN_CHESTS),save_bin_get_max_total(SAVE_BIN_CHESTS),
+        save_bin_get_flag_total(SAVE_BIN_STARS), save_bin_get_max_total(SAVE_BIN_STARS));
+        print_utf8(print_buffer,30,195);
     }
 
     // PRINT PANEL INFO
@@ -618,6 +648,10 @@ void print_module_menu(void) {
         mod_inf_to_disp = module_in_hand;
     } else {
         mod_inf_to_disp = inventory[inventory_y + icp->offset][inventory_x];
+    }
+
+    if (showProgress) {
+        mod_inf_to_disp = MOD_EMPTY;
     }
 
     if (mod_inf_to_disp != MOD_EMPTY) {
@@ -650,18 +684,19 @@ void print_module_menu(void) {
     }
 }
 
-f32 messageDisplayTimer = 0.0f;
+f32 gMessageDisplayTimer = 0.0f;
 f32 messageDisplayAlpha = 0.0f;
 char * messageDisplayPtr = NULL;
 
 char print_buffer_t5[100];
 void display_module_message(s8 id) {
+    messageDisplayAlpha = 0.0f;
     if (module_infos[id].type != MTYPE_NONMOD) {
         sprintf(print_buffer_t5,"Obtained @%s@%s@@ module.",module_type_infos[module_infos[id].type].text_color,module_infos[id].name);
     } else {
         sprintf(print_buffer_t5,"Obtained %s.",module_infos[id].name);
     }
-    messageDisplayTimer = 120.0f;
+    gMessageDisplayTimer = 120.0f;
     messageDisplayPtr = print_buffer_t5;
 }
 
@@ -685,8 +720,8 @@ void print_module_hud_status(void) {
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
-    if (messageDisplayTimer > 0) {
-        messageDisplayTimer -= gFrameLerpDeltaTime;
+    if (gMessageDisplayTimer > 0) {
+        gMessageDisplayTimer -= gFrameLerpDeltaTime;
         messageDisplayAlpha += gFrameLerpDeltaTime*.1f;
     } else {
         messageDisplayAlpha -= gFrameLerpDeltaTime*.1f;
@@ -765,6 +800,10 @@ Major Changes:\n\
 * Added post-game creative mode\n\
 \n\
 New Module Additions:\n\
+* Twirl (Action)\n\
+* Crouch Action (Action)\n\
+* Debug Monitor (Action)\n\
+\n\
 * Ground Upgrade (Upgrade)\n\
 \n\
 * Red Dye (Vanity)\n\
@@ -791,6 +830,7 @@ New Module Additions:\n\
 \n\
 Minor Changes:\n\
 * Polished level visuals\n\
+* Made gameplay adjustments to level\n\
 * Added module warnings\n\
 * Hold to navigate menus added\n\
 * C<+> can push modules in menu\n\
@@ -802,12 +842,14 @@ Minor Changes:\n\
 * Modules in chests are now 3D\n\
 * Can move cursor in menu even when modules are executing\n\
 * Fixed thwomp death softlock\n\
+* Fixed camera getting stuck at certain Y level\n\
 \n\
 Rebalances:\n\
 * Putting jumps together no longer increases jump tier\n\
 * Cap module incurs 4 second cooldown\n\
 * Hover module changed to air platform, no longer follows Mario\n\
-* Down module behavior now consistent with Wall module";
+* Down module behavior now consistent with Wall module\n\
+* Cap module extended to 2 secs";
 
 struct mariosModulesSave sMariosModulesSave;
 
@@ -825,7 +867,7 @@ void save_marios_modules(Vec3f pos) {
         bcopy(&inventory,&sMariosModulesSave.inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
         nuPiWriteSram(0, &sMariosModulesSave, ALIGN8(size));
 
-        messageDisplayTimer = 120.0f;
+        gMessageDisplayTimer = 120.0f;
         messageDisplayPtr = "@G@Game successfully saved.";
         play_sound(SOUND_GENERAL_HEART_SPIN, gGlobalSoundSource);
     }
@@ -876,6 +918,10 @@ s32 save_bin_get_flag_total(int type) {
         }
     }
     return count;
+}
+
+s32 save_bin_get_max_total(int type) {
+    return saveBinTotal[type];
 }
 
 void marios_modules_savefile_load_position(void) {
