@@ -249,14 +249,35 @@ void module_wall(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_timer(struct module_execution_thread * met, u8 call_context) {
+    u8 time = 0;
+    switch(met->option) {
+        case 0:
+            time = 14;
+            break;
+        case 1:
+            time = 6;
+            break;
+        case 2:
+            time = 9;
+            break;
+        case 3:
+            time = 29;
+            break;
+        case 4:
+            time = 59;
+            break;
+        case 6:
+            time = 1;
+            break;
+    }
     switch(call_context) {
         case MCC_INVOKE:
             met->halted = TRUE;
             met->timer = 0;
-            module_log_message(met,"Timer waiting %d frames.", 15 + (10*met->mod));
+            module_log_message(met,"Timer waiting %d frames.", time+1);
             break;
         case MCC_HALTED:
-            if (met->timer >= 15 + (10*met->mod)) {
+            if (met->timer >= time) {
                 module_log_message(met,"Timer finished.",0);
 
                 met->halted = FALSE;
@@ -454,10 +475,30 @@ void module_flip(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_if(struct module_execution_thread * met, u8 call_context) {
-    if (met->ifbool) {
+    s32 condition = FALSE;
+    switch(met->option) {
+        case 0:
+            module_log_message(met,"AND Gate, %d conditions",met->condition_count);
+            condition = TRUE;
+            for (int i = 0; i < met->condition_count; i++) {
+                if (!(met->condition_flags & (1 << i))) {
+                    condition = FALSE;
+                }
+            }
+            break;
+        case 1:
+            module_log_message(met,"NOT Gate, %d conditions",met->condition_count);
+            condition = (met->condition_flags == 0);
+            break;
+        case 2:
+            module_log_message(met,"OR Gate, %d conditions",met->condition_count);
+            condition = (met->condition_flags != 0);
+            break;
+    }
+
+    if (condition) {
         module_log_message(met,"@G@Condition@@ is @B@TRUE@@, continue.",0);
         met->x++;
-        met->ifbool = FALSE;
     } else {
         u8 revertX = met->x;
         s8 curModId = get_inventory(met->x,met->y);
@@ -492,15 +533,17 @@ void module_if(struct module_execution_thread * met, u8 call_context) {
             }
         }
     }
+    met->condition_flags = 0;
+    met->condition_count = 0;
 }
 
 void module_if_floor(struct module_execution_thread * met, u8 call_context) {
     if (GROUNDED) {
         module_log_message(met,"On floor, condition set to @B@TRUE@@.",0);
-        met->ifbool = TRUE;
+        add_met_condition(met,TRUE);
     } else {
         module_log_message(met,"Off floor, condition set to @R@FALSE@@.",0);
-        met->ifbool = FALSE;
+        add_met_condition(met,FALSE);
     }
     met->x++;
 }
@@ -508,10 +551,36 @@ void module_if_floor(struct module_execution_thread * met, u8 call_context) {
 void module_if_down(struct module_execution_thread * met, u8 call_context) {
     if (gMarioState->vel[1] < 0.0f) {
         module_log_message(met,"Falling, condition set to @B@TRUE@@.",0);
-        met->ifbool = TRUE;
+        add_met_condition(met,TRUE);
     } else {
         module_log_message(met,"Not falling, condition set to @R@FALSE@@.",0);
-        met->ifbool = FALSE;
+        add_met_condition(met,FALSE);
+    }
+    met->x++;
+}
+
+void module_if_input(struct module_execution_thread * met, u8 call_context) {
+    u32 inpFlag = A_BUTTON;
+    switch(met->option) {
+        case 2:
+        case 3:
+            inpFlag = B_BUTTON;
+            break;
+        case 4:
+        case 5:
+            inpFlag = Z_TRIG;
+    }
+
+    u32 cond = (gPlayer1Controller->buttonDown & inpFlag);
+    if (met->option % 2 == 0) {
+        cond = (gPlayer1Controller->buttonPressed & inpFlag);
+    }
+    if (cond) {
+        module_log_message(met,"Input met, condition set to @B@TRUE@@.",0);
+        add_met_condition(met,TRUE);
+    } else {
+        module_log_message(met,"No input, condition set to @R@FALSE@@.",0);
+        add_met_condition(met,FALSE);
     }
     met->x++;
 }
@@ -570,6 +639,34 @@ Gfx * skinLights[] = {
     &mat_woman_womanEye2,
     &mat_woman_womanEye3,
     &mat_woman_mouth,
+    NULL,
+};
+
+char * ifInputOptions[] = {
+    "@B@A@@ Pressed",
+    "@B@A@@ Held",
+    "@G@B@@ Pressed",
+    "@G@B@@ Held",
+    "@1@Z@@ Pressed",
+    "@1@Z@@ Held",
+    NULL,
+};
+
+char * timerOptions[] = {
+    "1/2 Second",
+    "1/4 Second",
+    "1/3 Second",
+    "1 Second",
+    "2 Seconds",
+    "1 Frame",
+    "2 Frames",
+    NULL,
+};
+
+char * ifOptions[] = {
+    "All conditions are @B@TRUE@@.",
+    "All conditions are @R@FALSE@@.",
+    "Any condition is @B@TRUE@@.",
     NULL,
 };
 
@@ -734,10 +831,9 @@ struct module_info module_infos[] = {
         .name = "Timer",
         .type = MTYPE_COND,
         .tex = micons_clock_rgba16,
-        .desc = "Continues after a 1/2 second.",
-        .upg_desc = "+1/3 a second per @O@UPG@@.",
-        .cooldown = -.5f,
+        .desc = "Continues after set time has passed.",
         .func = module_timer,
+        .options = timerOptions,
         .creative = TRUE,
     },
 
@@ -963,8 +1059,9 @@ struct module_info module_infos[] = {
         .name = "Start If Block",
         .type = MTYPE_LOGIC,
         .tex = micons_if_rgba16,
-        .desc = "Executes block if @G@condition@@ is @B@TRUE@@.",
+        .desc = "Executes block when...",
         .func = module_if,
+        .options = ifOptions,
         .creative = TRUE,
     },
     [MOD_ENDBLOCK] = {
@@ -979,7 +1076,7 @@ struct module_info module_infos[] = {
         .name = "If Grounded",
         .type = MTYPE_LOGIC,
         .tex = micons_ground_rgba16,
-        .desc = "Sets @G@condition@@ to @B@TRUE@@ if Mario is touching floor.",
+        .desc = "Checks if Mario is touching floor.",
         .func = module_if_floor,
         .creative = TRUE,
     },
@@ -987,8 +1084,18 @@ struct module_info module_infos[] = {
         .name = "If Falling",
         .type = MTYPE_LOGIC,
         .tex = micons_grav_rgba16,
-        .desc = "Sets @G@condition@@ to @B@TRUE@@ if Mario is falling.",
+        .desc = "Checks if Mario is falling.",
         .func = module_if_down,
+        .creative = TRUE,
+    },
+
+    [MOD_IF_INPUT] = {
+        .name = "If Input",
+        .type = MTYPE_LOGIC,
+        .tex = micons_btngen_rgba16,
+        .desc = "Checks for input.",
+        .func = module_if_input,
+        .options = ifInputOptions,
         .creative = TRUE,
     },
 

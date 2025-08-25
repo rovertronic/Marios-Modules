@@ -29,6 +29,7 @@ struct module_execution_thread module_execution_threads[MODULE_EXEC_COUNT];
 #include "module_data.inc.c"
 
 s8 inventory[INVENTORY_SLOTS_Y][INVENTORY_SLOTS_X];
+u8 inventoryParam[INVENTORY_SLOTS_Y][INVENTORY_SLOTS_X];
 
 int inventory_x = 0;
 int inventory_y = 0;
@@ -37,6 +38,7 @@ f32 inventory_vis_x = 0.0f;
 f32 inventory_vis_y = 0.0f;
 
 s8 module_in_hand = MOD_EMPTY;
+u8 module_param_in_hand = 0;
 
 struct module_panel * icp = &module_panel_info[PANEL_ACTIONS];
 int inventory_panel = PANEL_ACTIONS;
@@ -89,12 +91,20 @@ s8 get_inventory(int x, int y) {
     return inventory[y][x];
 }
 
+u8 get_inventory_param(int x, int y) {
+    if ((x >= INVENTORY_SLOTS_X)||(x < 0)||(y >= INVENTORY_SLOTS_Y)||(y < 0)) {
+        return 0;
+    }
+    return inventoryParam[y][x];
+}
+
 void add_inventory(s8 module) {
     // Check for specialized inventory slots first, before
     for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
         for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
             if (inventory[y][x] == MOD_EMPTY && inventory_row_info[y].type == ROW_STORAGE && inventory_row_info[y].mod_type_prio == module_infos[module].type) {
                 inventory[y][x] = module;
+                inventoryParam[y][x] = 0;
                 return;
             }
         }
@@ -104,6 +114,7 @@ void add_inventory(s8 module) {
         for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
             if (inventory[y][x] == MOD_EMPTY && inventory_row_info[y].type == ROW_STORAGE) {
                 inventory[y][x] = module;
+                inventoryParam[y][x] = 0;
                 return;
             }
         }
@@ -114,6 +125,7 @@ void init_module_inventory(void) {
     for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
         for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
             inventory[y][x] = MOD_EMPTY;
+            inventoryParam[y][x] = 0;
         }
     }
 
@@ -181,6 +193,7 @@ void module_update(void) {
                 while(read_mod != MOD_EMPTY) {
                     if (1 << module_infos[read_mod].type & inventory_row_info[met->y].whitelist_flags) {
                         met->extra_data = module_infos[read_mod].extra_data;
+                        met->option = inventoryParam[met->y][met->x];
                         if (module_infos[read_mod].func != NULL) {
                             module_infos[read_mod].func(met,MCC_INVOKE);
                         } else {
@@ -230,6 +243,13 @@ void module_update(void) {
     }
 }
 
+void add_met_condition(struct module_execution_thread * met, s32 condition) {
+    if (condition) {
+        met->condition_flags |= (1<<met->condition_count);
+    }
+    met->condition_count++;
+}
+
 void execute_module_in_inventory(struct module_execution_thread * met, u32 input, int x, int y, int manual) {
     if (!met->executing) {
         if (met == &module_execution_threads[MODULE_EXEC_PASSIVE]) {
@@ -257,6 +277,9 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
         met->ifbool = FALSE;
         met->doaircooldown = FALSE;
         met->debug_monitor = FALSE;
+
+        met->condition_flags = 0;
+        met->condition_count = 0;
         colorBlendCount = 0;
 
         if (manual) {
@@ -375,13 +398,23 @@ void control_module_menu(void) {
                 play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
             }
 
-            s16 module_to_pick_up = inventory[true_inventory_y][inventory_x];
+            s8 module_to_pick_up = inventory[true_inventory_y][inventory_x];
+            u8 module_param_to_pick = inventoryParam[true_inventory_y][inventory_x];
             if (inventory_panel != PANEL_CREATIVE) {
                 inventory[true_inventory_y][inventory_x] = module_in_hand;
+                inventoryParam[true_inventory_y][inventory_x] = module_param_in_hand;
             }
             module_in_hand = module_to_pick_up;
+            module_param_in_hand = module_param_to_pick;
         }
         modified_inventory = TRUE;
+    }
+
+    if (module_in_hand != MOD_EMPTY && module_infos[module_in_hand].options && (gPlayer1Controller->buttonPressed & B_BUTTON)) {
+        module_param_in_hand++;
+        if (module_infos[module_in_hand].options[module_param_in_hand] == NULL) {
+            module_param_in_hand = 0;
+        }
     }
 
     // SHORTCUTS (Not allowed in creative menu)
@@ -390,10 +423,14 @@ void control_module_menu(void) {
             inventory_vis_x += 5.0f;
             for (int i = INVENTORY_SLOTS_X-2; i >= inventory_x; i--) {
                 s8 mod = get_inventory(i,true_inventory_y);
+                u8 param = get_inventory_param(i,true_inventory_y);
 
                 if (get_inventory(i+1,true_inventory_y) == MOD_EMPTY) {
                     inventory[true_inventory_y][i+1] = mod;
                     inventory[true_inventory_y][i] = MOD_EMPTY;
+
+                    inventoryParam[true_inventory_y][i+1] = param;
+                    inventoryParam[true_inventory_y][i] = 0;
                 }
             }
             modified_inventory = TRUE;
@@ -403,10 +440,14 @@ void control_module_menu(void) {
             inventory_vis_x -= 5.0f;
             for (int i = 1; i <= inventory_x; i++) {
                 s8 mod = get_inventory(i,true_inventory_y);
+                u8 param = get_inventory_param(i,true_inventory_y);
 
                 if (get_inventory(i-1,true_inventory_y) == MOD_EMPTY) {
                     inventory[true_inventory_y][i-1] = mod;
                     inventory[true_inventory_y][i] = MOD_EMPTY;
+
+                    inventoryParam[true_inventory_y][i-1] = param;
+                    inventoryParam[true_inventory_y][i] = 0;
                 }
             }
             modified_inventory = TRUE;
@@ -643,29 +684,42 @@ void print_module_menu(void) {
 
     //PRINT MOD INFO
     s8 mod_inf_to_disp = MOD_EMPTY;
+    u8 mod_param_inf = 0;
 
     if (module_in_hand != MOD_EMPTY) {
         mod_inf_to_disp = module_in_hand;
+        mod_param_inf = module_param_in_hand;
     } else {
         mod_inf_to_disp = inventory[inventory_y + icp->offset][inventory_x];
+        mod_param_inf = inventoryParam[inventory_y + icp->offset][inventory_x];
     }
 
     if (showProgress) {
         mod_inf_to_disp = MOD_EMPTY;
+        mod_param_inf = 0;
     }
 
     if (mod_inf_to_disp != MOD_EMPTY) {
         print_set_envcolour(255, 255, 255, 255);
-        sprintf(print_buffer, "@%s@%s (%s):@@ %s\n",
+        int charCt = sprintf(print_buffer, "@%s@%s (%s):@@ %s\n",
             module_type_infos[module_infos[mod_inf_to_disp].type].text_color,
             module_infos[mod_inf_to_disp].name,
             module_type_infos[module_infos[mod_inf_to_disp].type].name,
             module_infos[mod_inf_to_disp].desc);
+
+        if (module_infos[mod_inf_to_disp].options != NULL) {
+            char * paramStr = "(@G@B@@ to change: %s) ";
+            if (module_in_hand == MOD_EMPTY) {
+                paramStr = "(%s) ";
+            }
+            charCt += sprintf(print_buffer+charCt, paramStr, module_infos[mod_inf_to_disp].options[mod_param_inf]);
+        }
+
         if (module_infos[mod_inf_to_disp].upg_desc != NULL) {
-            sprintf(print_buffer, "%s@O@UPG: @@%s ",print_buffer,module_infos[mod_inf_to_disp].upg_desc);
+            charCt += sprintf(print_buffer+charCt, "@O@UPG: @@%s ",module_infos[mod_inf_to_disp].upg_desc);
         }
         if (module_infos[mod_inf_to_disp].cooldown != 0.0f) {
-            sprintf(print_buffer, "%s@1@(Cooldown: %.1fs)@@ ",print_buffer,module_infos[mod_inf_to_disp].cooldown);
+            charCt += sprintf(print_buffer+charCt, "@1@(Cooldown: %.1fs)@@ ",module_infos[mod_inf_to_disp].cooldown);
         }
         /*
         if (module_infos[mod_inf_to_disp].elementable == TRUE) {
@@ -865,6 +919,7 @@ void save_marios_modules(Vec3f pos) {
         sMariosModulesSave.keys = gMarioState->numKeys;
         sMariosModulesSave.coins = gMarioState->numCoins;
         bcopy(&inventory,&sMariosModulesSave.inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+        bcopy(&inventoryParam,&sMariosModulesSave.inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
         nuPiWriteSram(0, &sMariosModulesSave, ALIGN8(size));
 
         gMessageDisplayTimer = 120.0f;
@@ -880,6 +935,7 @@ void load_marios_modules(void) {
         nuPiReadSram(0, &sMariosModulesSave, ALIGN8(size));
         if (sMariosModulesSave.save_magic == SAVE_MAGIC) {
             bcopy(&sMariosModulesSave.inventory,&inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+            bcopy(&sMariosModulesSave.inventoryParam,&inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
         } else {
             bzero(&sMariosModulesSave,size);
         }

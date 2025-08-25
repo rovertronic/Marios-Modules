@@ -51,12 +51,16 @@ struct module_execution_thread {
     u8 doaircooldown:1;
     u8 debug_monitor:1;
 
+    u16 condition_flags;
+    u8 condition_count;
+
     u8 landing_count;
 
     u16 used_flags;
     u16 timer;
     s16 cooltime;
     void * extra_data;
+    u8 option;
 };
 
 enum module_execution_ids {
@@ -81,6 +85,7 @@ struct module_info {
     char * upg_desc;
     void (*func)(struct module_execution_thread * met, u8 call_context);
     void * extra_data;
+    char ** options;
     f32 cooldown;
 };
 
@@ -158,6 +163,7 @@ enum module_id {
     MOD_IF_FLOOR,
     MOD_IF_DOWN,
     MOD_PASSIVE,
+    MOD_IF_INPUT,
     MOD_MONITOR,
     MOD_COUNT,
 };
@@ -204,7 +210,8 @@ enum {
 struct mariosModulesSave {
     u8 version;
     Vec3s pos;
-    u8 inventory[INVENTORY_SLOTS_Y*INVENTORY_SLOTS_X];
+    s8 inventory[INVENTORY_SLOTS_Y*INVENTORY_SLOTS_X];
+    s8 inventoryParam[INVENTORY_SLOTS_Y*INVENTORY_SLOTS_X];
     u32 bin[SAVE_BIN_COUNT];
     u16 coins;
     u8 keys;
@@ -216,6 +223,7 @@ Gfx *geo_module_material(s32 callContext, struct GraphNode *node, void *context)
 s8 get_inventory(int x, int y);
 void module_log_message(struct module_execution_thread * met,  char * logmsg, int num);
 void module_log_clear(void);
+void add_met_condition(struct module_execution_thread * met, s32 condition);
 
 void add_inventory(s8 module);
 void display_module_message(s8 id);
