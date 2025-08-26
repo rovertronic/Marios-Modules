@@ -24,6 +24,11 @@ u8 gGameSettings[SETTING_COUNT];
 Vec3f gModulePreviewPos;
 u8 gModuleUpdateVanity = FALSE;
 
+s8 gMysteryModuleState = 0;
+s8 gMysteryModuleSelection = -1;
+s8 gMysteryModuleChoice[2];
+f32 sMysteryModuleAlpha = 0.0f;
+
 struct module_execution_thread module_execution_threads[MODULE_EXEC_COUNT];
 
 #include "module_data.inc.c"
@@ -757,6 +762,43 @@ void print_execution_status(int x, int y, int execthread, int module) {
 
 char sDebugLogStringBuffer[100];
 void print_module_hud_status(void) {
+
+    if (gMysteryModuleState) {
+        sMysteryModuleAlpha+=gFrameLerpDeltaTime*.1f;
+        sMysteryModuleAlpha = CLAMP(sMysteryModuleAlpha,0.0f,1.0f);
+    } else {
+        sMysteryModuleAlpha-=gFrameLerpDeltaTime*.1f;
+        sMysteryModuleAlpha = CLAMP(sMysteryModuleAlpha,0.0f,1.0f);
+    }
+    if (sMysteryModuleAlpha > 0.0f) {
+        gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+        gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160 * sMysteryModuleAlpha);
+        render_4slice(160-40,120+30,160+40,120-30);
+
+        utf8_print_reset();
+        gDPSetEnvColor(gDisplayListHead++, 255,255,255, 255 * sMysteryModuleAlpha);
+        int offset; int y;
+        utf8_size("Pick a module.",&offset,&y);
+        offset/=2;
+        print_utf8("Pick a module.",160 - offset ,125);
+        gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
+        
+        gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
+        print_module(gMysteryModuleChoice[0],140-8,120);
+        print_module(gMysteryModuleChoice[1],180-8,120);
+
+        s16 x = 160;
+        switch(gMysteryModuleSelection) {
+            case 0:
+                x = 140;
+                break;
+            case 1:
+                x = 180;
+                break;
+        }
+        print_texture(micons_small_hand_1_rgba16,16,x, 130);
+    }
+
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     print_execution_status(22,MODULE_HUD_STATUS_Y,MODULE_EXEC_A,MOD_BUTTON_A);
     print_execution_status(42,MODULE_HUD_STATUS_Y,MODULE_EXEC_B,MOD_BUTTON_B);
@@ -932,7 +974,7 @@ void load_marios_modules(void) {
         gMarioState->numKeys = sMariosModulesSave.keys;
         gMarioState->numCoins = sMariosModulesSave.coins;
 
-        tinymt32_init(&gGlobalRandomState,sMariosModulesSave.seed);
+        tinymt32_init(&gGlobalRandomState,3);
     }
 }
 

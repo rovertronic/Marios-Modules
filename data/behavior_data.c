@@ -6102,6 +6102,7 @@ const BehaviorScript bhvChest[] = {
     END_LOOP(),
 };
 
+extern void bhv_mystery_chest(void);
 const BehaviorScript bhvMysteryChest[] = {
     BEGIN(OBJ_LIST_LEVEL),
     LOAD_ANIMATIONS(oAnimations, chest_anims),
@@ -6112,7 +6113,7 @@ const BehaviorScript bhvMysteryChest[] = {
     SET_INT(oIntangibleTimer, 0),
     SET_HOME(),
     BEGIN_LOOP(),
-        CALL_NATIVE(bhv_chest),
+        CALL_NATIVE(bhv_mystery_chest),
         SET_INT(oInteractStatus, INT_STATUS_NONE),
     END_LOOP(),
 };

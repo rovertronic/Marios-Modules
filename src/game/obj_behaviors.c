@@ -811,7 +811,13 @@ void bhv_chest_price_number(void) {
     }
 }
 
+extern struct module_info module_infos[];
+void bhv_mystery_chest(void);
+
 void bhv_chest(void) {
+    bhv_mystery_chest();
+    return;
+
     u8 cost = GET_BPARAM1(o->oBehParams);
 
     switch(o->oAction) {
@@ -873,6 +879,80 @@ void bhv_chest(void) {
             if (o->oTimer > 30) {
                 display_module_message(o->oBehParams2ndByte);
                 o->oAction = 3;
+            }
+            break;
+    }
+
+    obj_element_enemy_loop();
+}
+
+void bhv_mystery_chest(void) {
+    switch(o->oAction) {
+        case 0:
+            obj_element_init(o,ELEMENT_NORMAL,100.0f);
+            obj_save_bin_count(SAVE_BIN_CHESTS);
+
+            s8 randomModule;
+            do {
+                randomModule = tinymt32_generate_u32(&gGlobalRandomState)%MOD_COUNT;
+            } while (module_infos[randomModule].creative == FALSE  );
+            SET_BPARAM1(o->oBehParams,randomModule);
+            s8 firstPick = randomModule;
+            do {
+                randomModule = tinymt32_generate_u32(&gGlobalRandomState)%MOD_COUNT;
+            } while (module_infos[randomModule].creative == FALSE
+            || randomModule == firstPick
+            || module_infos[randomModule].type == module_infos[firstPick].type);
+            SET_BPARAM2(o->oBehParams,randomModule);
+
+            if (obj_save_bin_read()) {
+                o->oAction = 4;
+            }
+            o->oAction = 1;
+            break;
+        case 1:
+            o->header.gfx.animInfo.animFrame = 0;
+            o->header.gfx.animInfo.animFrameF = 0.0f;
+            o->header.gfx.animInfo.animAccelF = 0.0f;
+            if (o->oInteractStatus & INT_STATUS_INTERACTED) {
+                obj_save_bin_write(o);
+                set_mario_action(gMarioState,ACT_WAITING_FOR_DIALOG,0);
+
+                o->header.gfx.animInfo.animAccelF = 1.0f;
+                play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);
+                o->oAction = 2;
+
+                gMysteryModuleState = 1;
+                gMysteryModuleChoice[0] = GET_BPARAM1(o->oBehParams);
+                gMysteryModuleChoice[1] = GET_BPARAM2(o->oBehParams);
+            }
+            break;
+        case 2:;
+            s8 choice = MOD_EMPTY;
+            gMysteryModuleSelection = -1;
+            if (gPlayer1Controller->rawStickX < -20) {
+                gMysteryModuleSelection = 0;
+                choice = GET_BPARAM1(o->oBehParams);
+            }
+            if (gPlayer1Controller->rawStickX > 20) {
+                gMysteryModuleSelection = 1;
+                choice = GET_BPARAM2(o->oBehParams);
+            }
+            if (choice != MOD_EMPTY && (gPlayer1Controller->buttonPressed & A_BUTTON)) {
+                gMysteryModuleState = 0;
+                o->oAction = 3;
+                add_inventory(choice);
+
+                struct Object * moduleCollect = spawn_object(o,MODEL_MODULE,bhvModuleCollect);
+                moduleCollect->oBehParams2ndByte = choice;
+                o->oBehParams2ndByte = choice;
+            }
+            break;
+        case 3:
+            if (o->oTimer > 30) {
+                display_module_message(o->oBehParams2ndByte);
+                o->oAction = 4;
+                set_mario_action(gMarioState,ACT_IDLE,0);
             }
             break;
     }

@@ -14,6 +14,10 @@ extern Vec3f gModulePreviewPos;
 
 extern f32 gMessageDisplayTimer;
 
+extern s8 gMysteryModuleState;
+extern s8 gMysteryModuleSelection;
+extern s8 gMysteryModuleChoice[2];
+
 struct module_panel {
     char * name;
     u8 offset;
