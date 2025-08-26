@@ -331,10 +331,6 @@ void control_module_menu(void) {
 
     icp = &module_panel_info[inventory_panel];
 
-    if (icp == &module_panel_info[PANEL_PROGRESS]) {
-        return;
-    }
-
     //handle joystick
     if (
         (gPlayer1Controller->rawStickY < ANALOG_MENU_THRESH) &&
@@ -411,6 +407,7 @@ void control_module_menu(void) {
     }
 
     if (module_in_hand != MOD_EMPTY && module_infos[module_in_hand].options && (gPlayer1Controller->buttonPressed & B_BUTTON)) {
+        play_sound(SOUND_GENERAL_BIG_CLOCK, gGlobalSoundSource);
         module_param_in_hand++;
         if (module_infos[module_in_hand].options[module_param_in_hand] == NULL) {
             module_param_in_hand = 0;
@@ -581,8 +578,6 @@ char * module_is_invalid(int x, int y) {
 
 char print_buffer[500];
 void print_module_menu(void) {
-    int showProgress = (icp == &module_panel_info[PANEL_PROGRESS]);
-
     gSPDisplayList(gDisplayListHead++,ui_ui_mesh);
 
     gPrintModuleDarken=1;
@@ -636,34 +631,34 @@ void print_module_menu(void) {
     }
 
     //PRINT HAND and GRAB
-    if (!showProgress) {
-        print_module(module_in_hand,inventory_vis_x,inventory_vis_y);
-        void * hand_tex = micons_small_hand_1_rgba16;
-        if (module_in_hand != MOD_EMPTY) {
-            hand_tex = micons_small_hand_2_rgba16;
-        }
-        print_texture(hand_tex,16,inventory_vis_x+8, inventory_vis_y+8);
-        gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
+    print_module(module_in_hand,inventory_vis_x,inventory_vis_y);
+    void * hand_tex = micons_small_hand_1_rgba16;
+    if (module_in_hand != MOD_EMPTY) {
+        hand_tex = micons_small_hand_2_rgba16;
+    }
+    print_texture(hand_tex,16,inventory_vis_x+8, inventory_vis_y+8);
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
-        char * errmsg = module_is_invalid(inventory_x,inventory_y+icp->offset);
-        if (errmsg) {
-            //print reason
-            print_utf8_boxed(errmsg, 15+inventory_vis_x, 230-inventory_vis_y, 1.0f, FALSE);
-        }
-    } else {
+    char * errmsg = module_is_invalid(inventory_x,inventory_y+icp->offset);
+    if (errmsg) {
+        //print reason
+        print_utf8_boxed(errmsg, 15+inventory_vis_x, 230-inventory_vis_y, 1.0f, FALSE);
+    }
+
+    if (icp == &module_panel_info[PANEL_SETTINGS]) {
         gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
         gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
         gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160);
-        render_4slice(25,215,195,130);
+        render_4slice(25,170,195,125);
 
         utf8_print_reset();
         gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
 
-        sprintf(print_buffer,"Modules: %d/%d\nStars: %d/%d",
+        sprintf(print_buffer,"Chests: %d/%d\nStars: %d/%d",
         save_bin_get_flag_total(SAVE_BIN_CHESTS),save_bin_get_max_total(SAVE_BIN_CHESTS),
         save_bin_get_flag_total(SAVE_BIN_STARS), save_bin_get_max_total(SAVE_BIN_STARS));
-        print_utf8(print_buffer,30,195);
+        print_utf8(print_buffer,30,145);
     }
 
     // PRINT PANEL INFO
@@ -692,11 +687,6 @@ void print_module_menu(void) {
     } else {
         mod_inf_to_disp = inventory[inventory_y + icp->offset][inventory_x];
         mod_param_inf = inventoryParam[inventory_y + icp->offset][inventory_x];
-    }
-
-    if (showProgress) {
-        mod_inf_to_disp = MOD_EMPTY;
-        mod_param_inf = 0;
     }
 
     if (mod_inf_to_disp != MOD_EMPTY) {

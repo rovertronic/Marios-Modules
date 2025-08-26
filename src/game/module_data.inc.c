@@ -1,7 +1,7 @@
 // INVENTORY STRUCTURE DECLARATIONS
 struct module_panel module_panel_info[] = {
     [PANEL_SETTINGS] = {
-        .name = "Settings",
+        .name = "Settings + Stats",
         .offset = 48,
         .size = 2,
         .unlock = NULL,
@@ -22,12 +22,6 @@ struct module_panel module_panel_info[] = {
         .name = "@P@Vanity",
         .offset = 44,
         .size = 4,
-        .unlock = NULL,
-    },
-    [PANEL_PROGRESS] = {
-        .name = "Progress",
-        .offset = 0,
-        .size = 0,
         .unlock = NULL,
     },
     [PANEL_CREATIVE] = {
