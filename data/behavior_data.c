@@ -6102,6 +6102,21 @@ const BehaviorScript bhvChest[] = {
     END_LOOP(),
 };
 
+const BehaviorScript bhvMysteryChest[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    LOAD_ANIMATIONS(oAnimations, chest_anims),
+    ANIMATE(0),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_COMPUTE_DIST_TO_MARIO)),
+    SET_INTERACT_TYPE(INTERACT_IGLOO_BARRIER),
+    SET_HITBOX(/*Radius*/ 100, /*Height*/ 200),
+    SET_INT(oIntangibleTimer, 0),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_chest),
+        SET_INT(oInteractStatus, INT_STATUS_NONE),
+    END_LOOP(),
+};
+
 extern void bhv_hover(void);
 const BehaviorScript bhvHover[] = {
     BEGIN(OBJ_LIST_SURFACE),

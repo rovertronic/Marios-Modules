@@ -27,6 +27,119 @@ Vec3s gVec3sOne  = {     1,     1,     1 };
 
 static u16 gRandomSeed16;
 
+
+/* TinyMT 32-bit implementation */
+
+/**
+ * This function changes internal state of tinymt32.
+ * Users should not call this function directly.
+ * @param random tinymt internal status
+ */
+static void tinymt32_next_state(tinymt32_t * random) {
+    u32 x;
+    u32 y;
+
+    y = random->status[3];
+    x = (random->status[0] & TINYMT32_MASK)
+        ^ random->status[1]
+        ^ random->status[2];
+    x ^= (x << TINYMT32_SH0);
+    y ^= (y >> TINYMT32_SH0) ^ x;
+    random->status[0] = random->status[1];
+    random->status[1] = random->status[2];
+    random->status[2] = x ^ (y << TINYMT32_SH1);
+    random->status[3] = y;
+    s32 a = -((s32)(y & 1)) & (s32)TINYMT32_MAT1;
+    s32 b = -((s32)(y & 1)) & (s32)TINYMT32_MAT2;
+    random->status[1] ^= (u32)a;
+    random->status[2] ^= (u32)b;
+}
+
+/**
+ * This function outputs 32-bit unsigned integer from internal state.
+ * Users should not call this function directly.
+ * @param random tinymt internal status
+ * @return 32-bit unsigned pseudorandom number
+ */
+static u32 tinymt32_temper(tinymt32_t * random) {
+    u32 t0, t1;
+    t0 = random->status[3];
+    t1 = random->status[0]
+        + (random->status[2] >> TINYMT32_SH8);
+    t0 ^= t1;
+    if ((t1 & 1) != 0) {
+        t0 ^= TINYMT32_TMAT;
+    }
+    return t0;
+}
+
+/**
+ * This function outputs 32-bit unsigned integer from internal state.
+ * @param random tinymt internal status
+ * @return 32-bit unsigned integer r (0 <= r < 2^32)
+ */
+u32 tinymt32_generate_u32(tinymt32_t * random) {
+    tinymt32_next_state(random);
+    return tinymt32_temper(random);
+}
+
+/**
+ * This function outputs floating point number from internal state.
+ * This function is implemented using multiplying by (1 / 2^24).
+ * @param random tinymt internal status
+ * @return floating point number r (0.0 <= r < 1.0)
+ */
+f32 tinymt32_generate_float(tinymt32_t * random) {
+    tinymt32_next_state(random);
+    return (f32)(tinymt32_temper(random) >> 8) * TINYMT32_MUL;
+}
+
+#define MIN_LOOP 8
+#define PRE_LOOP 8
+
+/**
+ * This function certificate the period of 2^127-1.
+ * @param random tinymt state vector.
+ */
+static void period_certification(tinymt32_t * random) {
+    if ((random->status[0] & TINYMT32_MASK) == 0 &&
+        random->status[1] == 0 &&
+        random->status[2] == 0 &&
+        random->status[3] == 0) {
+        random->status[0] = 'T';
+        random->status[1] = 'I';
+        random->status[2] = 'N';
+        random->status[3] = 'Y';
+    }
+}
+
+/**
+ * This function initializes the internal state array with a 32-bit
+ * unsigned integer seed.
+ * @param random tinymt state vector.
+ * @param seed a 32-bit unsigned integer used as a seed.
+ */
+void tinymt32_init(tinymt32_t * random, u32 seed) {
+
+    random->status[0] = seed;
+    random->status[1] = TINYMT32_MAT1;
+    random->status[2] = TINYMT32_MAT2;
+    random->status[3] = TINYMT32_TMAT;
+    for (u32 i = 1; i < MIN_LOOP; i++) {
+        random->status[i & 3] ^= i + 1812433253U
+            * (random->status[(i - 1) & 3]
+               ^ (random->status[(i - 1) & 3] >> 30));
+    }
+    period_certification(random);
+    for (u32 i = 0; i < PRE_LOOP; i++) {
+        tinymt32_next_state(random);
+    }
+}
+
+tinymt32_t gGlobalRandomState;
+
+/* End of TinyMT 32-bit implementation */
+
 // Generate a pseudorandom integer from 0 to 65535 from the random seed, and update the seed.
 u16 random_u16(void) {
     if (gRandomSeed16 == 22026) {

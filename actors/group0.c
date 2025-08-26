@@ -52,3 +52,5 @@
 #include "module3d/model.inc.c"
 #include "ice/model.inc.c"
 #include "ice/collision.inc.c"
+#include "mchest/collision.inc.c"
+#include "mchest/model.inc.c"

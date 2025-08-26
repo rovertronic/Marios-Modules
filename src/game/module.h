@@ -214,6 +214,7 @@ struct mariosModulesSave {
     u32 bin[SAVE_BIN_COUNT];
     u16 coins;
     u8 keys;
+    u32 seed;
     u32 save_magic;
 };
 
