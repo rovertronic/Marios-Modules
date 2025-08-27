@@ -886,24 +886,36 @@ void bhv_chest(void) {
     obj_element_enemy_loop();
 }
 
+s8 lootTableVanity[] = {MOD_VAN_CAP,MOD_VAN_PANTS,MOD_VAN_HAIR,MOD_RED,MOD_BLUE,MOD_GREEN,MOD_YELLOW,MOD_BLACK,MOD_WHITE};
+
 void bhv_mystery_chest(void) {
     switch(o->oAction) {
         case 0:
             obj_element_init(o,ELEMENT_NORMAL,100.0f);
             obj_save_bin_count(SAVE_BIN_CHESTS);
 
+            // Normal loot
             s8 randomModule;
             do {
                 randomModule = tinymt32_generate_u32(&gGlobalRandomState)%MOD_COUNT;
-            } while (module_infos[randomModule].creative == FALSE  );
+            } while (module_infos[randomModule].creative == FALSE
+            || module_infos[randomModule].type == MTYPE_VANITY);
             SET_BPARAM1(o->oBehParams,randomModule);
             s8 firstPick = randomModule;
+
             do {
                 randomModule = tinymt32_generate_u32(&gGlobalRandomState)%MOD_COUNT;
             } while (module_infos[randomModule].creative == FALSE
             || randomModule == firstPick
-            || module_infos[randomModule].type == module_infos[firstPick].type);
+            || module_infos[randomModule].type == module_infos[firstPick].type
+            || module_infos[randomModule].type == MTYPE_VANITY);
             SET_BPARAM2(o->oBehParams,randomModule);
+
+            // Vanity Loot
+            randomModule = tinymt32_generate_u32(&gGlobalRandomState)%sizeof(lootTableVanity);
+            SET_BPARAM3(o->oBehParams, lootTableVanity[randomModule]);
+            randomModule = tinymt32_generate_u32(&gGlobalRandomState)%sizeof(lootTableVanity);
+            SET_BPARAM4(o->oBehParams, lootTableVanity[randomModule]);
 
             if (obj_save_bin_read()) {
                 o->oAction = 4;
@@ -927,7 +939,13 @@ void bhv_mystery_chest(void) {
                 gMysteryModuleChoice[1] = GET_BPARAM2(o->oBehParams);
             }
             break;
-        case 2:;
+        case 2:
+            if ((gMysteryModuleState >= 3) && gPlayer1Controller->buttonPressed & B_BUTTON) {
+                gMysteryModuleState = 0;
+                set_mario_action(gMarioState,ACT_IDLE,0);
+                o->oAction = 5;
+                break;
+            }
             s8 choice = MOD_EMPTY;
             gMysteryModuleSelection = -1;
             if (gPlayer1Controller->rawStickX < -20) {
@@ -939,20 +957,36 @@ void bhv_mystery_chest(void) {
                 choice = GET_BPARAM2(o->oBehParams);
             }
             if (choice != MOD_EMPTY && (gPlayer1Controller->buttonPressed & A_BUTTON)) {
-                gMysteryModuleState = 0;
                 o->oAction = 3;
                 add_inventory(choice);
 
                 struct Object * moduleCollect = spawn_object(o,MODEL_MODULE,bhvModuleCollect);
                 moduleCollect->oBehParams2ndByte = choice;
                 o->oBehParams2ndByte = choice;
+
+                gMysteryModuleState++;
             }
             break;
         case 3:
             if (o->oTimer > 30) {
                 display_module_message(o->oBehParams2ndByte);
                 o->oAction = 4;
+            }
+            break;
+        case 4:
+            if (gMysteryModuleState == 2) {
+                gMysteryModuleState = 3;
+                o->oAction = 2;
+        
+                SET_BPARAM1(o->oBehParams,GET_BPARAM3(o->oBehParams));
+                SET_BPARAM2(o->oBehParams,GET_BPARAM4(o->oBehParams));
+
+                gMysteryModuleChoice[0] = GET_BPARAM1(o->oBehParams);
+                gMysteryModuleChoice[1] = GET_BPARAM2(o->oBehParams);
+            } else {
+                gMysteryModuleState = 0;
                 set_mario_action(gMarioState,ACT_IDLE,0);
+                o->oAction = 5;
             }
             break;
     }

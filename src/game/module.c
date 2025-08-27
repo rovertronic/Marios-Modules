@@ -763,7 +763,7 @@ void print_execution_status(int x, int y, int execthread, int module) {
 char sDebugLogStringBuffer[100];
 void print_module_hud_status(void) {
 
-    if (gMysteryModuleState) {
+    if (gMysteryModuleState % 2 == 1) {
         sMysteryModuleAlpha+=gFrameLerpDeltaTime*.1f;
         sMysteryModuleAlpha = CLAMP(sMysteryModuleAlpha,0.0f,1.0f);
     } else {
@@ -771,9 +771,10 @@ void print_module_hud_status(void) {
         sMysteryModuleAlpha = CLAMP(sMysteryModuleAlpha,0.0f,1.0f);
     }
     if (sMysteryModuleAlpha > 0.0f) {
+        u8 noThanks = (gMysteryModuleState >= 3);
         gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
         gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160 * sMysteryModuleAlpha);
-        render_4slice(160-40,120+30,160+40,120-30);
+        render_4slice(160-40,120+30,160+40,120-30+(noThanks*-20));
 
         utf8_print_reset();
         gDPSetEnvColor(gDisplayListHead++, 255,255,255, 255 * sMysteryModuleAlpha);
@@ -781,6 +782,12 @@ void print_module_hud_status(void) {
         utf8_size("Pick a module.",&offset,&y);
         offset/=2;
         print_utf8("Pick a module.",160 - offset ,125);
+        if (noThanks) {
+            utf8_size("B: No Thanks.",&offset,&y);
+            offset/=2;
+            print_utf8("@G@B@@: No Thanks.",160 - offset ,75);
+        }
+
         gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
         
         gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
@@ -974,7 +981,7 @@ void load_marios_modules(void) {
         gMarioState->numKeys = sMariosModulesSave.keys;
         gMarioState->numCoins = sMariosModulesSave.coins;
 
-        tinymt32_init(&gGlobalRandomState,3);
+        tinymt32_init(&gGlobalRandomState,4);
     }
 }
 
