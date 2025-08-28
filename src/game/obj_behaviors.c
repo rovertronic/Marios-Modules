@@ -811,13 +811,7 @@ void bhv_chest_price_number(void) {
     }
 }
 
-extern struct module_info module_infos[];
-void bhv_mystery_chest(void);
-
 void bhv_chest(void) {
-    bhv_mystery_chest();
-    return;
-
     u8 cost = GET_BPARAM1(o->oBehParams);
 
     switch(o->oAction) {
@@ -886,6 +880,7 @@ void bhv_chest(void) {
     obj_element_enemy_loop();
 }
 
+extern struct module_info module_infos[];
 s8 lootTableVanity[] = {MOD_VAN_CAP,MOD_VAN_PANTS,MOD_VAN_HAIR,MOD_RED,MOD_BLUE,MOD_GREEN,MOD_YELLOW,MOD_BLACK,MOD_WHITE};
 
 void bhv_mystery_chest(void) {
@@ -914,7 +909,10 @@ void bhv_mystery_chest(void) {
             // Vanity Loot
             randomModule = tinymt32_generate_u32(&gGlobalRandomState)%sizeof(lootTableVanity);
             SET_BPARAM3(o->oBehParams, lootTableVanity[randomModule]);
-            randomModule = tinymt32_generate_u32(&gGlobalRandomState)%sizeof(lootTableVanity);
+            firstPick = randomModule;
+            do {
+                randomModule = tinymt32_generate_u32(&gGlobalRandomState)%sizeof(lootTableVanity);
+            } while (randomModule == firstPick);
             SET_BPARAM4(o->oBehParams, lootTableVanity[randomModule]);
 
             if (obj_save_bin_read()) {
