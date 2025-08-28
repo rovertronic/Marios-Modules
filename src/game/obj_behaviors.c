@@ -856,7 +856,6 @@ void bhv_chest(void) {
                 gHudDisplay.coins = gMarioState->numCoins;
                 play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);
                 o->oAction = 2;
-                gMessageDisplayTimer = 0.0f;
 
                 struct Object * moduleCollect = spawn_object(o,MODEL_MODULE,bhvModuleCollect);
                 moduleCollect->oBehParams2ndByte = o->oBehParams2ndByte;
@@ -895,7 +894,7 @@ void bhv_mystery_chest(void) {
                 randomModule = tinymt32_generate_u32(&gGlobalRandomState)%MOD_COUNT;
             } while (module_infos[randomModule].creative == FALSE
             || module_infos[randomModule].type == MTYPE_VANITY);
-            SET_BPARAM1(o->oBehParams,randomModule);
+            SET_BPARAM1(o->oMysteryChestContents,randomModule);
             s8 firstPick = randomModule;
 
             do {
@@ -904,16 +903,16 @@ void bhv_mystery_chest(void) {
             || randomModule == firstPick
             || module_infos[randomModule].type == module_infos[firstPick].type
             || module_infos[randomModule].type == MTYPE_VANITY);
-            SET_BPARAM2(o->oBehParams,randomModule);
+            SET_BPARAM2(o->oMysteryChestContents,randomModule);
 
             // Vanity Loot
             randomModule = tinymt32_generate_u32(&gGlobalRandomState)%sizeof(lootTableVanity);
-            SET_BPARAM3(o->oBehParams, lootTableVanity[randomModule]);
+            SET_BPARAM3(o->oMysteryChestContents, lootTableVanity[randomModule]);
             firstPick = randomModule;
             do {
                 randomModule = tinymt32_generate_u32(&gGlobalRandomState)%sizeof(lootTableVanity);
             } while (randomModule == firstPick);
-            SET_BPARAM4(o->oBehParams, lootTableVanity[randomModule]);
+            SET_BPARAM4(o->oMysteryChestContents, lootTableVanity[randomModule]);
 
             if (obj_save_bin_read()) {
                 o->oAction = 4;
@@ -933,8 +932,8 @@ void bhv_mystery_chest(void) {
                 o->oAction = 2;
 
                 gMysteryModuleState = 1;
-                gMysteryModuleChoice[0] = GET_BPARAM1(o->oBehParams);
-                gMysteryModuleChoice[1] = GET_BPARAM2(o->oBehParams);
+                gMysteryModuleChoice[0] = GET_BPARAM1(o->oMysteryChestContents);
+                gMysteryModuleChoice[1] = GET_BPARAM2(o->oMysteryChestContents);
             }
             break;
         case 2:
@@ -948,11 +947,11 @@ void bhv_mystery_chest(void) {
             gMysteryModuleSelection = -1;
             if (gPlayer1Controller->rawStickX < -20) {
                 gMysteryModuleSelection = 0;
-                choice = GET_BPARAM1(o->oBehParams);
+                choice = GET_BPARAM1(o->oMysteryChestContents);
             }
             if (gPlayer1Controller->rawStickX > 20) {
                 gMysteryModuleSelection = 1;
-                choice = GET_BPARAM2(o->oBehParams);
+                choice = GET_BPARAM2(o->oMysteryChestContents);
             }
             if (choice != MOD_EMPTY && (gPlayer1Controller->buttonPressed & A_BUTTON)) {
                 o->oAction = 3;
@@ -976,11 +975,11 @@ void bhv_mystery_chest(void) {
                 gMysteryModuleState = 3;
                 o->oAction = 2;
         
-                SET_BPARAM1(o->oBehParams,GET_BPARAM3(o->oBehParams));
-                SET_BPARAM2(o->oBehParams,GET_BPARAM4(o->oBehParams));
+                SET_BPARAM1(o->oMysteryChestContents,GET_BPARAM3(o->oMysteryChestContents));
+                SET_BPARAM2(o->oMysteryChestContents,GET_BPARAM4(o->oMysteryChestContents));
 
-                gMysteryModuleChoice[0] = GET_BPARAM1(o->oBehParams);
-                gMysteryModuleChoice[1] = GET_BPARAM2(o->oBehParams);
+                gMysteryModuleChoice[0] = GET_BPARAM1(o->oMysteryChestContents);
+                gMysteryModuleChoice[1] = GET_BPARAM2(o->oMysteryChestContents);
             } else {
                 gMysteryModuleState = 0;
                 set_mario_action(gMarioState,ACT_IDLE,0);
@@ -993,6 +992,7 @@ void bhv_mystery_chest(void) {
 }
 
 void bhv_hover(void) {
+    cur_obj_scale(1.0f + (o->oBehParams2ndByte * .5f));
     if (o->oAction == 0) {
         if (o->oOpacity < 250) {
             o->oOpacity = approach_f32_asymptotic(o->oOpacity,255,0.3f);

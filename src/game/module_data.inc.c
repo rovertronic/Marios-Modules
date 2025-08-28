@@ -722,9 +722,10 @@ struct module_info module_infos[] = {
         .type = MTYPE_MOVE,
         .tex = micons_hover_rgba16,
         .desc = "Spawns a temporary air platform for one second.",
-        .upg_desc = "Time +1/2s per @O@UPG@@.",
+        .upg_desc = "Size +50* per @O@UPG@@.",
         .unchainable = TRUE,
         .func = module_platform,
+        .cooldown = .5f,
         .creative = TRUE,
     },
 
@@ -803,6 +804,15 @@ struct module_info module_infos[] = {
         .creative = TRUE,
     },
 
+    [MOD_COOL] = {
+        .name = "Heat Sink",
+        .type = MTYPE_BUFF,
+        .tex = micons_pow_rgba16,
+        .desc = "Decreases cooldown time.",
+        .func = NULL,
+        .cooldown = -1.f,
+        .creative = TRUE,
+    },
 
     [MOD_REPEAT] = {
         .name = "Repeat",
@@ -1093,6 +1103,7 @@ struct module_info module_infos[] = {
         .creative = TRUE,
     },
 
+    //
     [MOD_SPD] = {
         .name = "Move",
         .type = MTYPE_PASSIVE,
@@ -1100,6 +1111,25 @@ struct module_info module_infos[] = {
         .desc = "Makes Mario walk forward.",
         .func = module_passive_effect,
         .extra_data = PASSIVE_FLAG_RUN,
+        .creative = TRUE,
+    },
+    [MOD_HOLD] = {
+        .name = "Hold",
+        .type = MTYPE_PASSIVE,
+        .tex = micons_btngen_rgba16,
+        .desc = "Always makes Mario jump as high as possible.",
+        .func = module_passive_effect,
+        .extra_data = PASSIVE_FLAG_HOLD,
+        .creative = TRUE,
+    },
+    [MOD_DEFENSE] = {
+        .name = "Defense",
+        .type = MTYPE_PASSIVE,
+        .tex = micons_btngen_rgba16,
+        .desc = "Reduces damage taken by 25*.",
+        .func = module_passive_effect,
+        .extra_data = PASSIVE_FLAG_DEFENSE,
+        .cooldown = .5f,
         .creative = TRUE,
     },
 };

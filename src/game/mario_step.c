@@ -9,6 +9,7 @@
 #include "game_init.h"
 #include "interaction.h"
 #include "mario_step.h"
+#include "module.h"
 
 #include "config.h"
 
@@ -599,6 +600,10 @@ u32 should_strengthen_gravity_for_jump_ascent(struct MarioState *m) {
 
     if (m->action & (ACT_FLAG_INTANGIBLE | ACT_FLAG_INVULNERABLE)) {
         return FALSE;
+    }
+
+    if ((m->passiveFlag & (1 << PASSIVE_FLAG_HOLD)) ) {
+        return TRUE;
     }
 
     if (!(gPlayer1Controller->buttonDown & (A_BUTTON|B_BUTTON)) && m->vel[1] > 20.0f) {

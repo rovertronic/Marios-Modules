@@ -168,6 +168,9 @@ enum module_id {
     MOD_PASSIVE,
     MOD_IF_INPUT,
     MOD_MONITOR,
+    MOD_COOL,
+    MOD_HOLD,
+    MOD_DEFENSE,
     MOD_COUNT,
 };
 
@@ -188,7 +191,7 @@ struct inventory_row {
 
 #define WHITELIST_VANITY ((1 << MTYPE_VANITY))
 #define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_ELEMENT) | (1 << MTYPE_LOGIC))
-#define WHITELIST_PASSIVE ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_ELEMENT) | (1 << MTYPE_LOGIC)) | (1 << MTYPE_PASSIVE)
+#define WHITELIST_PASSIVE ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_ELEMENT) | (1 << MTYPE_LOGIC) | (1 << MTYPE_PASSIVE))
 
 enum {
     SETTING_60HZ,
@@ -200,6 +203,8 @@ enum {
 
 enum {
     PASSIVE_FLAG_RUN,
+    PASSIVE_FLAG_HOLD,
+    PASSIVE_FLAG_DEFENSE,
 };
 
 enum {

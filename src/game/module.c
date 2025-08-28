@@ -206,7 +206,6 @@ void module_update(void) {
                             met->x++;
                         }
                         met->cooltime += module_infos[read_mod].cooldown*30.0f;
-                        met->cooltime = MAX(met->cooltime,1);
 
                         if (inventory_row_info[met->y].wrap && met->x == INVENTORY_SLOTS_X) {
                             met->x = 0;
@@ -223,6 +222,7 @@ void module_update(void) {
                         read_mod = get_inventory(met->x,met->y);
                     }
                 }
+                met->cooltime = MAX(met->cooltime,1);
                 if (met->doaircooldown || met->cooltime > 1) {
                     met->cooldown = TRUE;
                 } else {
@@ -736,17 +736,29 @@ void print_module_menu(void) {
 f32 gMessageDisplayTimer = 0.0f;
 f32 messageDisplayAlpha = 0.0f;
 char * messageDisplayPtr = NULL;
+char * messageDisplayQueuePtr = NULL;
 
 char print_buffer_t5[100];
+char print_buffer_t5_2[100];
 void display_module_message(s8 id) {
-    messageDisplayAlpha = 0.0f;
-    if (module_infos[id].type != MTYPE_NONMOD) {
-        sprintf(print_buffer_t5,"Obtained @%s@%s@@ module.",module_type_infos[module_infos[id].type].text_color,module_infos[id].name);
-    } else {
-        sprintf(print_buffer_t5,"Obtained %s.",module_infos[id].name);
+    int queue = FALSE;
+    char * usebuff = print_buffer_t5;
+    if (messageDisplayAlpha > 0) {
+        usebuff = print_buffer_t5_2;
+        queue = TRUE;
     }
-    gMessageDisplayTimer = 120.0f;
-    messageDisplayPtr = print_buffer_t5;
+
+    if (module_infos[id].type != MTYPE_NONMOD) {
+        sprintf(usebuff,"Obtained @%s@%s@@ module.",module_type_infos[module_infos[id].type].text_color,module_infos[id].name);
+    } else {
+        sprintf(usebuff,"Obtained %s.",module_infos[id].name);
+    }
+    if (!queue) {
+        gMessageDisplayTimer = 120.0f;
+        messageDisplayPtr = print_buffer_t5;
+    } else {
+        messageDisplayQueuePtr = print_buffer_t5_2;
+    }
 }
 
 #define MODULE_HUD_STATUS_Y 205
@@ -820,6 +832,11 @@ void print_module_hud_status(void) {
         messageDisplayAlpha -= gFrameLerpDeltaTime*.1f;
     }
     messageDisplayAlpha = CLAMP(messageDisplayAlpha,0.0f,1.0f);
+    if (messageDisplayAlpha == 0.0f && messageDisplayQueuePtr) {
+        gMessageDisplayTimer = 120.0f;
+        messageDisplayPtr = messageDisplayQueuePtr;
+        messageDisplayQueuePtr = NULL;
+    }
 
     if (messageDisplayAlpha > 0.0f && messageDisplayPtr != NULL) {
         print_utf8_boxed(messageDisplayPtr,160,10,messageDisplayAlpha,TRUE);
@@ -898,6 +915,7 @@ New Module Additions:\n\
 * Debug Monitor (Action)\n\
 \n\
 * Ground Upgrade (Upgrade)\n\
+* Heat Sink (Upgrade)\n\
 \n\
 * Red Dye (Vanity)\n\
 * Green Dye (Vanity)\n\
@@ -921,6 +939,10 @@ New Module Additions:\n\
 * If Grounded (Logic)\n\
 * If Falling (Logic)\n\
 \n\
+* Move (Passive)\n\
+* Hold (Passive)\n\
+* Defense (Passive)\n\
+\n\
 Minor Changes:\n\
 * Polished level visuals\n\
 * Made gameplay adjustments to level\n\
@@ -940,9 +962,10 @@ Minor Changes:\n\
 Rebalances:\n\
 * Putting jumps together no longer increases jump tier\n\
 * Cap module incurs 4 second cooldown\n\
+* Cap module cap time extended to 2 secs\n\
 * Hover module changed to air platform, no longer follows Mario\n\
-* Down module behavior now consistent with Wall module\n\
-* Cap module extended to 2 secs";
+* Hover module incurs .5s cooldown, grows with UPG.\n\
+* Down module behavior now consistent with Wall module";
 
 struct mariosModulesSave sMariosModulesSave;
 
@@ -981,7 +1004,7 @@ void load_marios_modules(void) {
         gMarioState->numKeys = sMariosModulesSave.keys;
         gMarioState->numCoins = sMariosModulesSave.coins;
 
-        tinymt32_init(&gGlobalRandomState,4);
+        tinymt32_init(&gGlobalRandomState,5);
     }
 }
 
