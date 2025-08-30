@@ -126,6 +126,18 @@ void add_inventory(s8 module) {
     }
 }
 
+void drop_inventory(s8 module, u8 dropy) {
+    for (int y = dropy; y<INVENTORY_SLOTS_Y; y++) {
+        for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
+            if (inventory[y][x] == MOD_EMPTY && inventory_row_info[y].type == ROW_STORAGE) {
+                inventory[y][x] = module;
+                inventoryParam[y][x] = 0;
+                return;
+            }
+        }
+    }
+}
+
 void init_module_inventory(void) {
     for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
         for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
@@ -141,9 +153,10 @@ void init_module_inventory(void) {
     // Settings
     inventory[48][0] = MOD_CAMERA_COLLISION;
     inventory[49][0] = MOD_WIDESCREEN;
+    inventory[49][1] = MOD_NOMUSIC;
     if (gEmulator & EMU_CONSOLE) {
         // N64 specific configuration
-        inventory[49][1] = MOD_60HZ;
+        inventory[49][2] = MOD_60HZ;
     } else {
         inventory[48][1] = MOD_60HZ;
     }
@@ -194,8 +207,14 @@ void module_update(void) {
             }
         } else if (met->executing) {
             s8 read_mod = get_inventory(met->x,met->y);
+            if (met->begin) {
+                met->begin = FALSE;
+                if (met == &module_execution_threads[MODULE_EXEC_PASSIVE]) {
+                    gMarioState->passiveFlag = 0;
+                }
+            }
             if (!met->halted) {
-                while(read_mod != MOD_EMPTY) {
+                while(read_mod != MOD_EMPTY) {                    
                     if (1 << module_infos[read_mod].type & inventory_row_info[met->y].whitelist_flags) {
                         met->extra_data = module_infos[read_mod].extra_data;
                         met->option = inventoryParam[met->y][met->x];
@@ -225,6 +244,9 @@ void module_update(void) {
                 met->cooltime = MAX(met->cooltime,1);
                 if (met->doaircooldown || met->cooltime > 1) {
                     met->cooldown = TRUE;
+                    if (met == &module_execution_threads[MODULE_EXEC_PASSIVE]) {
+                        gMarioState->passiveFlag = 0;
+                    }
                 } else {
                     met->executing = FALSE;
                 }
@@ -257,10 +279,7 @@ void add_met_condition(struct module_execution_thread * met, s32 condition) {
 
 void execute_module_in_inventory(struct module_execution_thread * met, u32 input, int x, int y, int manual) {
     if (!met->executing) {
-        if (met == &module_execution_threads[MODULE_EXEC_PASSIVE]) {
-            gMarioState->passiveFlag = 0;
-        }
-
+        met->begin = TRUE;
         met->mod = 0;
         met->spd = 0;
         met->x = x;
@@ -459,13 +478,13 @@ void control_module_menu(void) {
             if (!double_tap_return) {
                 inventory_vis_y += 10.0f;
                 s8 mod = inventory[true_inventory_y][inventory_x];
-                add_inventory(mod);
+                drop_inventory(mod,true_inventory_y);
                 inventory[true_inventory_y][inventory_x] = MOD_EMPTY;
                 double_tap_return = TRUE;
             } else {
                 for (int i = 0; i < INVENTORY_SLOTS_X; i++) {
                     s8 mod = inventory[true_inventory_y][i];
-                    add_inventory(mod);
+                    drop_inventory(mod,true_inventory_y);
                     inventory[true_inventory_y][i] = MOD_EMPTY;
                 }
             }
@@ -763,8 +782,13 @@ void display_module_message(s8 id) {
 
 #define MODULE_HUD_STATUS_Y 205
 void print_execution_status(int x, int y, int execthread, int module) {
+    u8 dotShowCondition = (module_execution_threads[execthread].executing);
+    if (execthread == MODULE_EXEC_PASSIVE) {
+        dotShowCondition = (module_execution_threads[execthread].executing)&&(!module_execution_threads[execthread].cooldown);
+    }
+
     print_module(module,x,y);
-    if (module_execution_threads[execthread].executing) {
+    if (dotShowCondition) {
         print_texture(micons_executing_rgba16,16 ,x,y);
     }
     if (module_execution_threads[execthread].input_notify) {
@@ -821,7 +845,7 @@ void print_module_hud_status(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     print_execution_status(22,MODULE_HUD_STATUS_Y,MODULE_EXEC_A,MOD_BUTTON_A);
     print_execution_status(42,MODULE_HUD_STATUS_Y,MODULE_EXEC_B,MOD_BUTTON_B);
-    //print_execution_status(62,MODULE_HUD_STATUS_Y,MODULE_EXEC_PASSIVE,MOD_TIMER);
+    print_execution_status(62,MODULE_HUD_STATUS_Y,MODULE_EXEC_PASSIVE,MOD_PASSIVE);
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 

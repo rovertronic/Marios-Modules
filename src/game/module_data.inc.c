@@ -168,7 +168,7 @@ void module_zaction(struct module_execution_thread * met, u8 call_context) {
 
 void module_pow(struct module_execution_thread * met, u8 call_context) {
     module_log_message(met,"UPG Increased by 1.",0);
-    met->mod++;
+    met->mod+=met->extra_data;
     met->x++;
 }
 
@@ -791,6 +791,18 @@ struct module_info module_infos[] = {
         .desc = "+1@O@UPG@@ to the next piece.",
         .cooldown = .5f,
         .func = module_pow,
+        .extra_data = 1,
+        .creative = TRUE,
+    },
+
+    [MOD_POW2] = {
+        .name = "+1 Upgrade",
+        .type = MTYPE_BUFF,
+        .tex = micons_twopow_rgba16,
+        .desc = "+1@O@UPG@@ to the next piece.",
+        .cooldown = .7f,
+        .func = module_pow,
+        .extra_data = 2,
         .creative = TRUE,
     },
 
@@ -807,7 +819,7 @@ struct module_info module_infos[] = {
     [MOD_COOL] = {
         .name = "Heat Sink",
         .type = MTYPE_BUFF,
-        .tex = micons_pow_rgba16,
+        .tex = micons_heatsink_rgba16,
         .desc = "Decreases cooldown time.",
         .func = NULL,
         .cooldown = -1.f,
@@ -1032,6 +1044,16 @@ struct module_info module_infos[] = {
         .extra_data = &gGameSettings[SETTING_AA],
     },
 
+    [MOD_NOMUSIC] = {
+        .name = "Disable Music",
+        .type = MTYPE_SETTINGS,
+        .tex = micons_nosound_rgba16,
+        .desc = "Disables in-game music, but not sound FX.",
+        .upg_desc = NULL,
+        .func = module_settings,
+        .extra_data = &gGameSettings[SETTING_NOMUSIC],
+    },
+
     [MOD_ICE] = {
         .name = "Ice",
         .type = MTYPE_ELEMENT,
@@ -1125,7 +1147,7 @@ struct module_info module_infos[] = {
     [MOD_DEFENSE] = {
         .name = "Defense",
         .type = MTYPE_PASSIVE,
-        .tex = micons_btngen_rgba16,
+        .tex = micons_def_rgba16,
         .desc = "Reduces damage taken by 25*.",
         .func = module_passive_effect,
         .extra_data = PASSIVE_FLAG_DEFENSE,

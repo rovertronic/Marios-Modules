@@ -8,6 +8,7 @@
 #include "game/game_init.h"
 #include "game/main.h"
 #include "engine/math_util.h"
+#include "game/module.h"
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
 void sequence_channel_process_sound(struct SequenceChannel *seqChannel, s32 recalculateVolume) {
@@ -25,6 +26,14 @@ void sequence_channel_process_sound(struct SequenceChannel *seqChannel, s32 reca
         seqChannel->appliedVolume = channelVolume;
 #endif
     }
+
+    if (gGameSettings[SETTING_NOMUSIC]) {
+        if (seqChannel->seqPlayer == &gSequencePlayers[SEQ_PLAYER_LEVEL]
+            || seqChannel->seqPlayer == &gSequencePlayers[SEQ_PLAYER_ENV]) {
+            channelVolume =0;
+        }
+    }
+
 
     if (seqChannel->changes.as_bitfields.pan) {
         seqChannel->pan = seqChannel->newPan * seqChannel->panChannelWeight;
@@ -69,6 +78,13 @@ static void sequence_channel_process_sound(struct SequenceChannel *seqChannel) {
                 channelVolume = seqChannel->volume * seqChannel->volumeScale * seqChannel->seqPlayer->fadeVolume;
                 if (seqChannel->seqPlayer->muted && (seqChannel->muteBehavior & MUTE_BEHAVIOR_SOFTEN) != 0) {
                     channelVolume *= seqChannel->seqPlayer->muteVolumeScale;
+                }
+
+                if (gGameSettings[SETTING_NOMUSIC]) {
+                    if (seqChannel->seqPlayer == &gSequencePlayers[SEQ_PLAYER_LEVEL]
+                        || seqChannel->seqPlayer == &gSequencePlayers[SEQ_PLAYER_ENV]) {
+                        channelVolume =0;
+                    }
                 }
 
                 panFromChannel = seqChannel->pan * seqChannel->panChannelWeight;

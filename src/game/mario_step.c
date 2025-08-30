@@ -603,7 +603,7 @@ u32 should_strengthen_gravity_for_jump_ascent(struct MarioState *m) {
     }
 
     if ((m->passiveFlag & (1 << PASSIVE_FLAG_HOLD)) ) {
-        return TRUE;
+        return FALSE;
     }
 
     if (!(gPlayer1Controller->buttonDown & (A_BUTTON|B_BUTTON)) && m->vel[1] > 20.0f) {

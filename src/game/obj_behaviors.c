@@ -881,6 +881,10 @@ void bhv_chest(void) {
 
 extern struct module_info module_infos[];
 s8 lootTableVanity[] = {MOD_VAN_CAP,MOD_VAN_PANTS,MOD_VAN_HAIR,MOD_RED,MOD_BLUE,MOD_GREEN,MOD_YELLOW,MOD_BLACK,MOD_WHITE};
+// 4x jump, 2x upg+1, 1x ground upg, 1x attack, 1x ground, 1x wall, 1x timer, 1x input, 1x heat sink, 1x down
+s8 lootTableTier1[] = {MOD_JUMP, MOD_JUMP, MOD_JUMP, MOD_JUMP, MOD_POW, MOD_POW, MOD_GROUND_UPG, MOD_ATTACK, MOD_HIT_GROUND, MOD_HIT_WALL, MOD_TIMER, MOD_INPUT, MOD_COOL, MOD_GRAV};
+//1x hover module, 1x repeat module, 1x cap module, 1x tornado, 1x crouchact, 1x upg+2, 1x grav flip
+s8 lootTableTier2[] = {MOD_PLATFORM, MOD_REPEAT, MOD_CAP, MOD_TORNADO, MOD_ZACTION, MOD_POW2, MOD_FLIP_VEL};
 
 void bhv_mystery_chest(void) {
     switch(o->oAction) {
@@ -890,20 +894,24 @@ void bhv_mystery_chest(void) {
 
             // Normal loot
             s8 randomModule;
-            do {
-                randomModule = tinymt32_generate_u32(&gGlobalRandomState)%MOD_COUNT;
-            } while (module_infos[randomModule].creative == FALSE
-            || module_infos[randomModule].type == MTYPE_VANITY);
-            SET_BPARAM1(o->oMysteryChestContents,randomModule);
-            s8 firstPick = randomModule;
+            s8 firstPick;
 
+            s8 * lootTable = lootTableTier1;
+            u8 lootCount = sizeof(lootTableTier1);
+            if (o->oBehParams2ndByte == 1) {
+                lootTable = lootTableTier2;
+                lootCount = sizeof(lootTableTier2);  
+            }
+
+            // Normal Loot
+            randomModule = lootTable[tinymt32_generate_u32(&gGlobalRandomState)%lootCount];
+            SET_BPARAM1(o->oMysteryChestContents, randomModule);
+            firstPick = randomModule;
             do {
-                randomModule = tinymt32_generate_u32(&gGlobalRandomState)%MOD_COUNT;
-            } while (module_infos[randomModule].creative == FALSE
-            || randomModule == firstPick
-            || module_infos[randomModule].type == module_infos[firstPick].type
-            || module_infos[randomModule].type == MTYPE_VANITY);
-            SET_BPARAM2(o->oMysteryChestContents,randomModule);
+                randomModule = lootTable[tinymt32_generate_u32(&gGlobalRandomState)%lootCount];
+            } while (randomModule == firstPick
+            || module_infos[randomModule].type == module_infos[firstPick].type);
+            SET_BPARAM2(o->oMysteryChestContents, randomModule);
 
             // Vanity Loot
             randomModule = tinymt32_generate_u32(&gGlobalRandomState)%sizeof(lootTableVanity);
@@ -993,6 +1001,7 @@ void bhv_mystery_chest(void) {
 
 void bhv_hover(void) {
     cur_obj_scale(1.0f + (o->oBehParams2ndByte * .5f));
+    o->oCollisionDistance += 100.0f * o->oBehParams2ndByte;
     if (o->oAction == 0) {
         if (o->oOpacity < 250) {
             o->oOpacity = approach_f32_asymptotic(o->oOpacity,255,0.3f);

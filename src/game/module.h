@@ -53,6 +53,7 @@ struct module_execution_thread {
     u8 ifbool:1;
     u8 doaircooldown:1;
     u8 debug_monitor:1;
+    u8 begin:1;
 
     u16 condition_flags;
     u8 condition_count;
@@ -123,6 +124,7 @@ enum module_id {
     MOD_BUTTON_B,
     MOD_JUMP,
     MOD_POW,
+    MOD_POW2,
     MOD_HIT_GROUND,
     MOD_HIT_WALL,
     MOD_TIMER,
@@ -171,6 +173,7 @@ enum module_id {
     MOD_COOL,
     MOD_HOLD,
     MOD_DEFENSE,
+    MOD_NOMUSIC,
     MOD_COUNT,
 };
 
@@ -198,6 +201,7 @@ enum {
     SETTING_CAMERA_COLLISION,
     SETTING_WIDE,
     SETTING_AA,
+    SETTING_NOMUSIC,
     SETTING_COUNT,
 };
 
