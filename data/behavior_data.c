@@ -3140,11 +3140,14 @@ const BehaviorScript bhvStaticObject[] = {
     BREAK(),
 };
 
+void bhv_moduleLabel(void);
 const BehaviorScript bhvModuleSign[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SCALE(/*Unused*/ 0, /*Field*/ 200),
-    BREAK(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_moduleLabel),
+    END_LOOP(),
 };
 
 const BehaviorScript bhvCastleFloorTrap[] = {

@@ -811,6 +811,33 @@ void bhv_chest_price_number(void) {
     }
 }
 
+extern struct module_info module_infos[];
+s8 lootTableVanity[] = {MOD_VAN_CAP,MOD_VAN_PANTS,MOD_VAN_HAIR,MOD_RED,MOD_BLUE,MOD_GREEN,MOD_YELLOW,MOD_BLACK,MOD_WHITE};
+// 4x jump, 2x upg+1, 1x ground upg, 1x attack, 1x ground, 1x wall, 1x timer, 1x input, 1x heat sink, 1x down
+s8 lootTableTier1[] = {MOD_JUMP, MOD_JUMP, MOD_JUMP, MOD_JUMP, MOD_POW, MOD_POW, MOD_GROUND_UPG, MOD_ATTACK, MOD_HIT_GROUND, MOD_HIT_WALL, MOD_TIMER, MOD_INPUT, MOD_COOL, MOD_GRAV};
+//1x hover module, 1x repeat module, 1x cap module, 1x tornado, 1x crouchact, 1x upg+2, 1x grav flip
+s8 lootTableTier2[] = {MOD_PLATFORM, MOD_REPEAT, MOD_CAP, MOD_TORNADO, MOD_ZACTION, MOD_POW2, MOD_FLIP_VEL};
+
+s8 sModuleChestLabelBuffer[10];
+void bhv_moduleLabel(void) {
+    if (GET_BPARAM4(o->oBehParams) > 0) {
+        o->oBehParams2ndByte = sModuleChestLabelBuffer[GET_BPARAM4(o->oBehParams)];
+    }
+}
+
+void obj_show_price(s8 cost) {
+    struct Object * digit;
+    if (cost >= 10) {
+        digit = spawn_object(o,MODEL_NUMBER,bhvChestPriceNumber);
+        SET_BPARAM3(digit->oBehParams,0);
+    }
+    digit = spawn_object(o,MODEL_NUMBER,bhvChestPriceNumber);
+    SET_BPARAM3(digit->oBehParams,1);
+
+    digit = spawn_object(o,MODEL_NUMBER,bhvChestPriceNumber);
+    SET_BPARAM3(digit->oBehParams,2);
+}
+
 void bhv_chest(void) {
     u8 cost = GET_BPARAM1(o->oBehParams);
 
@@ -818,6 +845,18 @@ void bhv_chest(void) {
         case 0:
             obj_element_init(o,ELEMENT_NORMAL,100.0f);
             obj_save_bin_count(SAVE_BIN_CHESTS);
+
+            if (GET_BPARAM3(o->oBehParams) > 0) {
+                s8 randomModule;
+
+                s8 * lootTable = lootTableTier1;
+                u8 lootCount = sizeof(lootTableTier1);
+
+                randomModule = lootTable[tinymt32_generate_u32(&gGlobalRandomState)%lootCount];
+
+                o->oBehParams2ndByte = randomModule;
+                sModuleChestLabelBuffer[GET_BPARAM4(o->oBehParams)] = randomModule;
+            }
 
             if (obj_save_bin_read()) {
                 o->oAction = 3;
@@ -828,20 +867,7 @@ void bhv_chest(void) {
             if (cost > 0) {
                 cur_obj_set_model(MODEL_CCHEST);
                 if (o->oDistanceToMario < 400.0f) {
-                    Vec3f chest_content_vec = {o->oPosX,o->oPosY+140.0f,o->oPosZ};
-                    s32 x;
-                    s32 y;
-
-                    struct Object * digit;
-                    if (cost >= 10) {
-                        digit = spawn_object(o,MODEL_NUMBER,bhvChestPriceNumber);
-                        SET_BPARAM3(digit->oBehParams,0);
-                    }
-                    digit = spawn_object(o,MODEL_NUMBER,bhvChestPriceNumber);
-                    SET_BPARAM3(digit->oBehParams,1);
-
-                    digit = spawn_object(o,MODEL_NUMBER,bhvChestPriceNumber);
-                    SET_BPARAM3(digit->oBehParams,2);
+                    obj_show_price(cost);
                 }
             }
 
@@ -879,14 +905,9 @@ void bhv_chest(void) {
     obj_element_enemy_loop();
 }
 
-extern struct module_info module_infos[];
-s8 lootTableVanity[] = {MOD_VAN_CAP,MOD_VAN_PANTS,MOD_VAN_HAIR,MOD_RED,MOD_BLUE,MOD_GREEN,MOD_YELLOW,MOD_BLACK,MOD_WHITE};
-// 4x jump, 2x upg+1, 1x ground upg, 1x attack, 1x ground, 1x wall, 1x timer, 1x input, 1x heat sink, 1x down
-s8 lootTableTier1[] = {MOD_JUMP, MOD_JUMP, MOD_JUMP, MOD_JUMP, MOD_POW, MOD_POW, MOD_GROUND_UPG, MOD_ATTACK, MOD_HIT_GROUND, MOD_HIT_WALL, MOD_TIMER, MOD_INPUT, MOD_COOL, MOD_GRAV};
-//1x hover module, 1x repeat module, 1x cap module, 1x tornado, 1x crouchact, 1x upg+2, 1x grav flip
-s8 lootTableTier2[] = {MOD_PLATFORM, MOD_REPEAT, MOD_CAP, MOD_TORNADO, MOD_ZACTION, MOD_POW2, MOD_FLIP_VEL};
-
 void bhv_mystery_chest(void) {
+    u8 cost = GET_BPARAM1(o->oBehParams);
+
     switch(o->oAction) {
         case 0:
             obj_element_init(o,ELEMENT_NORMAL,100.0f);
@@ -931,9 +952,17 @@ void bhv_mystery_chest(void) {
             o->header.gfx.animInfo.animFrame = 0;
             o->header.gfx.animInfo.animFrameF = 0.0f;
             o->header.gfx.animInfo.animAccelF = 0.0f;
-            if (o->oInteractStatus & INT_STATUS_INTERACTED) {
+
+            if (o->oDistanceToMario < 400.0f && cost > 0) {
+                obj_show_price(cost);
+            }
+
+            if ((gMarioState->numCoins >= cost) && (o->oInteractStatus & INT_STATUS_INTERACTED)) {
                 obj_save_bin_write(o);
                 set_mario_action(gMarioState,ACT_WAITING_FOR_DIALOG,0);
+
+                gMarioState->numCoins-=cost;
+                gHudDisplay.coins = gMarioState->numCoins;
 
                 o->header.gfx.animInfo.animAccelF = 1.0f;
                 play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);

@@ -784,7 +784,7 @@ void display_module_message(s8 id) {
 void print_execution_status(int x, int y, int execthread, int module) {
     u8 dotShowCondition = (module_execution_threads[execthread].executing);
     if (execthread == MODULE_EXEC_PASSIVE) {
-        dotShowCondition = (module_execution_threads[execthread].executing)&&(!module_execution_threads[execthread].cooldown);
+        dotShowCondition = (module_execution_threads[execthread].cooldown);
     }
 
     print_module(module,x,y);
@@ -1028,7 +1028,7 @@ void load_marios_modules(void) {
         gMarioState->numKeys = sMariosModulesSave.keys;
         gMarioState->numCoins = sMariosModulesSave.coins;
 
-        tinymt32_init(&gGlobalRandomState,5);
+        tinymt32_init(&gGlobalRandomState,6);
     }
 }
 
@@ -1041,8 +1041,11 @@ void save_bin_reset(void) {
 }
 
 void obj_save_bin_count(int type) {
-    o->saveBinId = saveBinTotal[type];
-    o->saveBinType = type;
+    s32 id = saveBinTotal[type];
+
+    o->saveBinId = id%32;
+    o->saveBinType = type+(id/32);
+
     saveBinTotal[type]++;
 }
 
@@ -1056,8 +1059,8 @@ void obj_save_bin_write(struct Object * obj) {
 
 s32 save_bin_get_flag_total(int type) {
     int count = 0;
-    for (int i = 0; i < 32; i++) {
-        if (sMariosModulesSave.bin[type] & (1 << i)) {
+    for (int i = 0; i < saveBinTotal[type]; i++) {
+        if (sMariosModulesSave.bin[type+(i/32)] & (1 << (i%32))) {
             count++;
         }
     }

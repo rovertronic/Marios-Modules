@@ -796,7 +796,7 @@ struct module_info module_infos[] = {
     },
 
     [MOD_POW2] = {
-        .name = "+1 Upgrade",
+        .name = "+2 Upgrade",
         .type = MTYPE_BUFF,
         .tex = micons_twopow_rgba16,
         .desc = "+1@O@UPG@@ to the next piece.",

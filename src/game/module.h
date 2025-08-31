@@ -214,6 +214,7 @@ enum {
 enum {
     SAVE_BIN_STARS,
     SAVE_BIN_CHESTS,
+    SAVE_BIN_CHESTS2,
     SAVE_BIN_DOORS,
     SAVE_BIN_COUNT,
 };
