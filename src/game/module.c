@@ -199,7 +199,7 @@ void module_update(void) {
                 }
             }
             if (
-                (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING))
+                (GROUNDED)
                 && (count_objects_with_behavior(bhvHover) == 0) 
                 && (gMarioState->capTimer == 0)
             ) {
