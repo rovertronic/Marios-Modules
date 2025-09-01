@@ -104,6 +104,12 @@ u8 get_inventory_param(int x, int y) {
 }
 
 void add_inventory(s8 module) {
+    // Logic modules always come packaged with if blocks
+    if (module_infos[module].type == MTYPE_LOGIC && module != MOD_IF && module != MOD_ENDBLOCK) {
+        add_inventory(MOD_IF);
+        add_inventory(MOD_ENDBLOCK);
+    }
+
     // Check for specialized inventory slots first, before
     for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
         for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
@@ -1028,7 +1034,7 @@ void load_marios_modules(void) {
         gMarioState->numKeys = sMariosModulesSave.keys;
         gMarioState->numCoins = sMariosModulesSave.coins;
 
-        tinymt32_init(&gGlobalRandomState,7);
+        tinymt32_init(&gGlobalRandomState,9);
     }
 }
 

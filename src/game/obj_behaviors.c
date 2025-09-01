@@ -813,8 +813,8 @@ void bhv_chest_price_number(void) {
 
 extern struct module_info module_infos[];
 s8 lootTableVanity[] = {MOD_VAN_CAP,MOD_VAN_PANTS,MOD_VAN_HAIR,MOD_RED,MOD_BLUE,MOD_GREEN,MOD_YELLOW,MOD_BLACK,MOD_WHITE};
-// 3x jump, 2x upg+1, 1x ground upg, 1x attack, 1x ground, 1x wall, 1x timer, 2x input, 1x heat sink, 1x down
-s8 lootTableTier1[] = {MOD_JUMP, MOD_JUMP, MOD_JUMP, MOD_POW, MOD_POW, MOD_GROUND_UPG, MOD_ATTACK, MOD_HIT_GROUND, MOD_HIT_WALL, MOD_TIMER, MOD_INPUT, MOD_INPUT, MOD_COOL, MOD_GRAV};
+// 2x jump, 1x upg+1, 1x ground upg, 1x attack, 1x ground, 1x wall, 1x timer, 2x input, 1x heat sink, 1x down, 3x if conditions
+s8 lootTableTier1[] = {MOD_JUMP, MOD_JUMP, MOD_POW, MOD_GROUND_UPG, MOD_ATTACK, MOD_HIT_GROUND, MOD_HIT_WALL, MOD_TIMER, MOD_INPUT, MOD_INPUT, MOD_COOL, MOD_GRAV, MOD_IF_FLOOR, MOD_IF_DOWN, MOD_IF_INPUT};
 //1x hover module, 1x repeat, 1x cap module, 1x tornado, 1x crouchact, 1x upg+2, 1x grav flip, 1x defense
 s8 lootTableTier2[] = {MOD_PLATFORM, MOD_REPEAT, MOD_CAP, MOD_TORNADO, MOD_ZACTION, MOD_POW2, MOD_FLIP_VEL, MOD_DEFENSE};
 
