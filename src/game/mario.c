@@ -1777,17 +1777,10 @@ void queue_rumble_particles(struct MarioState *m) {
 }
 #endif
 
-/**
- * Main function for executing Mario's behavior. Returns particleFlags.
- */
-extern u8 title_or_game;
-extern u8 title_progress;
-u16 flickergoon_timer = 0;
+u16 sIntroCutsceneBlinkTimer = 0;
 
-s32 execute_mario_action(UNUSED struct Object *obj) {
-    s32 inLoop = TRUE;
-
-    if (title_or_game == 0) {
+void mario_title_logic(void) {
+    if (gMainMenuState != MAIN_MENU_CLOSED) {
         gMarioState->faceAngle[1] = 0x8000;
         gMarioState->action = ACT_TITLE;
         gMarioState->marioObj->header.gfx.angle[1] = 0x8000;
@@ -1798,8 +1791,36 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
             gMarioState->action = ACT_IDLE;
         }
     }
+}
+
+void intro_eye_animation(void) {
+    if (gMainMenuState != MAIN_MENU_CLOSED) {
+        gMarioState->marioBodyState->eyeState = MARIO_EYES_DEAD;
+        if (gMainMenuState == MAIN_MENU_OPENING_CUTSCENE) {
+            sIntroCutsceneBlinkTimer ++;
+        }
+        if (sIntroCutsceneBlinkTimer > 120) {
+            if (random_u16() % 2 == 0) {
+                gMarioState->marioBodyState->eyeState = MARIO_EYES_OPEN;
+            } else {
+                gMarioState->marioBodyState->eyeState = MARIO_EYES_DEAD;
+            }
+        }
+        if (sIntroCutsceneBlinkTimer > 160) {
+            gMarioState->marioBodyState->eyeState = MARIO_EYES_OPEN;
+        }
+    }
+}
+
+/**
+ * Main function for executing Mario's behavior. Returns particleFlags.
+ */
+
+s32 execute_mario_action(UNUSED struct Object *obj) {
+    s32 inLoop = TRUE;
 
     // Updates once per frame:
+    mario_title_logic();
     vec3f_get_dist_and_angle(gMarioState->prevPos, gMarioState->pos, &gMarioState->moveSpeed, &gMarioState->movePitch, &gMarioState->moveYaw);
     vec3f_get_lateral_dist(gMarioState->prevPos, gMarioState->pos, &gMarioState->lateralSpeed);
     vec3f_copy(gMarioState->prevPos, gMarioState->pos);
@@ -1891,22 +1912,7 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
         }
         gMarioState->gateAngle = approach_s16_asymptotic(gMarioState->gateAngle,target_angle,4);
 
-        if (title_or_game == 0) {
-            gMarioState->marioBodyState->eyeState = MARIO_EYES_DEAD;
-            if (title_progress) {
-                flickergoon_timer ++;
-            }
-            if (flickergoon_timer > 120) {
-                if (random_u16() % 2 == 0) {
-                    gMarioState->marioBodyState->eyeState = MARIO_EYES_OPEN;
-                } else {
-                    gMarioState->marioBodyState->eyeState = MARIO_EYES_DEAD;
-                }
-            }
-            if (flickergoon_timer > 160) {
-                gMarioState->marioBodyState->eyeState = MARIO_EYES_OPEN;
-            }
-        }
+        intro_eye_animation();
         bcopy(gMarioState->marioBodyState,gMarioState->marioGfxBodyState,sizeof(gBodyStates[0]));
 
         return gMarioState->particleFlags;

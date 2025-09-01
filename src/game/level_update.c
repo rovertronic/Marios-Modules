@@ -1009,7 +1009,6 @@ void basic_update(void) {
     }
 }
 
-extern u8 title_or_game;
 s32 play_mode_normal(void) {
 #ifndef DISABLE_DEMO
     if (gCurrDemoInput != NULL) {
@@ -1077,7 +1076,7 @@ s32 play_mode_normal(void) {
             gCameraMovementFlags |= CAM_MOVE_PAUSE_SCREEN;
             set_play_mode(PLAY_MODE_PAUSED);
             */
-            if (title_or_game == 1) {
+            if (gMainMenuState == MAIN_MENU_CLOSED) {
                 gModuleMenuOpen = !gModuleMenuOpen;
                 if (gModuleMenuOpen) {
                     module_log_clear();

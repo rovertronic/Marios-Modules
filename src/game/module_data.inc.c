@@ -666,12 +666,12 @@ char * ifOptions[] = {
 
 struct module_info module_infos[] = {
     // Sockets
-    [MOD_BUTTON_A] = {MTYPE_INPUT,0,0,0,"",micons_abtn_rgba16,NULL,NULL,NULL},
-    [MOD_BUTTON_B] = {MTYPE_INPUT,0,0,0,"",micons_bbtn_rgba16,NULL,NULL,NULL},
-    [MOD_VANITY] = {MTYPE_INPUT,0,0,0,"",micons_vanity_rgba16,NULL,NULL,NULL},
-    [MOD_SETTINGS] = {MTYPE_INPUT,0,0,0,"",micons_gear_rgba16,NULL,NULL,NULL},
-    [MOD_WRAP] = {MTYPE_INPUT,0,0,0,"",micons_wrap_rgba16,NULL,NULL,NULL},
-    [MOD_PASSIVE] = {MTYPE_INPUT,0,0,0,"",micons_p__rgba16,NULL,NULL,NULL},
+    [MOD_BUTTON_A] = {MTYPE_INPUT,0,0,0,0,"",micons_abtn_rgba16,NULL,NULL,NULL},
+    [MOD_BUTTON_B] = {MTYPE_INPUT,0,0,0,0,"",micons_bbtn_rgba16,NULL,NULL,NULL},
+    [MOD_VANITY] = {MTYPE_INPUT,0,0,0,0,"",micons_vanity_rgba16,NULL,NULL,NULL},
+    [MOD_SETTINGS] = {MTYPE_INPUT,0,0,0,0,"",micons_gear_rgba16,NULL,NULL,NULL},
+    [MOD_WRAP] = {MTYPE_INPUT,0,0,0,0,"",micons_wrap_rgba16,NULL,NULL,NULL},
+    [MOD_PASSIVE] = {MTYPE_INPUT,0,0,0,0,"",micons_p__rgba16,NULL,NULL,NULL},
 
     // Actions
     [MOD_JUMP] = {
@@ -684,6 +684,7 @@ struct module_info module_infos[] = {
         .elementable = TRUE,
         .func = module_jump,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     [MOD_TORNADO] = {
@@ -695,6 +696,7 @@ struct module_info module_infos[] = {
         .elementable = TRUE,
         .func = module_tornado,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_2,
     },
 
     [MOD_ATTACK] = {
@@ -706,6 +708,7 @@ struct module_info module_infos[] = {
         .func = module_attack,
         .elementable = TRUE,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     [MOD_INPUT] = {
@@ -715,6 +718,7 @@ struct module_info module_infos[] = {
         .desc = "Checks for a button press for one second, otherwise cancels.",
         .func = module_input,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     [MOD_PLATFORM] = {
@@ -727,6 +731,7 @@ struct module_info module_infos[] = {
         .func = module_platform,
         .cooldown = .5f,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_2,
     },
 
     [MOD_SWAP] = {
@@ -745,6 +750,7 @@ struct module_info module_infos[] = {
         .cooldown = 3.0f,
         .func = module_cap,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_2,
     },
 
     [MOD_MONITOR] = {
@@ -771,6 +777,7 @@ struct module_info module_infos[] = {
         .unchainable = TRUE,
         .func = module_flip,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_2,
     },
 
     [MOD_ZACTION] = {
@@ -781,6 +788,7 @@ struct module_info module_infos[] = {
         .unchainable = TRUE,
         .func = module_zaction,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_2,
     },
 
     // Modifiers
@@ -793,6 +801,7 @@ struct module_info module_infos[] = {
         .func = module_pow,
         .extra_data = 1,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     [MOD_POW2] = {
@@ -804,6 +813,7 @@ struct module_info module_infos[] = {
         .func = module_pow,
         .extra_data = 2,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_2,
     },
 
     [MOD_GROUND_UPG] = {
@@ -814,6 +824,7 @@ struct module_info module_infos[] = {
         .unchainable = TRUE,
         .func = module_floor_upg,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     [MOD_COOL] = {
@@ -824,6 +835,7 @@ struct module_info module_infos[] = {
         .func = NULL,
         .cooldown = -1.f,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     [MOD_REPEAT] = {
@@ -833,14 +845,7 @@ struct module_info module_infos[] = {
         .desc = "Repeats from the start.",
         .func = module_repeat,
         .creative = TRUE,
-    },
-
-    [MOD_SPD] = {
-        .name = "Speed",
-        .type = MTYPE_BUFF,
-        .tex = micons_spd_rgba16,
-        .desc = "Adds speed to next action block.",
-        .func = module_spd,
+        .loot_tier = LOOT_TIER_2,
     },
 
     [MOD_TIMER] = {
@@ -851,6 +856,7 @@ struct module_info module_infos[] = {
         .func = module_timer,
         .options = timerOptions,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     // Conditions
@@ -862,6 +868,7 @@ struct module_info module_infos[] = {
         .unchainable = TRUE,
         .func = module_wall,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     [MOD_GRAV] = {
@@ -872,6 +879,7 @@ struct module_info module_infos[] = {
         .unchainable = TRUE,
         .func = module_grav,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     [MOD_HIT_GROUND] = {
@@ -882,6 +890,7 @@ struct module_info module_infos[] = {
         .unchainable = TRUE,
         .func = module_floor,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     // Non modifiers
@@ -900,6 +909,7 @@ struct module_info module_infos[] = {
         .func = module_clothes_color,
         .extra_data = capLights,
         .creative = TRUE,
+        .loot_tier = LOOT_VANITY,
     },
 
     [MOD_VAN_PANTS] = {
@@ -910,6 +920,7 @@ struct module_info module_infos[] = {
         .func = module_clothes_color,
         .extra_data = jeanLights,
         .creative = TRUE,
+        .loot_tier = LOOT_VANITY,
     },
 
     [MOD_VAN_HAIR] = {
@@ -920,6 +931,7 @@ struct module_info module_infos[] = {
         .func = module_clothes_color,
         .extra_data = hairLights,
         .creative = TRUE,
+        .loot_tier = LOOT_VANITY,
     },
 
     [MOD_VAN_SKIN] = {
@@ -940,6 +952,7 @@ struct module_info module_infos[] = {
         .func = module_color,
         .extra_data = &moduleRed,
         .creative = TRUE,
+        .loot_tier = LOOT_VANITY,
     },
 
     [MOD_BLUE] = {
@@ -950,6 +963,7 @@ struct module_info module_infos[] = {
         .func = module_color,
         .extra_data = &moduleBlue,
         .creative = TRUE,
+        .loot_tier = LOOT_VANITY,
     },
 
     [MOD_GREEN] = {
@@ -960,6 +974,7 @@ struct module_info module_infos[] = {
         .func = module_color,
         .extra_data = &moduleGreen,
         .creative = TRUE,
+        .loot_tier = LOOT_VANITY,
     },
 
     [MOD_YELLOW] = {
@@ -970,6 +985,7 @@ struct module_info module_infos[] = {
         .func = module_color,
         .extra_data = &moduleYellow,
         .creative = TRUE,
+        .loot_tier = LOOT_VANITY,
     },
 
     [MOD_WHITE] = {
@@ -980,6 +996,7 @@ struct module_info module_infos[] = {
         .func = module_color,
         .extra_data = &moduleWhite,
         .creative = TRUE,
+        .loot_tier = LOOT_VANITY,
     },
 
     [MOD_BLACK] = {
@@ -990,6 +1007,7 @@ struct module_info module_infos[] = {
         .func = module_color,
         .extra_data = &moduleBlack,
         .creative = TRUE,
+        .loot_tier = LOOT_VANITY,
     },
 
     [MOD_WOMAN] = {
@@ -998,6 +1016,7 @@ struct module_info module_infos[] = {
         .tex = micons_woman_rgba16,
         .desc = "Swaps to alternative hardware + voicebox.",
         //Ryan left twitter... rip
+        //edit: he's BACK
         //.desc = "Changes Mario's gender to @R@WOMAN@@.",
         .func = module_woman,
         .creative = TRUE,
@@ -1153,5 +1172,6 @@ struct module_info module_infos[] = {
         .extra_data = PASSIVE_FLAG_DEFENSE,
         .cooldown = .5f,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_2,
     },
 };

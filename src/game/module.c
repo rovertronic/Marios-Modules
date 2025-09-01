@@ -18,6 +18,7 @@
 #include <PR/os_internal_reg.h>
 #include "utf8_print.h"
 #include "frame_lerp.h"
+#include "seq_ids.h"
 
 u8 gModuleMenuOpen = FALSE;
 u8 gGameSettings[SETTING_COUNT];
@@ -346,21 +347,8 @@ void update_settings(void) {
 #define ANALOG_MENU_THRESH 30
 u16 joystick_hold_timer = 0;
 u8 double_tap_return = FALSE;
-void control_module_menu(void) {
-    // Always turn off passive effects when in menu
-    gMarioState->passiveFlag = 0;
 
-    // handle panel changing
-    if (gPlayer1Controller->buttonPressed & R_TRIG) {
-        inventory_panel++;
-    }
-    if (gPlayer1Controller->buttonPressed & L_TRIG) {
-        inventory_panel--;
-    }
-    inventory_panel = (INVENTORY_PANEL_CT+inventory_panel)%INVENTORY_PANEL_CT;
-
-    icp = &module_panel_info[inventory_panel];
-
+void joystick_to_dpad(void) {
     //handle joystick
     if (
         (gPlayer1Controller->rawStickY < ANALOG_MENU_THRESH) &&
@@ -387,6 +375,24 @@ void control_module_menu(void) {
             gPlayer1Controller->buttonPressed |= L_JPAD;
         }
     }
+}
+
+void control_module_menu(void) {
+    // Always turn off passive effects when in menu
+    gMarioState->passiveFlag = 0;
+
+    // handle panel changing
+    if (gPlayer1Controller->buttonPressed & R_TRIG) {
+        inventory_panel++;
+    }
+    if (gPlayer1Controller->buttonPressed & L_TRIG) {
+        inventory_panel--;
+    }
+    inventory_panel = (INVENTORY_PANEL_CT+inventory_panel)%INVENTORY_PANEL_CT;
+
+    icp = &module_panel_info[inventory_panel];
+
+    joystick_to_dpad();
 
     if (gPlayer1Controller->buttonPressed & L_JPAD) {
         inventory_x --;
@@ -935,7 +941,7 @@ char * changelog = "\
 Major Changes:\n\
 * Increased max framerate to 60\n\
 * Overhauled and refined module menu\n\
-* Added vanity, settings, passive, and progress panels\n\
+* Added vanity, settings, and passive panels\n\
 * Added game saving via save blocks\n\
 * Added post-game creative mode\n\
 \n\
@@ -1082,5 +1088,173 @@ void marios_modules_savefile_load_position(void) {
         for (int i = 0; i < 3; i++) {
             gMarioState->pos[i] = sMariosModulesSave.pos[i];
         }
+    }
+}
+
+// MARIO'S MODULES: MAIN FUCKING MENU
+
+u8 sMainMenuTitleAlpha = 255;
+u8 gMainMenuState = MAIN_MENU_TITLE;
+u8 gMainMenuTargetState = MAIN_MENU_TITLE;
+f32 sMainMenuTransition = 1.0f;
+s8 sMainMenuIndex = 0;
+
+f32 sBigTextScroll = 0.0f;
+
+f32 sMainMenuHandPos[2] = {0.0f};
+f32 sMainMenuHandTargetPos[2] = {0.0f};
+
+char * sButtonsMain[] = {
+    "@G@Play",
+    "Credits",
+    "Changelog",
+    NULL,
+};
+
+char * sButtonsFile[] = {
+    "Continue",
+    "New Game",
+    NULL,
+};
+
+char * sButtonsMode[] = {
+    "Standard Game",
+    "@P@Mystery Mania",
+    "@R@Rogue",
+    "@G@Creative",
+    NULL,
+};
+
+void render_menu_button_list(char * btns[]) {
+    int i = 0;
+    char * curStr = btns[0];
+    while(curStr != NULL) {
+        print_utf8_boxed(curStr,160,120-(i*22),sMainMenuTransition,TRUE);
+        if (i == sMainMenuIndex) {
+            int sx; int sy; utf8_size(curStr, &sx, &sy);
+            sMainMenuHandTargetPos[0] = 165 + (sx/2);
+            sMainMenuHandTargetPos[1] = 105 + (i*22);
+        }
+
+        i++;
+        curStr = btns[i];
+    }
+
+}
+
+void render_main_menu_hand(void) {
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
+    print_set_envcolour(255, 255, 255, sMainMenuTransition*255.0f);
+
+    sMainMenuHandPos[0] = approach_f32_asymptotic(sMainMenuHandPos[0],sMainMenuHandTargetPos[0], .2f);
+    sMainMenuHandPos[1] = approach_f32_asymptotic(sMainMenuHandPos[1],sMainMenuHandTargetPos[1], .2f);
+    print_texture(micons_small_hand_1_rgba16,16,sMainMenuHandPos[0], sMainMenuHandPos[1]);
+
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
+}
+
+void render_main_menu_big_text(char * str) {
+    utf8_print_reset();
+
+    gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, sMainMenuTransition*180.0f);
+    render_4slice(-10,241,330,0);
+
+    gDPSetEnvColor(gDisplayListHead++, 255,255,255, sMainMenuTransition*255.0f);
+    print_utf8(str,10,220+sBigTextScroll);
+    sBigTextScroll -= gFrameLerpDeltaTime*(gPlayer1Controller->rawStickY/16.0f);
+    int sx; int sy; utf8_size(str, &sx, &sy);
+
+    if (sBigTextScroll > -sy - 200) {
+        sBigTextScroll = -sy - 200;
+    }
+    if (sBigTextScroll < 0) {
+        sBigTextScroll = 0;
+    }
+}
+
+void render_main_menu(void) {
+    switch(gMainMenuState) {
+        case MAIN_MENU_TITLE:
+            gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
+            print_set_envcolour(255, 255, 255, sMainMenuTransition*255.0f);
+            render_multi_image(micons_mmodules_title_rgba16, 0, 40, 320, 124, 1, 1, G_CYC_1CYCLE);
+            break;
+        case MAIN_MENU_MAIN:
+            render_main_menu_hand();
+            render_menu_button_list(&sButtonsMain);
+            break;
+        case MAIN_MENU_FILE:
+            render_main_menu_hand();
+            render_menu_button_list(&sButtonsFile);
+            break;
+        case MAIN_MENU_CHANGELOG:;
+            render_main_menu_big_text(changelog);
+            break;
+    }
+}
+
+void main_menu_handle_scroll(u8 max) {
+    joystick_to_dpad();
+
+    if (gPlayer1Controller->buttonPressed & D_JPAD) {
+        sMainMenuIndex++;
+    }
+    if (gPlayer1Controller->buttonPressed & U_JPAD) {
+        sMainMenuIndex--;
+    }
+
+    sMainMenuIndex = (sMainMenuIndex + max)%max;
+}
+
+void logic_main_menu(void) {
+    if (gMainMenuState != gMainMenuTargetState) {
+        sMainMenuTransition -= .1f;
+        if (sMainMenuTransition <= 0.0f) {
+            sMainMenuTransition = 0.0f;
+            gMainMenuState = gMainMenuTargetState;
+        }
+    } else {
+        sMainMenuTransition = CLAMP(sMainMenuTransition+.1f,0.0f,1.0f);
+    }
+    switch(gMainMenuState) {
+        case MAIN_MENU_TITLE:
+            if (sMainMenuTitleAlpha > 0) {
+                if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                    gMainMenuTargetState = MAIN_MENU_MAIN;
+                }
+            }
+            break;
+        case MAIN_MENU_MAIN:
+            main_menu_handle_scroll(3);
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                switch (sMainMenuIndex) {
+                    case 0:
+                        gMainMenuTargetState = MAIN_MENU_FILE;
+                        break;
+                    case 1:
+                        gMainMenuTargetState = MAIN_MENU_CREDITS;
+                        break;
+                    case 2:
+                        gMainMenuTargetState = MAIN_MENU_CHANGELOG;
+                        break;
+                }
+            }
+            break;
+        case MAIN_MENU_FILE:
+            main_menu_handle_scroll(2);
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                switch (sMainMenuIndex) {
+                    case 0:
+                        level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
+                        gMainMenuTargetState = MAIN_MENU_LEVEL_WARP;
+                        break;
+                    case 1:
+                        gMainMenuTargetState = MAIN_MENU_OPENING_CUTSCENE;
+                        play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
+                        break;
+                }
+            }
+            break;
     }
 }

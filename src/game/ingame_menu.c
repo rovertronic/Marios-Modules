@@ -2296,31 +2296,12 @@ s32 render_course_complete_screen(void) {
     return MENU_OPT_NONE;
 }
 
-//u8 title_dl_alpha = 255;
-//u8 title_progress = FALSE;
-//u8 title_or_game = 0;
-
-u8 title_dl_alpha = 0;
-u8 title_progress = TRUE;
-u8 title_or_game = 1;
-
 s32 render_menus_and_dialogs(void) {
     create_dl_ortho_matrix();
 
-    if (title_dl_alpha > 0) {
-        gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-        print_set_envcolour(255, 255, 255, title_dl_alpha);
-        render_multi_image(micons_mmodules_title_rgba16, 0, 40, 320, 124, 1, 1, G_CYC_1CYCLE);
-        if (title_progress) {
-            title_dl_alpha -= 5;
-        }
-        if (gPlayer1Controller->buttonPressed & START_BUTTON) {
-            play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
-            title_progress = TRUE;
-        }
-    }
-    if (title_or_game == 0) {
-        return 0;
+    if (gMainMenuState != MAIN_MENU_CLOSED) {
+        render_main_menu();
+        return;
     }
 
     if (gMenuMode != MENU_MODE_NONE) {
@@ -2362,6 +2343,10 @@ s32 render_menus_and_dialogs(void) {
 
 s32 logic_menus_and_dialogs(void) {
     s32 mode = MENU_OPT_NONE;
+
+    if (gMainMenuState != MAIN_MENU_CLOSED) {
+        logic_main_menu();
+    }
 
     if (gModuleMenuOpen) {
         control_module_menu();

@@ -78,11 +78,19 @@ enum module_execution_ids {
 
 #define GROUNDED (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_AUTOMATIC))
 
+enum module_loot_ids {
+    LOOT_NONE,
+    LOOT_VANITY,
+    LOOT_TIER_1,
+    LOOT_TIER_2,
+};
+
 struct module_info {
     u8 type;
-    u8 unchainable;
-    u8 creative;
-    u8 elementable;
+    u8 unchainable:1;
+    u8 creative:1;
+    u8 elementable:1;
+    u8 loot_tier:2;
     char * name;
     void * tex;
     char * desc;
@@ -231,6 +239,23 @@ struct mariosModulesSave {
     u32 seed;
     u32 save_magic;
 };
+
+// Main Menu
+extern u8 gMainMenuState;
+
+enum {
+    MAIN_MENU_TITLE,
+    MAIN_MENU_MAIN,
+    MAIN_MENU_FILE,
+    MAIN_MENU_CREDITS,
+    MAIN_MENU_CHANGELOG,
+    MAIN_MENU_OPENING_CUTSCENE,
+    MAIN_MENU_LEVEL_WARP,
+    MAIN_MENU_CLOSED,
+};
+
+void render_main_menu(void);
+void logic_main_menu(void);
 
 Gfx *geo_module_material(s32 callContext, struct GraphNode *node, void *context);
 

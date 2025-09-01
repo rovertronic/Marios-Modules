@@ -793,7 +793,7 @@ void utf8_size(char * str, int * x, int * y) {
 
 void utf8_print_reset(void) {
     utf8_print_texture = NULL;
-
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
 
 typedef struct {
@@ -1056,7 +1056,7 @@ void print_utf8_boxed(char * str, int x, int y, f32 alpha, int centered) {
     gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
     render_4slice(x-4+offset,y+18,x+sx+4+offset,y-2);
 
-    gDPSetEnvColor(gDisplayListHead++, 0,0,0, alpha*255.0f);
     utf8_print_reset();
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, alpha*255.0f);
     print_utf8(str,x+offset,y);
 }
