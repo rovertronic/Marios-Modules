@@ -643,6 +643,10 @@ void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags)
         sWarpDest.type = WARP_TYPE_SAME_AREA;
     }
 
+    if (gMainMenuState == MAIN_MENU_LEVEL_WARP_CONTINUE) {
+        sWarpDest.type = WARP_TYPE_CHANGE_LEVEL;
+    }
+
     sWarpDest.levelNum = destLevel;
     sWarpDest.areaIdx = destArea;
     sWarpDest.nodeId = destWarpNode;
@@ -798,7 +802,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
 
             case WARP_OP_LOOK_UP: // enter totwc
                 sDelayedWarpTimer = 30;
-                sSourceWarpNodeId = WARP_NODE_LOOK_UP;
+                sSourceWarpNodeId = 2;
                 play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0xFF, 0xFF, 0xFF);
                 play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
                 break;

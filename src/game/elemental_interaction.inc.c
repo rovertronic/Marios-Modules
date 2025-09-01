@@ -51,6 +51,7 @@ struct ElementHitbox * obj_check_element_collision(u8 element, u8 lateral) {
 }
 
 void obj_element_enemy_loop(void) {
+    return;
     // Check collisions
     if (obj_check_element_collision(ELEMENT_FLAME,0)) {
         o->element->afflict |= ELEMENT_FLAME;

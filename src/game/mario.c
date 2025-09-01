@@ -1962,7 +1962,12 @@ void init_mario(void) {
     vec3_zero(gMarioState->angleVel);
     vec3s_to_vec3f(gMarioState->pos, gMarioSpawnInfo->startPos);
 
-    marios_modules_savefile_load_position();
+    if (gMainMenuState == MAIN_MENU_LEVEL_WARP_CONTINUE) {
+        load_marios_modules();
+        update_settings();
+        marios_modules_savefile_load_position();
+        gMainMenuState = MAIN_MENU_CLOSED;
+    }
 
     vec3f_copy(gMarioState->prevPos, gMarioState->pos);
     vec3_zero(gMarioState->vel);

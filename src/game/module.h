@@ -242,6 +242,7 @@ struct mariosModulesSave {
 
 // Main Menu
 extern u8 gMainMenuState;
+extern u8 gMainMenuTargetState;
 
 enum {
     MAIN_MENU_TITLE,
@@ -250,7 +251,7 @@ enum {
     MAIN_MENU_CREDITS,
     MAIN_MENU_CHANGELOG,
     MAIN_MENU_OPENING_CUTSCENE,
-    MAIN_MENU_LEVEL_WARP,
+    MAIN_MENU_LEVEL_WARP_CONTINUE,
     MAIN_MENU_CLOSED,
 };
 

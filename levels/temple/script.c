@@ -38,6 +38,8 @@ const LevelScript level_temple_entry[] = {
 
 	AREA(1, temple_area_1),
 		WARP_NODE(0xF1, LEVEL_TEMPLE, 0x01, 0x01, WARP_NO_CHECKPOINT),
+		WARP_NODE(2, LEVEL_TEMPLE, 0x01, 3, WARP_NO_CHECKPOINT),
+		WARP_NODE(3, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		MARIO_POS(0x01, 0, 0, 674, 10746),
 		OBJECT(MODEL_CHEST, 4520, 199, 10551, 0, -180, 0, (MOD_JUMP << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -900, 279, 3878, 0, 90, 0, (MOD_JUMP << 16), bhvChest),
@@ -137,6 +139,7 @@ const LevelScript level_temple_entry[] = {
 		OBJECT(MODEL_MCHEST, 117, 2026, -7437, 0, 90, 0, (40 << 24) | (1 << 16), bhvMysteryChest),
 		OBJECT(MODEL_MCHEST, -376, 3799, 10579, 0, -180, 0, (1 << 16), bhvMysteryChest),
 		OBJECT(MODEL_MCHEST, 117, 2026, -6227, 0, 90, 0, (20 << 24) | (0 << 16), bhvMysteryChest),
+		OBJECT(MODEL_NONE, 0, 674, 10746, 0, 0, 0, (3 << 16), bhvAirborneWarp),
 		OBJECT(MODEL_SAVE, -1567, 1189, -1314, 0, 0, 0, 0x00000000, bhvSaveBox),
 		OBJECT(MODEL_SAVE, -5447, 2176, -6334, 0, -90, 0, 0x00000000, bhvSaveBox),
 		OBJECT(MODEL_SAVE, 6795, 4577, -384, 0, 0, 0, 0x00000000, bhvSaveBox),
