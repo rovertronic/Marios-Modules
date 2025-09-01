@@ -1028,7 +1028,7 @@ void load_marios_modules(void) {
         gMarioState->numKeys = sMariosModulesSave.keys;
         gMarioState->numCoins = sMariosModulesSave.coins;
 
-        tinymt32_init(&gGlobalRandomState,6);
+        tinymt32_init(&gGlobalRandomState,7);
     }
 }
 
