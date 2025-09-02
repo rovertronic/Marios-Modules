@@ -200,11 +200,6 @@ void module_update(void) {
                 }
                 met->executing = FALSE;
                 met->cooldown = FALSE;
-
-                if (gModuleUpdateVanity && i != MODULE_EXEC_VANITY) {
-                    gModuleUpdateVanity = FALSE;
-                    update_vanity();
-                }
             }
             if (
                 (GROUNDED)
@@ -219,6 +214,9 @@ void module_update(void) {
                 met->begin = FALSE;
                 if (met == &module_execution_threads[MODULE_EXEC_PASSIVE]) {
                     gMarioState->passiveFlag = 0;
+                }
+                if (met == &module_execution_threads[MODULE_EXEC_VANITY]) {
+                    gMarioState->marioObj->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_MARIO];
                 }
             }
             if (!met->halted) {
@@ -329,12 +327,12 @@ s32 handle_module_inputs(void) {
             execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_B],B_BUTTON,0,1,TRUE);
         }
         execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_PASSIVE],Z_TRIG,0,5,FALSE);
+        update_vanity();
     }
     return FALSE;
 }
 
 void update_vanity(void) {
-    gMarioState->marioObj->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_MARIO];
     execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY],0,0,44,FALSE);
 }
 

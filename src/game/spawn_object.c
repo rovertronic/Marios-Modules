@@ -192,6 +192,9 @@ struct Object *allocate_object(struct ObjectNode *objList) {
 
     obj->element = NULL;
 
+    obj->saveBinId = 0;
+    obj->saveBinType = 0;
+
     return obj;
 }
 

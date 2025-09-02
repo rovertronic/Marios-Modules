@@ -200,7 +200,7 @@ struct inventory_row {
     u8 wrap;
 };
 
-#define WHITELIST_VANITY ((1 << MTYPE_VANITY))
+#define WHITELIST_VANITY ((1 << MTYPE_VANITY) | (1 << MTYPE_LOGIC) | (1 << MTYPE_COND))
 #define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_ELEMENT) | (1 << MTYPE_LOGIC))
 #define WHITELIST_PASSIVE ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_ELEMENT) | (1 << MTYPE_LOGIC) | (1 << MTYPE_PASSIVE))
 

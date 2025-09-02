@@ -858,10 +858,10 @@ void bhv_chest(void) {
                 sModuleChestLabelBuffer[GET_BPARAM4(o->oBehParams)] = randomModule;
             }
 
+            o->oAction = 1;
             if (obj_save_bin_read()) {
                 o->oAction = 3;
             }
-            o->oAction = 1;
             break;
         case 1:
             if (cost > 0) {
@@ -943,10 +943,10 @@ void bhv_mystery_chest(void) {
             } while (randomModule == firstPick);
             SET_BPARAM4(o->oMysteryChestContents, lootTableVanity[randomModule]);
 
-            if (obj_save_bin_read()) {
-                o->oAction = 4;
-            }
             o->oAction = 1;
+            if (obj_save_bin_read()) {
+                o->oAction = 5;
+            }
             break;
         case 1:
             o->header.gfx.animInfo.animFrame = 0;
