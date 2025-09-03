@@ -201,6 +201,7 @@
 
 /* Mystery Chest */
 #define /*0x0F4*/ oMysteryChestContents  OBJECT_FIELD_S32(0x1B)
+#define /*0x0F4*/ oChestSeed             OBJECT_FIELD_S32(0x1C)
 
 /* 1-Up Hidden */
 #define /*0x0F4*/ o1UpHiddenTimesTriggered                      OBJECT_FIELD_S32(0x1B)

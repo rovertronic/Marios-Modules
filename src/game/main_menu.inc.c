@@ -1,19 +1,19 @@
-struct mariosModulesSave sMariosModulesSave;
+struct mariosModulesSave gMariosModulesSave;
 
 void save_marios_modules(Vec3f pos) {
     int size = sizeof(struct mariosModulesSave);
 
     if (gSramProbe != 0) {
-        sMariosModulesSave.version = MARIOS_MODULES_GAME_VERSION;
+        gMariosModulesSave.version = MARIOS_MODULES_GAME_VERSION;
         for (int i = 0; i < 3; i++) {
-            sMariosModulesSave.pos[i] = pos[i];
+            gMariosModulesSave.pos[i] = pos[i];
         }
-        sMariosModulesSave.save_magic = SAVE_MAGIC;
-        sMariosModulesSave.keys = gMarioState->numKeys;
-        sMariosModulesSave.coins = gMarioState->numCoins;
-        bcopy(&inventory,&sMariosModulesSave.inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
-        bcopy(&inventoryParam,&sMariosModulesSave.inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
-        nuPiWriteSram(0, &sMariosModulesSave, ALIGN8(size));
+        gMariosModulesSave.save_magic = SAVE_MAGIC;
+        gMariosModulesSave.keys = gMarioState->numKeys;
+        gMariosModulesSave.coins = gMarioState->numCoins;
+        bcopy(&inventory,&gMariosModulesSave.inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+        bcopy(&inventoryParam,&gMariosModulesSave.inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+        nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
 
         gMessageDisplayTimer = 120.0f;
         messageDisplayPtr = "@G@Game successfully saved.";
@@ -25,17 +25,17 @@ void load_marios_modules(void) {
     int size = sizeof(struct mariosModulesSave);
 
     if (gSramProbe != 0) {
-        nuPiReadSram(0, &sMariosModulesSave, ALIGN8(size));
-        if (sMariosModulesSave.save_magic == SAVE_MAGIC) {
-            bcopy(&sMariosModulesSave.inventory,&inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
-            bcopy(&sMariosModulesSave.inventoryParam,&inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+        nuPiReadSram(0, &gMariosModulesSave, ALIGN8(size));
+        if (gMariosModulesSave.save_magic == SAVE_MAGIC) {
+            bcopy(&gMariosModulesSave.inventory,&inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+            bcopy(&gMariosModulesSave.inventoryParam,&inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
         } else {
-            bzero(&sMariosModulesSave,size);
+            bzero(&gMariosModulesSave,size);
         }
-        gMarioState->numKeys = sMariosModulesSave.keys;
-        gMarioState->numCoins = sMariosModulesSave.coins;
+        gMarioState->numKeys = gMariosModulesSave.keys;
+        gMarioState->numCoins = gMariosModulesSave.coins;
 
-        tinymt32_init(&gGlobalRandomState,sMariosModulesSave.seed);
+        tinymt32_init(&gGlobalRandomState,gMariosModulesSave.seed);
     }
 }
 
@@ -57,17 +57,17 @@ void obj_save_bin_count(int type) {
 }
 
 u32 obj_save_bin_read(void) {
-    return (sMariosModulesSave.bin[o->saveBinType] & (1 << o->saveBinId));
+    return (gMariosModulesSave.bin[o->saveBinType] & (1 << o->saveBinId));
 }
 
 void obj_save_bin_write(struct Object * obj) {
-    sMariosModulesSave.bin[obj->saveBinType] |= (1 << obj->saveBinId);
+    gMariosModulesSave.bin[obj->saveBinType] |= (1 << obj->saveBinId);
 }
 
 s32 save_bin_get_flag_total(int type) {
     int count = 0;
     for (int i = 0; i < saveBinTotal[type]; i++) {
-        if (sMariosModulesSave.bin[type+(i/32)] & (1 << (i%32))) {
+        if (gMariosModulesSave.bin[type+(i/32)] & (1 << (i%32))) {
             count++;
         }
     }
@@ -79,9 +79,9 @@ s32 save_bin_get_max_total(int type) {
 }
 
 void marios_modules_savefile_load_position(void) {
-    if (sMariosModulesSave.save_magic == SAVE_MAGIC) {
+    if (gMariosModulesSave.save_magic == SAVE_MAGIC) {
         for (int i = 0; i < 3; i++) {
-            gMarioState->pos[i] = sMariosModulesSave.pos[i];
+            gMarioState->pos[i] = gMariosModulesSave.pos[i];
         }
     }
 }
@@ -312,6 +312,10 @@ void logic_main_menu(void) {
                         break;
                     case 1:
                         gMainMenuTargetState = MAIN_MENU_OPENING_CUTSCENE;
+                        gMainMenuState = MAIN_MENU_OPENING_CUTSCENE;
+                        gMariosModulesSave.seed = gGlobalTimer;
+                        tinymt32_init(&gGlobalRandomState,gMariosModulesSave.seed);
+                        saveBinTotal[SAVE_BIN_CHESTS] = 0;
                         play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
                         break;
                 }

@@ -843,6 +843,8 @@ void bhv_chest(void) {
 
     switch(o->oAction) {
         case 0:
+            o->oChestSeed = gMariosModulesSave.seed;
+
             obj_element_init(o,ELEMENT_NORMAL,100.0f);
             obj_save_bin_count(SAVE_BIN_CHESTS);
 
@@ -903,6 +905,11 @@ void bhv_chest(void) {
     }
 
     obj_element_enemy_loop();
+
+    if (gMariosModulesSave.seed != o->oChestSeed) {
+        // Redo init on seed change
+        o->oAction = 0;
+    }
 }
 
 void bhv_mystery_chest(void) {
@@ -910,6 +917,8 @@ void bhv_mystery_chest(void) {
 
     switch(o->oAction) {
         case 0:
+            o->oChestSeed = gMariosModulesSave.seed;
+
             obj_element_init(o,ELEMENT_NORMAL,100.0f);
             obj_save_bin_count(SAVE_BIN_CHESTS);
 
@@ -1026,6 +1035,11 @@ void bhv_mystery_chest(void) {
     }
 
     obj_element_enemy_loop();
+
+    if (gMariosModulesSave.seed != o->oChestSeed) {
+        // Redo init on seed change
+        o->oAction = 0;
+    }
 }
 
 void bhv_hover(void) {

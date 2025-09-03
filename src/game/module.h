@@ -240,6 +240,8 @@ struct mariosModulesSave {
     u32 save_magic;
 };
 
+extern struct mariosModulesSave gMariosModulesSave;
+
 // Main Menu
 extern u8 gMainMenuState;
 extern u8 gMainMenuTargetState;
