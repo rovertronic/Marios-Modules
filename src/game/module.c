@@ -169,7 +169,10 @@ void init_module_inventory(void) {
     }
 
     // Vanity
+    inventory[44][0] = MOD_TAN;
+    inventory[44][1] = MOD_VAN_SKIN;
     inventory[46][0] = MOD_WOMAN;
+    inventory[46][1] = MOD_BROWN;
 
     // Starter inventory
     inventory[4][7] = MOD_MONITOR;
@@ -382,12 +385,19 @@ void control_module_menu(void) {
 
     // handle panel changing
     if (gPlayer1Controller->buttonPressed & R_TRIG) {
-        inventory_panel++;
+        inventory_panel = (INVENTORY_PANEL_CT+inventory_panel+1)%INVENTORY_PANEL_CT;
+        while ((module_panel_info[inventory_panel].unlock != NULL)
+        && !module_panel_info[inventory_panel].unlock()) {
+            inventory_panel = (INVENTORY_PANEL_CT+inventory_panel+1)%INVENTORY_PANEL_CT;
+        }
     }
     if (gPlayer1Controller->buttonPressed & L_TRIG) {
-        inventory_panel--;
+        inventory_panel = (INVENTORY_PANEL_CT+inventory_panel-1)%INVENTORY_PANEL_CT;
+        while ((module_panel_info[inventory_panel].unlock != NULL)
+        && !module_panel_info[inventory_panel].unlock()) {
+            inventory_panel = (INVENTORY_PANEL_CT+inventory_panel-1)%INVENTORY_PANEL_CT;
+        }
     }
-    inventory_panel = (INVENTORY_PANEL_CT+inventory_panel)%INVENTORY_PANEL_CT;
 
     icp = &module_panel_info[inventory_panel];
 
@@ -856,7 +866,9 @@ void print_module_hud_status(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     print_execution_status(22,MODULE_HUD_STATUS_Y,MODULE_EXEC_A,MOD_BUTTON_A);
     print_execution_status(42,MODULE_HUD_STATUS_Y,MODULE_EXEC_B,MOD_BUTTON_B);
-    print_execution_status(62,MODULE_HUD_STATUS_Y,MODULE_EXEC_PASSIVE,MOD_PASSIVE);
+    if (passivePanelCondition()) {
+        print_execution_status(62,MODULE_HUD_STATUS_Y,MODULE_EXEC_PASSIVE,MOD_PASSIVE);
+    }
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 

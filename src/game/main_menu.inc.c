@@ -93,6 +93,7 @@ u8 gMainMenuState = MAIN_MENU_TITLE;
 u8 gMainMenuTargetState = MAIN_MENU_TITLE;
 f32 sMainMenuTransition = 1.0f;
 s8 sMainMenuIndex = 0;
+u16 sMainMenuSeedShaker[2];
 
 f32 sBigTextScroll = 0.0f;
 
@@ -269,6 +270,9 @@ void main_menu_handle_scroll(u8 max) {
 }
 
 void logic_main_menu(void) {
+    sMainMenuSeedShaker[0] = random_u16();
+    sMainMenuSeedShaker[1] = random_u16();
+
     if (gMainMenuState != gMainMenuTargetState) {
         sMainMenuTransition -= .1f;
         if (sMainMenuTransition <= 0.0f) {
@@ -313,7 +317,7 @@ void logic_main_menu(void) {
                     case 1:
                         gMainMenuTargetState = MAIN_MENU_OPENING_CUTSCENE;
                         gMainMenuState = MAIN_MENU_OPENING_CUTSCENE;
-                        gMariosModulesSave.seed = gGlobalTimer;
+                        gMariosModulesSave.seed = (sMainMenuSeedShaker[0] | (sMainMenuSeedShaker[1] << 16));
                         tinymt32_init(&gGlobalRandomState,gMariosModulesSave.seed);
                         saveBinTotal[SAVE_BIN_CHESTS] = 0;
                         play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);

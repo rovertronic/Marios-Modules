@@ -1,4 +1,12 @@
 // INVENTORY STRUCTURE DECLARATIONS
+s32 creativePanelCondition(void) {
+    return FALSE;
+}
+
+s32 passivePanelCondition(void) {
+    return FALSE;
+}
+
 struct module_panel module_panel_info[] = {
     [PANEL_SETTINGS] = {
         .name = "Settings + Stats",
@@ -16,7 +24,7 @@ struct module_panel module_panel_info[] = {
         .name = "@Y@Passive",
         .offset = 5,
         .size = 5,
-        .unlock = NULL,
+        .unlock = passivePanelCondition,
     },
     [PANEL_VANITY] = {
         .name = "@P@Vanity",
@@ -28,7 +36,7 @@ struct module_panel module_panel_info[] = {
         .name = "@G@Creative",
         .offset = 39,
         .size = 5,
-        .unlock = NULL,
+        .unlock = creativePanelCondition,
     },
 };
 
@@ -405,6 +413,12 @@ int colorBlendCount = 0;
 void module_clothes_color(struct module_execution_thread * met, u8 call_context) {
     // Somewhat hacky, inject mario's material dls with new color
     // won't crash N64 i think and that's all that matters
+    if (colorBlendCount == 0) {
+        module_log_message(met,"No colors to apply, do nothing.",0);
+        met->x++;
+        return;
+    }
+
 
     Gfx ** lightList = met->extra_data;
 
@@ -603,6 +617,8 @@ Vec3f moduleGreen = {0.0f,1.0f,0.0f};
 Vec3f moduleYellow = {1.0f,1.0f,0.0f};
 Vec3f moduleWhite = {1.0f,1.0f,1.0f};
 Vec3f moduleBlack = {0.02f,0.02f,0.02f};
+Vec3f moduleTan = {.996f,.756f,.474f};
+Vec3f moduleBrown = {.6f,.3f,.1f};
 
 Gfx * capLights[] = {
     &mat_mario_cap_v3,
@@ -1007,6 +1023,26 @@ struct module_info module_infos[] = {
         .func = module_color,
         .extra_data = &moduleBlack,
         .creative = TRUE,
+        .loot_tier = LOOT_VANITY,
+    },
+
+    [MOD_TAN] = {
+        .name = "Tan",
+        .type = MTYPE_VANITY,
+        .tex = micons_btngen_rgba16,
+        .desc = "Mixes tan into palette.",
+        .func = module_color,
+        .extra_data = &moduleTan,
+        .loot_tier = LOOT_VANITY,
+    },
+
+    [MOD_BROWN] = {
+        .name = "Brown",
+        .type = MTYPE_VANITY,
+        .tex = micons_btngen_rgba16,
+        .desc = "Mixes brown into palette.",
+        .func = module_color,
+        .extra_data = &moduleBrown,
         .loot_tier = LOOT_VANITY,
     },
 
