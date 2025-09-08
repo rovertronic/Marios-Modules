@@ -230,7 +230,7 @@ enum {
 };
 
 #define SAVE_MAGIC 0x0203DD10 //my favorite rom address
-struct mariosModulesSave {
+struct mariosModulesSaveFile {
     u8 version;
     Vec3s pos;
     s8 inventory[INVENTORY_SLOTS_Y*INVENTORY_SLOTS_X];
@@ -238,11 +238,19 @@ struct mariosModulesSave {
     u32 bin[SAVE_BIN_COUNT];
     u16 coins;
     u8 keys;
+    u32 flags;
     u32 seed;
+};
+
+#define SAVE_FLAG_PASSIVE (1 << 0)
+
+struct mariosModulesSaveGame {
+    struct mariosModulesSaveFile file[3];
     u32 save_magic;
 };
 
-extern struct mariosModulesSave gMariosModulesSave;
+extern struct mariosModulesSaveGame gMariosModulesSave;
+extern int gMariosModulesSaveIndex;
 
 // Main Menu
 extern u8 gMainMenuState;

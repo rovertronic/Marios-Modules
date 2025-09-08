@@ -843,7 +843,7 @@ void bhv_chest(void) {
 
     switch(o->oAction) {
         case 0:
-            o->oChestSeed = gMariosModulesSave.seed;
+            o->oChestSeed = gMariosModulesSave.file[gMariosModulesSaveIndex].seed;
 
             obj_element_init(o,ELEMENT_NORMAL,100.0f);
             obj_save_bin_count(SAVE_BIN_CHESTS);
@@ -889,10 +889,16 @@ void bhv_chest(void) {
                 moduleCollect->oBehParams2ndByte = o->oBehParams2ndByte;
 
 
-                if (o->oBehParams2ndByte != MOD_NONMOD_KEY) {
-                    add_inventory(o->oBehParams2ndByte);
-                } else {
-                    gMarioState->numKeys++;
+                switch(o->oBehParams2ndByte) {
+                    case MOD_NONMOD_KEY:
+                        gMarioState->numKeys++;
+                        break;
+                    case MOD_PASSIVE:
+                        gMariosModulesSave.file[gMariosModulesSaveIndex].flags |= SAVE_FLAG_PASSIVE;
+                        break;
+                    default:
+                        add_inventory(o->oBehParams2ndByte);
+                        break;
                 }
             }
             break;
@@ -906,7 +912,7 @@ void bhv_chest(void) {
 
     obj_element_enemy_loop();
 
-    if (gMariosModulesSave.seed != o->oChestSeed) {
+    if (gMariosModulesSave.file[gMariosModulesSaveIndex].seed != o->oChestSeed) {
         // Redo init on seed change
         o->oAction = 0;
     }
@@ -917,7 +923,7 @@ void bhv_mystery_chest(void) {
 
     switch(o->oAction) {
         case 0:
-            o->oChestSeed = gMariosModulesSave.seed;
+            o->oChestSeed = gMariosModulesSave.file[gMariosModulesSaveIndex].seed;
 
             obj_element_init(o,ELEMENT_NORMAL,100.0f);
             obj_save_bin_count(SAVE_BIN_CHESTS);
@@ -1036,7 +1042,7 @@ void bhv_mystery_chest(void) {
 
     obj_element_enemy_loop();
 
-    if (gMariosModulesSave.seed != o->oChestSeed) {
+    if (gMariosModulesSave.file[gMariosModulesSaveIndex].seed != o->oChestSeed) {
         // Redo init on seed change
         o->oAction = 0;
     }

@@ -3,7 +3,7 @@
 const GeoLayout temple_area_1_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_SWITCH_CASE(10, geo_switch_area),
+		GEO_SWITCH_CASE(11, geo_switch_area),
 		GEO_OPEN_NODE(),
 			GEO_BRANCH(1, temple_dl_0zroom_geo),
 			GEO_BRANCH(1, temple_dl_1room_geo),
@@ -14,6 +14,7 @@ const GeoLayout temple_area_1_geo[] = {
 			GEO_BRANCH(1, temple_dl_6room_geo),
 			GEO_BRANCH(1, temple_dl_7room_geo),
 			GEO_BRANCH(1, temple_dl_8room_geo),
+			GEO_BRANCH(1, temple_dl_9room_geo),
 		GEO_CLOSE_NODE(),
 		GEO_ASM(0, geo_render_preview_mario),
 	GEO_CLOSE_NODE(),
@@ -139,6 +140,17 @@ const GeoLayout temple_dl_8room_geo[] = {
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room5_midsection_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room8_001_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room8_001_mesh_layer_4),
+	GEO_CLOSE_NODE(),
+	GEO_RETURN(),
+};
+const GeoLayout temple_dl_9room_geo[] = {
+	GEO_NODE_START(),
+	GEO_OPEN_NODE(),
+		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_Plane_mesh_layer_1),
+		GEO_TRANSLATE_NODE_WITH_DL(LAYER_OPAQUE, 0, 0, -2027, temple_dl_visMiningDrill_mesh_layer_1),
+		GEO_OPEN_NODE(),
+			GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_visMiningDrill_mesh_layer_4),
+		GEO_CLOSE_NODE(),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };

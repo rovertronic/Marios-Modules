@@ -1,18 +1,19 @@
-struct mariosModulesSave gMariosModulesSave;
+struct mariosModulesSaveGame gMariosModulesSave;
+int gMariosModulesSaveIndex = 0;
 
 void save_marios_modules(Vec3f pos) {
-    int size = sizeof(struct mariosModulesSave);
+    int size = sizeof(struct mariosModulesSaveGame);
 
     if (gSramProbe != 0) {
-        gMariosModulesSave.version = MARIOS_MODULES_GAME_VERSION;
+        gMariosModulesSave.file[gMariosModulesSaveIndex].version = MARIOS_MODULES_GAME_VERSION;
         for (int i = 0; i < 3; i++) {
-            gMariosModulesSave.pos[i] = pos[i];
+            gMariosModulesSave.file[gMariosModulesSaveIndex].pos[i] = pos[i];
         }
         gMariosModulesSave.save_magic = SAVE_MAGIC;
-        gMariosModulesSave.keys = gMarioState->numKeys;
-        gMariosModulesSave.coins = gMarioState->numCoins;
-        bcopy(&inventory,&gMariosModulesSave.inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
-        bcopy(&inventoryParam,&gMariosModulesSave.inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+        gMariosModulesSave.file[gMariosModulesSaveIndex].keys = gMarioState->numKeys;
+        gMariosModulesSave.file[gMariosModulesSaveIndex].coins = gMarioState->numCoins;
+        bcopy(&inventory,&gMariosModulesSave.file[gMariosModulesSaveIndex].inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+        bcopy(&inventoryParam,&gMariosModulesSave.file[gMariosModulesSaveIndex].inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
         nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
 
         gMessageDisplayTimer = 120.0f;
@@ -22,20 +23,20 @@ void save_marios_modules(Vec3f pos) {
 }
 
 void load_marios_modules(void) {
-    int size = sizeof(struct mariosModulesSave);
+    int size = sizeof(struct mariosModulesSaveGame);
 
     if (gSramProbe != 0) {
         nuPiReadSram(0, &gMariosModulesSave, ALIGN8(size));
         if (gMariosModulesSave.save_magic == SAVE_MAGIC) {
-            bcopy(&gMariosModulesSave.inventory,&inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
-            bcopy(&gMariosModulesSave.inventoryParam,&inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+            bcopy(&gMariosModulesSave.file[gMariosModulesSaveIndex].inventory,&inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+            bcopy(&gMariosModulesSave.file[gMariosModulesSaveIndex].inventoryParam,&inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
         } else {
             bzero(&gMariosModulesSave,size);
         }
-        gMarioState->numKeys = gMariosModulesSave.keys;
-        gMarioState->numCoins = gMariosModulesSave.coins;
+        gMarioState->numKeys = gMariosModulesSave.file[gMariosModulesSaveIndex].keys;
+        gMarioState->numCoins = gMariosModulesSave.file[gMariosModulesSaveIndex].coins;
 
-        tinymt32_init(&gGlobalRandomState,gMariosModulesSave.seed);
+        tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
     }
 }
 
@@ -57,17 +58,17 @@ void obj_save_bin_count(int type) {
 }
 
 u32 obj_save_bin_read(void) {
-    return (gMariosModulesSave.bin[o->saveBinType] & (1 << o->saveBinId));
+    return (gMariosModulesSave.file[gMariosModulesSaveIndex].bin[o->saveBinType] & (1 << o->saveBinId));
 }
 
 void obj_save_bin_write(struct Object * obj) {
-    gMariosModulesSave.bin[obj->saveBinType] |= (1 << obj->saveBinId);
+    gMariosModulesSave.file[gMariosModulesSaveIndex].bin[obj->saveBinType] |= (1 << obj->saveBinId);
 }
 
 s32 save_bin_get_flag_total(int type) {
     int count = 0;
     for (int i = 0; i < saveBinTotal[type]; i++) {
-        if (gMariosModulesSave.bin[type+(i/32)] & (1 << (i%32))) {
+        if (gMariosModulesSave.file[gMariosModulesSaveIndex].bin[type+(i/32)] & (1 << (i%32))) {
             count++;
         }
     }
@@ -81,7 +82,7 @@ s32 save_bin_get_max_total(int type) {
 void marios_modules_savefile_load_position(void) {
     if (gMariosModulesSave.save_magic == SAVE_MAGIC) {
         for (int i = 0; i < 3; i++) {
-            gMarioState->pos[i] = gMariosModulesSave.pos[i];
+            gMarioState->pos[i] = gMariosModulesSave.file[gMariosModulesSaveIndex].pos[i];
         }
     }
 }
@@ -317,8 +318,8 @@ void logic_main_menu(void) {
                     case 1:
                         gMainMenuTargetState = MAIN_MENU_OPENING_CUTSCENE;
                         gMainMenuState = MAIN_MENU_OPENING_CUTSCENE;
-                        gMariosModulesSave.seed = (sMainMenuSeedShaker[0] | (sMainMenuSeedShaker[1] << 16));
-                        tinymt32_init(&gGlobalRandomState,gMariosModulesSave.seed);
+                        gMariosModulesSave.file[gMariosModulesSaveIndex].seed = (sMainMenuSeedShaker[0] | (sMainMenuSeedShaker[1] << 16));
+                        tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
                         saveBinTotal[SAVE_BIN_CHESTS] = 0;
                         play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
                         break;

@@ -44,6 +44,7 @@ const LevelScript level_temple_entry[] = {
 		OBJECT(MODEL_CHEST, 4520, 199, 10551, 0, -180, 0, (MOD_JUMP << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -900, 279, 3878, 0, 90, 0, (MOD_JUMP << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -100, 279, 3878, 0, -90, 0, (5 << 24) | (MOD_POW << 16), bhvChest),
+		OBJECT(MODEL_CHEST, -9927, 989, -3747, 0, 0, 0, (0 << 24) | (MOD_PASSIVE << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -553, 2092, -199, 0, -90, 0, (MOD_HIT_WALL << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -7344, 1819, -199, 0, 90, 0, (MOD_GRAV << 16), bhvChest),
 		OBJECT(MODEL_CHEST, -49, 389, -781, 0, -45, 0, (15 << 24) | (0 << 16) | (1 << 8) | (1), bhvChest),

@@ -788,7 +788,7 @@ void display_module_message(s8 id) {
         queue = TRUE;
     }
 
-    if (module_infos[id].type != MTYPE_NONMOD) {
+    if (module_infos[id].type != MTYPE_NONMOD && id != MOD_PASSIVE) {
         sprintf(usebuff,"Obtained @%s@%s@@ module.",module_type_infos[module_infos[id].type].text_color,module_infos[id].name);
     } else {
         sprintf(usebuff,"Obtained %s.",module_infos[id].name);
