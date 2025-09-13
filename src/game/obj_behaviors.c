@@ -1175,20 +1175,19 @@ void bhv_bdoor(void) {
         }
     }
 
+    gMarioState->numKeys = 99;
+
     f32 dist;
     u8 needs_key = (o->oBehParams2ndByte==1);
     u8 open = FALSE;
     vec3_get_dist(gMarioState->pos,&o->oHomeVec,&dist);
-    if (dist < 400.0f) {
+    if (dist < 400.0f && o->oAction != 4) {
         open = TRUE;
 
         if (needs_key && gMarioState->numKeys > 0) {
-            obj_save_bin_write(o);
-            gMarioState->numKeys--;
-            o->oBehParams2ndByte = 0;
-            cur_obj_play_sound_2(SOUND_GENERAL_DOOR_TURN_KEY);
-            cur_obj_set_model(MODEL_BDOOR);
-            needs_key = FALSE;
+            o->oAction = 4;
+            o->oTimer = 0;
+            spawn_object(o,MODEL_KEY,bhvKeyOpen);
         }
     }
     if (force_door_shut) {
@@ -1224,6 +1223,15 @@ void bhv_bdoor(void) {
             if (o->oPosY < o->oHomeY) {
                 o->oAction = 0;
                 o->oPosY = o->oHomeY;
+            }
+            break;
+        case 4://door unlock anim
+            if (o->oTimer>=50) {
+                obj_save_bin_write(o);
+                gMarioState->numKeys--;
+                o->oBehParams2ndByte = 0;
+                cur_obj_set_model(MODEL_BDOOR);
+                o->oAction = 0;
             }
             break;
     }
@@ -1278,6 +1286,10 @@ void bhv_save_box(void) {
 }
 
 void bhv_module_collect(void) {
+    if (o->oBehParams2ndByte == MOD_NONMOD_KEY) {
+        cur_obj_set_model(MODEL_KEY);
+    }
+
     f32 p = o->oTimer/30.0f;
     o->oPosX = approach_f32_asymptotic(o->oHomeX,gMarioState->pos[0],p);
     o->oPosY = 80.0f + approach_f32_asymptotic(o->oHomeY,gMarioState->pos[1],p) + (sins(p * 0x8000) * p * 300.0f);
@@ -1288,5 +1300,41 @@ void bhv_module_collect(void) {
     }
     if (p>=1.0f){
         obj_mark_for_deletion(o);
+    }
+}
+
+void bhv_key_open(void) {
+    struct Object * keyDoor = cur_obj_nearest_object_with_behavior(bhvBdoor);
+
+    if (keyDoor) {
+        o->oHomeX = keyDoor->oHomeX;
+        o->oHomeY = keyDoor->oHomeY + 200.0f;
+        o->oHomeZ = keyDoor->oHomeZ;
+
+        o->oFaceAngleYaw = keyDoor->oFaceAngleYaw+0x4000;
+        if ((obj_angle_to_object(o,keyDoor) - keyDoor->oFaceAngleYaw) < 0x4000) {
+            o->oFaceAngleYaw = keyDoor->oFaceAngleYaw-0x4000;
+        }
+    }
+
+    switch(o->oAction) {
+        case 0:;
+            f32 p = o->oTimer/30.0f;
+            p = 1.0f-p;
+            o->oPosX = approach_f32_asymptotic(o->oHomeX,gMarioState->pos[0],p);
+            o->oPosY = 80.0f + approach_f32_asymptotic(o->oHomeY,gMarioState->pos[1],p) + (sins(p * 0x8000) * p * 300.0f);
+            o->oPosZ = approach_f32_asymptotic(o->oHomeZ,gMarioState->pos[2],p);
+
+            if (o->oTimer >= 30) {
+                o->oAction = 1;
+                cur_obj_play_sound_2(SOUND_GENERAL_DOOR_TURN_KEY);
+            }
+            break;
+        case 1:
+            o->oFaceAnglePitch += 0x400;
+            if (o->oTimer >= 20) {
+                obj_mark_for_deletion(o);
+            }
+            break;
     }
 }

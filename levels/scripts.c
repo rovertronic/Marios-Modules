@@ -124,6 +124,7 @@ const LevelScript level_main_scripts_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_SAVE, save_geo),
     LOAD_MODEL_FROM_GEO(MODEL_MODULE, module3d_geo),
     LOAD_MODEL_FROM_GEO(MODEL_ICE, ice_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_KEY, key_geo),
     FREE_LEVEL_POOL(),
     POP_POOL(),
     CALL(/*arg*/ 0, /*func*/ lvl_init_from_save_file),

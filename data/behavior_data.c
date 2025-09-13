@@ -6211,6 +6211,16 @@ const BehaviorScript bhvModuleCollect[] = {
     END_LOOP(),
 };
 
+extern void bhv_key_open(void);
+const BehaviorScript bhvKeyOpen[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_key_open),
+    END_LOOP(),
+};
+
 extern void bhv_flame_projectile(void);
 const BehaviorScript bhvFlameProjectile[] = {
     BEGIN(OBJ_LIST_LEVEL),

@@ -26,3 +26,4 @@
 #include "module3d/geo.inc.c"
 #include "ice/geo.inc.c"
 #include "mchest/geo.inc.c"
+#include "key/geo.inc.c"

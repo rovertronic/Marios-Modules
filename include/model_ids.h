@@ -584,6 +584,7 @@ enum new_models {
     MODEL_SAVE,
     MODEL_MODULE,
     MODEL_ICE,
+    MODEL_KEY,
 };
 
 #endif // MODEL_IDS_H

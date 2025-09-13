@@ -54,3 +54,5 @@
 #include "ice/collision.inc.c"
 #include "mchest/collision.inc.c"
 #include "mchest/model.inc.c"
+#include "key/collision.inc.c"
+#include "key/model.inc.c"
