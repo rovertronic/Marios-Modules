@@ -1160,6 +1160,7 @@ struct module_info module_infos[] = {
         .desc = "Checks if Mario is touching floor.",
         .func = module_if_floor,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
     [MOD_IF_DOWN] = {
         .name = "If Falling",
@@ -1168,6 +1169,7 @@ struct module_info module_infos[] = {
         .desc = "Checks if Mario is falling.",
         .func = module_if_down,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     [MOD_IF_INPUT] = {
@@ -1178,6 +1180,7 @@ struct module_info module_infos[] = {
         .func = module_if_input,
         .options = ifInputOptions,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     //

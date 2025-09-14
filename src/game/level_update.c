@@ -1085,6 +1085,7 @@ s32 play_mode_normal(void) {
                 if (gModuleMenuOpen) {
                     module_log_clear();
                     play_sound(SOUND_GENERAL_OPEN_IRON_DOOR, gGlobalSoundSource);
+                    gModuleMenuMode = MODULE_MENU_MODE_NORMAL;
                 } else {
                     play_sound(SOUND_GENERAL_CLOSE_IRON_DOOR, gGlobalSoundSource);
                 }

@@ -9,6 +9,8 @@
 #define INVENTORY_SLOTS_X 8
 
 extern u8 gModuleMenuOpen;
+extern u8 gModuleMenuMode;
+extern s8 gRecycleChestContent;
 extern u8 gGameSettings[];
 extern Vec3f gModulePreviewPos;
 
@@ -74,6 +76,11 @@ enum module_execution_ids {
     MODULE_EXEC_SETTINGS,
     MODULE_EXEC_PASSIVE,
     MODULE_EXEC_COUNT,
+};
+
+enum module_menu_modes {
+    MODULE_MENU_MODE_NORMAL,
+    MODULE_MENU_MODE_RECYCLE,
 };
 
 #define GROUNDED (((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_STATIONARY)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_MOVING)||((gMarioState->action & ACT_GROUP_MASK) == ACT_GROUP_AUTOMATIC))

@@ -152,6 +152,7 @@ const GeoLayout temple_dl_9room_geo[] = {
 		GEO_TRANSLATE_NODE_WITH_DL(LAYER_OPAQUE, -7119, 2169, -17429, temple_dl_grindr_mesh_layer_1),
 		GEO_OPEN_NODE(),
 			GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_grindr_mesh_layer_4),
+			GEO_DISPLAY_LIST(LAYER_TRANSPARENT_DECAL, temple_dl_grindr_mesh_layer_6),
 		GEO_CLOSE_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room8_001_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room8_001_mesh_layer_4),

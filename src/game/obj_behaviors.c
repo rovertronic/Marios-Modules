@@ -1048,6 +1048,48 @@ void bhv_mystery_chest(void) {
     }
 }
 
+void bhv_recycle_chest(void) {
+    switch(o->oAction) {
+        case 0:
+            o->header.gfx.animInfo.animAccelF = 1.0f;
+            obj_element_init(o,ELEMENT_NORMAL,100.0f);
+            o->oAction = 3;
+            break;
+        case 1:
+            o->header.gfx.animInfo.animFrame = 0;
+            o->header.gfx.animInfo.animFrameF = 0.0f;
+            o->header.gfx.animInfo.animAccelF = 0.0f;
+            if (o->oInteractStatus & INT_STATUS_INTERACTED) {
+                obj_save_bin_write(o);
+                o->header.gfx.animInfo.animAccelF = 1.0f;
+
+                play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);
+                o->oAction = 2;
+
+                struct Object * moduleCollect = spawn_object(o,MODEL_MODULE,bhvModuleCollect);
+                moduleCollect->oBehParams2ndByte = gRecycleChestContent;
+
+                add_inventory(gRecycleChestContent);
+            }
+            break;
+        case 2:
+            if (o->oTimer > 30) {
+                display_module_message(gRecycleChestContent);
+                gRecycleChestContent = MOD_EMPTY;
+                o->oAction = 3;
+            }
+            break;
+        case 3: // No items
+            if (gRecycleChestContent != MOD_EMPTY) {
+                o->header.gfx.animInfo.animAccelF = -1.0f;
+            }
+            if (o->header.gfx.animInfo.animFrameF <= 0.0f) {
+                o->oAction = 1;
+            }
+            break;
+    }
+}
+
 void bhv_hover(void) {
     cur_obj_scale(1.0f + (o->oBehParams2ndByte * .5f));
     o->oCollisionDistance += 100.0f * o->oBehParams2ndByte;
@@ -1174,8 +1216,6 @@ void bhv_bdoor(void) {
             o->oBehParams2ndByte=0;
         }
     }
-
-    gMarioState->numKeys = 99;
 
     f32 dist;
     u8 needs_key = (o->oBehParams2ndByte==1);
@@ -1334,6 +1374,23 @@ void bhv_key_open(void) {
             o->oFaceAnglePitch += 0x400;
             if (o->oTimer >= 20) {
                 obj_mark_for_deletion(o);
+            }
+            break;
+    }
+}
+
+void bhv_recycle_interface(void) {
+    switch(o->oAction) {
+        case 0:
+            if (GROUNDED && o->oDistanceToMario < 100.0f && gModuleMenuOpen == FALSE && gRecycleChestContent == MOD_EMPTY) {
+                o->oAction = 1;
+                gModuleMenuOpen = TRUE;
+                gModuleMenuMode = MODULE_MENU_MODE_RECYCLE;
+            }
+            break;
+        case 1:
+            if (o->oDistanceToMario > 100.0f) {
+                o->oAction = 0;
             }
             break;
     }

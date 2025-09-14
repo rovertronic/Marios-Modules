@@ -21,6 +21,8 @@
 #include "seq_ids.h"
 
 u8 gModuleMenuOpen = FALSE;
+u8 gModuleMenuMode = MODULE_MENU_MODE_NORMAL;
+s8 gRecycleChestContent = MOD_EMPTY;
 u8 gGameSettings[SETTING_COUNT];
 Vec3f gModulePreviewPos;
 u8 gModuleUpdateVanity = FALSE;
@@ -432,23 +434,69 @@ void control_module_menu(void) {
 
     int modified_inventory = FALSE;
     if (gPlayer1Controller->buttonPressed & A_BUTTON) {
-        if (is_inventory_slot_locked(inventory_x,inventory_y)) {
-            play_sound(SOUND_MENU_CAMERA_BUZZ, gGlobalSoundSource);
+        if (gModuleMenuMode == MODULE_MENU_MODE_NORMAL) {
+            if (is_inventory_slot_locked(inventory_x,inventory_y)) {
+                play_sound(SOUND_MENU_CAMERA_BUZZ, gGlobalSoundSource);
+            } else {
+                if (!(module_in_hand == MOD_EMPTY && inventory[true_inventory_y][inventory_x] == MOD_EMPTY)) {
+                    play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
+                }
+
+                s8 module_to_pick_up = inventory[true_inventory_y][inventory_x];
+                u8 module_param_to_pick = inventoryParam[true_inventory_y][inventory_x];
+                if (inventory_panel != PANEL_CREATIVE) {
+                    inventory[true_inventory_y][inventory_x] = module_in_hand;
+                    inventoryParam[true_inventory_y][inventory_x] = module_param_in_hand;
+                }
+                module_in_hand = module_to_pick_up;
+                module_param_in_hand = module_param_to_pick;
+            }
+            modified_inventory = TRUE;
         } else {
-            if (!(module_in_hand == MOD_EMPTY && inventory[true_inventory_y][inventory_x] == MOD_EMPTY)) {
-                play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
+            s8 recycledModule = inventory[true_inventory_y][inventory_x];
+
+            int price = 4;
+            int canSimilarRoll = TRUE;
+            switch(module_infos[recycledModule].loot_tier) {
+                case LOOT_TIER_2:
+                    price = 10;
+                    break;
+                case LOOT_VANITY:
+                    price = 1;
+                    canSimilarRoll = FALSE;
+                    break;
             }
 
-            s8 module_to_pick_up = inventory[true_inventory_y][inventory_x];
-            u8 module_param_to_pick = inventoryParam[true_inventory_y][inventory_x];
-            if (inventory_panel != PANEL_CREATIVE) {
-                inventory[true_inventory_y][inventory_x] = module_in_hand;
-                inventoryParam[true_inventory_y][inventory_x] = module_param_in_hand;
+            if (gMarioState->numCoins >= price && module_infos[recycledModule].loot_tier != LOOT_NONE) {
+                gMarioState->numCoins-=price;
+                gHudDisplay.coins = gMarioState->numCoins;
+
+                inventory[true_inventory_y][inventory_x] = MOD_EMPTY;
+
+                int checkSimilar = FALSE;
+                if (canSimilarRoll) {
+                    checkSimilar = random_u16()%2;
+                }
+
+                s8 rerolledModule = random_u16()%MOD_COUNT;
+                int i = 0;
+                while(
+                    (module_infos[rerolledModule].loot_tier != module_infos[recycledModule].loot_tier)
+                    || (module_infos[rerolledModule].func == module_infos[recycledModule].func)
+                    || (rerolledModule == recycledModule)
+                    || (checkSimilar && module_infos[rerolledModule].type != module_infos[recycledModule].type) ) {
+                    rerolledModule = random_u16()%MOD_COUNT;
+                    i++;
+                    if (i > 10) {
+                        //only 1 module of this type in the loot table
+                        checkSimilar = FALSE;
+                    }
+                }
+
+                gRecycleChestContent = rerolledModule;
+                gModuleMenuOpen = FALSE;
             }
-            module_in_hand = module_to_pick_up;
-            module_param_in_hand = module_param_to_pick;
         }
-        modified_inventory = TRUE;
     }
 
     if (module_in_hand != MOD_EMPTY && module_infos[module_in_hand].options && (gPlayer1Controller->buttonPressed & B_BUTTON)) {
@@ -651,12 +699,18 @@ void print_module_menu(void) {
             int true_y = y + icp->offset;
 
             char * invalid = module_is_invalid(x,true_y);
+            if (gModuleMenuMode == MODULE_MENU_MODE_RECYCLE && module_infos[inventory[true_y][x]].loot_tier == LOOT_NONE) {
+                gPrintModuleDarken=2;
+            }
             if (invalid) {
                 gPrintModuleDarken=2;
             }
             print_module(inventory[true_y][x],inv_slot_printx(x,y), inv_slot_printy(x,y));
             if (invalid) {
                 print_texture(micons_warn_rgba16,16,inv_slot_printx(x,y), inv_slot_printy(x,y));
+                gPrintModuleDarken=1;
+            }
+            if (gModuleMenuMode == MODULE_MENU_MODE_RECYCLE && module_infos[inventory[true_y][x]].loot_tier == LOOT_NONE) {
                 gPrintModuleDarken=1;
             }
 
@@ -755,6 +809,32 @@ void print_module_menu(void) {
         }
         if (module_infos[mod_inf_to_disp].cooldown != 0.0f) {
             charCt += sprintf(print_buffer+charCt, "@1@(Cooldown: %.1fs)@@ ",module_infos[mod_inf_to_disp].cooldown);
+        }
+
+        if (gModuleMenuMode == MODULE_MENU_MODE_RECYCLE) {
+            int recyclePrice = 4;
+            int canRecycle = TRUE;
+            switch(module_infos[mod_inf_to_disp].loot_tier) {
+                case LOOT_NONE:
+                    canRecycle = FALSE;
+                    break;
+                case LOOT_TIER_2:
+                    recyclePrice = 10;
+                    break;
+                case LOOT_VANITY:
+                    recyclePrice = 1;
+                    break;
+            }
+
+            if (canRecycle) {
+                char * str = "Recycle %s for @Y@%d coins.@@ (You currently have @Y@%d@@)";
+                if (gMarioState->numCoins < recyclePrice) {
+                    str = "Recycle %s for @Y@%d coins.@@ (You currently have @R@%d@@)";
+                }
+                sprintf(print_buffer, str,module_infos[mod_inf_to_disp].name,recyclePrice,gMarioState->numCoins);
+            } else {
+                sprintf(print_buffer, "@R@Can't recycle.");
+            }
         }
         /*
         if (module_infos[mod_inf_to_disp].elementable == TRUE) {

@@ -56,3 +56,4 @@
 #include "mchest/model.inc.c"
 #include "key/collision.inc.c"
 #include "key/model.inc.c"
+#include "hover/collision.inc.c"
