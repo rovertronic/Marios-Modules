@@ -1535,7 +1535,6 @@ void update_mario_health(struct MarioState *m) {
             if (m->passiveFlag & (1 << PASSIVE_FLAG_DEFENSE)) {
                 dmg = 48;
             }
-            dmg = 48;
 
             m->health -= dmg;
             m->hurtCounter--;

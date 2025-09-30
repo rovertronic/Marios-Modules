@@ -119,6 +119,7 @@ void module_jump(struct module_execution_thread * met, u8 call_context) {
             case 1:
                 module_log_message(met,"UPG is 1, double jump action performed.",0);
                 set_mario_action(gMarioState,ACT_DOUBLE_JUMP,0);
+                met->mod--;
                 break;
             default:
                 module_log_message(met,"UPG is 2+, triple jump action performed.",0);
@@ -126,9 +127,9 @@ void module_jump(struct module_execution_thread * met, u8 call_context) {
                 if (gMarioState->flags & MARIO_WING_CAP) {
                     set_mario_action(gMarioState,ACT_FLYING_TRIPLE_JUMP,0);
                 }
+                met->mod-=2;
                 break;
         }
-        met->mod = 0;
     } else {
         module_log_message(met,"Not on valid ground, pressed A instead.",0);
         gMarioState->input |= INPUT_A_PRESSED;
