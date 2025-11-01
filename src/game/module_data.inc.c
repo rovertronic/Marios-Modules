@@ -1048,7 +1048,7 @@ struct module_info module_infos[] = {
     },
 
     [MOD_WOMAN] = {
-        .name = "Body Type B",
+        .name = "Model.W",
         .type = MTYPE_VANITY,
         .tex = micons_woman_rgba16,
         .desc = "Swaps to alternative hardware + voicebox.",

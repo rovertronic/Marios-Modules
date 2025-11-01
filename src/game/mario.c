@@ -35,15 +35,15 @@
 #include "module.h"
 
 u32 sMarioCharacterSoundTable[][2] = {
-    [MARIO_SND_YAH_WAH_HOO]          = { SOUND_MARIO_YAH_WAH_HOO,         SOUND_NONE },
-    [MARIO_SND_HOOHOO]               = { SOUND_MARIO_HOOHOO,              SOUND_NONE },
-    [MARIO_SND_YAHOO]                = { SOUND_MARIO_YAHOO,               SOUND_NONE },
+    [MARIO_SND_YAH_WAH_HOO]          = { SOUND_MARIO_YAH_WAH_HOO,         SOUND_GIRL_JUMP },
+    [MARIO_SND_HOOHOO]               = { SOUND_MARIO_HOOHOO,              SOUND_GIRL_DOUBLEJUMP },
+    [MARIO_SND_YAHOO]                = { SOUND_MARIO_YAHOO,               SOUND_GIRL_LONGJUMP },
     [MARIO_SND_UH]                   = { SOUND_MARIO_UH,                  SOUND_NONE },
     [MARIO_SND_HRMM]                 = { SOUND_MARIO_HRMM,                SOUND_NONE },
     [MARIO_SND_WAH2]                 = { SOUND_MARIO_WAH2,                SOUND_NONE },
     [MARIO_SND_WHOA]                 = { SOUND_MARIO_WHOA,                SOUND_NONE },
     [MARIO_SND_EEUH]                 = { SOUND_MARIO_EEUH,                SOUND_NONE },
-    [MARIO_SND_ATTACKED]             = { SOUND_MARIO_ATTACKED,            SOUND_NONE },
+    [MARIO_SND_ATTACKED]             = { SOUND_MARIO_ATTACKED,            SOUND_GIRL_HURT },
     [MARIO_SND_OOOF]                 = { SOUND_MARIO_OOOF,                SOUND_NONE },
     [MARIO_SND_OOOF2]                = { SOUND_MARIO_OOOF2,               SOUND_NONE },
     [MARIO_SND_HERE_WE_GO]           = { SOUND_MARIO_HERE_WE_GO,          SOUND_NONE },
@@ -51,14 +51,16 @@ u32 sMarioCharacterSoundTable[][2] = {
     [MARIO_SND_SNORING1]             = { SOUND_MARIO_SNORING1,            SOUND_NONE },
     [MARIO_SND_SNORING2]             = { SOUND_MARIO_SNORING2,            SOUND_NONE },
     [MARIO_SND_WAAAOOOW]             = { SOUND_MARIO_WAAAOOOW,            SOUND_NONE },
-    [MARIO_SND_HAHA]                 = { SOUND_MARIO_HAHA,                SOUND_NONE },
+    [MARIO_SND_HAHA]                 = { SOUND_MARIO_HAHA,                SOUND_GIRL_WOW },
     [MARIO_SND_HAHA_WATER]           = { SOUND_MARIO_HAHA_WATER,          SOUND_NONE },
     [MARIO_SND_UH_LEDGE_CLIMB_FAST]  = { SOUND_MARIO_UH_LEDGE_CLIMB_FAST, SOUND_NONE },
     [MARIO_SND_UH_LONG_JUMP_LAND]    = { SOUND_MARIO_UH_LONG_JUMP_LAND,   SOUND_NONE },
     [MARIO_SND_ON_FIRE]              = { SOUND_MARIO_ON_FIRE,             SOUND_NONE },
-    [MARIO_SND_DYING]                = { SOUND_MARIO_DYING,               SOUND_NONE },
+    [MARIO_SND_DYING]                = { SOUND_MARIO_DYING,               SOUND_GIRL_HURT },
     [MARIO_SND_PANTING_COLD]         = { SOUND_MARIO_PANTING_COLD,        SOUND_NONE },
-    [MARIO_SND_YAHOO_WAHA_YIPPEE]    = { SOUND_MARIO_YAHOO_WAHA_YIPPEE,   SOUND_NONE },
+    [MARIO_SND_YAHOO_WAHA_YIPPEE]    = { SOUND_MARIO_YAHOO_WAHA_YIPPEE,   SOUND_GIRL_TRIPLEJUMP },
+    [MARIO_SND_HOO]                  = { SOUND_MARIO_PUNCH_HOO,           SOUND_GIRL_HOO},
+    [MARIO_SND_PUNCH]                = { SOUND_MARIO_PUNCH_YAH,           SOUND_GIRL_HOO},                     
 };
 
 u32 get_mario_sound_id(int marioSoundEnum) {
