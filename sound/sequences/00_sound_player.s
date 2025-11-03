@@ -8166,10 +8166,10 @@ layer_end
 .sound_girl_longjump:
 chan_setbank 8
 chan_setinstr 28
-chan_setlayer 0, .layer_girl_longjump
+chan_setlayer 0, .layer_girl_longjump2
 chan_end
 
-.layer_girl_longjump:
+.layer_girl_longjump2:
 layer_note1 39, 0x70, 127
 layer_end
 

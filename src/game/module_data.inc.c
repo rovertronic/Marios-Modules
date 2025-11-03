@@ -1,6 +1,6 @@
 // INVENTORY STRUCTURE DECLARATIONS
 s32 creativePanelCondition(void) {
-    return FALSE;
+    return TRUE;
 }
 
 s32 passivePanelCondition(void) {
