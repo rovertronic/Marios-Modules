@@ -556,5 +556,7 @@ extern const BehaviorScript bhvMysteryChest[];
 extern const BehaviorScript bhvKeyOpen[];
 extern const BehaviorScript bhvRecycleChest[];
 extern const BehaviorScript bhvRecycleInterface[];
+extern const BehaviorScript bhvShredder[];
+extern const BehaviorScript bhvModuleShred[];
 
 #endif // BEHAVIOR_DATA_H

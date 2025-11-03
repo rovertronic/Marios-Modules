@@ -1379,19 +1379,74 @@ void bhv_key_open(void) {
     }
 }
 
+int sShredding = FALSE;
+
 void bhv_recycle_interface(void) {
     switch(o->oAction) {
         case 0:
             if (GROUNDED && o->oDistanceToMario < 100.0f && gModuleMenuOpen == FALSE && gRecycleChestContent == MOD_EMPTY) {
-                o->oAction = 1;
+                o->oAction ++;
                 gModuleMenuOpen = TRUE;
                 gModuleMenuMode = MODULE_MENU_MODE_RECYCLE;
             }
             break;
-        case 1:
+        case 1: // Waiting for input
+            if (gRecycleChestContent != MOD_EMPTY) {
+                o->oAction ++;
+                struct Object * visualShred = spawn_object(o,MODEL_MODULE,bhvModuleShred);
+                visualShred->oBehParams2ndByte = gRecycledModule;
+            }
+            break;
+        case 2: // Shred animation
+            if (o->oTimer > 30) {
+                sShredding = TRUE;
+                cur_obj_play_sound_1(SOUND_ENV_SHREDDER);
+            }
+            if (o->oTimer > 120) {
+                sShredding = FALSE;
+                o->oAction ++;
+            }
+            break;
+        case 3: // Cooldown
             if (o->oDistanceToMario > 100.0f) {
                 o->oAction = 0;
             }
             break;
     }
+}
+
+void bhv_shredder(void) {
+    if (sShredding) {
+        o->oFaceAngleRoll += 0x200;
+    }
+}
+
+void bhv_module_shred(void) {
+    o->oFaceAngleYaw = 0x4000;
+    switch(o->oAction) {
+        case 0:
+            o->oHomeX = -7119;
+            o->oHomeY = 2203;
+            o->oHomeZ = -17429;
+
+            o->oAction++;
+            break;
+        case 1:;
+            f32 p = 1.0f - (o->oTimer/30.0f);
+            o->oPosX = approach_f32_asymptotic(o->oHomeX,gMarioState->pos[0],p);
+            o->oPosY = 80.0f + approach_f32_asymptotic(o->oHomeY,gMarioState->pos[1],p) + (sins(p * 0x8000) * p * 300.0f);
+            o->oPosZ = approach_f32_asymptotic(o->oHomeZ,gMarioState->pos[2],p);
+            if (o->oTimer >= 30) {
+                o->oAction++;
+            }
+            break;
+        case 2:
+            o->oPosY -= 1.0f;
+            o->oFaceAnglePitch = (random_u16()%2000)-1000;
+            if (o->oTimer > 50) {
+                o->oFaceAnglePitch = 0;
+            }
+            break;
+    }
+
 }

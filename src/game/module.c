@@ -23,6 +23,7 @@
 u8 gModuleMenuOpen = FALSE;
 u8 gModuleMenuMode = MODULE_MENU_MODE_NORMAL;
 s8 gRecycleChestContent = MOD_EMPTY;
+s8 gRecycledModule = MOD_EMPTY;
 u8 gGameSettings[SETTING_COUNT];
 Vec3f gModulePreviewPos;
 u8 gModuleUpdateVanity = FALSE;
@@ -468,9 +469,12 @@ void control_module_menu(void) {
             }
 
             if (gMarioState->numCoins >= price && module_infos[recycledModule].loot_tier != LOOT_NONE) {
+                gPlayer1Controller->buttonPressed = 0;
+
                 gMarioState->numCoins-=price;
                 gHudDisplay.coins = gMarioState->numCoins;
 
+                gRecycledModule = inventory[true_inventory_y][inventory_x];
                 inventory[true_inventory_y][inventory_x] = MOD_EMPTY;
 
                 int checkSimilar = FALSE;

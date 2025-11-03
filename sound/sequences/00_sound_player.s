@@ -4510,6 +4510,7 @@ sound_ref .sound_env_waterfall1
 sound_ref .sound_env_waterfall1
 sound_ref .sound_env_waterfall1
 sound_ref .sound_env_waterfall1
+sound_ref .sound_env_shredder
 
 .sound_env_waterfall1:
 chan_setbank 5
@@ -8221,3 +8222,17 @@ chan_end
 .layer_girl_wow2:
 layer_note1 39, 0x32, 127
 layer_end
+
+.sound_env_shredder:
+chan_setbank 3
+chan_setinstr 10
+chan_setlayer 0, .layer_env_shredder
+chan_end
+
+.layer_env_shredder:
+layer_somethingon
+layer_jump .layer_env_shredder_loop
+
+.layer_env_shredder_loop:
+layer_note1 39, 0x160, 127
+layer_jump .layer_env_shredder_loop

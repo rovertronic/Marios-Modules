@@ -3,9 +3,25 @@
     "sample_bank": "sfx_4",
     "envelopes": {
         "envelope0": [
-            [2, 32700],
-            [1, 32700],
-            [32700, 29430],
+            [
+                2,
+                32700
+            ],
+            [
+                1,
+                32700
+            ],
+            [
+                32700,
+                29430
+            ],
+            "hang"
+        ],
+        "envelope1": [
+            [
+                2,
+                32700
+            ],
             "hang"
         ]
     },
@@ -59,6 +75,11 @@
             "release_rate": 208,
             "envelope": "envelope0",
             "sound": "09"
+        },
+        "inst10": {
+            "release_rate": 208,
+            "envelope": "envelope1",
+            "sound": "shredder"
         }
     },
     "instrument_list": [
@@ -71,6 +92,7 @@
         "inst6",
         "inst7",
         "inst8",
-        "inst9"
+        "inst9",
+        "inst10"
     ]
 }

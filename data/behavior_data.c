@@ -6236,6 +6236,16 @@ const BehaviorScript bhvModuleCollect[] = {
     END_LOOP(),
 };
 
+extern void bhv_module_shred(void);
+const BehaviorScript bhvModuleShred[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_module_shred),
+    END_LOOP(),
+};
+
 extern void bhv_key_open(void);
 const BehaviorScript bhvKeyOpen[] = {
     BEGIN(OBJ_LIST_LEVEL),
@@ -6270,5 +6280,16 @@ const BehaviorScript bhvIceProjectile[] = {
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_ice_projectile),
         CALL_NATIVE(load_object_collision_model),
+    END_LOOP(),
+};
+
+extern void bhv_shredder(void);
+const BehaviorScript bhvShredder[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    SET_HOME(),
+    SET_FLOAT(oDrawingDistance, 2000),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_shredder),
     END_LOOP(),
 };

@@ -15,3 +15,4 @@
 #include "levels/temple/bdoorcol/collision.inc.c"
 #include "levels/temple/bdoor/model.inc.c"
 #include "levels/temple/bdoorl/model.inc.c"
+#include "shredder/model.inc.c"

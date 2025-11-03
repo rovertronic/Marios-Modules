@@ -401,6 +401,7 @@ enum SoundBank {
 #define SOUND_ENV_WATER_DRAIN                    /* 0x41160001 */ SOUND_ARG_LOAD(SOUND_BANK_ENV,      0x16, 0x00, SOUND_NO_VOLUME_LOSS) // unverified
 #define SOUND_ENV_METAL_BOX_PUSH                 /* 0x40178001 */ SOUND_ARG_LOAD(SOUND_BANK_ENV,      0x17, 0x80, 0) // unverified
 #define SOUND_ENV_SINK_QUICKSAND                 /* 0x40188001 */ SOUND_ARG_LOAD(SOUND_BANK_ENV,      0x18, 0x80, 0) // unverified
+#define SOUND_ENV_SHREDDER                       /* 0x40288000 */ SOUND_ARG_LOAD(SOUND_BANK_ENV,      0x28, 0x80, 0)
 
 /* Object Sound Effects */
 #define SOUND_OBJ_SUSHI_SHARK_WATER_SOUND        /* 0x50008081 */ SOUND_ARG_LOAD(SOUND_BANK_OBJ,      0x00, 0x80, SOUND_DISCRETE)

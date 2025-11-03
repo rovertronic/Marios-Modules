@@ -11,6 +11,7 @@
 extern u8 gModuleMenuOpen;
 extern u8 gModuleMenuMode;
 extern s8 gRecycleChestContent;
+extern s8 gRecycledModule;
 extern u8 gGameSettings[];
 extern Vec3f gModulePreviewPos;
 

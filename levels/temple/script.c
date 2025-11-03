@@ -19,7 +19,7 @@
 
 const LevelScript level_temple_entry[] = {
 	INIT_LEVEL(),
-	LOAD_YAY0(0x7, _temple_segment_7SegmentRomStart, _temple_segment_7SegmentRomEnd), 
+	LOAD_YAY0(0x07, _temple_segment_7SegmentRomStart, _temple_segment_7SegmentRomEnd), 
 	LOAD_YAY0(0x5, _group1_yay0SegmentRomStart, _group1_yay0SegmentRomEnd), 
 	LOAD_RAW(0xc, _group1_geoSegmentRomStart, _group1_geoSegmentRomEnd), 
 	LOAD_YAY0(0x6, _group17_yay0SegmentRomStart, _group17_yay0SegmentRomEnd), 
@@ -33,6 +33,7 @@ const LevelScript level_temple_entry[] = {
 	JUMP_LINK(script_func_global_18), 
 	LOAD_MODEL_FROM_GEO(MODEL_BDOOR, bdoor_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_BDOOR_LOCKED, bdoorl_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_SHREDDER, shredder_geo), 
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 
@@ -165,6 +166,8 @@ const LevelScript level_temple_entry[] = {
 		OBJECT(MODEL_SCUTTLEBUG, 2214, 90, -618, 0, 84, 0, (1 << 16), bhvScuttlebug),
 		OBJECT(MODEL_SCUTTLEBUG, 1736, 90, -5, 0, 137, 0, 0x00000000, bhvScuttlebug),
 		OBJECT(MODEL_SCUTTLEBUG, 2742, 90, -177, 0, -44, 0, 0x00000000, bhvScuttlebug),
+		OBJECT(MODEL_SHREDDER, -7069, 2203, -17429, 0, 0, 0, 0x00000000, bhvShredder),
+		OBJECT(MODEL_SHREDDER, -7169, 2203, -17449, 0, -180, 0, 0x00000000, bhvShredder),
 		OBJECT(MODEL_WOODEN_SIGNPOST, 4353, 79, 10053, 0, -180, 0, (DIALOG_TUTORIAL_1 << 16), bhvMessagePanel),
 		OBJECT(MODEL_WOODEN_SIGNPOST, 3890, 319, 10321, 0, 90, 0, (DIALOG_TUTORIAL_2 << 16), bhvMessagePanel),
 		OBJECT(MODEL_WOODEN_SIGNPOST, -900, 279, 4178, 0, 90, 0, (DIALOG_TUTORIAL_3 << 16), bhvMessagePanel),
