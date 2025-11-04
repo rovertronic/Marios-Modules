@@ -29,11 +29,18 @@
 #include "module.h"
 #include "actors/group0.h"
 #include "frame_lerp.h"
+#include "utf8_print.h"
 
 #ifdef VERSION_EU
 #undef LANGUAGE_FUNCTION
 #define LANGUAGE_FUNCTION gInGameLanguage
 #endif
+
+u8 gNewDialogId = 0;
+
+char * sNewDialogList[] = {
+    "Newlinetest\nNewlinetest\nNewlinetest\nNewlinetest\nNewlinetest\nNewlinetest\nNewlinetest\nNewlinetest\nNewlinetest",
+};
 
 u16 gDialogColorFadeTimer;
 s8 gLastDialogLineNum;
@@ -760,7 +767,11 @@ void reset_dialog_render_state(void) {
 }
 
 void render_dialog_box_type(struct DialogEntry *dialog, s8 linesPerBox) {
-    create_dl_translation_matrix(MENU_MTX_NOPUSH, dialog->leftOffset, dialog->width, 0);
+    int sx; int sy;
+    utf8_size(sNewDialogList[gNewDialogId],&sx,&sy);
+    int syh = sy/2;
+
+    create_dl_translation_matrix(MENU_MTX_NOPUSH, dialog->leftOffset, dialog->width+syh, 0);
 
     switch (gDialogBoxType) {
         case DIALOG_TYPE_ROTATE: // Renders a dialog black box with zoom and rotation
@@ -781,11 +792,15 @@ void render_dialog_box_type(struct DialogEntry *dialog, s8 linesPerBox) {
             break;
     }
 
-    create_dl_translation_matrix(MENU_MTX_PUSH, -7.0f, 5.0f, 0);
-    create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.1f, (((f32) linesPerBox / 5.0f) + 0.1f), 1.0f);
+    //create_dl_translation_matrix(MENU_MTX_PUSH, -7.0f, 5.0f, 0);
+    //create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.1f, (((f32) linesPerBox / 5.0f) + 0.1f), 1.0f);
 
-    gSPDisplayList(gDisplayListHead++, dl_draw_text_bg_box);
-    gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+    gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160);
+    render_4slice(0,-5-syh,130,syh-26);
+
+    //gSPDisplayList(gDisplayListHead++, dl_draw_text_bg_box);
+    //gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
 void change_and_flash_dialog_text_color_lines(s8 colorMode, s8 lineNum, u8 *customColor) {
@@ -905,6 +920,8 @@ void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 l
         totalLines = linesPerBox + 1;
     }
 
+    totalLines = 0;
+
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     strIdx = gDialogTextPos;
 
@@ -918,6 +935,12 @@ void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 l
     }
 
     create_dl_translation_matrix(MENU_MTX_PUSH, X_VAL3, 2 - lineNum * Y_VAL3, 0);
+
+    utf8_print_reset();
+    int sx; int sy;
+    utf8_size(sNewDialogList[gNewDialogId],&sx,&sy);
+    int syh = sy/2;
+    print_utf8(sNewDialogList[gNewDialogId],5,-syh-12);
 
     while (pageState == DIALOG_PAGE_STATE_NONE) {
         if (customColor == 1) {
@@ -979,17 +1002,18 @@ void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 l
                 linePos += 2;
                 break;
             case DIALOG_CHAR_MULTI_THE:
-                render_multi_text_string_lines(STRING_THE, lineNum, &linePos, linesPerBox, xMatrix, lowerBound);
+                //render_multi_text_string_lines(STRING_THE, lineNum, &linePos, linesPerBox, xMatrix, lowerBound);
                 xMatrix = 1;
                 break;
             case DIALOG_CHAR_MULTI_YOU:
-                render_multi_text_string_lines(STRING_YOU, lineNum, &linePos, linesPerBox, xMatrix, lowerBound);
+                //render_multi_text_string_lines(STRING_YOU, lineNum, &linePos, linesPerBox, xMatrix, lowerBound);
                 xMatrix = 1;
                 break;
             case DIALOG_CHAR_STAR_COUNT:
                 render_star_count_dialog_text(&xMatrix, &linePos);
                 break;
             default: // any other character
+                break;
                 if ((lineNum >= lowerBound) && (lineNum <= (lowerBound + linesPerBox))) {
                     if (linePos || xMatrix != 1) {
                         create_dl_translation_matrix(
@@ -1207,6 +1231,7 @@ void render_dialog_entries(void) {
 
     render_dialog_box_type(dialog, dialog->linesPerBox);
 
+/*
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE,
                   // Horizontal scissoring isn't really required and can potentially mess up widescreen enhancements.
 #ifdef WIDESCREEN
@@ -1221,11 +1246,15 @@ void render_dialog_entries(void) {
                   ensure_nonnegative(DIAG_VAL3 + dialog->leftOffset),
 #endif
                   ensure_nonnegative(240 + ((dialog->linesPerBox * 80) / DIAG_VAL4) - dialog->width));
+*/
     handle_dialog_text_and_pages(0, dialog, lowerBound);
 
+    /*
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     if (gLastDialogPageStrPos == -1 && gLastDialogResponse == 1) {
         render_dialog_triangle_choice();
     }
+    */
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 2, 2, SCREEN_WIDTH - gBorderHeight / 2, SCREEN_HEIGHT - gBorderHeight / 2);
     if (gLastDialogPageStrPos != -1 && gDialogBoxState == DIALOG_STATE_VERTICAL) {
         render_dialog_triangle_next(dialog->linesPerBox);
