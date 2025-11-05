@@ -838,7 +838,6 @@ struct module_info module_infos[] = {
         .type = MTYPE_BUFF,
         .tex = micons_ground_rgba16,
         .desc = "@O@UPG@@+ times landed during sequence.",
-        .unchainable = TRUE,
         .func = module_floor_upg,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_1,
