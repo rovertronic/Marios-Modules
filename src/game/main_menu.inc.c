@@ -16,8 +16,8 @@ void save_marios_modules(Vec3f pos) {
         bcopy(&inventoryParam,&gMariosModulesSave.file[gMariosModulesSaveIndex].inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
         nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
 
-        gMessageDisplayTimer = 120.0f;
-        messageDisplayPtr = "@G@Game successfully saved.";
+        display_generic_message("@G@Game successfully saved.");
+
         play_sound(SOUND_GENERAL_HEART_SPIN, gGlobalSoundSource);
     }
 }
@@ -314,6 +314,7 @@ void logic_main_menu(void) {
                     case 0:
                         level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
                         gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;
+                        gModuleTutorialState = TUTORIAL_DONE;
                         break;
                     case 1:
                         gMainMenuTargetState = MAIN_MENU_OPENING_CUTSCENE;

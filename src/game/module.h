@@ -263,6 +263,7 @@ extern int gMariosModulesSaveIndex;
 // Main Menu
 extern u8 gMainMenuState;
 extern u8 gMainMenuTargetState;
+extern u8 gModuleTutorialState;
 
 enum {
     MAIN_MENU_TITLE,
@@ -274,6 +275,26 @@ enum {
     MAIN_MENU_LEVEL_WARP_CONTINUE,
     MAIN_MENU_CLOSED,
 };
+
+enum {
+    TUTORIAL_WAIT_FOR_MODULE_COLLECT,
+    TUTORIAL_PRESS_START,
+    TUTORIAL_MOVE_CURSOR,
+    TUTORIAL_PICK_UP_MOD,
+    TUTORIAL_PLACE_MOD,
+    TUTORIAL_GET_STAR,
+    TUTORIAL_DONE,
+};
+
+struct ScreenMessage {
+    char text[80];
+    f32 time;
+    s8 tutorialHoldId;
+};
+
+void display_generic_message(char * str);
+void display_tutorial_message(char * str, u8 tutorialId);
+
 
 void render_main_menu(void);
 void logic_main_menu(void);
@@ -290,6 +311,7 @@ void display_module_message(s8 id);
 void module_update(void);
 void print_module_menu(void);
 void print_module_hud_status(void);
+void print_module_generic_message(void);
 void init_module_inventory(void);
 s32 handle_module_inputs(void);
 void control_module_menu(void);

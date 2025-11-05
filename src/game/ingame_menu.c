@@ -2366,6 +2366,7 @@ s32 render_menus_and_dialogs(void) {
     } else {
         print_module_hud_status();
     }
+    print_module_generic_message();
 
     return 0;
 }

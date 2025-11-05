@@ -905,6 +905,12 @@ void bhv_chest(void) {
         case 2:
             if (o->oTimer > 30) {
                 display_module_message(o->oBehParams2ndByte);
+
+                if (gModuleTutorialState == TUTORIAL_WAIT_FOR_MODULE_COLLECT) {
+                    display_tutorial_message("Press @R@START@@ to open your inventory.",TUTORIAL_PRESS_START);
+                    gModuleTutorialState = TUTORIAL_PRESS_START;
+                }
+
                 o->oAction = 3;
             }
             break;

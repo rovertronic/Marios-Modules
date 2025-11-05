@@ -20,6 +20,11 @@
 #include "frame_lerp.h"
 #include "seq_ids.h"
 
+u8 gModuleTutorialState = TUTORIAL_WAIT_FOR_MODULE_COLLECT;
+struct ScreenMessage sScreenMessageList[15];
+s8 sScreenMessageCount = -1;
+s8 sScreenMessageIndex = -1;
+
 u8 gModuleMenuOpen = FALSE;
 u8 gModuleMenuMode = MODULE_MENU_MODE_NORMAL;
 s8 gRecycleChestContent = MOD_EMPTY;
@@ -196,7 +201,48 @@ void init_module_inventory(void) {
     update_settings();
 }
 
+void tutorial_handler(void) {
+    switch(gModuleTutorialState) {
+        case TUTORIAL_MOVE_CURSOR:
+            if (inventory_x != 0 || inventory_y != 0) {
+                display_tutorial_message("Press @B@A@@ to pick up the jump module.",TUTORIAL_PICK_UP_MOD);
+                gModuleTutorialState = TUTORIAL_PICK_UP_MOD;
+            }
+            break;
+        case TUTORIAL_PRESS_START:
+            if (gModuleMenuOpen) {
+                display_tutorial_message("Use the analog stick to move the cursor.",TUTORIAL_MOVE_CURSOR);
+                gModuleTutorialState = TUTORIAL_MOVE_CURSOR;
+            }
+            break;
+        case TUTORIAL_PICK_UP_MOD:
+            if (module_in_hand == MOD_JUMP) {
+                gModuleTutorialState = TUTORIAL_PLACE_MOD;
+                display_tutorial_message("Now place it in @B@Socket A@@.",TUTORIAL_PLACE_MOD);
+            }
+            break;
+        case TUTORIAL_PLACE_MOD:
+            if (inventory[0][0] == MOD_JUMP) {
+                gModuleTutorialState = TUTORIAL_GET_STAR;
+                display_generic_message("Now you can press @B@A@@ to do a single jump!");
+                display_tutorial_message("Now collect the @Y@star@@.",TUTORIAL_GET_STAR);
+            }
+            break;
+        case TUTORIAL_GET_STAR:
+            if (save_bin_get_flag_total(SAVE_BIN_STARS) > 0) {
+                display_generic_message("Collecting @Y@stars@@ unlocks more socket slots.");
+                display_generic_message("You can now craft more complex moves.");
+                display_generic_message("Keep in mind sockets execute from left to right.");
+                display_generic_message("Good luck!");
+                gModuleTutorialState = TUTORIAL_DONE;
+            }
+            break;
+    }
+}
+
 void module_update(void) {
+    tutorial_handler();
+
     for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
         struct module_execution_thread * met = &module_execution_threads[i];
         if (met->cooldown) {
@@ -857,7 +903,19 @@ void print_module_menu(void) {
     }
 }
 
+char * get_screen_message_buffer(void) {
+    return &sScreenMessageList[sScreenMessageCount+1];
+}
+
+void add_screen_message(f32 time) {
+    // Assume usage of sprintf and get_screen_message_buffer before this
+    sScreenMessageCount++;
+    sScreenMessageList[sScreenMessageCount].time = time;
+    sScreenMessageList[sScreenMessageCount].tutorialHoldId = -1;
+}
+
 f32 gMessageDisplayTimer = 0.0f;
+f32 gMessageDisplayNextTimer = 0.0f;
 f32 messageDisplayAlpha = 0.0f;
 char * messageDisplayPtr = NULL;
 char * messageDisplayQueuePtr = NULL;
@@ -865,24 +923,56 @@ char * messageDisplayQueuePtr = NULL;
 char print_buffer_t5[100];
 char print_buffer_t5_2[100];
 void display_module_message(s8 id) {
-    int queue = FALSE;
-    char * usebuff = print_buffer_t5;
-    if (messageDisplayAlpha > 0) {
-        usebuff = print_buffer_t5_2;
-        queue = TRUE;
-    }
-
+    char * usebuff = get_screen_message_buffer();
     if (module_infos[id].type != MTYPE_NONMOD && id != MOD_PASSIVE) {
         sprintf(usebuff,"Obtained @%s@%s@@ module.",module_type_infos[module_infos[id].type].text_color,module_infos[id].name);
     } else {
         sprintf(usebuff,"Obtained %s.",module_infos[id].name);
     }
-    if (!queue) {
-        gMessageDisplayTimer = 120.0f;
-        messageDisplayPtr = print_buffer_t5;
-    } else {
-        messageDisplayQueuePtr = print_buffer_t5_2;
+    add_screen_message(120.f);
+}
+
+void display_generic_message(char * str) {
+    sprintf(get_screen_message_buffer(),"%s",str);
+    add_screen_message(120.f);
+}
+
+void display_tutorial_message(char * str, u8 tutorialId) {
+    sprintf(get_screen_message_buffer(),"%s",str);
+    add_screen_message(99999.f);
+    sScreenMessageList[sScreenMessageCount].tutorialHoldId = tutorialId;
+}
+
+void print_module_generic_message(void) {
+    if (messageDisplayAlpha == 0.0f && sScreenMessageCount != sScreenMessageIndex) {
+        sScreenMessageIndex++;
     }
+
+    if (sScreenMessageIndex == -1) {return;}
+
+    if (sScreenMessageList[sScreenMessageIndex].time > 0) {
+        sScreenMessageList[sScreenMessageIndex].time -= gFrameLerpDeltaTime;
+
+        if (sScreenMessageList[sScreenMessageIndex].tutorialHoldId != gModuleTutorialState &&
+            sScreenMessageList[sScreenMessageIndex].tutorialHoldId != -1) {
+            sScreenMessageList[sScreenMessageIndex].time = 0;
+        }
+        messageDisplayAlpha += gFrameLerpDeltaTime*.1f;
+    } else {
+        messageDisplayAlpha -= gFrameLerpDeltaTime*.1f;
+    }
+    messageDisplayAlpha = CLAMP(messageDisplayAlpha,0.0f,1.0f);
+
+    if (messageDisplayAlpha > 0.0f) {
+        print_utf8_boxed(sScreenMessageList[sScreenMessageIndex].text ,160,10,messageDisplayAlpha,TRUE);
+    }
+
+    if (messageDisplayAlpha == 0.0f && sScreenMessageIndex == sScreenMessageCount) {
+        sScreenMessageIndex = -1;
+        sScreenMessageCount = -1;
+    }
+
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
 
 #define MODULE_HUD_STATUS_Y 205
@@ -955,23 +1045,6 @@ void print_module_hud_status(void) {
     }
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
-
-    if (gMessageDisplayTimer > 0) {
-        gMessageDisplayTimer -= gFrameLerpDeltaTime;
-        messageDisplayAlpha += gFrameLerpDeltaTime*.1f;
-    } else {
-        messageDisplayAlpha -= gFrameLerpDeltaTime*.1f;
-    }
-    messageDisplayAlpha = CLAMP(messageDisplayAlpha,0.0f,1.0f);
-    if (messageDisplayAlpha == 0.0f && messageDisplayQueuePtr) {
-        gMessageDisplayTimer = 120.0f;
-        messageDisplayPtr = messageDisplayQueuePtr;
-        messageDisplayQueuePtr = NULL;
-    }
-
-    if (messageDisplayAlpha > 0.0f && messageDisplayPtr != NULL) {
-        print_utf8_boxed(messageDisplayPtr,160,10,messageDisplayAlpha,TRUE);
-    }
 
     int y = 0;
     for (int i = 0; i < DEBUG_LOG_MAX; i++) {
