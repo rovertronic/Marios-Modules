@@ -108,14 +108,17 @@ Major Changes:\n\
 * Added vanity, settings, and passive panels\n\
 * Added game saving via save blocks\n\
 * Added post-game creative mode\n\
+* Improved tutorial\n\
 \n\
 New Module Additions:\n\
 * Twirl (Action)\n\
 * Crouch Action (Action)\n\
+* Rotate (Action)\n\
 * Debug Monitor (Action)\n\
 \n\
 * Ground Upgrade (Upgrade)\n\
 * Heat Sink (Upgrade)\n\
+* +2 (Upgrade)\n\
 \n\
 * Red Dye (Vanity)\n\
 * Green Dye (Vanity)\n\
@@ -123,6 +126,8 @@ New Module Additions:\n\
 * Yellow Dye (Vanity)\n\
 * Black Dye (Vanity)\n\
 * White Dye (Vanity)\n\
+* Tan Dye (Vanity)\n\
+* Brown Dye (Vanity)\n\
 * Pants (Vanity)\n\
 * Cap + Shirt (Vanity)\n\
 * Skin (Vanity)\n\
