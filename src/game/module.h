@@ -192,6 +192,7 @@ enum module_id {
     MOD_HOLD,
     MOD_DEFENSE,
     MOD_NOMUSIC,
+    MOD_ROTATE,
     MOD_COUNT,
 };
 

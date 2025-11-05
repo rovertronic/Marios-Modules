@@ -612,6 +612,22 @@ void module_passive_effect(struct module_execution_thread * met, u8 call_context
     met->x++;
 }
 
+void module_rotate(struct module_execution_thread * met, u8 call_context) {
+    switch(call_context) {
+        case MCC_INVOKE:
+            met->halted = TRUE;
+            met->timer = 0;
+            break;
+        case MCC_HALTED:
+            gMarioState->faceAngle[1] += 0x2000;
+            if (met->timer >= 3) {
+                met->halted = FALSE;
+                met->x++;
+            }
+            break;
+    }
+}
+
 Vec3f moduleRed = {1.0f,0.0f,0.0f};
 Vec3f moduleBlue = {0.0f,0.0f,1.0f};
 Vec3f moduleGreen = {0.0f,1.0f,0.0f};
@@ -776,7 +792,7 @@ struct module_info module_infos[] = {
         .tex = micons_script_rgba16,
         .desc = "Displays a verbose breakdown of the actions of all following modules. Press START to clear log.",
         .func = module_monitor,
-        .creative = TRUE,
+        .creative = FALSE,
     },
 
     [MOD_GRAPPLE] = {
@@ -1212,5 +1228,14 @@ struct module_info module_infos[] = {
         .cooldown = .5f,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_2,
+    },
+    [MOD_ROTATE] = {
+        .name = "Rotate",
+        .type = MTYPE_MOVE,
+        .tex = micons_repeat_rgba16,
+        .desc = "Rotates Mario 180 degrees.",
+        .func = module_rotate,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 };
