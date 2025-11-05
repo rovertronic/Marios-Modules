@@ -25,6 +25,7 @@
 #include "rumble_init.h"
 #include "config.h"
 #include "module.h"
+#include "ingame_menu.h"
 
 u8  sDelayInvincTimer;
 s16 sInvulnerable;
@@ -1731,6 +1732,9 @@ u32 check_read_sign(struct MarioState *m, struct Object *obj) {
 
             m->interactObj = obj;
             m->usedObj     = obj;
+
+            gNewDialogId = m->interactObj->oBehParams2ndByte;
+
             return set_mario_action(m, ACT_READING_SIGN, 0);
         }
     }

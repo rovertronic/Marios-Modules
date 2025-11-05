@@ -50,6 +50,7 @@ enum HUDFlashModes {
 };
 
 extern s8 gHudFlash;
+extern u8 gNewDialogId;
 
 extern s8 gDialogCourseActNum;
 extern s16 gInGameLanguage;
@@ -176,5 +177,14 @@ void render_hud_cannon_reticle(void);
 void reset_red_coins_collected(void);
 s32 render_menus_and_dialogs(void);
 s32 logic_menus_and_dialogs(void);
+
+enum {
+    NEWTEXT_GOLD_CHEST,
+    NEWTEXT_MYSTERY_CHEST,
+    NEWTEXT_TIP_1,
+    NEWTEXT_TIP_2,
+    NEWTEXT_WALL,
+    NEWTEXT_CHASM,
+};
 
 #endif // INGAME_MENU_H

@@ -39,7 +39,16 @@
 u8 gNewDialogId = 0;
 
 char * sNewDialogList[] = {
-    "Newlinetest\nNewlinetest\nNewlinetest\nNewlinetest\nNewlinetest\nNewlinetest\nNewlinetest\nNewlinetest\nNewlinetest",
+    [NEWTEXT_GOLD_CHEST] = "Gold chests require a payment of coins to open.",
+    [NEWTEXT_MYSTERY_CHEST] = "Mystery chests give you a choice between two different modules.\nThey're randomized for every new file!",
+    [NEWTEXT_TIP_1] = "- POINT OF ADVICE -\nThe ... on your socket HUD indicates that it is cooling down.",
+    [NEWTEXT_TIP_2] = "- POINT OF ADVICE -\nUse @Y@C←→@@ to push modules left and right.\nDouble tap @Y@Cv@@ to send all modules in a row down.",
+    [NEWTEXT_WALL] = "A @R@gargantuan wall@@ towers before thee.\n\
+Unfortunately, there's no other way but to scale it.\n\
+Well, better @Y@get your shit together@@ and @O@lock in!",
+    [NEWTEXT_CHASM] = "A @R@vast chasm@@ stands\n\
+between you and your destiny.\n\
+How will you cross it?",
 };
 
 u16 gDialogColorFadeTimer;
@@ -768,7 +777,7 @@ void reset_dialog_render_state(void) {
 
 void render_dialog_box_type(struct DialogEntry *dialog, s8 linesPerBox) {
     int sx; int sy;
-    utf8_size(sNewDialogList[gNewDialogId],&sx,&sy);
+    utf8_size(utf8_autonewline(sNewDialogList[gNewDialogId],120),&sx,&sy);
     int syh = sy/2;
 
     create_dl_translation_matrix(MENU_MTX_NOPUSH, dialog->leftOffset, dialog->width+syh, 0);
@@ -938,9 +947,9 @@ void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 l
 
     utf8_print_reset();
     int sx; int sy;
-    utf8_size(sNewDialogList[gNewDialogId],&sx,&sy);
+    utf8_size(utf8_autonewline(sNewDialogList[gNewDialogId],120),&sx,&sy);
     int syh = sy/2;
-    print_utf8(sNewDialogList[gNewDialogId],5,-syh-12);
+    print_utf8(utf8_autonewline(sNewDialogList[gNewDialogId],120),5,-syh-12);
 
     while (pageState == DIALOG_PAGE_STATE_NONE) {
         if (customColor == 1) {

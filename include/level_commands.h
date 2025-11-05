@@ -6,6 +6,7 @@
 #include "level_table.h"
 #include "config.h"
 #include "game/module.h"
+#include "game/ingame_menu.h"
 
 enum LevelCommands {
     /*0x00*/ LEVEL_CMD_LOAD_AND_EXECUTE,
