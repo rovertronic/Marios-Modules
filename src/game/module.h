@@ -289,6 +289,7 @@ enum {
 
 struct ScreenMessage {
     char text[80];
+    char * stringId;
     f32 time;
     s8 tutorialHoldId;
 };

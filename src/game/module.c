@@ -907,11 +907,12 @@ char * get_screen_message_buffer(void) {
     return &sScreenMessageList[sScreenMessageCount+1];
 }
 
-void add_screen_message(f32 time) {
+void add_screen_message(f32 time, char * stringId) {
     // Assume usage of sprintf and get_screen_message_buffer before this
     sScreenMessageCount++;
     sScreenMessageList[sScreenMessageCount].time = time;
     sScreenMessageList[sScreenMessageCount].tutorialHoldId = -1;
+    sScreenMessageList[sScreenMessageCount].stringId = stringId;
 }
 
 f32 gMessageDisplayTimer = 0.0f;
@@ -929,17 +930,24 @@ void display_module_message(s8 id) {
     } else {
         sprintf(usebuff,"Obtained %s.",module_infos[id].name);
     }
-    add_screen_message(120.f);
+    add_screen_message(120.f, NULL);
 }
 
 void display_generic_message(char * str) {
-    sprintf(get_screen_message_buffer(),"%s",str);
-    add_screen_message(120.f);
+    for (int i = 0; i <= sScreenMessageCount; i++) {
+        if (sScreenMessageList[i].stringId == str) {
+            // Already in queue, cancel
+            return;
+        }
+    }
+
+    sprintf(get_screen_message_buffer(),"%s", str);
+    add_screen_message(120.f, str);
 }
 
 void display_tutorial_message(char * str, u8 tutorialId) {
     sprintf(get_screen_message_buffer(),"%s",str);
-    add_screen_message(99999.f);
+    add_screen_message(99999.f, str);
     sScreenMessageList[sScreenMessageCount].tutorialHoldId = tutorialId;
 }
 
