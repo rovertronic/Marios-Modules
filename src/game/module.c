@@ -918,11 +918,7 @@ void add_screen_message(f32 time, char * stringId) {
 f32 gMessageDisplayTimer = 0.0f;
 f32 gMessageDisplayNextTimer = 0.0f;
 f32 messageDisplayAlpha = 0.0f;
-char * messageDisplayPtr = NULL;
-char * messageDisplayQueuePtr = NULL;
 
-char print_buffer_t5[100];
-char print_buffer_t5_2[100];
 void display_module_message(s8 id) {
     char * usebuff = get_screen_message_buffer();
     if (module_infos[id].type != MTYPE_NONMOD && id != MOD_PASSIVE) {

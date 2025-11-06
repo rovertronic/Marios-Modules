@@ -617,9 +617,26 @@ void module_rotate(struct module_execution_thread * met, u8 call_context) {
         case MCC_INVOKE:
             met->halted = TRUE;
             met->timer = 0;
+
+            switch(met->option) {
+                case 0:
+                    met->currentAngle = -0x4000;
+                    break;
+                case 1:
+                    met->currentAngle = 0x8000;
+                    break;
+                case 2:
+                    met->currentAngle = 0x4000;
+                    break;
+                case 3:
+                    met->currentAngle = -(gMarioState->faceAngle[1] -gMarioState->intendedYaw);
+                    break;
+            }
             break;
-        case MCC_HALTED:
-            gMarioState->faceAngle[1] += 0x2000;
+        case MCC_HALTED:;
+            s16 rotateInc = met->currentAngle/4;
+
+            gMarioState->faceAngle[1] += rotateInc;
             if (met->timer >= 3) {
                 met->halted = FALSE;
                 met->x++;
@@ -694,6 +711,14 @@ char * ifOptions[] = {
     "All conditions are @B@TRUE@@.",
     "All conditions are @R@FALSE@@.",
     "Any condition is @B@TRUE@@.",
+    NULL,
+};
+
+char * rotateOptions[] = {
+    "90 degrees clockwise",
+    "180 degrees",
+    "90 degrees counter-clockwise",
+    "To analog stick direction",
     NULL,
 };
 
@@ -874,7 +899,7 @@ struct module_info module_infos[] = {
         .name = "Repeat",
         .type = MTYPE_COND,
         .tex = micons_repeat_rgba16,
-        .desc = "Repeats from the start.",
+        .desc = "Repeats from the start once.",
         .func = module_repeat,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_2,
@@ -1233,8 +1258,10 @@ struct module_info module_infos[] = {
         .name = "Rotate",
         .type = MTYPE_MOVE,
         .tex = micons_repeat_rgba16,
-        .desc = "Rotates Mario 180 degrees.",
+        .desc = "Rotates Mario.",
+        //.upg_desc = "Increases rotate speed.",
         .func = module_rotate,
+        .options = rotateOptions,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_1,
     },

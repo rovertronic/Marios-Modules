@@ -66,6 +66,7 @@ struct module_execution_thread {
     u16 used_flags;
     u16 timer;
     s16 cooltime;
+    s16 currentAngle;
     void * extra_data;
     u8 option;
 };
