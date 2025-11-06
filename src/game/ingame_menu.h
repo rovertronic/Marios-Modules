@@ -185,6 +185,8 @@ enum {
     NEWTEXT_TIP_2,
     NEWTEXT_WALL,
     NEWTEXT_CHASM,
+    NEWTEXT_FOIL,
+    NEWTEXT_PASSIVE,
 };
 
 #endif // INGAME_MENU_H

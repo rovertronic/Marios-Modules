@@ -102,75 +102,106 @@ f32 sMainMenuHandPos[2] = {0.0f};
 f32 sMainMenuHandTargetPos[2] = {0.0f};
 
 char * sChangelogStr = "\
+Mario's Modules v1.2\n\
+\n\
 Major Changes:\n\
-* Increased max framerate to 60\n\
-* Overhauled and refined module menu\n\
-* Added vanity, settings, and passive panels\n\
-* Added game saving via save blocks\n\
-* Added post-game creative mode\n\
-* Improved tutorial\n\
+→ Increased max framerate to 60\n\
+→ Overhauled and refined module menu\n\
+→ Added vanity, settings, and passive panels\n\
+→ Added game saving via save blocks\n\
+→ Added post-game creative mode\n\
+→ Improved tutorial\n\
 \n\
 New Module Additions:\n\
-* Twirl (Action)\n\
-* Crouch Action (Action)\n\
-* Rotate (Action)\n\
-* Debug Monitor (Action)\n\
+→ Twirl (Action)\n\
+→ Crouch Action (Action)\n\
+→ Rotate (Action)\n\
+→ Debug Monitor (Action)\n\
 \n\
-* Ground Upgrade (Upgrade)\n\
-* Heat Sink (Upgrade)\n\
-* +2 (Upgrade)\n\
+→ Ground Upgrade (Upgrade)\n\
+→ Heat Sink (Upgrade)\n\
+→ +2 (Upgrade)\n\
 \n\
-* Red Dye (Vanity)\n\
-* Green Dye (Vanity)\n\
-* Blue Dye (Vanity)\n\
-* Yellow Dye (Vanity)\n\
-* Black Dye (Vanity)\n\
-* White Dye (Vanity)\n\
-* Tan Dye (Vanity)\n\
-* Brown Dye (Vanity)\n\
-* Pants (Vanity)\n\
-* Cap + Shirt (Vanity)\n\
-* Skin (Vanity)\n\
-* Hair (Vanity)\n\
-* Woman (Vanity)\n\
+→ Red Dye (Vanity)\n\
+→ Green Dye (Vanity)\n\
+→ Blue Dye (Vanity)\n\
+→ Yellow Dye (Vanity)\n\
+→ Black Dye (Vanity)\n\
+→ White Dye (Vanity)\n\
+→ Tan Dye (Vanity)\n\
+→ Brown Dye (Vanity)\n\
+→ Pants (Vanity)\n\
+→ Cap + Shirt (Vanity)\n\
+→ Skin (Vanity)\n\
+→ Hair (Vanity)\n\
+→ Woman (Vanity)\n\
 \n\
-* 60 FPS (Option)\n\
-* Camera Collision (Option)\n\
-* Widescreen (Option)\n\
+→ 60 FPS (Option)\n\
+→ Camera Collision (Option)\n\
+→ Widescreen (Option)\n\
+→ Disable Music (Option)\n\
 \n\
-* If Block (Logic)\n\
-* End Block (Logic)\n\
-* Stop (Logic)\n\
-* If Grounded (Logic)\n\
-* If Falling (Logic)\n\
+→ If Block (Logic)\n\
+→ End Block (Logic)\n\
+→ Stop (Logic)\n\
+→ If Grounded (Logic)\n\
+→ If Falling (Logic)\n\
 \n\
-* Move (Passive)\n\
-* Hold (Passive)\n\
-* Defense (Passive)\n\
+→ Move (Passive)\n\
+→ Hold (Passive)\n\
+→ Defense (Passive)\n\
 \n\
 Minor Changes:\n\
-* Polished level visuals\n\
-* Made gameplay adjustments to level\n\
-* Added module warnings\n\
-* Hold to navigate menus added\n\
-* C<+> can push modules in menu\n\
-* CV sends module back to inventory\n\
-* Double tap CV sends row back to inventory\n\
-* Z pushes all modules to the left\n\
-* Shortened module cooldown\n\
-* Re-organized module classifications\n\
-* Modules in chests are now 3D\n\
-* Can move cursor in menu even when modules are executing\n\
-* Fixed thwomp death softlock\n\
-* Fixed camera getting stuck at certain Y level\n\
+→ Polished level visuals\n\
+→ Made gameplay adjustments to level\n\
+→ Added new rooms to level\n\
+→ Added new stars to level\n\
+→ New treasure chest type: Mystery Chest\n\
+→ Added module warnings\n\
+→ Hold to navigate menus added\n\
+→ C<+> can push modules in menu\n\
+→ Cv sends module back to inventory\n\
+→ Double tap Cv sends row back to inventory\n\
+→ Z pushes all modules to the left\n\
+→ Initial module cooldown is shorter, however...\n\
+→ Some modules invoke a longer cooldown\n\
+→ Re-organized module classifications\n\
+→ Modules in chests are now 3D\n\
+→ Can move cursor in menu even when modules are executing\n\
+→ Fixed thwomp death softlock\n\
+→ Fixed camera getting stuck at certain Y level\n\
 \n\
 Rebalances:\n\
-* Putting jumps together no longer increases jump tier\n\
-* Cap module incurs 4 second cooldown\n\
-* Cap module cap time extended to 2 secs\n\
-* Hover module changed to air platform, no longer follows Mario\n\
-* Hover module incurs .5s cooldown, grows with UPG.\n\
-* Down module behavior now consistent with Wall module";
+→ Putting jumps together no longer increases jump tier\n\
+→ Cap module incurs 4 second cooldown\n\
+→ Cap module cap time extended to 2 secs\n\
+→ Hover module changed to air platform, no longer follows Mario\n\
+→ Hover module incurs .5s cooldown, grows with UPG.\n\
+→ Down module behavior now consistent with Wall module";
+
+char * sCreditsStr = "\
+- CREDITS -\n\
+\n\
+@O@Rovertronic@@\n\
+Code, Artwork, 3D Models, Level Design\n\
+\n\
+@O@Igorsantusa@@ and @O@Calem28@@\n\
+Soundtrack\n\
+From: SwApFell: I Hate You.\n\
+\n\
+Songs used:\n\
+TITLE\n\
+Mouth\n\
+Ancient Kingdom\n\
+TESTAMENT\n\
+KING VERMILLION\n\
+\n\
+@O@HackerN64 Team@@\n\
+HackerSM64\n\
+\n\
+This hack was made for\n\
+a competition,\n\
+Mario Jams 7: Element.";
 
 char * sButtonsMain[] = {
     "@G@Play",
@@ -258,6 +289,9 @@ void render_main_menu(void) {
             break;
         case MAIN_MENU_CHANGELOG:
             render_main_menu_big_text(sChangelogStr);
+            break;
+        case MAIN_MENU_CREDITS:
+            render_main_menu_big_text(sCreditsStr);
             break;
     }
 }

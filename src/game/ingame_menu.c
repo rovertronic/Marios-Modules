@@ -49,6 +49,8 @@ Well, better @Y@get your shit together@@ and @O@lock in!",
     [NEWTEXT_CHASM] = "A @R@vast chasm@@ stands\n\
 between you and your destiny.\n\
 How will you cross it?",
+    [NEWTEXT_FOIL] = "- POINT OF ADVICE -\nTin foil will disable all controls. You must be self-sufficient.",
+    [NEWTEXT_PASSIVE] = "- POINT OF ADVICE -\nThe passive socket is always active. It can be leveraged for great power."
 };
 
 u16 gDialogColorFadeTimer;
