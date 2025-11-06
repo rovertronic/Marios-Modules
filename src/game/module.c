@@ -981,6 +981,7 @@ void print_module_generic_message(void) {
     }
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 }
 
 #define MODULE_HUD_STATUS_Y 205
