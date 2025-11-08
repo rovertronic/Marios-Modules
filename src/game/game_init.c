@@ -111,6 +111,7 @@ u8 sSingleThreadOtherFrame = FALSE;
 u8 sSingleThreaded = TRUE;
 u8 sFrameCap60 = TRUE;
 u8 sVideoThreadStarted = FALSE;
+u8 gLevelChangeSpinlockState = 0;
 
 // Display
 // ----------------------------------------------------------------------------------------------------
@@ -829,6 +830,7 @@ void thread5_game_loop(UNUSED void *arg) {
             profiler_update(PROFILER_TIME_CONTROLLERS, 0);
             profiler_collision_reset();
             addr = level_script_execute(addr);
+            frameLerp_update_pos_cache();
             profiler_collision_completed();
 #if !defined(PUPPYPRINT_DEBUG) && defined(VISUAL_DEBUG)
             debug_box_input();
@@ -862,6 +864,7 @@ void thread5_game_loop(UNUSED void *arg) {
             if (!sSingleThreaded) {
                 sSingleThreadOtherFrame = TRUE;
                 osStartThread(&gGraphicsThread);
+                gLevelChangeSpinlockState = 1;
             } else {
                 // Single threaded mode for emulators
                 osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
@@ -881,6 +884,7 @@ void thread5_game_loop(UNUSED void *arg) {
                 gFrameLerpRenderFrame = FRAMELERP_NORMAL;
                 gFrameLerpDeltaTime = 1.0f;
             }
+            frameLerp_update_pos_video_cache();
 
             // Render
             select_gfx_pool();
@@ -904,6 +908,7 @@ void thread5_game_loop(UNUSED void *arg) {
             }
         } else {
             sSingleThreadOtherFrame = TRUE;
+
             osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
             osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
         }
@@ -920,27 +925,26 @@ void thread10_graphics_loop(UNUSED void *arg) {
 
     render_init();
     while (gResetTimer == 0) {
+        if (gLevelChangeSpinlockState == 2) {
+            gLevelChangeSpinlockState = 3;
+            while(gLevelChangeSpinlockState == 3){
+                osRecvMesg(&gGraphicsVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+            }
+        }
+        frameLerp_update_pos_video_cache();
+
         u32 deltaTime = osGetCount() - prevTime;
         prevTime = osGetCount();
+        gFrameLerpDeltaTime = (f32)deltaTime/(f32)OS_USEC_TO_CYCLES(33333);
 
         if (deltaTime < OS_USEC_TO_CYCLES(33333)) { // > 30 fps
             if (gGlobalTimer == lastRenderedFrame + 1) {
                 gFrameLerpRenderFrame = FRAMELERP_NORMAL;
-                gFrameLerpDeltaTime = 1.0f;
             } else {
                 gFrameLerpRenderFrame = FRAMELERP_BETWEEN;
-                gFrameLerpDeltaTime = 0.5f;
             }
-        } else if (deltaTime > OS_USEC_TO_CYCLES(66666)) { // < 15fps
-            if (gGlobalTimer == lastRenderedFrame + 1) {
-                gFrameLerpRenderFrame = FRAMELERP_SLOW;
-            } else {
-                gFrameLerpRenderFrame = FRAMELERP_NORMAL;
-            }
-            gFrameLerpDeltaTime = 1.0f;
         } else {
             gFrameLerpRenderFrame = FRAMELERP_NORMAL;
-            gFrameLerpDeltaTime = 1.0f;
         }
         lastRenderedFrame = gGlobalTimer;
 

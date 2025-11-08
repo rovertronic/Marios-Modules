@@ -589,6 +589,9 @@ void geo_process_camera(struct GraphNodeCamera *node) {
         vec3f_copy(gSkyboxCameraPos,node->posLerp);
         vec3f_copy(gSkyboxCameraFoc,node->focLerp);
     }
+    mtxf_lookat(gCameraTransform, frameLerpPos(node->posVideoCache,node->posLerp), frameLerpPos(node->focusVideoCache,node->focLerp), node->roll);
+    vec3f_copy(gSkyboxCameraPos,node->posLerp);
+    vec3f_copy(gSkyboxCameraFoc,node->focLerp);
 
     // Calculate the lookAt
 #ifdef F3DEX_GBI_2
@@ -1159,14 +1162,14 @@ void geo_process_object(struct Object *node) {
         s32 isInvisible = (node->header.gfx.node.flags & GRAPH_RENDER_INVISIBLE);
         // Maintain throw matrix pointer if the game is paused as it won't be updated.
 
-        frameLerpPos(node->header.gfx.pos,node->header.gfx.posLerp);
+        frameLerpPos(node->header.gfx.posVideoCache,node->header.gfx.posLerp);
         frameLerpPos(node->header.gfx.scale,node->header.gfx.scaleLerp);
 
         // If the throw matrix is null and the object is invisible, there is no need
         // to update billboarding, scale, rotation, etc. 
         // This still updates translation since it is needed for sound.
         if (isInvisible) {
-            mtxf_translate(gMatStack[gMatStackIndex + 1], node->header.gfx.pos);
+            mtxf_translate(gMatStack[gMatStackIndex + 1], node->header.gfx.posVideoCache);
         }
         else{
             if (node->header.gfx.node.flags & GRAPH_RENDER_BILLBOARD) {
@@ -1197,7 +1200,7 @@ void geo_process_object(struct Object *node) {
         }
 
         gMatStackIndex++;
-        linear_mtxf_mul_vec3f_and_translate(gCameraTransform, node->header.gfx.cameraToObject, node->header.gfx.pos);
+        linear_mtxf_mul_vec3f_and_translate(gCameraTransform, node->header.gfx.cameraToObject, node->header.gfx.posVideoCache);
 
         // FIXME: correct types
         if (node->header.gfx.animInfo.curAnim != NULL) {
