@@ -625,6 +625,9 @@ void control_module_menu(void) {
                     if (get_inventory(i-1,true_inventory_y) == MOD_EMPTY) {
                         inventory[true_inventory_y][i-1] = mod;
                         inventory[true_inventory_y][i] = MOD_EMPTY;
+
+                        inventoryParam[true_inventory_y][i-1] = param;
+                        inventoryParam[true_inventory_y][i] = 0;
                     }
                 }
             }

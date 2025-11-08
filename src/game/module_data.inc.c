@@ -176,7 +176,7 @@ void module_zaction(struct module_execution_thread * met, u8 call_context) {
 
 
 void module_pow(struct module_execution_thread * met, u8 call_context) {
-    module_log_message(met,"UPG Increased by 1.",0);
+    module_log_message(met,"UPG Increased by %d.",met->extra_data);
     met->mod+=met->extra_data;
     met->x++;
 }
@@ -187,17 +187,19 @@ void module_spd(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_repeat(struct module_execution_thread * met, u8 call_context) {
-    if (met->used_flags & (1 << (met->x + (inventory_row_info[met->y-1].wrap * 8))) ) {
+    int wrap = (inventory_row_info[met->y-1].wrap) && (met->y != 0) ;
+
+    if (met->used_flags & (1 << (met->x + (wrap * 8))) ) {
         module_log_message(met,"Already repeated, so pass through.",0);
 
         met->x++;
     } else {
         module_log_message(met,"Repeat from start.",0);
 
-        met->used_flags |= (1 << (met->x + (inventory_row_info[met->y-1].wrap * 8)) );
+        met->used_flags |= (1 << (wrap * 8) );
         met->x=0;
 
-        if (inventory_row_info[met->y-1].wrap) {
+        if (wrap) {
             met->y--;
         }
     }
@@ -687,6 +689,7 @@ Gfx * skinLights[] = {
     &mat_woman_womanEye2,
     &mat_woman_womanEye3,
     &mat_woman_mouth,
+    &mat_woman_face_7___eye_X_v3_001,
     NULL,
 };
 
