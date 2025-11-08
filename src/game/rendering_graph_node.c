@@ -585,13 +585,10 @@ void geo_process_camera(struct GraphNodeCamera *node) {
         Vec3f offsetFoc = {gModulePreviewPos[0]-250.0f,gModulePreviewPos[1],gModulePreviewPos[2]};
         mtxf_lookat(gCameraTransform, offsetPos, offsetFoc, node->roll);
     } else {
-        mtxf_lookat(gCameraTransform, frameLerpPos(node->pos,node->posLerp), frameLerpPos(node->focus,node->focLerp), node->roll);
+        mtxf_lookat(gCameraTransform, frameLerpPos(node->posVideoCache,node->posLerp), frameLerpPos(node->focusVideoCache,node->focLerp), node->roll);
         vec3f_copy(gSkyboxCameraPos,node->posLerp);
         vec3f_copy(gSkyboxCameraFoc,node->focLerp);
     }
-    mtxf_lookat(gCameraTransform, frameLerpPos(node->posVideoCache,node->posLerp), frameLerpPos(node->focusVideoCache,node->focLerp), node->roll);
-    vec3f_copy(gSkyboxCameraPos,node->posLerp);
-    vec3f_copy(gSkyboxCameraFoc,node->focLerp);
 
     // Calculate the lookAt
 #ifdef F3DEX_GBI_2
