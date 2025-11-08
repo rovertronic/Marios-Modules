@@ -682,6 +682,8 @@ Gfx *geo_render_preview_mario(s32 callContext, struct GraphNode *node, UNUSED Ma
                 gPreviewMario.areaIndex = mario->header.gfx.areaIndex;
                 vec3s_copy(gPreviewMario.angle, gVec3sZero);
                 vec3f_copy(gPreviewMario.pos, gModulePreviewPos);
+                vec3f_copy(gPreviewMario.posCache, gModulePreviewPos);
+                vec3f_copy(gPreviewMario.posVideoCache, gModulePreviewPos);
                 vec3f_copy(gPreviewMario.scale, mario->header.gfx.scale);
 
                 gPreviewMario.animInfo = mario->header.gfx.animInfo;

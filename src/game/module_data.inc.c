@@ -187,15 +187,19 @@ void module_spd(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_repeat(struct module_execution_thread * met, u8 call_context) {
-    if (met->used_flags & (1 << met->x)) {
+    if (met->used_flags & (1 << (met->x + (inventory_row_info[met->y-1].wrap * 8))) ) {
         module_log_message(met,"Already repeated, so pass through.",0);
 
         met->x++;
     } else {
         module_log_message(met,"Repeat from start.",0);
 
-        met->used_flags |= (1 << met->x);
+        met->used_flags |= (1 << (met->x + (inventory_row_info[met->y-1].wrap * 8)) );
         met->x=0;
+
+        if (inventory_row_info[met->y-1].wrap) {
+            met->y--;
+        }
     }
 }
 
@@ -749,7 +753,8 @@ struct module_info module_infos[] = {
         .name = "Tornado",
         .type = MTYPE_MOVE,
         .tex = micons_tornado_rgba16,
-        .desc = "If airborne, makes Mario spin. Rises when above heat.",
+        .desc = "If airborne, makes Mario spin.",
+        .upg_desc = "Uses 1 @O@UPG@@ to slow fall.",
         .unchainable = TRUE,
         .elementable = TRUE,
         .func = module_tornado,

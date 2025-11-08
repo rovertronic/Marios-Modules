@@ -271,6 +271,7 @@ void module_update(void) {
                     gMarioState->marioObj->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_MARIO];
                 }
             }
+            escape_halt:
             if (!met->halted) {
                 while(read_mod != MOD_EMPTY) {                    
                     if (1 << module_infos[read_mod].type & inventory_row_info[met->y].whitelist_flags) {
@@ -291,7 +292,7 @@ void module_update(void) {
 
                         read_mod = get_inventory(met->x,met->y);
                         if (met->halted) {
-                            return;
+                            goto escape_halt;
                         }
                     } else {
                         // module incompatible with row, NOP
@@ -323,6 +324,11 @@ void module_update(void) {
 
                 module_infos[read_mod].func(met,MCC_HALTED);
                 met->timer++;
+
+                if (inventory_row_info[met->y].wrap && met->x == INVENTORY_SLOTS_X) {
+                    met->x = 0;
+                    met->y ++;
+                }
             }
         }
     }
