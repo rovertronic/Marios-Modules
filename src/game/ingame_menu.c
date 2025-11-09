@@ -50,7 +50,8 @@ Well, better @Y@get your shit together@@ and @O@lock in!",
 between you and your destiny.\n\
 How will you cross it?",
     [NEWTEXT_FOIL] = "- POINT OF ADVICE -\nTin foil will disable all controls. You must be self-sufficient.",
-    [NEWTEXT_PASSIVE] = "- POINT OF ADVICE -\nThe passive socket is always active. It can be leveraged for great power."
+    [NEWTEXT_PASSIVE] = "- POINT OF ADVICE -\nThe passive socket is always active. It can be leveraged for great power.",
+    [NEWTEXT_FRAMEWALK] = "- POINT OF ADVICE -\nYou can effortlessly walk up slopes by walking and braking in rapid succession. This is called frame walking.",
 };
 
 u16 gDialogColorFadeTimer;

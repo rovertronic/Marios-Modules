@@ -39,7 +39,7 @@ void king_bobomb_act_inactive(void) { // act 0
         o->oAction = KING_BOBOMB_ACT_ACTIVE;
         o->oFlags |= OBJ_FLAG_HOLDABLE;
 
-        my_shock = spawn_object(o,MODEL_AMP,bhvCirclingAmp);
+        my_shock = spawn_object(o,MODEL_ELECTRIC_AURA,bhvElectricAura);
         obj_scale(my_shock,4.0f);
     }
 }

@@ -3,7 +3,7 @@
 const GeoLayout temple_area_1_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_SWITCH_CASE(14, geo_switch_area),
+		GEO_SWITCH_CASE(16, geo_switch_area),
 		GEO_OPEN_NODE(),
 			GEO_BRANCH(1, temple_dl_0zroom_geo),
 			GEO_BRANCH(1, temple_dl_1room_geo),
@@ -17,6 +17,8 @@ const GeoLayout temple_area_1_geo[] = {
 			GEO_BRANCH(1, temple_dl_91room_geo),
 			GEO_BRANCH(1, temple_dl_92room_geo),
 			GEO_BRANCH(1, temple_dl_93room_geo),
+			GEO_BRANCH(1, temple_dl_94room_geo),
+			GEO_BRANCH(1, temple_dl_95room_geo),
 			GEO_BRANCH(1, temple_dl_9room_geo),
 		GEO_CLOSE_NODE(),
 		GEO_ASM(0, geo_render_preview_mario),
@@ -55,9 +57,6 @@ const GeoLayout temple_dl_2room_geo[] = {
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room2_001_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room2_001_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, temple_dl_vis_room2_001_mesh_layer_5),
-		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room2_p2_mesh_layer_1),
-		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room2_p2_mesh_layer_4),
-		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, temple_dl_vis_room2_p2_mesh_layer_5),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room5_001_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room5_001_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, temple_dl_vis_room5_001_mesh_layer_5),
@@ -66,6 +65,8 @@ const GeoLayout temple_dl_2room_geo[] = {
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room6_001_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room91_001_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room91_001_mesh_layer_4),
+		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room_p2_mesh_layer_1),
+		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room_p2_mesh_layer_4),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
@@ -199,6 +200,23 @@ const GeoLayout temple_dl_93room_geo[] = {
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room4_92_midsection_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room92_002_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room92_002_mesh_layer_4),
+	GEO_CLOSE_NODE(),
+	GEO_RETURN(),
+};
+const GeoLayout temple_dl_94room_geo[] = {
+	GEO_NODE_START(),
+	GEO_OPEN_NODE(),
+		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room_94_mesh_layer_1),
+		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room_94_mesh_layer_4),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, temple_dl_vis_room_94_mesh_layer_5),
+	GEO_CLOSE_NODE(),
+	GEO_RETURN(),
+};
+const GeoLayout temple_dl_95room_geo[] = {
+	GEO_NODE_START(),
+	GEO_OPEN_NODE(),
+		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room_95_mesh_layer_1),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, temple_dl_vis_room_95_mesh_layer_5),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };

@@ -5,6 +5,7 @@
 
 // amp
 extern const GeoLayout dAmpGeo[];
+extern const GeoLayout dAmpGeo2[];
 extern const Gfx dAmpElectricityDl[];
 extern const Gfx dAmpEyeDl[];
 extern const Gfx dAmpMouthDl[];

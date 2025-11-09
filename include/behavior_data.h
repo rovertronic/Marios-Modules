@@ -558,5 +558,6 @@ extern const BehaviorScript bhvRecycleChest[];
 extern const BehaviorScript bhvRecycleInterface[];
 extern const BehaviorScript bhvShredder[];
 extern const BehaviorScript bhvModuleShred[];
+extern const BehaviorScript bhvElectricAura[];
 
 #endif // BEHAVIOR_DATA_H
