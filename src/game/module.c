@@ -621,6 +621,7 @@ void control_module_menu(void) {
             for (int j = 0; j < INVENTORY_SLOTS_X; j++) {
                 for (int i = 1; i < INVENTORY_SLOTS_X; i++) {
                     s8 mod = get_inventory(i,true_inventory_y);
+                    u8 param = get_inventory_param(i,true_inventory_y);
 
                     if (get_inventory(i-1,true_inventory_y) == MOD_EMPTY) {
                         inventory[true_inventory_y][i-1] = mod;
