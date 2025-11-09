@@ -845,7 +845,6 @@ void bhv_chest(void) {
         case 0:
             o->oChestSeed = gMariosModulesSave.file[gMariosModulesSaveIndex].seed;
 
-            obj_element_init(o,ELEMENT_NORMAL,100.0f);
             obj_save_bin_count(SAVE_BIN_CHESTS);
 
             if (GET_BPARAM3(o->oBehParams) > 0) {
@@ -1046,8 +1045,6 @@ void bhv_mystery_chest(void) {
             break;
     }
 
-    obj_element_enemy_loop();
-
     if (gMariosModulesSave.file[gMariosModulesSaveIndex].seed != o->oChestSeed) {
         // Redo init on seed change
         o->oAction = 0;
@@ -1215,14 +1212,14 @@ void bhv_volume(void) {
     }
 }
 
-void bhv_bdoor(void) {
-    if (o->oTimer == 0) {
-        obj_save_bin_count(SAVE_BIN_DOORS);
-        if (obj_save_bin_read()) {
-            o->oBehParams2ndByte=0;
-        }
+void bhv_init_bdoor(void) {
+    obj_save_bin_count(SAVE_BIN_DOORS);
+    if (obj_save_bin_read()) {
+        o->oBehParams2ndByte=0;
     }
+}
 
+void bhv_bdoor(void) {
     f32 dist;
     u8 needs_key = (o->oBehParams2ndByte==1);
     u8 open = FALSE;

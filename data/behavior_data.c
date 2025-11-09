@@ -6159,12 +6159,14 @@ const BehaviorScript bhvHover[] = {
 };
 
 extern void bhv_bdoor(void);
+extern void bhv_init_bdoor(void);
 const BehaviorScript bhvBdoor[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT | OBJ_FLAG_DONT_CALC_COLL_DIST)),
     LOAD_COLLISION_DATA(bdoorcol_collision),
     SET_FLOAT(oDrawingDistance, 20000),
     SET_FLOAT(oCollisionDistance, 3000),
+    CALL_NATIVE(bhv_init_bdoor),
     SET_HOME(),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_bdoor),
