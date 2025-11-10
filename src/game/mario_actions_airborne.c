@@ -683,7 +683,7 @@ s32 act_twirling(struct MarioState *m) {
 #endif
 
     if (m->actionArg > 1) {
-        yawVelTarget = MAX( 0x1800 + ((m->actionArg-1) * 0x800), 0x7FFF);
+        yawVelTarget = MIN( 0x1800 + ((m->actionArg-1) * 0x800), 0x7FFF);
     } else {
         yawVelTarget = 0x1800;
     }
