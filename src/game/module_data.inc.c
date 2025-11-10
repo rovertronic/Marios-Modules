@@ -187,16 +187,16 @@ void module_spd(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_repeat(struct module_execution_thread * met, u8 call_context) {
-    int wrap = (inventory_row_info[met->y-1].wrap) && (met->y != 0) ;
+    int wrap = (met->y != 0) && (inventory_row_info[met->y-1].wrap) ;
 
-    if (met->used_flags & (1 << (met->x + (wrap * 8))) ) {
+    if (met->used_flags & (1 << (met->x + (wrap * 8)) )) {
         module_log_message(met,"Already repeated, so pass through.",0);
 
         met->x++;
     } else {
         module_log_message(met,"Repeat from start.",0);
 
-        met->used_flags |= (1 << (wrap * 8) );
+        met->used_flags |= (1 << (met->x + (wrap * 8)) );
         met->x=0;
 
         if (wrap) {
