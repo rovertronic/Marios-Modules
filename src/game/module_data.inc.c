@@ -141,8 +141,14 @@ void module_jump(struct module_execution_thread * met, u8 call_context) {
 void module_tornado(struct module_execution_thread * met, u8 call_context) {
     if (!(GROUNDED)) {
         met->doaircooldown = TRUE;
-        set_mario_action(gMarioState,ACT_TWIRLING,0);
-        module_log_message(met,"Twirl action performed.",0);
+        if (met->mod > 0) {
+            module_log_message(met,"Twirl action performed with speed @O@UPG.@@",0);
+            set_mario_action(gMarioState,ACT_TWIRLING,met->mod+1);
+            met->mod=0;
+        } else {
+            module_log_message(met,"Twirl action performed.",0);
+            set_mario_action(gMarioState,ACT_TWIRLING,0);
+        }
     } else {
         module_log_message(met,"Failed to initiate twirl.",0);
     }
@@ -769,7 +775,7 @@ struct module_info module_infos[] = {
         .type = MTYPE_MOVE,
         .tex = micons_tornado_rgba16,
         .desc = "If airborne, makes Mario spin.",
-        .upg_desc = "Uses 1 @O@UPG@@ to slow fall.",
+        .upg_desc = "Twirl speed increases per @O@UPG@@.",
         .unchainable = TRUE,
         .elementable = TRUE,
         .func = module_tornado,
