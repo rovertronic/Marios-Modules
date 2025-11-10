@@ -34,6 +34,7 @@
 #include "level_commands.h"
 #include "debug.h"
 #include "module.h"
+#include "behavior_data.h"
 
 #include "config.h"
 
@@ -1081,6 +1082,14 @@ s32 play_mode_normal(void) {
             set_play_mode(PLAY_MODE_PAUSED);
             */
             if (gMainMenuState == MAIN_MENU_CLOSED) {
+                if (gModuleTutorialState == TUTORIAL_DISCONNECTED) {
+                    gModuleTutorialState = TUTORIAL_DONE;
+                    spawn_object(gMarioObject,MODEL_EXPLOSION,bhvExplosion);
+                    set_mario_action(gMarioState, ACT_EATEN_BY_BUBBA, 0);
+                    gMarioState->health = 0;
+                    return FALSE;
+                }
+
                 gModuleMenuOpen = !gModuleMenuOpen;
                 if (gModuleMenuOpen) {
                     module_log_clear();

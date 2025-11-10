@@ -587,6 +587,7 @@ enum new_models {
     MODEL_KEY,
     MODEL_SHREDDER,
     MODEL_ELECTRIC_AURA,
+    MODEL_ASRIELCAGE,
 };
 
 #endif // MODEL_IDS_H

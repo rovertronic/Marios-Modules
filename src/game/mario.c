@@ -1319,7 +1319,7 @@ void update_mario_joystick_inputs(struct MarioState *m) {
         m->intendedMag = mag / 8.0f;
     }
 
-    if (gModuleMenuOpen) {
+    if (gModuleMenuOpen || gModuleTutorialState == TUTORIAL_DISCONNECTED) {
         m->intendedMag = 0.0f;
     }
 

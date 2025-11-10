@@ -1208,6 +1208,17 @@ void bhv_volume(void) {
                 //fadeout_level_music(126);
                 //play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, dungeon_seq_change), 0);
                 break;
+            case VOLUME_DISCONNECT:
+                if (gModuleTutorialState == TUTORIAL_DONE && gMarioState->action != ACT_EATEN_BY_BUBBA) {
+                    display_tutorial_message("Remote disconnected. Press @R@START@@ to self-destruct.", TUTORIAL_DISCONNECTED);
+                    gModuleTutorialState = TUTORIAL_DISCONNECTED;
+                }
+                break;
+            case VOLUME_RECONNECT:
+                if (gModuleTutorialState == TUTORIAL_DISCONNECTED) {
+                    gModuleTutorialState = TUTORIAL_DONE;
+                }
+                break;
         }
     }
 }

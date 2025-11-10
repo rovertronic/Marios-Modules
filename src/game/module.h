@@ -287,6 +287,7 @@ enum {
     TUTORIAL_PLACE_MOD,
     TUTORIAL_GET_STAR,
     TUTORIAL_DONE,
+    TUTORIAL_DISCONNECTED,
 };
 
 struct ScreenMessage {

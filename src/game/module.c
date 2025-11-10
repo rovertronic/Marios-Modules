@@ -378,11 +378,14 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
 
 s32 handle_module_inputs(void) {
     if (!gModuleMenuOpen && (!(gMarioState->input & INPUT_FIRST_PERSON))) {
-        if (gPlayer1Controller->buttonPressed & A_BUTTON) {
-            execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_A],A_BUTTON,0,0,TRUE);
-        }
-        if (gPlayer1Controller->buttonPressed & B_BUTTON) {
-            execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_B],B_BUTTON,0,1,TRUE);
+
+        if (gModuleTutorialState != TUTORIAL_DISCONNECTED) {
+            if (gPlayer1Controller->buttonPressed & A_BUTTON) {
+                execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_A],A_BUTTON,0,0,TRUE);
+            }
+            if (gPlayer1Controller->buttonPressed & B_BUTTON) {
+                execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_B],B_BUTTON,0,1,TRUE);
+            }
         }
         execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_PASSIVE],Z_TRIG,0,5,FALSE);
         update_vanity();
