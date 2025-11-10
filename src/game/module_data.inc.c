@@ -600,6 +600,18 @@ void module_if_input(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+void module_if_wall(struct module_execution_thread * met, u8 call_context) {
+    if (gMarioState->wall != NULL) {
+        module_log_message(met,"Wall hit, condition set to @B@TRUE@@.",0);
+        add_met_condition(met,TRUE);
+    } else {
+        module_log_message(met,"Wall not hit, condition set to @R@FALSE@@.",0);
+        add_met_condition(met,FALSE);
+    }
+
+    met->x++;
+}
+
 void module_stop(struct module_execution_thread * met, u8 call_context) {
     module_log_message(met,"Sequence stopped prematurely.",0);
     met->x = INVENTORY_SLOTS_X+1; // OOB = MOD_EMPTY
@@ -1228,6 +1240,15 @@ struct module_info module_infos[] = {
         .desc = "Checks for input.",
         .func = module_if_input,
         .options = ifInputOptions,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
+    },
+    [MOD_IF_WALL] = {
+        .name = "If Touching Wall",
+        .type = MTYPE_LOGIC,
+        .tex = micons_wall_rgba16,
+        .desc = "Checks for wall touch.",
+        .func = module_if_wall,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_1,
     },

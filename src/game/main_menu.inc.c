@@ -146,6 +146,7 @@ New Module Additions:\n\
 → Stop (Logic)\n\
 → If Grounded (Logic)\n\
 → If Falling (Logic)\n\
+→ If Touching Wall (Logic)\n\
 \n\
 → Move (Passive)\n\
 → Hold (Passive)\n\

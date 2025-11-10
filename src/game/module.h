@@ -194,6 +194,7 @@ enum module_id {
     MOD_DEFENSE,
     MOD_NOMUSIC,
     MOD_ROTATE,
+    MOD_IF_WALL,
     MOD_COUNT,
 };
 
