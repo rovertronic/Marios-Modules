@@ -2086,6 +2086,9 @@ s32 cur_obj_update_dialog(s32 actionArg, s32 dialogFlags, s32 dialogID, UNUSED s
 }
 
 s32 cur_obj_update_dialog_with_cutscene(s32 actionArg, s32 dialogFlags, s32 cutsceneTable, s32 dialogID) {
+
+    gNewDialogId = dialogID;
+
     s32 dialogResponse = DIALOG_RESPONSE_NONE;
     s32 doneTurning = TRUE;
 

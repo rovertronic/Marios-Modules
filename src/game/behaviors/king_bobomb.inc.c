@@ -1,5 +1,9 @@
 // king_bobomb.inc.c
 
+void bhv_king_bobomb_init(void) {
+    obj_save_bin_count(SAVE_BIN_STARS);
+}
+
 // Copy of geo_update_projectile_pos_from_parent
 Gfx *geo_update_held_mario_pos(s32 callContext, UNUSED struct GraphNode *node, Mat4 mtx) {
     if (callContext == GEO_CONTEXT_RENDER) {
@@ -35,7 +39,7 @@ void king_bobomb_act_inactive(void) { // act 0
             seq_player_lower_volume(SEQ_MM64_BOSS, 60, 40);
         }
     } else if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP,
-        DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, DIALOG_017)) {
+        DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, NEWTEXT_BOSS_1)) {
         o->oAction = KING_BOBOMB_ACT_ACTIVE;
         o->oFlags |= OBJ_FLAG_HOLDABLE;
 
@@ -196,9 +200,15 @@ void king_bobomb_act_hit_ground(void) { // act 6
 }
 
 void king_bobomb_act_death(void) { // act 7
+    int deathtext = NEWTEXT_BOSS_DEFEAT_1;
+    if (gMarioState->marioObj->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_WOMAN]) {
+        //ryamp boburei hates foids so much!!
+        deathtext = NEWTEXT_BOSS_DEFEAT_1_FOID;
+    }
+
     cur_obj_init_animation_with_sound(KING_BOBOMB_ANIM_HIT_GROUND);
     if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP,
-        DIALOG_FLAG_TEXT_DEFAULT, CUTSCENE_DIALOG, DIALOG_116)) {
+        DIALOG_FLAG_TEXT_DEFAULT, CUTSCENE_DIALOG, deathtext)) {
         create_sound_spawner(SOUND_OBJ_KING_WHOMP_DEATH);
 
         cur_obj_hide();
@@ -209,12 +219,6 @@ void king_bobomb_act_death(void) { // act 7
         cur_obj_shake_screen(SHAKE_POS_SMALL);
 
         cur_obj_spawn_star_at_y_offset(o->oHomeX,o->oHomeY+500.0f,o->oHomeZ, 200.0f);
-
-        struct Object * sign = spawn_object(o,MODEL_WOODEN_SIGNPOST,bhvMessagePanel);
-        sign->oBehParams2ndByte = DIALOG_CREDITS;
-        sign->oPosX = o->oHomeX;
-        sign->oPosY = o->oHomeY;
-        sign->oPosZ = o->oHomeZ;
 
         obj_mark_for_deletion(my_shock);
 

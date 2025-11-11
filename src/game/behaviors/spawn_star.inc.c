@@ -13,7 +13,9 @@ static struct ObjectHitbox sCollectStarHitbox = {
 };
 
 void bhv_collect_star_init(void) {
-    obj_save_bin_count(SAVE_BIN_STARS);
+    if (cur_obj_has_behavior(bhvStar)) {
+        obj_save_bin_count(SAVE_BIN_STARS);
+    }
     if (obj_save_bin_read()) {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
         gMarioState->numStars = save_bin_get_flag_total(SAVE_BIN_STARS);
@@ -131,6 +133,7 @@ void spawn_default_star(f32 x, f32 y, f32 z) {
     struct Object *starObj = NULL;
     starObj = spawn_star(starObj, x, y, z);
     starObj->oBehParams2ndByte = SPAWN_STAR_ARC_CUTSCENE_BP_DEFAULT_STAR;
+    starObj->saveBinId = starObj->parentObj->saveBinId;
 }
 
 void spawn_red_coin_cutscene_star(f32 x, f32 y, f32 z) {

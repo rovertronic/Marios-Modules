@@ -52,7 +52,18 @@ How will you cross it?",
     [NEWTEXT_FOIL] = "- POINT OF ADVICE -\nTin foil will disable all controls. Your creation must be self-sufficient.",
     [NEWTEXT_PASSIVE] = "- POINT OF ADVICE -\nThe passive socket is always active. It can be leveraged for great power.",
     [NEWTEXT_FRAMEWALK] = "- POINT OF ADVICE -\nYou can effortlessly walk up slopes by walking and braking in rapid succession. This is called frame walking.",
-    [NEWTEXT_ANTIVANISH] = "This cage is coated in @B@anti-vanish paint.@@ It needs to be opened with a purple switch."
+    [NEWTEXT_ANTIVANISH] = "This cage is coated in @B@anti-vanish paint.@@ It needs to be opened with a purple switch.",
+    [NEWTEXT_BOSS_1] = "Halt!\nIt is I, @O@Ryamp Boburei.@@\nYou must prove your strength before you can leave this temple.",
+    [NEWTEXT_BOSS_2] = "I am @Y@Wigginator.@@\nFace my wiggler missiles!",
+    [NEWTEXT_BOSS_DEFEAT_1] = "You have passed the test. You may now proceed.",
+    [NEWTEXT_BOSS_DEFEAT_1_FOID] = "I can't believe I was defeated by the likes of you!\nYou have passed the test. You may now proceed.",
+    /*
+    The joke is that there's this X user named "Ryan Hakueri" who absolutely despises woman,
+    and can't help himself but express to the world how much he hates them. But he also loves
+    touhou and femboys. He unironically uses terms such as 'Foid'. I am eternally fascinated by
+    this individual, his name and profile picture is iconic and is an earworm stuck in my brain,
+    so I must reference him in my hack. Autistic Breeder is a close second.
+    */
 };
 
 u16 gDialogColorFadeTimer;
