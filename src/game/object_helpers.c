@@ -129,6 +129,11 @@ Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *conte
             return NULL;
         }
 
+        if (gCutsceneRoom != -1) {
+            switchCase->selectedCase = gCutsceneRoom-1;
+            return NULL;
+        }
+
         room = get_room_at_pos(
             gMarioObject->oPosX,
             gMarioObject->oPosY,

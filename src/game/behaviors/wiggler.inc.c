@@ -144,7 +144,7 @@ void wiggler_init_segments(void) {
             struct Object * bodrider =
                 spawn_object_relative(i, 0, 0, 0, o, MODEL_SNUFIT, bhvSnufit);
             bodrider->objRiding = bodyPart;
-            bodrider->
+            bodrider->oNumLootCoins = 0;
             if (bodyPart != NULL) {
                 obj_init_animation_with_sound(bodyPart, wiggler_seg5_anims_0500C874, 0);
                 bodyPart->header.gfx.animInfo.animFrame = (23 * i) % 26 - 1;

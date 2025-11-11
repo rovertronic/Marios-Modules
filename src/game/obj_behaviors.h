@@ -7,6 +7,10 @@
 #include "macros.h"
 #include "types.h"
 
+extern s8 gCutsceneRoom;
+extern s8 gCutsceneCameraId;
+extern s8 gButtonPressId;
+
 enum ObjCollisionFlags {
     OBJ_COL_FLAGS_NONE      = (0 << 0),
     OBJ_COL_FLAG_GROUNDED   = (1 << 0),

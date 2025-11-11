@@ -560,5 +560,6 @@ extern const BehaviorScript bhvShredder[];
 extern const BehaviorScript bhvModuleShred[];
 extern const BehaviorScript bhvElectricAura[];
 extern const BehaviorScript bhvAsrielcage[];
+extern const BehaviorScript bhvCutsceneCamera[];
 
 #endif // BEHAVIOR_DATA_H

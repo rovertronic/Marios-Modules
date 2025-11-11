@@ -46,6 +46,9 @@ void bhv_purple_switch_loop(void) {
          * up. When time is up, move to a waiting-while-pressed state.
          */
         case PURPLE_SWITCH_ACT_TICKING:
+            if (o->oTimer == 10) {
+                gButtonPressId = GET_BPARAM4(o->oBehParams);
+            }
             if (o->oBehParams2ndByte != 0) {
                 if (o->oBehParams2ndByte == 1 && gMarioObject->platform != o) {
                     o->oAction++;

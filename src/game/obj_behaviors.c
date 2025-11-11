@@ -779,6 +779,50 @@ extern u8 world_module_timer;
 extern Vec3f world_module_pos;
 extern s8 world_module_id;
 
+s8 gCutsceneCameraId = -1;
+s8 gCutsceneRoom = -1;
+s8 gButtonPressId = -1;
+void bhv_cutscene_camera(void) {
+    o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
+     if (gCutsceneCameraId == o->oBehParams2ndByte) {
+        gCutsceneRoom = get_room_at_pos(o->oPosX, o->oPosY, o->oPosZ);
+        gCamera->cutscene = 1;
+        vec3f_copy(gLakituState.goalPos,&o->oPosVec);
+        gLakituState.goalFocus[0] = o->oPosX + sins(o->oFaceAngleYaw) * coss(o->oFaceAnglePitch) * 5.0f;
+        gLakituState.goalFocus[1] = o->oPosY + sins(o->oFaceAnglePitch) * -5.0f;
+        gLakituState.goalFocus[2] = o->oPosZ + coss(o->oFaceAngleYaw) * coss(o->oFaceAnglePitch) * 5.0f;
+
+        if (o->oTimer >= 60) {
+            gCutsceneRoom = -1;
+            gCutsceneCameraId = -1;
+            gCamera->cutscene = 0;
+            disable_time_stop_including_mario();
+        }
+     } else {
+        o->oTimer = 0;
+     }
+}
+
+void bhv_asriel_cage(void) {
+    o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
+    switch(o->oAction) {
+        case 0:
+            if (gButtonPressId == 0) {
+                o->oAction = 1;
+                gCutsceneCameraId = 0;
+                enable_time_stop_including_mario();
+            }
+            break;
+        case 1:
+            o->oPosY += 15.0f;
+            if (o->oTimer > 30) {
+                o->oAction = 2;
+                gButtonPressId = -1;
+            }
+            break;
+    }
+}
+
 void bhv_chest_price_number(void) {
     u8 cost = GET_BPARAM1(o->parentObj->oBehParams);
     u8 place = GET_BPARAM3(o->oBehParams);

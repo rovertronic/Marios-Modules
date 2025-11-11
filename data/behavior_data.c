@@ -6187,6 +6187,7 @@ const BehaviorScript bhvBdoor[] = {
     END_LOOP(),
 };
 
+extern void bhv_asriel_cage(void);
 const BehaviorScript bhvAsrielcage[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT | OBJ_FLAG_DONT_CALC_COLL_DIST)),
@@ -6196,6 +6197,7 @@ const BehaviorScript bhvAsrielcage[] = {
     SET_HOME(),
     CALL_NATIVE(bhv_init_room),
     BEGIN_LOOP(),
+        CALL_NATIVE(bhv_asriel_cage),
         CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };
@@ -6320,5 +6322,13 @@ const BehaviorScript bhvShredder[] = {
     SET_FLOAT(oDrawingDistance, 2000),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_shredder),
+    END_LOOP(),
+};
+
+extern void bhv_cutscene_camera(void);
+const BehaviorScript bhvCutsceneCamera[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_cutscene_camera),
     END_LOOP(),
 };
