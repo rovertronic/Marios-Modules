@@ -26,6 +26,14 @@
 
 #include "sparkle_animation/model.inc.c"
 
+#include "wiggler_body/model.inc.c"
+#include "wiggler_body/anims/data.inc.c"
+#include "wiggler_body/anims/table.inc.c"
+
+#include "wiggler_head/model.inc.c"
+#include "wiggler_head/anims/data.inc.c"
+#include "wiggler_head/anims/table.inc.c"
+
 #ifdef S2DEX_TEXT_ENGINE
 #include "src/s2d_engine/s2d_config.h"
 #include FONT_C_FILE

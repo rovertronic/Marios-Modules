@@ -17,6 +17,8 @@
 #include "sparkle_animation/geo.inc.c"
 #include "mario/geo.inc.c"
 #include "king_bobomb/geo.inc.c"
+#include "wiggler_body/geo.inc.c"
+#include "wiggler_head/geo.inc.c"
 
 #include "chest/geo.inc.c"
 #include "hover/geo.inc.c"

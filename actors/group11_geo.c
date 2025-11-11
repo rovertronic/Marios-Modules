@@ -8,8 +8,6 @@
 #include "group11.h"
 
 #include "bubba/geo.inc.c"
-#include "wiggler_body/geo.inc.c"
-#include "wiggler_head/geo.inc.c"
 #include "lakitu_enemy/geo.inc.c"
 #include "spiny_egg/geo.inc.c"
 #include "spiny/geo.inc.c"

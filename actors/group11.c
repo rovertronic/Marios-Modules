@@ -11,13 +11,6 @@
 #include "bubba/model.inc.c"
 UNUSED static const u64 binid_0 = 0;
 
-#include "wiggler_body/model.inc.c"
-#include "wiggler_body/anims/data.inc.c"
-#include "wiggler_body/anims/table.inc.c"
-
-#include "wiggler_head/model.inc.c"
-#include "wiggler_head/anims/data.inc.c"
-#include "wiggler_head/anims/table.inc.c"
 UNUSED static const u64 binid_1 = 1;
 
 #include "lakitu_enemy/model.inc.c"

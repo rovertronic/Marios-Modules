@@ -125,6 +125,8 @@ const LevelScript level_main_scripts_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_MODULE, module3d_geo),
     LOAD_MODEL_FROM_GEO(MODEL_ICE, ice_geo),
     LOAD_MODEL_FROM_GEO(MODEL_KEY, key_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_WIGGLER_HEAD,            wiggler_head_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_WIGGLER_BODY,            wiggler_body_geo),
     FREE_LEVEL_POOL(),
     POP_POOL(),
     CALL(/*arg*/ 0, /*func*/ lvl_init_from_save_file),
@@ -299,8 +301,6 @@ const LevelScript script_func_global_12[] = {
     LOAD_MODEL_FROM_GEO(MODEL_ENEMY_LAKITU,            enemy_lakitu_geo),
     LOAD_MODEL_FROM_GEO(MODEL_SPINY_BALL,              spiny_ball_geo),
     LOAD_MODEL_FROM_GEO(MODEL_SPINY,                   spiny_geo),
-    LOAD_MODEL_FROM_GEO(MODEL_WIGGLER_HEAD,            wiggler_head_geo),
-    LOAD_MODEL_FROM_GEO(MODEL_WIGGLER_BODY,            wiggler_body_geo),
     LOAD_MODEL_FROM_GEO(MODEL_BUBBA,                   bubba_geo),
     RETURN(),
 };
