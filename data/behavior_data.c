@@ -5243,6 +5243,7 @@ const BehaviorScript bhvWigglerHead[] = {
     HIDE(),
     SCALE(/*Unused*/ 0, /*Field*/ 400),
     SET_FLOAT(oWigglerFallThroughFloorsHeight, 5000),
+    CALL_NATIVE(bhv_king_bobomb_init), // this just registers a star id
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_wiggler_update),
     END_LOOP(),

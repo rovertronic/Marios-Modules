@@ -103,6 +103,9 @@ void bhv_wiggler_body_part_update(void) {
     } else {
         obj_check_attacks(&sWigglerBodyPartHitbox, o->oAction);
     }
+
+    vec3f_copy(o->saddlePos,&o->oPosVec);
+    o->saddlePos[1] += 200.0f;
 }
 
 /**
@@ -129,10 +132,19 @@ void wiggler_init_segments(void) {
 
         o->header.gfx.animInfo.animFrame = -1;
 
+        // spawn a rider on the head
+        struct Object * bodrider =
+            spawn_object_relative(i, 0, 0, 0, o, MODEL_CHUCKYA, bhvChuckya);
+        bodrider->objRiding = o;
+
         // Spawn each body part
         for (i = 1; i < WIGGLER_NUM_SEGMENTS; i++) {
             bodyPart =
-                spawn_object_relative(i, 0, 0, 0, o, MODEL_WIGGLER_BODY, bhvWigglerBody);
+                spawn_object_relative(i, 0, 0, 0, o, MODEL_WIGBOD, bhvWigglerBody);
+            struct Object * bodrider =
+                spawn_object_relative(i, 0, 0, 0, o, MODEL_SNUFIT, bhvSnufit);
+            bodrider->objRiding = bodyPart;
+            bodrider->
             if (bodyPart != NULL) {
                 obj_init_animation_with_sound(bodyPart, wiggler_seg5_anims_0500C874, 0);
                 bodyPart->header.gfx.animInfo.animFrame = (23 * i) % 26 - 1;
@@ -207,8 +219,8 @@ static void wiggler_act_walk(void) {
 
         // If Mario is positioned below the wiggler, assume he entered through the
         // lower cave entrance, so don't display text.
-        if (gMarioObject->oPosY < o->oPosY || cur_obj_update_dialog_with_cutscene(
-            MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_NONE, CUTSCENE_DIALOG, DIALOG_150)) {
+        if (o->oDistanceToMario < 1500.0f && cur_obj_update_dialog_with_cutscene(
+            MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_NONE, CUTSCENE_DIALOG, NEWTEXT_BOSS_2)) {
             o->oWigglerTextStatus = WIGGLER_TEXT_STATUS_COMPLETED_DIALOG;
         }
     } else {
@@ -280,8 +292,8 @@ static void wiggler_act_jumped_on(void) {
     // defeated) or go back to walking
     if (o->header.gfx.scale[1] >= 4.0f) {
         if (o->oTimer > 30) {
-            if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
-                DIALOG_FLAG_NONE, CUTSCENE_DIALOG, attackText[o->oHealth - 2])) {
+            //if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
+            //    DIALOG_FLAG_NONE, CUTSCENE_DIALOG, attackText[o->oHealth - 2])) {
                 // Because we don't want the wiggler to disappear after being
                 // defeated, we leave its health at 1
                 if (--o->oHealth == 1) {
@@ -297,7 +309,7 @@ static void wiggler_act_jumped_on(void) {
                         o->oVelY = 70.0f;
                     }
                 }
-            }
+            //}
         }
     } else {
         o->oTimer = 0;
@@ -425,4 +437,7 @@ void bhv_wiggler_update(void) {
         // Update the rest of the segments to follow segment 0
         wiggler_update_segments();
     }
+
+    vec3f_copy(o->saddlePos,&o->oPosVec);
+    o->saddlePos[1] += 200.0f;
 }

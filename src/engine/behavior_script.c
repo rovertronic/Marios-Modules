@@ -949,5 +949,11 @@ void cur_obj_update(void) {
         }
     }
 
+    if (o->objRiding) {
+        vec3f_copy(&o->oPosVec,o->objRiding->saddlePos);
+        vec3f_copy(&o->oHomeVec,o->objRiding->saddlePos);
+        o->oVelY = 0.0f;
+    }
+
     frameLerp_cache_pos(o->header.gfx.pos,o->header.gfx.posCache,o->header.gfx.posVideoCache);
 }

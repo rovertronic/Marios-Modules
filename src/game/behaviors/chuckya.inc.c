@@ -41,6 +41,10 @@ void chuckya_act_0(void) {
         o->oChuckyaSubActionTimer = 0;
     }
 
+    if (o->objRiding) {
+        o->oMoveAngleYaw = o->objRiding->oMoveAngleYaw;
+    }
+
     o->oAngleToMario = obj_angle_to_object(o, gMarioObject);
 
     switch (initialSubAction = o->oSubAction) {

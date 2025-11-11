@@ -330,6 +330,9 @@ struct Object {
               u8 saveBinId;
               u8 saveBinType;
 
+              struct Object * objRiding;
+              Vec3f saddlePos;
+
               struct ElementHitbox * element;
 };
 

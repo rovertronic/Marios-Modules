@@ -145,9 +145,11 @@ void bhv_snufit_loop(void) {
         // Snufit orbits in a circular motion depending on an internal timer
         // and vertically off the global timer. The vertical position can be
         // manipulated using pauses since it uses the global timer.
-        o->oPosX = o->oHomeX + 100.0f * coss(o->oSnufitCircularPeriod);
-        o->oPosY = o->oHomeY + 8.0f * coss(4000 * gGlobalTimer);
-        o->oPosZ = o->oHomeZ + 100.0f * sins(o->oSnufitCircularPeriod);
+        if (!o->objRiding) {
+            o->oPosX = o->oHomeX + 100.0f * coss(o->oSnufitCircularPeriod);
+            o->oPosY = o->oHomeY + 8.0f * coss(4000 * gGlobalTimer);
+            o->oPosZ = o->oHomeZ + 100.0f * sins(o->oSnufitCircularPeriod);
+        }
 
         o->oSnufitBodyScale
             = (s16)(o->oSnufitBodyBaseScale + 666
