@@ -6,6 +6,8 @@
 #include "macros.h"
 #include "types.h"
 
+extern s16 gNearestRedCoinDist;
+
 enum marioSounds {
     MARIO_SND_YAH_WAH_HOO,
     MARIO_SND_HOOHOO,

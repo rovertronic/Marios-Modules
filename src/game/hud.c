@@ -17,6 +17,7 @@
 #include "engine/math_util.h"
 #include "puppycam2.h"
 #include "puppyprint.h"
+#include "mario.h"
 
 #include "config.h"
 
@@ -407,6 +408,13 @@ void render_hud_mario_lives(void) {
     print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(22), HUD_TOP_Y, "|"); // 'Mario key' glyph
     print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(38), HUD_TOP_Y, "*"); // 'X' glyph
     print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(54), HUD_TOP_Y, "%d", gMarioState->numKeys);
+
+    // Red Coin Radar
+    if (gNearestRedCoinDist != -1) {
+        print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(22), HUD_TOP_Y-18, "@"); // 'Mario key' glyph
+        print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(38), HUD_TOP_Y-18, "-"); // 'X' glyph
+        print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(54), HUD_TOP_Y-18, "%dM", gNearestRedCoinDist);
+    }
 }
 
 #ifdef VANILLA_STYLE_CUSTOM_DEBUG

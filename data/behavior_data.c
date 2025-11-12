@@ -4597,7 +4597,7 @@ const BehaviorScript bhvRedCoin[] = {
     BILLBOARD(),
     SET_INT(oIntangibleTimer, 0),
     SET_INT(oAnimState, OBJ_ANIM_STATE_INIT_ANIM),
-    CALL_NATIVE(bhv_init_room),
+    //CALL_NATIVE(bhv_init_room),
     CALL_NATIVE(bhv_red_coin_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_red_coin_loop),
@@ -4605,6 +4605,7 @@ const BehaviorScript bhvRedCoin[] = {
     END_LOOP(),
 };
 
+extern void bhv_red_coin_fake(void);
 const BehaviorScript bhvFakeRedCoin[] = {
     BEGIN(OBJ_LIST_LEVEL),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
@@ -4613,6 +4614,7 @@ const BehaviorScript bhvFakeRedCoin[] = {
     SET_INT(oAnimState, OBJ_ANIM_STATE_INIT_ANIM),
     CALL_NATIVE(bhv_init_room),
     BEGIN_LOOP(),
+        CALL_NATIVE(bhv_red_coin_fake),
         ADD_INT(oAnimState, 1),
     END_LOOP(),
 };
@@ -6356,9 +6358,10 @@ const BehaviorScript bhvRedCoinSpawner[] = {
     END_LOOP(),
 };
 
+extern void bhv_red_coin_manager(void);
 const BehaviorScript bhvRedCoinManager[] = {
     BEGIN(OBJ_LIST_LEVEL),
     BEGIN_LOOP(),
-        //CALL_NATIVE(bhv_red_coin_spawner),
+        CALL_NATIVE(bhv_red_coin_manager),
     END_LOOP(),
 };

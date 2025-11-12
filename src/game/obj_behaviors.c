@@ -1163,7 +1163,7 @@ u8 dungeon_seq_timer = 0;
 
 extern void seq_player_fade_to_target_volume(s32 player, s32 fadeDuration, u8 targetVolume);
 
-u8 force_door_shut = FALSE;
+u8 sForceDoorShut = FALSE;
 s16 spline_seg = 0;
 f32 spline_prog = 0;
 void bhv_dungeon_manager(void) {
@@ -1191,7 +1191,7 @@ void bhv_dungeon_manager(void) {
         }
     }
 
-    force_door_shut = FALSE;
+    sForceDoorShut = FALSE;
 }
 
 void bhv_volume(void) {
@@ -1217,7 +1217,7 @@ void bhv_volume(void) {
                 {
                     struct Object * enemy = cur_obj_nearest_object_with_behavior(bhvScuttlebug);
                     if (enemy) {
-                        force_door_shut = TRUE;
+                        sForceDoorShut = TRUE;
                     }
                 }
                 break;
@@ -1225,7 +1225,7 @@ void bhv_volume(void) {
                 {
                     struct Object * enemy = cur_obj_nearest_object_with_behavior(bhvSnufit);
                     if (enemy) {
-                        force_door_shut = TRUE;
+                        sForceDoorShut = TRUE;
                     }
                 }
                 break;
@@ -1289,7 +1289,7 @@ void bhv_bdoor(void) {
             spawn_object(o,MODEL_KEY,bhvKeyOpen);
         }
     }
-    if (force_door_shut) {
+    if (sForceDoorShut) {
         open = FALSE;
     }
     if (needs_key) {
@@ -1538,10 +1538,60 @@ void bhv_orangepole(void) {
 }
 
 void bhv_red_coin_spawner(void) {
+    o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
+    switch(o->oAction) {
+        case 0:;
+            struct Object * myManager = cur_obj_nearest_object_with_behavior(bhvRedCoinManager);
+            if (myManager && myManager->oAction == 3) {
+                struct Object * red = spawn_object(o,MODEL_RED_COIN,bhvRedCoin);
+                red->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
+                spawn_mist_particles();
+                o->oAction++;
+            }
+            break;
+    }
+}
+
+void bhv_red_coin_manager(void) {
     switch(o->oAction) {
         case 0:
-            spawn_object(o,MODEL_RED_COIN,bhvRedCoin);
-            o->oAction++;
+            if (gButtonPressId == 2) {
+                enable_time_stop_including_mario();
+                gCutsceneCameraId = 2;
+                o->oAction++;
+            }
+            break;
+        case 1:
+            if (o->oTimer >= 50) {
+                enable_time_stop_including_mario();
+                gCutsceneCameraId = 3;
+                o->oAction++;
+            }
+            break;
+        case 2:
+            if (o->oTimer > 15) {
+                o->oAction++;
+            }
+            break;
+    }
+}
+
+void bhv_red_coin_fake(void) {
+    o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
+    switch(o->oAction) {
+        case 0:;
+            struct Object * myManager = cur_obj_nearest_object_with_behavior(bhvRedCoinManager);
+            if (myManager && myManager->oAction == 1) {
+                o->oAction++;
+            }
+            break;
+        case 1:
+            if (o->oTimer > 30) {
+                o->oPosY -= 10.0f;
+            }
+            if (o->oTimer > 60) {
+                obj_mark_for_deletion(o);
+            }
             break;
     }
 }

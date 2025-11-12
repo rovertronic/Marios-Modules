@@ -1813,12 +1813,20 @@ void intro_eye_animation(void) {
     }
 }
 
+s16 gNearestRedCoinDist = -1;
+
 /**
  * Main function for executing Mario's behavior. Returns particleFlags.
  */
 
 s32 execute_mario_action(UNUSED struct Object *obj) {
     s32 inLoop = TRUE;
+
+    struct Object * nearestRedCoin = cur_obj_nearest_object_with_behavior(bhvRedCoin);
+    gNearestRedCoinDist = -1;
+    if (nearestRedCoin) {
+        gNearestRedCoinDist = dist_between_objects(gMarioObject,nearestRedCoin)/100;
+    }
 
     // Updates once per frame:
     mario_title_logic();
