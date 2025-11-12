@@ -213,7 +213,7 @@ struct inventory_row {
     u8 wrap;
 };
 
-#define WHITELIST_VANITY ((1 << MTYPE_VANITY) | (1 << MTYPE_LOGIC) | (1 << MTYPE_COND))
+#define WHITELIST_VANITY (1 << MTYPE_VANITY)
 #define WHITELIST_ACTION ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_ELEMENT) | (1 << MTYPE_LOGIC))
 #define WHITELIST_PASSIVE ((1 << MTYPE_MOVE) | (1 << MTYPE_COND) | (1 << MTYPE_BUFF) | (1 << MTYPE_VANITY) | (1 << MTYPE_ELEMENT) | (1 << MTYPE_LOGIC) | (1 << MTYPE_PASSIVE))
 
@@ -257,6 +257,7 @@ struct mariosModulesSaveFile {
 
 struct mariosModulesSaveGame {
     struct mariosModulesSaveFile file[3];
+    u32 achievements;
     u32 save_magic;
 };
 
@@ -296,6 +297,31 @@ struct ScreenMessage {
     f32 time;
     s8 tutorialHoldId;
 };
+
+
+struct Achievement {
+    char * name;
+    char * desc;
+    u16 rank;
+    u16 flag;
+};
+
+enum {
+    ACHIEVEMENT_WIN,
+    ACHIEVEMENT_STARS,
+    ACHIEVEMENT_SHRED,
+    ACHIEVEMENT_COSMETIC,
+    ACHIEVEMENT_ECO,
+    ACHIEVEMENT_REPEAT,
+    ACHIEVEMENT_FAST,
+    ACHIEVEMENT_FASTSPIN,
+    ACHIEVEMENT_HOT,
+    ACHIEVEMENT_FALL,
+    ACHIEVEMENT_NO_HIT,
+    ACHIEVEMENT_NO_AIR_PLATFORM,
+    ACHIEVEMENT_COUNT,
+};
+
 
 void display_generic_message(char * str);
 void display_tutorial_message(char * str, u8 tutorialId);

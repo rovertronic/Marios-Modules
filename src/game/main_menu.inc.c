@@ -219,10 +219,90 @@ char * sButtonsFile[] = {
 
 char * sButtonsMode[] = {
     "Standard Game",
-    "@P@Mystery Mania",
-    "@R@Rogue",
+    "@O@Last Stand",
     "@G@Creative",
     NULL,
+};
+
+char * sModeDescriptions[] = {
+    "The standard Mario's Modules experience. Collect @Y@15 stars@@ by finding modules and building moves to complete the game.",
+    "The temple has been insulated with tin-foil. @B@A socket, @G@B socket,@@ and moving with analog is disabled. Use infinite modules to craft a Mario that can get to the end of the temple.",
+    "Infinite modules, everything unlocked. No achievements.",
+};
+
+struct Achievement achievementList[] = {
+    [ACHIEVEMENT_WIN] = {
+        .name = "@O@Fate of the Kingdom",
+        .desc = "Escape the manufacturing dungeon.",
+        .rank = 0,
+        .flag = 0,
+    },
+    [ACHIEVEMENT_STARS] = {
+        .name = "@O@Mario's All Powered Up",
+        .desc = "Collect all 15 stars.",
+        .rank = 0,
+        .flag = 1,
+    },
+    [ACHIEVEMENT_SHRED] = {
+        .name = "@O@Thrifter",
+        .desc = "Reroll a module with the Recycletron.",
+        .rank = 0,
+        .flag = 2,
+    },
+    [ACHIEVEMENT_COSMETIC] = {
+        .name = "@O@Starving Artist",
+        .desc = "Shred 5 cosmetic modules.",
+        .rank = 0,
+        .flag = 3,
+    },
+    [ACHIEVEMENT_ECO] = {
+        .name = "@1@Eco Friendly",
+        .desc = "Triple jump without any cooldown.",
+        .rank = 1,
+        .flag = 4,
+    },
+    [ACHIEVEMENT_REPEAT] = {
+        .name = "@1@Threepeater",
+        .desc = "Repeat 3 times during a single socket execution.",
+        .rank = 1,
+        .flag = 5,
+    },
+    [ACHIEVEMENT_FAST] = {
+        .name = "@1@Supersonic",
+        .desc = "Break the sound barrier. (1143+ speed)",
+        .rank = 1,
+        .flag = 6,
+    },
+    [ACHIEVEMENT_FASTSPIN] = {
+        .name = "@1@Superkirby",
+        .desc = "Twirl at 14 revolutions per second.",
+        .rank = 1,
+        .flag = 7,
+    },
+    [ACHIEVEMENT_HOT] = {
+        .name = "@1@Overclocked and Overcooked",
+        .desc = "Incur a 15+ second cooldown.",
+        .rank = 1,
+        .flag = 8,
+    },
+    [ACHIEVEMENT_FALL] = {
+        .name = "@Y@Watch Me Fly, Mama!",
+        .desc = "Stay airborne for 30 seconds or more.",
+        .rank = 2,
+        .flag = 9,
+    },
+    [ACHIEVEMENT_NO_HIT] = {
+        .name = "@Y@You CAN Dodge Forever!",
+        .desc = "Collect all 15 stars without taking damage.",
+        .rank = 2,
+        .flag = 10,
+    },
+    [ACHIEVEMENT_NO_AIR_PLATFORM] = {
+        .name = "@Y@Not A Bowser In The Sky",
+        .desc = "Collect all 15 stars without using the air platform module.",
+        .rank = 2,
+        .flag = 11,
+    },
 };
 
 void render_menu_button_list(char * btns[]) {
