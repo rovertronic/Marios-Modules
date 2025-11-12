@@ -67,6 +67,8 @@ const GeoLayout temple_dl_2room_geo[] = {
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room91_001_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room_p2_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, temple_dl_vis_room_p2_mesh_layer_4),
+		GEO_DISPLAY_LIST(LAYER_OPAQUE, temple_dl_vis_room_p2_001_mesh_layer_1),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, temple_dl_vis_room_p2_001_mesh_layer_5),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };

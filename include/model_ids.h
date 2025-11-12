@@ -590,6 +590,7 @@ enum new_models {
     MODEL_ASRIELCAGE,
     MODEL_WIGHEAD,
     MODEL_WIGBOD,
+    MODEL_ORANGEPOLE,
 };
 
 #endif // MODEL_IDS_H

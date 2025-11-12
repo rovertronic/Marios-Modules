@@ -467,6 +467,7 @@ const BehaviorScript bhvGiantPole[] = {
     END_LOOP(),
 };
 
+extern void bhv_orangepole(void);
 const BehaviorScript bhvPoleGrabbing[] = {
     BEGIN(OBJ_LIST_POLELIKE),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
@@ -474,7 +475,9 @@ const BehaviorScript bhvPoleGrabbing[] = {
     SET_HITBOX(/*Radius*/ 80, /*Height*/ 1500),
     CALL_NATIVE(bhv_pole_init),
     SET_INT(oIntangibleTimer, 0),
+    SET_HOME(),
     BEGIN_LOOP(),
+        CALL_NATIVE(bhv_orangepole),
         CALL_NATIVE(bhv_pole_base_loop),
     END_LOOP(),
 };
@@ -4602,6 +4605,18 @@ const BehaviorScript bhvRedCoin[] = {
     END_LOOP(),
 };
 
+const BehaviorScript bhvFakeRedCoin[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    BILLBOARD(),
+    SET_INT(oIntangibleTimer, 0),
+    SET_INT(oAnimState, OBJ_ANIM_STATE_INIT_ANIM),
+    CALL_NATIVE(bhv_init_room),
+    BEGIN_LOOP(),
+        ADD_INT(oAnimState, 1),
+    END_LOOP(),
+};
+
 const BehaviorScript bhvBowserCourseRedCoinStar[] = {
     BEGIN(OBJ_LIST_LEVEL),
     OR_INT(oFlags, (OBJ_FLAG_PERSISTENT_RESPAWN | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
@@ -6330,5 +6345,20 @@ const BehaviorScript bhvCutsceneCamera[] = {
     BEGIN(OBJ_LIST_LEVEL),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_cutscene_camera),
+    END_LOOP(),
+};
+
+extern void bhv_red_coin_spawner(void);
+const BehaviorScript bhvRedCoinSpawner[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_red_coin_spawner),
+    END_LOOP(),
+};
+
+const BehaviorScript bhvRedCoinManager[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    BEGIN_LOOP(),
+        //CALL_NATIVE(bhv_red_coin_spawner),
     END_LOOP(),
 };

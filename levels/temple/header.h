@@ -17,4 +17,5 @@ extern const LevelScript level_temple_entry[];
 #include "shredder/geo_header.h"
 #include "asrielcage/geo_header.h"
 #include "asrielcage/collision_header.h"
+#include "orangepole/geo_header.h"
 #endif

@@ -792,7 +792,7 @@ void bhv_cutscene_camera(void) {
         gLakituState.goalFocus[1] = o->oPosY + sins(o->oFaceAnglePitch) * -5.0f;
         gLakituState.goalFocus[2] = o->oPosZ + coss(o->oFaceAngleYaw) * coss(o->oFaceAnglePitch) * 5.0f;
 
-        if (o->oTimer >= 60) {
+        if (o->oTimer >= 60 + GET_BPARAM4(o->oBehParams)) {
             gCutsceneRoom = -1;
             gCutsceneCameraId = -1;
             gCamera->cutscene = 0;
@@ -815,6 +815,7 @@ void bhv_asriel_cage(void) {
             break;
         case 1:
             o->oPosY += 15.0f;
+            cur_obj_play_sound_1(SOUND_MOVING_AIM_CANNON);
             if (o->oTimer > 30) {
                 o->oAction = 2;
                 gButtonPressId = -1;
@@ -1507,4 +1508,40 @@ void bhv_module_shred(void) {
             break;
     }
 
+}
+
+void bhv_orangepole(void) {
+    switch(o->oAction) {
+        case 0:
+            o->oPosY = o->oHomeY + 2000.0f;
+            if (gButtonPressId == 1) {
+                gCutsceneCameraId = 1;
+                o->oAction = 1;
+                enable_time_stop_including_mario();
+            }
+            break;
+        case 1:
+            o->oPosY += o->oVelY;
+            o->oVelY -= 4.0f;
+            if (o->oPosY < o->oHomeY) {
+                if (o->oVelY < -20.0f) {
+                    cur_obj_play_sound_2(SOUND_GENERAL_TOX_BOX_MOVE);
+                }
+                o->oVelY = ABS(o->oVelY)*.4f;
+                o->oPosY = o->oHomeY;
+            }
+            if (o->oTimer > 120) {
+                o->oAction++;
+            }
+            break;
+    }
+}
+
+void bhv_red_coin_spawner(void) {
+    switch(o->oAction) {
+        case 0:
+            spawn_object(o,MODEL_RED_COIN,bhvRedCoin);
+            o->oAction++;
+            break;
+    }
 }

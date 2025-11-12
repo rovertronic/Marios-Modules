@@ -19,3 +19,4 @@
 #include "levels/temple/bdoorl/geo.inc.c"
 #include "shredder/geo.inc.c"
 #include "asrielcage/geo.inc.c"
+#include "orangepole/geo.inc.c"

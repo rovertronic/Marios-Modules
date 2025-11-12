@@ -18,3 +18,4 @@
 #include "shredder/model.inc.c"
 #include "asrielcage/model.inc.c"
 #include "asrielcage/collision.inc.c"
+#include "orangepole/model.inc.c"

@@ -561,5 +561,8 @@ extern const BehaviorScript bhvModuleShred[];
 extern const BehaviorScript bhvElectricAura[];
 extern const BehaviorScript bhvAsrielcage[];
 extern const BehaviorScript bhvCutsceneCamera[];
+extern const BehaviorScript bhvRedCoinSpawner[];
+extern const BehaviorScript bhvFakeRedCoin[];
+extern const BehaviorScript bhvRedCoinManager[];
 
 #endif // BEHAVIOR_DATA_H
