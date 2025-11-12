@@ -387,7 +387,7 @@ s32 handle_module_inputs(void) {
                 execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_B],B_BUTTON,0,1,TRUE);
             }
         }
-        execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_PASSIVE],Z_TRIG,0,5,FALSE);
+        execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_PASSIVE],0,0,10,FALSE);
         update_vanity();
     }
     return FALSE;

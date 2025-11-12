@@ -3,6 +3,18 @@ s32 creativePanelCondition(void) {
     return TRUE;
 }
 
+s32 storagePanelCondition(void) {
+    // Storage only activates once your initial inventory overfills
+    for (int x = 0; x < INVENTORY_SLOTS_X; x++) {
+        for (int y = 5; y < 10; y++) {
+            if (get_inventory(x,y) != MOD_EMPTY) {
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
 s32 passivePanelCondition(void) {
     return ( (gMariosModulesSave.file[gMariosModulesSaveIndex].flags & SAVE_FLAG_PASSIVE) != 0 );
 }
@@ -22,9 +34,15 @@ struct module_panel module_panel_info[] = {
     },
     [PANEL_PASSIVE] = {
         .name = "@Y@Passive",
-        .offset = 5,
+        .offset = 10,
         .size = 5,
         .unlock = passivePanelCondition,
+    },
+    [PANEL_STORAGE] = {
+        .name = "@1@Storage",
+        .offset = 5,
+        .size = 5,
+        .unlock = storagePanelCondition,
     },
     [PANEL_VANITY] = {
         .name = "@P@Vanity",
@@ -48,12 +66,19 @@ struct inventory_row inventory_row_info[INVENTORY_SLOTS_Y] = {
     [3] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [4] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 
-     // Passive
-    [5] = {.type = ROW_SOCKET, .icon = MOD_PASSIVE, .whitelist_flags = WHITELIST_PASSIVE, .wrap = 1},
-    [6] = {.type = ROW_SOCKET, .icon = MOD_WRAP, .whitelist_flags = WHITELIST_PASSIVE},
+     // Extra Storage
+    [5] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [6] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [7] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [8] = {.type = ROW_STORAGE, .mod_type_prio = -1},
     [9] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+
+     // Passive
+    [10] = {.type = ROW_SOCKET, .icon = MOD_PASSIVE, .whitelist_flags = WHITELIST_PASSIVE, .wrap = 1},
+    [11] = {.type = ROW_SOCKET, .icon = MOD_WRAP, .whitelist_flags = WHITELIST_PASSIVE},
+    [12] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [13] = {.type = ROW_STORAGE, .mod_type_prio = -1},
+    [14] = {.type = ROW_STORAGE, .mod_type_prio = -1},
 
     // Storage
     //[5] = {.type = ROW_STORAGE, .mod_type_prio = -1},
