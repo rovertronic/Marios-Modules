@@ -108,8 +108,6 @@ void bhv_goomba_triplet_spawner_update(void) {
  * Initialization function for goomba.
  */
 void bhv_goomba_init(void) {
-    obj_element_init(o,ELEMENT_NORMAL,50.0f);
-
     o->oGoombaSize = o->oBehParams2ndByte & GOOMBA_BP_SIZE_MASK;
 
     o->oGoombaScale = sGoombaProperties[o->oGoombaSize].scale;
@@ -153,13 +151,7 @@ static void goomba_begin_jump(void) {
  * comes back.
  */
 static void mark_goomba_as_dead(void) {
-    if (o->parentObj != o) {
-        set_object_respawn_info_bits(
-            o->parentObj, (o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) >> 2);
 
-        o->parentObj->oBehParams =
-            o->parentObj->oBehParams | (o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) << 6;
-    }
 }
 
 /**
@@ -318,13 +310,6 @@ void bhv_goomba_update(void) {
     f32 animSpeed;
 
     if (obj_update_standard_actions(o->oGoombaScale)) {
-        // If this goomba has a spawner and mario moved away from the spawner, unload
-        if (o->parentObj != o) {
-            if (o->parentObj->oAction == GOOMBA_TRIPLET_SPAWNER_ACT_UNLOADED) {
-                obj_mark_for_deletion(o);
-            }
-        }
-
         cur_obj_scale(o->oGoombaScale);
         obj_update_blinking(&o->oGoombaBlinkTimer, 30, 50, 5);
 #ifdef FLOOMBAS
@@ -366,11 +351,6 @@ void bhv_goomba_update(void) {
             mark_goomba_as_dead();
         }
 
-        cur_obj_move_standard(-78);
-        obj_element_enemy_loop();
-        
-        //Vec3f modulePos = {o->oPosX,o->oPosY+140.0f,o->oPosZ};
-        //enemy_module_set_position(modulePos);
     } else {
         o->oAnimState = GOOMBA_ANIM_STATE_EYES_CLOSED;
 #ifdef FLOOMBAS
@@ -378,5 +358,13 @@ void bhv_goomba_update(void) {
             o->oAnimState += FLOOMBA_ANIM_STATE_EYES_OPEN;
         }
 #endif
+    }
+
+    cur_obj_move_standard(-78);
+    Vec3f modulePos = {o->oPosX,o->oPosY+105.0f,o->oPosZ};
+    vec3f_copy(o->saddlePos,modulePos);
+
+    if (o->objRiding) {
+        o->oMoveAngleYaw = o->objRiding->oMoveAngleYaw;
     }
 }

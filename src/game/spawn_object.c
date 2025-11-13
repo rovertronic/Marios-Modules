@@ -97,6 +97,11 @@ void unload_object(struct Object *obj) {
     obj->prevObj = NULL;
     obj->oFloor = NULL;
 
+    if (obj->objRider) {
+        obj->objRider->objRiding = NULL;
+        obj->objRiding = NULL;
+    }
+
     stop_sounds_from_source(obj->header.gfx.cameraToObject);
     geo_remove_child(&obj->header.gfx.node);
     geo_add_child(&gObjParentGraphNode, &obj->header.gfx.node);
@@ -196,6 +201,7 @@ struct Object *allocate_object(struct ObjectNode *objList) {
     obj->saveBinType = 0;
 
     obj->objRiding = NULL;
+    obj->objRider = NULL;
 
     return obj;
 }

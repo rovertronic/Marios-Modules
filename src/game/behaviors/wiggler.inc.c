@@ -135,7 +135,7 @@ void wiggler_init_segments(void) {
         // spawn a rider on the head
         struct Object * bodrider =
             spawn_object_relative(i, 0, 0, 0, o, MODEL_CHUCKYA, bhvChuckya);
-        bodrider->objRiding = o;
+        obj_ride_obj(bodrider,o);
 
         // Spawn each body part
         for (i = 1; i < WIGGLER_NUM_SEGMENTS; i++) {
@@ -143,7 +143,7 @@ void wiggler_init_segments(void) {
                 spawn_object_relative(i, 0, 0, 0, o, MODEL_WIGBOD, bhvWigglerBody);
             struct Object * bodrider =
                 spawn_object_relative(i, 0, 0, 0, o, MODEL_SNUFIT, bhvSnufit);
-            bodrider->objRiding = bodyPart;
+            obj_ride_obj(bodrider,bodyPart);
             bodrider->oNumLootCoins = 0;
             if (bodyPart != NULL) {
                 obj_init_animation_with_sound(bodyPart, wiggler_seg5_anims_0500C874, 0);

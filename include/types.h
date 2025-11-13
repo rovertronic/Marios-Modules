@@ -331,6 +331,7 @@ struct Object {
               u8 saveBinType;
 
               struct Object * objRiding;
+              struct Object * objRider;
               Vec3f saddlePos;
 
               struct ElementHitbox * element;

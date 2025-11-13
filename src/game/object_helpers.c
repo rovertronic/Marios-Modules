@@ -2385,4 +2385,9 @@ void mtxf_object_noscale(Mat4 dest, struct Object * obj) {
     dest[3][2] += obj->header.gfx.pos[2];
 }
 
+void obj_ride_obj(struct Object * rider, struct Object * saddle) {
+    rider->objRiding = saddle;
+    saddle->objRider = rider;
+}
+
 #include "elemental_interaction.inc.c"

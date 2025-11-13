@@ -278,6 +278,7 @@ void mtxf_object(Mat4 dest, struct Object * obj);
 void mtxf_object_noscale(Mat4 dest, struct Object * obj);
 
 void cur_obj_spawn_star_at_y_offset(f32 targetX, f32 targetY, f32 targetZ, f32 offsetY);
+void obj_ride_obj(struct Object * rider, struct Object * saddle);
 
 #include "elemental_interaction.inc.h"
 

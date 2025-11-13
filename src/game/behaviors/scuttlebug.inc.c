@@ -26,7 +26,6 @@ s32 update_angle_from_move_flags(s32 *angle) {
 void bhv_scuttlebug_loop(void) {
     if (o->oAction == 0) {
         o->oAction++;
-        obj_element_init(o,ELEMENT_NORMAL,70.0f);
         if (o->oBehParams2ndByte == 1) {
             //o->prevObj = spawn_object(o,MODEL_SNUFIT,bhvSnufit);
         }
@@ -145,7 +144,7 @@ void bhv_scuttlebug_loop(void) {
     obj_element_enemy_loop();
 
     Vec3f modulePos = {o->oPosX,o->oPosY+140.0f,o->oPosZ};
-    enemy_module_set_position(modulePos);
+    vec3f_copy(o->saddlePos,modulePos);
 }
 
 void bhv_scuttlebug_spawn_loop(void) {

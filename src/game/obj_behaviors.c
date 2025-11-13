@@ -1595,3 +1595,16 @@ void bhv_red_coin_fake(void) {
             break;
     }
 }
+
+void bhv_goomba_stack(void) {
+    struct Object * goomba1 = spawn_object(o,MODEL_GOOMBA,bhvStackGoomba);
+    struct Object * goomba2 = spawn_object(o,MODEL_GOOMBA,bhvStackGoomba);
+    struct Object * goomba3 = spawn_object(o,MODEL_GOOMBA,bhvStackGoomba);
+
+    goomba1->parentObj = goomba1->parentObj;
+    goomba2->parentObj = goomba2->parentObj;
+    goomba3->parentObj = goomba3->parentObj;
+
+    obj_ride_obj(goomba3,goomba2);
+    obj_ride_obj(goomba2,goomba1);
+}
