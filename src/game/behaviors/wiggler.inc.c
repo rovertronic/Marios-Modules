@@ -106,6 +106,14 @@ void bhv_wiggler_body_part_update(void) {
 
     vec3f_copy(o->saddlePos,&o->oPosVec);
     o->saddlePos[1] += 200.0f;
+
+    if (o->parentObj->oAction == WIGGLER_ACT_FALL_THROUGH_FLOOR) {
+        cur_obj_hide();
+        if (o->objRider) {
+            obj_mark_for_deletion(o->objRider);
+            o->objRider = NULL;
+        }
+    }
 }
 
 /**
@@ -347,7 +355,7 @@ static void wiggler_act_shrink(void) {
 
         // 4 is the default scale, so shrink to 1/4 of regular size
         if (approach_f32_ptr(&o->header.gfx.scale[0], 1.0f, 0.1f)) {
-            spawn_default_star(0.0f, 2048.0f, 0.0f);
+            spawn_default_star(o->oHomeX,o->oHomeY+400.0f,o->oHomeZ);
             o->oAction = WIGGLER_ACT_FALL_THROUGH_FLOOR;
         }
 
@@ -361,15 +369,12 @@ static void wiggler_act_shrink(void) {
 static void wiggler_act_fall_through_floor(void) {
     if (o->oTimer == 60) {
         stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));
-        o->oWigglerFallThroughFloorsHeight = 1700.0f;
-    } else if (o->oTimer > 60) {
-        if (o->oPosY < o->oWigglerFallThroughFloorsHeight) {
-            o->oAction = WIGGLER_ACT_WALK;
-        } else {
-            o->oFaceAnglePitch = obj_get_pitch_from_vel();
+        cur_obj_hide();
+        
+        if (o->objRider) {
+            obj_mark_for_deletion(o->objRider);
+            o->objRider = NULL;
         }
-
-        cur_obj_move_using_fvel_and_gravity();
     }
 }
 

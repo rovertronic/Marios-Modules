@@ -64,6 +64,7 @@ How will you cross it?",
     this individual, his name and profile picture is iconic and is an earworm stuck in my brain,
     so I must reference him in my hack. Autistic Breeder is a close second.
     */
+    [NEWTEXT_SAVE] = "- POINT OF ADVICE -\nDon't forget to @G@save@@ frequently!",
 };
 
 u16 gDialogColorFadeTimer;
