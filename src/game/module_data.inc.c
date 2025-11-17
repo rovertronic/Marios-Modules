@@ -548,20 +548,22 @@ void module_if(struct module_execution_thread * met, u8 call_context) {
     } else {
         u8 revertX = met->x;
         s8 curModId = get_inventory(met->x,met->y);
-        s8 stackLevel = 1;
+        s8 stackLevel = 0;
 
         module_log_message(met,"@G@Condition@@ is @R@FALSE@@, go to end block.",0);
-        while(curModId != MOD_ENDBLOCK && stackLevel == 1) {
+        while(!(curModId == MOD_ENDBLOCK && stackLevel == 0)) {
 
-            //switch(curModId) {
-            //    case MOD_IF:
-            //        stackLevel++;
-            //        break;
-            //    case MOD_ENDBLOCK:
-            //        stackLevel--;
-            //        break;
-            //}
-            //if (stackLevel < 1) {stackLevel = 1;}
+            switch(curModId) {
+                case MOD_IF:
+                    stackLevel++;
+                    break;
+                case MOD_ENDBLOCK:
+                    stackLevel--;
+                    if (stackLevel == 0) {
+                        continue;
+                    }
+                    break;
+            }
 
             met->x++;
             if (inventory_row_info[met->y].wrap && met->x == INVENTORY_SLOTS_X) {
