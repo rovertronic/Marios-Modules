@@ -1147,12 +1147,16 @@ void bhv_hover(void) {
         } else {
             o->oAction = 1;
         }
+        load_object_collision_model();
     } else {
         if (o->oTimer >= 30 + (o->oBehParams2ndByte * 15)) {
             o->oOpacity *= .7f;
             if (o->oOpacity < 5) {
                 obj_mark_for_deletion(o);
             }
+        }
+        if (o->oTimer >= 29 + (o->oBehParams2ndByte * 15)) {
+            load_object_collision_model();
         }
     }
 }

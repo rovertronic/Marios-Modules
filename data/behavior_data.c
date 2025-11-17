@@ -6197,7 +6197,6 @@ const BehaviorScript bhvHover[] = {
     SET_HOME(),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_hover),
-        CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };
 

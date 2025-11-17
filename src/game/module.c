@@ -255,8 +255,7 @@ void module_update(void) {
             }
             if (
                 (GROUNDED)
-                && (count_objects_with_behavior(bhvHover) == 0) 
-                && (gMarioState->capTimer == 0)
+                && (count_objects_with_behavior(bhvHover) == 0)
             ) {
                 met->timer++;
             }
@@ -1021,27 +1020,28 @@ void print_module_hud_status(void) {
     }
     if (sMysteryModuleAlpha > 0.0f) {
         u8 noThanks = (gMysteryModuleState >= 3);
+        s16 ntyoff = (noThanks*20);
         gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
         gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160 * sMysteryModuleAlpha);
-        render_4slice(160-40,120+30,160+40,120-30+(noThanks*-20));
+        render_4slice(160-40,120+30+ntyoff,160+40,120-30);
 
         utf8_print_reset();
         gDPSetEnvColor(gDisplayListHead++, 255,255,255, 255 * sMysteryModuleAlpha);
         int offset; int y;
         utf8_size("Pick a module.",&offset,&y);
         offset/=2;
-        print_utf8("Pick a module.",160 - offset ,125);
+        print_utf8("Pick a module.",160 - offset ,125+ntyoff);
         if (noThanks) {
             utf8_size("B: No Thanks.",&offset,&y);
             offset/=2;
-            print_utf8("@G@B@@: No Thanks.",160 - offset ,75);
+            print_utf8("@G@B@@: No Thanks.",160 - offset ,75+ntyoff);
         }
 
         gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
         
         gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-        print_module(gMysteryModuleChoice[0],140-8,120);
-        print_module(gMysteryModuleChoice[1],180-8,120);
+        print_module(gMysteryModuleChoice[0],140-8,120-ntyoff);
+        print_module(gMysteryModuleChoice[1],180-8,120-ntyoff);
 
         s16 x = 160;
         switch(gMysteryModuleSelection) {
@@ -1052,7 +1052,36 @@ void print_module_hud_status(void) {
                 x = 180;
                 break;
         }
-        print_texture(micons_small_hand_1_rgba16,16,x, 130);
+        print_texture(micons_small_hand_1_rgba16,16,x, 130-ntyoff);
+
+        // Print module
+        s8 mod_inf_to_disp = -1;
+        if (gMysteryModuleSelection != -1) {
+            mod_inf_to_disp = gMysteryModuleChoice[gMysteryModuleSelection];
+        }
+        if (mod_inf_to_disp != -1) {
+            int charCt = sprintf(print_buffer, "@%s@%s (%s):@@ %s\n",
+                module_type_infos[module_infos[mod_inf_to_disp].type].text_color,
+                module_infos[mod_inf_to_disp].name,
+                module_type_infos[module_infos[mod_inf_to_disp].type].name,
+                module_infos[mod_inf_to_disp].desc);
+
+            if (module_infos[mod_inf_to_disp].upg_desc != NULL) {
+                charCt += sprintf(print_buffer+charCt, "@O@UPG: @@%s ",module_infos[mod_inf_to_disp].upg_desc);
+            }
+            if (module_infos[mod_inf_to_disp].cooldown != 0.0f) {
+                charCt += sprintf(print_buffer+charCt, "@1@(Cooldown: %.1fs)@@ ",module_infos[mod_inf_to_disp].cooldown);
+            }
+
+            gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+            gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160);
+            render_4slice(25,82,33+260,25);
+
+            utf8_print_reset();
+            gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
+            print_utf8(utf8_autonewline(print_buffer,260), 30, 64);
+            gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
+        }
     }
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);

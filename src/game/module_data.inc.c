@@ -420,7 +420,7 @@ void module_platform(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_cap(struct module_execution_thread * met, u8 call_context) {
-    gMarioState->capTimer += 60;
+    gMarioState->capTimer = 60;
     switch(met->mod) {
         case 0:
             module_log_message(met,"UPG is 0, enable vanish cap.",0);
@@ -856,9 +856,9 @@ struct module_info module_infos[] = {
         .name = "Cap",
         .type = MTYPE_MOVE,
         .tex = micons_cap_rgba16,
-        .desc = "Enables cap power for two seconds. Can stack caps and time.",
+        .desc = "Enables cap power for two seconds. Caps may be combined with multiple modules.",
         .upg_desc = "0:Vanish, 1:Metal, 2:Wing.",
-        .cooldown = 3.0f,
+        .cooldown = 4.0f,
         .func = module_cap,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_2,
@@ -944,6 +944,17 @@ struct module_info module_infos[] = {
         .desc = "Decreases cooldown time.",
         .func = NULL,
         .cooldown = -1.f,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
+    },
+
+    [MOD_TIME_EXTEND] = {
+        .name = "Time Extend",
+        .type = MTYPE_BUFF,
+        .tex = micons_clock_rgba16,
+        .desc = "Adds one second to any module that specifies a time in seconds.",
+        .func = NULL,
+        .cooldown = .3f,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_1,
     },
@@ -1051,7 +1062,6 @@ struct module_info module_infos[] = {
         .desc = "Mixes colors into skin tone.",
         .func = module_clothes_color,
         .extra_data = skinLights,
-        .creative = TRUE,
     },
 
     [MOD_RED] = {
@@ -1149,7 +1159,6 @@ struct module_info module_infos[] = {
         //edit: he's BACK
         //.desc = "Changes Mario's gender to @R@WOMAN@@.",
         .func = module_woman,
-        .creative = TRUE,
     },
 
     // Settings
