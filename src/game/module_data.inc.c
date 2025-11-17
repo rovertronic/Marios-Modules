@@ -409,7 +409,7 @@ void module_platform(struct module_execution_thread * met, u8 call_context) {
             }
             break;
         case MCC_HALTED:
-            if (met->timer >= 1) {
+            if (met->timer >= 2) {
                 met->halted = FALSE;
                 met->x++;
                 met->mod = 0;
