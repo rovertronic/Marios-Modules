@@ -1454,6 +1454,10 @@ void bhv_recycle_interface(void) {
             }
             break;
         case 1: // Waiting for input
+            if (o->oDistanceToMario >= 100.0f) {
+                o->oAction = 0;
+                break;
+            }
             if (gRecycleChestContent != MOD_EMPTY) {
                 o->oAction ++;
                 struct Object * visualShred = spawn_object(o,MODEL_MODULE,bhvModuleShred);
