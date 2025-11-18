@@ -344,6 +344,7 @@ void execute_module_in_inventory(struct module_execution_thread * met, u32 input
     if (!met->executing) {
         met->begin = TRUE;
         met->mod = 0;
+        met->time_mod = 0;
         met->spd = 0;
         met->x = x;
         met->y = y;

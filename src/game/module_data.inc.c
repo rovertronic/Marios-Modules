@@ -290,6 +290,7 @@ void module_wall(struct module_execution_thread * met, u8 call_context) {
 
 void module_timer(struct module_execution_thread * met, u8 call_context) {
     u8 time = 0;
+
     switch(met->option) {
         case 0:
             time = 14;
@@ -310,11 +311,15 @@ void module_timer(struct module_execution_thread * met, u8 call_context) {
             time = 1;
             break;
     }
+    time += met->time_mod * 30;
     switch(call_context) {
         case MCC_INVOKE:
             met->halted = TRUE;
             met->timer = 0;
             module_log_message(met,"Timer waiting %d frames.", time+1);
+            if (met->time_mod > 0) {
+                module_log_message(met,"Extra time from time extend: %ds",met->time_mod);
+            }
             break;
         case MCC_HALTED:
             if (met->timer >= time) {
@@ -358,6 +363,10 @@ void module_grav(struct module_execution_thread * met, u8 call_context) {
 void module_input(struct module_execution_thread * met, u8 call_context) {
     switch(call_context) {
         case MCC_INVOKE:
+            if (met->time_mod > 0) {
+                module_log_message(met,"Extra time from time extend: %ds",met->time_mod);
+            }
+
             play_sound(SOUND_GENERAL_BOWSER_KEY_LAND, gGlobalSoundSource);
             module_log_message(met,"Polling for player input.",0);
             if (gPlayer1Controller->buttonPressed & met->input) {
@@ -381,12 +390,13 @@ void module_input(struct module_execution_thread * met, u8 call_context) {
                 met->x++;
                 break;
             }
-            if (met->timer >= 30) {
+            if (met->timer >= 30 + (met->time_mod * 30)) {
                 module_log_message(met,"Player input rejected, cancel.",0);
 
                 met->input_notify = FALSE;
                 met->cooldown = TRUE;
                 met->timer = 0;
+                met->time_mod = 0;
             }
             break;
     }
@@ -397,6 +407,10 @@ void module_platform(struct module_execution_thread * met, u8 call_context) {
         case MCC_INVOKE:
             module_log_message(met,"Spawned air platform.",0);
 
+            if (met->time_mod > 0) {
+                module_log_message(met,"Extra time from time extend: %ds",met->time_mod);
+            }
+
             met->doaircooldown = TRUE;
             met->halted = TRUE;
             met->timer = 0;
@@ -404,6 +418,7 @@ void module_platform(struct module_execution_thread * met, u8 call_context) {
             play_sound(SOUND_ACTION_TELEPORT, gGlobalSoundSource);
             struct Object * hover = spawn_object(gMarioState->marioObj,MODEL_HOVER,bhvHover);
             hover->oBehParams2ndByte = met->mod;
+            SET_BPARAM4(hover->oBehParams, met->time_mod);
             if (gMarioState->vel[1] < 0.0f) {
                 gMarioState->vel[1] = 0.0f;
             }
@@ -413,6 +428,7 @@ void module_platform(struct module_execution_thread * met, u8 call_context) {
                 met->halted = FALSE;
                 met->x++;
                 met->mod = 0;
+                met->time_mod = 0;
                 break;
             }
             break;
@@ -420,7 +436,11 @@ void module_platform(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_cap(struct module_execution_thread * met, u8 call_context) {
-    gMarioState->capTimer = 60;
+    gMarioState->capTimer = 60 + (met->time_mod*30);
+    if (met->time_mod > 0) {
+        module_log_message(met,"Extra time from time extend: %ds",met->time_mod);
+    }
+
     switch(met->mod) {
         case 0:
             module_log_message(met,"UPG is 0, enable vanish cap.",0);
@@ -429,14 +449,16 @@ void module_cap(struct module_execution_thread * met, u8 call_context) {
         case 1:
             module_log_message(met,"UPG is 1, enable metal cap.",0);
             gMarioState->flags |= MARIO_METAL_CAP;
+            met->mod --;
             break;
         default:
             module_log_message(met,"UPG is 2+, enable wing cap.",0);
             gMarioState->flags |= MARIO_WING_CAP;
+            met->mod -= 2;
             break;
     }
 
-    met->mod = 0;
+    met->time_mod = 0;
     met->x++;
 }
 
@@ -696,6 +718,12 @@ void module_rotate(struct module_execution_thread * met, u8 call_context) {
     }
 }
 
+void module_time_extend(struct module_execution_thread * met, u8 call_context) {
+    module_log_message(met,"Increased time by one second.",0);
+    met->time_mod ++;
+    met->x++;
+}
+
 Vec3f moduleRed = {1.0f,0.0f,0.0f};
 Vec3f moduleBlue = {0.0f,0.0f,1.0f};
 Vec3f moduleGreen = {0.0f,1.0f,0.0f};
@@ -856,9 +884,9 @@ struct module_info module_infos[] = {
         .name = "Cap",
         .type = MTYPE_MOVE,
         .tex = micons_cap_rgba16,
-        .desc = "Enables cap power for two seconds. Caps may be combined with multiple modules.",
+        .desc = "Enables cap power for two seconds. Caps may be combined with multiple cap modules.",
         .upg_desc = "0:Vanish, 1:Metal, 2:Wing.",
-        .cooldown = 4.0f,
+        .cooldown = 5.0f,
         .func = module_cap,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_2,
@@ -953,8 +981,8 @@ struct module_info module_infos[] = {
         .type = MTYPE_BUFF,
         .tex = micons_clock_rgba16,
         .desc = "Adds one second to any module that specifies a time in seconds.",
-        .func = NULL,
-        .cooldown = .3f,
+        .func = module_time_extend,
+        .cooldown = .5f,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_1,
     },

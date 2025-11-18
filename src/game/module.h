@@ -41,6 +41,7 @@ enum {
 struct module_execution_thread {
     u32 input;
     u8 mod;
+    u8 time_mod;
     u8 x;
     u8 y;
     u8 spd;
