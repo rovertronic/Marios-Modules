@@ -86,7 +86,10 @@ void module_log_clear(void) {
 }
 
 s32 is_inventory_slot_locked(int x, int y) {
-    return FALSE;
+    if (creativePanelCondition()) {
+        return FALSE;
+    }
+
     switch(y) {
         case 0://a
             if (x >= 1+(gMarioState->numStars*2)) {return TRUE;}
@@ -491,7 +494,7 @@ void control_module_menu(void) {
     int modified_inventory = FALSE;
     if (gPlayer1Controller->buttonPressed & A_BUTTON) {
         if (gModuleMenuMode == MODULE_MENU_MODE_NORMAL) {
-            if (is_inventory_slot_locked(inventory_x,inventory_y)) {
+            if (is_inventory_slot_locked(inventory_x,true_inventory_y)) {
                 play_sound(SOUND_MENU_CAMERA_BUZZ, gGlobalSoundSource);
             } else {
                 if (!(module_in_hand == MOD_EMPTY && inventory[true_inventory_y][inventory_x] == MOD_EMPTY)) {
@@ -777,7 +780,7 @@ void print_module_menu(void) {
                 gPrintModuleDarken=1;
             }
 
-            if (is_inventory_slot_locked(x,y)) {
+            if (is_inventory_slot_locked(x,true_y)) {
                 gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 150);
                 print_texture(micons_lock_rgba16,16,inv_slot_printx(x,y), inv_slot_printy(x,y));
                 gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);

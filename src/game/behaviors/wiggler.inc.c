@@ -441,6 +441,12 @@ void bhv_wiggler_update(void) {
 
         // Update the rest of the segments to follow segment 0
         wiggler_update_segments();
+
+        while (cur_obj_lateral_dist_to_home() > 1000.0f) {
+            s16 homeAngle = cur_obj_angle_to_home();
+            o->oPosX += sins(homeAngle);
+            o->oPosZ += coss(homeAngle);
+        }
     }
 
     vec3f_copy(o->saddlePos,&o->oPosVec);

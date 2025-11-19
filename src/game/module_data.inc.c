@@ -1,6 +1,6 @@
 // INVENTORY STRUCTURE DECLARATIONS
 s32 creativePanelCondition(void) {
-    return TRUE;
+    return FALSE;
 }
 
 s32 storagePanelCondition(void) {
@@ -436,7 +436,10 @@ void module_platform(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_cap(struct module_execution_thread * met, u8 call_context) {
-    gMarioState->capTimer = 60 + (met->time_mod*30);
+    s16 capTime = 60 + (met->time_mod*30);
+    if (gMarioState->capTimer < capTime) {
+        gMarioState->capTimer = capTime;
+    }
     if (met->time_mod > 0) {
         module_log_message(met,"Extra time from time extend: %ds",met->time_mod);
     }
@@ -639,6 +642,10 @@ void module_if_input(struct module_execution_thread * met, u8 call_context) {
         case 4:
         case 5:
             inpFlag = Z_TRIG;
+            break;
+        case 6:
+        case 7:
+            inpFlag = L_TRIG;
     }
 
     u32 cond = (gPlayer1Controller->buttonDown & inpFlag);
@@ -773,6 +780,8 @@ char * ifInputOptions[] = {
     "@G@B@@ Held",
     "@1@Z@@ Pressed",
     "@1@Z@@ Held",
+    "@1@𝐋@@ Pressed",
+    "@1@𝐋@@ Held",
     NULL,
 };
 
@@ -1001,7 +1010,7 @@ struct module_info module_infos[] = {
         .name = "Timer",
         .type = MTYPE_COND,
         .tex = micons_clock_rgba16,
-        .desc = "Continues after set time has passed.",
+        .desc = "Continues after a set time has passed.",
         .func = module_timer,
         .options = timerOptions,
         .creative = TRUE,
