@@ -121,6 +121,7 @@ New Module Additions:\n\
 → Ground Upgrade (Upgrade)\n\
 → Heat Sink (Upgrade)\n\
 → +2 (Upgrade)\n\
+→ Time Extend (Upgrade)\n\
 \n\
 → Red Dye (Vanity)\n\
 → Green Dye (Vanity)\n\
@@ -174,7 +175,7 @@ Minor Changes:\n\
 \n\
 Rebalances:\n\
 → Putting jumps together no longer increases jump tier\n\
-→ Cap module incurs 4 second cooldown\n\
+→ Cap module incurs 5 second cooldown\n\
 → Cap module cap time extended to 2 secs\n\
 → Hover module changed to air platform, no longer follows Mario\n\
 → Hover module incurs .5s cooldown, grows with UPG.\n\

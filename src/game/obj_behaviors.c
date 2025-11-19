@@ -1228,7 +1228,7 @@ void bhv_volume(void) {
             case VOLUME_SNUFIT_BATTLE:
                 {
                     struct Object * enemy = cur_obj_nearest_object_with_behavior(bhvSnufit);
-                    if (enemy) {
+                    if (enemy && GET_BPARAM4(enemy->oBehParams) == 1) {
                         sForceDoorShut = TRUE;
                     }
                 }

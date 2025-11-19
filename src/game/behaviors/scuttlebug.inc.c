@@ -27,11 +27,8 @@ void bhv_scuttlebug_loop(void) {
     if (o->oAction == 0) {
         o->oAction++;
         if (o->oBehParams2ndByte == 1) {
-            //o->prevObj = spawn_object(o,MODEL_SNUFIT,bhvSnufit);
-        }
-    } else if (o->oAction == 1) {
-        if (o->oBehParams2ndByte == 1) {
-            //enemy_module_use(o,o->prevObj);
+            struct Object * rideSnuffit = spawn_object(o,MODEL_SNUFIT,bhvSnufit);
+            obj_ride_obj(rideSnuffit,o);
         }
     }
 
