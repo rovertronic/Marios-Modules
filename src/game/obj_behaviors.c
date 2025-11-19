@@ -1100,7 +1100,6 @@ void bhv_recycle_chest(void) {
     switch(o->oAction) {
         case 0:
             o->header.gfx.animInfo.animAccelF = 1.0f;
-            obj_element_init(o,ELEMENT_NORMAL,100.0f);
             o->oAction = 3;
             break;
         case 1:
@@ -1130,9 +1129,10 @@ void bhv_recycle_chest(void) {
         case 3: // No items
             if (gRecycleChestContent != MOD_EMPTY) {
                 o->header.gfx.animInfo.animAccelF = -1.0f;
-            }
-            if (o->header.gfx.animInfo.animFrameF <= 0.0f) {
-                o->oAction = 1;
+                
+                if (o->header.gfx.animInfo.animFrameF <= 0.0f) {
+                    o->oAction = 1;
+                }
             }
             break;
     }
