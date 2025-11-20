@@ -1,0 +1,9 @@
+extern Vtx minimap8_minimap8_mesh_vtx_0[63];
+extern Gfx minimap8_minimap8_mesh_tri_0[];
+extern Vtx minimap8_minimap8_mesh_vtx_1[132];
+extern Gfx minimap8_minimap8_mesh_tri_1[];
+extern Gfx mat_minimap8_map_mat_1_layer1[];
+extern Gfx mat_revert_minimap8_map_mat_1_layer1[];
+extern Gfx mat_minimap8_map_mat_3_layer1[];
+extern Gfx mat_revert_minimap8_map_mat_3_layer1[];
+extern Gfx minimap8_minimap8_mesh[];

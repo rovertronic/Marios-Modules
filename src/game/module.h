@@ -9,6 +9,7 @@
 #define INVENTORY_SLOTS_X 8
 
 extern u8 gModuleMenuOpen;
+extern u8 gMiniMapOpen;
 extern u8 gModuleMenuMode;
 extern s8 gRecycleChestContent;
 extern s8 gRecycledModule;
@@ -253,6 +254,7 @@ struct mariosModulesSaveFile {
     u16 coins;
     u8 keys;
     u32 flags;
+    u32 room_discover_flags;
     u32 seed;
 };
 

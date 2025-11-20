@@ -1,0 +1,9 @@
+extern Vtx minimap11_minimap11_mesh_vtx_0[8];
+extern Gfx minimap11_minimap11_mesh_tri_0[];
+extern Vtx minimap11_minimap11_mesh_vtx_1[16];
+extern Gfx minimap11_minimap11_mesh_tri_1[];
+extern Gfx mat_minimap11_map_mat_1_layer1[];
+extern Gfx mat_revert_minimap11_map_mat_1_layer1[];
+extern Gfx mat_minimap11_map_mat_3_layer1[];
+extern Gfx mat_revert_minimap11_map_mat_3_layer1[];
+extern Gfx minimap11_minimap11_mesh[];

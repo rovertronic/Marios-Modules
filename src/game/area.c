@@ -443,7 +443,7 @@ void render_game(void) {
             }
         }
 
-        if (gModuleMenuOpen && gCurrentArea->graphNode) {
+        if (gModuleMenuOpen && !gMiniMapOpen && gCurrentArea->graphNode) {
             gRenderPass = 1;
             geo_process_root(gCurrentArea->graphNode, gViewportOverride, gViewportClip, gFBSetColor);
         }

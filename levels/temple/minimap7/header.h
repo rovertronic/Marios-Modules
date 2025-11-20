@@ -1,0 +1,9 @@
+extern Vtx minimap7_minimap7_mesh_vtx_0[26];
+extern Gfx minimap7_minimap7_mesh_tri_0[];
+extern Vtx minimap7_minimap7_mesh_vtx_1[56];
+extern Gfx minimap7_minimap7_mesh_tri_1[];
+extern Gfx mat_minimap7_map_mat_1_layer1[];
+extern Gfx mat_revert_minimap7_map_mat_1_layer1[];
+extern Gfx mat_minimap7_map_mat_3_layer1[];
+extern Gfx mat_revert_minimap7_map_mat_3_layer1[];
+extern Gfx minimap7_minimap7_mesh[];

@@ -111,6 +111,7 @@ Major Changes:\n\
 → Added game saving via save blocks\n\
 → Added post-game creative mode\n\
 → Improved tutorial\n\
+→ Hold Z in module menu to view minimap\n\
 \n\
 New Module Additions:\n\
 → Twirl (Action)\n\
@@ -164,7 +165,7 @@ Minor Changes:\n\
 → C<+> can push modules in menu\n\
 → Cv sends module back to inventory\n\
 → Double tap Cv sends row back to inventory\n\
-→ Z pushes all modules to the left\n\
+→ B pushes all modules to the left\n\
 → Initial module cooldown is shorter, however...\n\
 → Some modules invoke a longer cooldown\n\
 → Re-organized module classifications\n\

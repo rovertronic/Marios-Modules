@@ -19,6 +19,7 @@
 #include "utf8_print.h"
 #include "frame_lerp.h"
 #include "seq_ids.h"
+#include "levels/temple/header.h"
 
 u8 gModuleTutorialState = TUTORIAL_WAIT_FOR_MODULE_COLLECT;
 struct ScreenMessage sScreenMessageList[15];
@@ -26,6 +27,8 @@ s8 sScreenMessageCount = -1;
 s8 sScreenMessageIndex = -1;
 
 u8 gModuleMenuOpen = FALSE;
+u8 gMiniMapOpen = FALSE;
+f32 gMiniMapZoom = 1.0f;
 u8 gModuleMenuMode = MODULE_MENU_MODE_NORMAL;
 s8 gRecycleChestContent = MOD_EMPTY;
 s8 gRecycledModule = MOD_EMPTY;
@@ -444,6 +447,19 @@ void control_module_menu(void) {
     // Always turn off passive effects when in menu
     gMarioState->passiveFlag = 0;
 
+    // Handle Minimap viewage
+    if (gMiniMapOpen) {
+        if (!(gPlayer1Controller->buttonDown & Z_TRIG)) {
+            gMiniMapOpen = FALSE;
+        }
+        return;
+    }
+
+    if (gPlayer1Controller->buttonDown & Z_TRIG) {
+        gMiniMapOpen = TRUE;
+        return;
+    }
+
     // handle panel changing
     if (gPlayer1Controller->buttonPressed & R_TRIG) {
         inventory_panel = (INVENTORY_PANEL_CT+inventory_panel+1)%INVENTORY_PANEL_CT;
@@ -577,7 +593,8 @@ void control_module_menu(void) {
                 s8 mod = get_inventory(i,true_inventory_y);
                 u8 param = get_inventory_param(i,true_inventory_y);
 
-                if (get_inventory(i+1,true_inventory_y) == MOD_EMPTY) {
+                if (get_inventory(i+1,true_inventory_y) == MOD_EMPTY &&
+                    !is_inventory_slot_locked(i+1,true_inventory_y) ) {
                     inventory[true_inventory_y][i+1] = mod;
                     inventory[true_inventory_y][i] = MOD_EMPTY;
 
@@ -622,7 +639,7 @@ void control_module_menu(void) {
             modified_inventory = TRUE;
         }
 
-        if (gPlayer1Controller->buttonPressed & Z_TRIG) {
+        if (module_in_hand == MOD_EMPTY && gPlayer1Controller->buttonPressed & B_BUTTON) {
             inventory_vis_x -= 10.0f;
             for (int j = 0; j < INVENTORY_SLOTS_X; j++) {
                 for (int i = 1; i < INVENTORY_SLOTS_X; i++) {
@@ -734,9 +751,58 @@ char * module_is_invalid(int x, int y) {
     return NULL;
 }
 
+Gfx * sMinimapRoomDls[32] = {
+    NULL, // Buffer
+    NULL, // Minimap
+    minimap1_minimap1_mesh,
+    minimap2_minimap2_mesh,
+    minimap3_minimap3_mesh,
+    minimap4_minimap4_mesh,
+    minimap5_minimap5_mesh,
+    minimap6_minimap6_mesh,
+    minimap7_minimap7_mesh,
+    minimap8_minimap8_mesh,
+    minimap10_minimap10_mesh,
+    minimap11_minimap11_mesh,
+};
+
+void print_mini_map(void) {
+    gMiniMapZoom += (gPlayer1Controller->rawStickY/400.0f) * gFrameLerpDeltaTime;
+    gMiniMapZoom = CLAMP(gMiniMapZoom,0.5f,1.0f);
+
+    f32 mario_x_to_map_x = (gMarioState->pos[0]/-50.f) * gMiniMapZoom;
+    f32 mario_z_to_map_y = (gMarioState->pos[2]/50.f) * gMiniMapZoom;
+
+    create_dl_translation_matrix(MENU_MTX_PUSH, 160.f + mario_x_to_map_x, 120.f + mario_z_to_map_y, 0);
+    create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.02f * gMiniMapZoom, 0.02f * gMiniMapZoom, 1.0f);
+
+    if (gMarioCurrentRoom >= 13 && gMarioCurrentRoom <= 17) {
+        // Hardcoded upstairs DL
+    } else {
+        for (int i = 0; i < 32; i++) {
+            if (sMinimapRoomDls[i] != NULL &&
+                (gMariosModulesSave.file[gMariosModulesSaveIndex].room_discover_flags & (1 << i))
+            ) {
+                gSPDisplayList(gDisplayListHead++, sMinimapRoomDls[i]);
+            }
+        }
+    }
+
+    gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
+    print_texture(micons_cap_rgba16, 16, 160-8, 120-8);
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
+}
+
 
 char print_buffer[500];
 void print_module_menu(void) {
+    if (gMiniMapOpen) {
+        print_mini_map();
+        return;
+    }
+
     gSPDisplayList(gDisplayListHead++,ui_ui_mesh);
 
     gPrintModuleDarken=1;

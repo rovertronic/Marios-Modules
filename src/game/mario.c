@@ -1828,6 +1828,9 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
         gNearestRedCoinDist = dist_between_objects(gMarioObject,nearestRedCoin)/100;
     }
 
+    int room = gMarioCurrentRoom;
+    gMariosModulesSave.file[gMariosModulesSaveIndex].room_discover_flags |= (1 << room);
+
     // Updates once per frame:
     mario_title_logic();
     vec3f_get_dist_and_angle(gMarioState->prevPos, gMarioState->pos, &gMarioState->moveSpeed, &gMarioState->movePitch, &gMarioState->moveYaw);
