@@ -766,12 +766,15 @@ Gfx * sMinimapRoomDls[32] = {
     minimap11_minimap11_mesh,
 };
 
+extern void shade_screen(void);
 void print_mini_map(void) {
     gMiniMapZoom += (gPlayer1Controller->rawStickY/400.0f) * gFrameLerpDeltaTime;
     gMiniMapZoom = CLAMP(gMiniMapZoom,0.5f,1.0f);
 
     f32 mario_x_to_map_x = (gMarioState->pos[0]/-50.f) * gMiniMapZoom;
     f32 mario_z_to_map_y = (gMarioState->pos[2]/50.f) * gMiniMapZoom;
+
+    shade_screen();
 
     create_dl_translation_matrix(MENU_MTX_PUSH, 160.f + mario_x_to_map_x, 120.f + mario_z_to_map_y, 0);
     create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.02f * gMiniMapZoom, 0.02f * gMiniMapZoom, 1.0f);
