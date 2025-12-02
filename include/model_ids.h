@@ -591,6 +591,7 @@ enum new_models {
     MODEL_WIGHEAD,
     MODEL_WIGBOD,
     MODEL_ORANGEPOLE,
+    MODEL_SILVER_STAR,
 };
 
 #endif // MODEL_IDS_H

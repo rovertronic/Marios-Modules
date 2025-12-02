@@ -566,5 +566,7 @@ extern const BehaviorScript bhvFakeRedCoin[];
 extern const BehaviorScript bhvRedCoinManager[];
 extern const BehaviorScript bhvGoombaStack[];
 extern const BehaviorScript bhvStackGoomba[];
+extern const BehaviorScript bhvFireGoomba[];
+extern const BehaviorScript bhvSilverStar[];
 
 #endif // BEHAVIOR_DATA_H

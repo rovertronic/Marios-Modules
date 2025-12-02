@@ -44,4 +44,8 @@ void bhv_fire_spitter_update(void) {
     }
 
     cur_obj_move_standard(78);
+
+    if (o->objRiding == NULL) {
+        obj_mark_for_deletion(o);
+    }
 }

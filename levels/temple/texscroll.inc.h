@@ -4,6 +4,7 @@ extern void scroll_temple_dl_vis_room2_001_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room5_001_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room3_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room5_midsection_2_mesh_layer_5_vtx_0();
+extern void scroll_temple_dl_vis_room9_001_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room_94_mesh_layer_5_vtx_1();
 extern void scroll_temple_dl_vis_room_95_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room_99_001_mesh_layer_5_vtx_0();

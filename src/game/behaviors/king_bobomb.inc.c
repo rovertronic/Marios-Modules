@@ -1,6 +1,6 @@
 // king_bobomb.inc.c
 
-void bhv_king_bobomb_init(void) {
+void bhv_has_star_init(void) {
     obj_save_bin_count(SAVE_BIN_STARS);
 }
 

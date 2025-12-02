@@ -390,6 +390,8 @@ enum BehaviorCommands {
     BC_BPTR(BHV_CMD_SPAWN_WATER_DROPLET, dropletParams)
 
 
+extern void bhv_has_star_init(void);
+
 const BehaviorScript bhvStarDoor[] = {
     BEGIN(OBJ_LIST_SURFACE),
     SET_INT(oInteractType, INTERACT_DOOR),
@@ -518,7 +520,6 @@ const BehaviorScript bhvCapSwitch[] = {
     END_LOOP(),
 };
 
-extern void bhv_king_bobomb_init(void);
 const BehaviorScript bhvKingBobomb[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_ACTIVE_FROM_AFAR | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
@@ -532,7 +533,7 @@ const BehaviorScript bhvKingBobomb[] = {
     SPAWN_OBJ(/*Model*/ MODEL_NONE, /*Behavior*/ bhvBobombAnchorMario),
     SET_INT(oHealth, 3),
     SET_INT(oDamageOrCoinValue, 3),
-    CALL_NATIVE(bhv_king_bobomb_init),
+    CALL_NATIVE(bhv_has_star_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_king_bobomb_loop),
     END_LOOP(),
@@ -1782,6 +1783,7 @@ const BehaviorScript bhvFloorSwitchHardcodedModel[] = {
 const BehaviorScript bhvFloorSwitchHiddenObjects[] = {
     BEGIN(OBJ_LIST_SURFACE),
     SET_INT(oBehParams2ndByte, PURPLE_SWITCH_BP_REVEAL_HIDDEN),
+    CALL_NATIVE(bhv_has_star_init),
     GOTO(bhvFloorSwitchHardcodedModel + 1),
 };
 
@@ -5272,7 +5274,7 @@ const BehaviorScript bhvWigglerHead[] = {
     HIDE(),
     SCALE(/*Unused*/ 0, /*Field*/ 400),
     SET_FLOAT(oWigglerFallThroughFloorsHeight, 5000),
-    CALL_NATIVE(bhv_king_bobomb_init), // this just registers a star id
+    CALL_NATIVE(bhv_has_star_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_wiggler_update),
     END_LOOP(),
@@ -6381,6 +6383,22 @@ extern void bhv_goomba_stack(void);
 const BehaviorScript bhvGoombaStack[] = {
     BEGIN(OBJ_LIST_LEVEL),
     CALL_NATIVE(bhv_goomba_stack),
+    BEGIN_LOOP(),
+
+    END_LOOP(),
+};
+
+extern void bhv_fire_goomba(void);
+const BehaviorScript bhvFireGoomba[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    CALL_NATIVE(bhv_fire_goomba),
+    BEGIN_LOOP(),
+
+    END_LOOP(),
+};
+
+const BehaviorScript bhvSilverStar[] = {
+    BEGIN(OBJ_LIST_LEVEL),
     BEGIN_LOOP(),
 
     END_LOOP(),
