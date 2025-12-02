@@ -30,7 +30,8 @@ struct DungeonCell {
     u8 id;
     u8 doorFlags;
     u8 x;
-    u8 y;
+    u8 y:7;
+    u8 resolved:1;
 };
 
 void dungeon_generate(void);
