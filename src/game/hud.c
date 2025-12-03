@@ -18,6 +18,7 @@
 #include "puppycam2.h"
 #include "puppyprint.h"
 #include "mario.h"
+#include "dungeon.h"
 
 #include "config.h"
 
@@ -574,6 +575,8 @@ void render_hud(void) {
 #else
         create_dl_ortho_matrix();
 #endif
+
+        dungeon_debug_print();
 
         if (gCurrentArea != NULL && gCurrentArea->camera->mode == CAMERA_MODE_INSIDE_CANNON) {
             render_hud_cannon_reticle();

@@ -119,6 +119,7 @@ void print_utf8(char * str, int x, int y);
 void print_utf8_boxed(char * str, int x, int y, f32 alpha, int centered);
 void utf8_print_reset(void);
 void utf8_size(char * str, int * x, int * y);
+void print_utf8_color(char * str, int x, int y, u8 r, u8 g, u8 b);
 
 void ui_render(void);
 

@@ -690,6 +690,68 @@ void print_utf8(char * str, int x, int y) {
     }
 }
 
+void print_utf8_color(char * str, int x, int y, u8 r, u8 g, u8 b) {
+    print_textcolor[0] = r;
+    print_textcolor[1] = g;
+    print_textcolor[2] = b;
+    print_textcolor[3] = r;
+    print_textcolor[4] = g;
+    print_textcolor[5] = b;
+
+    print_italics = 0;
+    horizontal_wiggle = 0;
+
+    int charIndex = 0;
+    int printX = 0;
+    int printY = 0;
+    char * printHead = &str[charIndex];
+
+    while((*printHead) != '\0') {
+
+        if ((*printHead) == '\n') {
+            printX = 0;
+            printY -= 16;
+
+            charIndex++;
+            printHead = &str[charIndex];
+            continue;
+        }
+
+        if ((*printHead) == '@') {
+            for (int i = 0; i < 6; i++) {
+                print_textcolor[i] = 255;
+            }
+            print_italics = 0;
+            horizontal_wiggle = 0;
+
+            printHead = &str[++charIndex];
+            while ((*printHead) != '@') {
+                printHead = &str[++charIndex];
+            }
+            printHead = &str[++charIndex];
+            continue;
+        }
+
+        u32 codepoint;
+        u8 size = utf8_to_codepoint(printHead,&codepoint);
+        fontChar * fc = get_fontchar_from_utf8_codepoint(codepoint);
+
+        s8 xOff = 0;
+        if (horizontal_wiggle != 0) {
+            xOff = ((gGlobalTimer/6)%3)*horizontal_wiggle;
+        }
+        if (fc != NULL) {
+            if (fc->tex != NULL) {
+                render_fontchar(fc,x+printX+xOff,y+printY);
+            }
+            printX += fc->size+1;
+        }
+        
+        charIndex += size;
+        printHead = &str[charIndex];
+    }
+}
+
 char sAutoNewlineBuffer[512];
 char * utf8_autonewline(char * str, int maxX) {
     int charIndex = 0;
