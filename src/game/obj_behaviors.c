@@ -1521,14 +1521,21 @@ void bhv_module_shred(void) {
 void bhv_orangepole(void) {
     switch(o->oAction) {
         case 0:
-            o->oPosY = o->oHomeY + 2000.0f;
-            if (gButtonPressId == 1) {
-                gCutsceneCameraId = 1;
+            if ( (gMariosModulesSave.file[gMariosModulesSaveIndex].flags & SAVE_FLAG_PASSIVE) != 0 ) {
+                o->oAction = 3;
+            } else {
                 o->oAction = 1;
-                enable_time_stop_including_mario();
             }
             break;
         case 1:
+            o->oPosY = o->oHomeY + 2000.0f;
+            if (gButtonPressId == 1) {
+                gCutsceneCameraId = 1;
+                o->oAction++;
+                enable_time_stop_including_mario();
+            }
+            break;
+        case 2:
             o->oPosY += o->oVelY;
             o->oVelY -= 4.0f;
             if (o->oPosY < o->oHomeY) {
