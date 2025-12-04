@@ -1,5 +1,6 @@
 struct mariosModulesSaveGame gMariosModulesSave;
 int gMariosModulesSaveIndex = 0;
+int gMainMenuWarpLocation = 2;
 
 void save_marios_modules(Vec3f pos) {
     int size = sizeof(struct mariosModulesSaveGame);
@@ -216,6 +217,7 @@ char * sButtonsMain[] = {
 char * sButtonsFile[] = {
     "Continue",
     "New Game",
+    "@P@Rogue-Like",
     NULL,
 };
 
@@ -430,10 +432,11 @@ void logic_main_menu(void) {
             }
             break;
         case MAIN_MENU_FILE:
-            main_menu_handle_scroll(2);
+            main_menu_handle_scroll(3);
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
                 switch (sMainMenuIndex) {
                     case 0:
+                        gMainMenuWarpLocation = 2;
                         level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
                         gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;
                         gModuleTutorialState = TUTORIAL_DONE;
@@ -445,6 +448,12 @@ void logic_main_menu(void) {
                         tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
                         saveBinTotal[SAVE_BIN_CHESTS] = 0;
                         play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
+                        break;
+                    case 2:
+                        gMainMenuWarpLocation = 4;
+                        level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
+                        gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;
+                        gModuleTutorialState = TUTORIAL_DONE;
                         break;
                 }
             }

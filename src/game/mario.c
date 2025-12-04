@@ -33,6 +33,7 @@
 #include "sound_init.h"
 #include "rumble_init.h"
 #include "module.h"
+#include "dungeon.h"
 
 u32 sMarioCharacterSoundTable[][2] = {
     [MARIO_SND_YAH_WAH_HOO]          = { SOUND_MARIO_YAH_WAH_HOO,         SOUND_GIRL_JUMP },
@@ -1938,6 +1939,10 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
  **************************************************/
 
 void init_mario(void) {
+    if (gCurrLevelNum == LEVEL_ROGUE) {
+        dungeon_generate();
+    }
+
     gMarioState->actionTimer = 0;
     gMarioState->framesSinceA = 0xFF;
     gMarioState->framesSinceB = 0xFF;

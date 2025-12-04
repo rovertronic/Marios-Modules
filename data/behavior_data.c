@@ -6403,3 +6403,12 @@ const BehaviorScript bhvSilverStar[] = {
 
     END_LOOP(),
 };
+
+const BehaviorScript bhvDungeonProcGenRoom[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    BEGIN_REPEAT(1),
+    END_REPEAT(),
+    CALL_NATIVE(load_object_static_model),
+    BREAK(),
+};

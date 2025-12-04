@@ -1,0 +1,14 @@
+extern const GeoLayout doorhole_covered_geo[];
+extern u8 doorhole_covered_conk_i8[];
+extern u8 doorhole_covered_cobbleGrungeGrey_i8[];
+extern Vtx doorhole_covered_doorhole_covered_mesh_layer_1_vtx_cull[8];
+extern Vtx doorhole_covered_doorhole_covered_mesh_layer_1_vtx_0[32];
+extern Gfx doorhole_covered_doorhole_covered_mesh_layer_1_tri_0[];
+extern Vtx doorhole_covered_doorhole_covered_mesh_layer_1_vtx_1[13];
+extern Gfx doorhole_covered_doorhole_covered_mesh_layer_1_tri_1[];
+extern Gfx mat_doorhole_covered_conc[];
+extern Gfx mat_revert_doorhole_covered_conc[];
+extern Gfx mat_doorhole_covered_cobble[];
+extern Gfx mat_revert_doorhole_covered_cobble[];
+extern Gfx doorhole_covered_doorhole_covered_mesh_layer_1[];
+extern Gfx doorhole_covered_final_revert_mesh_layer_1[];

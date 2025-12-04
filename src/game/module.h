@@ -273,6 +273,7 @@ extern int gMariosModulesSaveIndex;
 extern u8 gMainMenuState;
 extern u8 gMainMenuTargetState;
 extern u8 gModuleTutorialState;
+extern int gMainMenuWarpLocation;
 
 enum {
     MAIN_MENU_TITLE,

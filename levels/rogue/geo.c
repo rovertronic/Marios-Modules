@@ -1,0 +1,20 @@
+#include <ultra64.h>
+#include "sm64.h"
+#include "geo_commands.h"
+
+#include "game/level_geo.h"
+#include "game/geo_misc.h"
+#include "game/camera.h"
+#include "game/moving_texture.h"
+#include "game/screen_transition.h"
+#include "game/paintings.h"
+
+#include "make_const_nonconst.h"
+
+#include "header.h"
+
+#include "geo.inc.c"
+#include "minijunc/geo.inc.c"
+#include "smallhall/geo.inc.c"
+#include "doorhole/geo.inc.c"
+#include "doorhole_covered/geo.inc.c"

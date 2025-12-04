@@ -1,0 +1,5 @@
+#include "levels/rogue/area_1/collision.inc.c"
+#include "levels/rogue/area_1/room.inc.c"
+#include "levels/rogue/area_1/macro.inc.c"
+#include "levels/rogue/area_1/spline.inc.c"
+#include "levels/rogue/model.inc.c"

@@ -18,14 +18,18 @@ struct DungeonRoomVariantCellList {
 
 struct DungeonRoomVariant {
     struct DungeonRoomVariantCellList * cellList;
+    ModelID16 model;
+    Collision * collision;
     u8 generateOnce:1;
 };
 
 struct DungeonRoom {
     u32 neighborFlag;
-    u8 roomVariant;
     u8 direction;
-    struct Object * roomObject; 
+    u8 xorigin;
+    u8 yorigin;
+    struct DungeonRoomVariant * variant;
+    struct Object * obj; 
 };
 
 struct DungeonCell {

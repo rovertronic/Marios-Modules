@@ -1,0 +1,21 @@
+#include <ultra64.h>
+#include "sm64.h"
+#include "surface_terrains.h"
+#include "moving_texture_macros.h"
+#include "level_misc_macros.h"
+#include "macro_preset_names.h"
+#include "special_preset_names.h"
+#include "textures.h"
+#include "dialog_ids.h"
+
+#include "make_const_nonconst.h"
+
+#include "leveldata.inc.c"
+#include "minijunc/collision.inc.c"
+#include "minijunc/model.inc.c"
+#include "smallhall/collision.inc.c"
+#include "smallhall/model.inc.c"
+#include "doorhole/collision.inc.c"
+#include "doorhole/model.inc.c"
+#include "doorhole_covered/collision.inc.c"
+#include "doorhole_covered/model.inc.c"

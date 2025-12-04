@@ -803,7 +803,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
 
             case WARP_OP_LOOK_UP: // enter totwc
                 sDelayedWarpTimer = 30;
-                sSourceWarpNodeId = 2;
+                sSourceWarpNodeId = gMainMenuWarpLocation;
                 play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0xFF, 0xFF, 0xFF);
                 play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
                 break;
@@ -1421,6 +1421,7 @@ s32 lvl_set_current_level(UNUSED s16 initOrUpdate, s32 levelNum) {
     sWarpCheckpointActive = FALSE;
     gCurrLevelNum = levelNum;
     gCurrCourseNum = gLevelToCourseNumTable[levelNum - 1];
+	if (gCurrLevelNum == LEVEL_ROGUE) return 0;
 	if (gCurrLevelNum == LEVEL_TEMPLE) return 0;
 
     if (gCurrDemoInput != NULL || gCurrCreditsEntry != NULL || gCurrCourseNum == COURSE_NONE) {
