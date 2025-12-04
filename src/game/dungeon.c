@@ -330,8 +330,13 @@ void dungeon_spawn_room_objects(void) {
             if (sDungeonCellProcessList[i]->doorFlags & (1<<j)) {
                 struct Object * doorObj;
                 if (dungeon_door_on_other_side(sDungeonCellProcessList[i]->x,sDungeonCellProcessList[i]->y,j)) {
-                    doorObj = spawn_object(gMarioObject, MODEL_DUNGEON_DOORHOLE ,bhvDungeonProcGenRoom);
-                    doorObj->collisionData = segmented_to_virtual(doorhole_collision);
+                    if (j == 0 || j == 1) {
+                        doorObj = spawn_object(gMarioObject, MODEL_DUNGEON_DOORHOLE ,bhvDungeonProcGenRoom);
+                        doorObj->collisionData = segmented_to_virtual(doorhole_collision);
+                    } else {
+                        doorObj = spawn_object(gMarioObject, MODEL_NONE, bhvStaticObject);
+                        obj_mark_for_deletion(doorObj);
+                    }
                 } else {
                     doorObj = spawn_object(gMarioObject, MODEL_DUNGEON_DOORHOLE_COVERED ,bhvDungeonProcGenRoom);
                     doorObj->collisionData = segmented_to_virtual(doorhole_covered_collision);
