@@ -18,8 +18,11 @@ struct DungeonRoomVariantCellList {
 
 struct DungeonRoomVariant {
     struct DungeonRoomVariantCellList * cellList;
+    s8 * requiredLoot;
+
     ModelID16 model;
     Collision * collision;
+    u8 maxLootCt:2;
     u8 generateOnce:1;
 };
 
@@ -28,8 +31,10 @@ struct DungeonRoom {
     u8 direction;
     u8 xorigin;
     u8 yorigin;
+    u8 lootCount;
+    s8 loot[4];
     struct DungeonRoomVariant * variant;
-    struct Object * obj; 
+    struct Object * obj;
 };
 
 struct DungeonCell {

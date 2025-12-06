@@ -515,17 +515,6 @@ u8 doorhole_conk_i8[] = {
 	
 };
 
-Vtx doorhole_doorhole_mesh_layer_1_vtx_cull[8] = {
-	{{ {-27, 0, 200}, 0, {0, 0}, {0, 0, 0, 0} }},
-	{{ {-27, 560, 200}, 0, {0, 0}, {0, 0, 0, 0} }},
-	{{ {-27, 560, -200}, 0, {0, 0}, {0, 0, 0, 0} }},
-	{{ {-27, 0, -200}, 0, {0, 0}, {0, 0, 0, 0} }},
-	{{ {27, 0, 200}, 0, {0, 0}, {0, 0, 0, 0} }},
-	{{ {27, 560, 200}, 0, {0, 0}, {0, 0, 0, 0} }},
-	{{ {27, 560, -200}, 0, {0, 0}, {0, 0, 0, 0} }},
-	{{ {27, 0, -200}, 0, {0, 0}, {0, 0, 0, 0} }},
-};
-
 Vtx doorhole_doorhole_mesh_layer_1_vtx_0[52] = {
 	{{ {27, 280, 200}, 0, {-26, 126}, {217, 217, 217, 255} }},
 	{{ {27, 0, 200}, 0, {-1475, 1574}, {217, 217, 217, 255} }},
@@ -630,17 +619,9 @@ Gfx mat_revert_doorhole_conc[] = {
 };
 
 Gfx doorhole_doorhole_mesh_layer_1[] = {
-	gsSPClearGeometryMode(G_LIGHTING),
-	gsSPVertex(doorhole_doorhole_mesh_layer_1_vtx_cull + 0, 8, 0),
-	gsSPSetGeometryMode(G_LIGHTING),
-	gsSPCullDisplayList(0, 7),
 	gsSPDisplayList(mat_doorhole_conc),
 	gsSPDisplayList(doorhole_doorhole_mesh_layer_1_tri_0),
 	gsSPDisplayList(mat_revert_doorhole_conc),
-	gsSPEndDisplayList(),
-};
-
-Gfx doorhole_final_revert_mesh_layer_1[] = {
 	gsDPPipeSync(),
 	gsSPSetGeometryMode(G_LIGHTING),
 	gsSPClearGeometryMode(G_TEXTURE_GEN),

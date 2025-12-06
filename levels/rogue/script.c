@@ -23,9 +23,13 @@ const LevelScript level_rogue_entry[] = {
 	ALLOC_LEVEL_POOL(),
 	MARIO(MODEL_MARIO, 0x00000001, bhvMario), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_MINIJUNC, minijunc_geo), 
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SHORT_HALL, smallhall_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SHORT_HALL, smallhall_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_LOBBY, rlobby_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_DOORHOLE, doorhole_geo), 
-	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_DOORHOLE_COVERED, doorhole_covered_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_DOORHOLE_COVERED, doorhole_covered_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_TREASURE, rtresure_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_WALLJUMP, rwalljump_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_LONGJUMP, rlongjump_geo),
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 

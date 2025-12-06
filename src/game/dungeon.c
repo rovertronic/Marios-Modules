@@ -7,6 +7,7 @@
 #include "object_list_processor.h"
 #include "model_ids.h"
 #include "behavior_data.h"
+#include "module.h"
 
 #include "levels/rogue/header.h"
 
@@ -17,6 +18,8 @@
 
 int sDungeonRoomCount = 0;
 int sDungeonLoopCount = 0;
+int sDungeonCurrentDepth = 0;
+int sDungeonLootSlotsAvailible = 0;
 u32 sDungeonUniqueVariantGeneratedFlags;
 
 struct DungeonRoom sDungeonRoomList[40];
@@ -24,6 +27,9 @@ struct DungeonCell sDungeonCellGrid[32][32];
 
 int sDungeonCellProcessCount = 0;
 struct DungeonCell * sDungeonCellProcessList[256];
+
+u8 sDungeonInventory[MOD_COUNT]; // Index = Mod Type, Value = Count
+u8 sDungeonForceRegen = FALSE;
 
 s8 sDirectionList[4][2] = {
     { 1, 0}, // Right
@@ -33,22 +39,6 @@ s8 sDirectionList[4][2] = {
 };
 
 // Room Definitions
-struct DungeonRoomVariantCellList sRoomMainCellList[] = {
-    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
-    {.x = 1, .y = 0},
-    {.x = 2, .y = 0},
-    {.x = 0, .y = 1},
-    {.x = 1, .y = 1},
-    {.x = 2, .y = 1},
-    {.x = 2, .y = -1, .doorFlags = DOOR_DOWN}, // thumb for testing rotation, lol
-    {.end = TRUE},
-};
-
-struct DungeonRoomVariant sRoomMain = {
-    .cellList = &sRoomMainCellList,
-    .generateOnce = FALSE,
-};
-
 struct DungeonRoomVariantCellList sRoomHallCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
     {.x = 1, .y = 0, .doorFlags = DOOR_RIGHT},
@@ -59,54 +49,8 @@ struct DungeonRoomVariant sRoomHall = {
     .cellList = &sRoomHallCellList,
     .model = MODEL_ROOM_SHORT_HALL,
     .collision = smallhall_collision,
-    .generateOnce = FALSE,
-};
-
-struct DungeonRoomVariantCellList sRoomLongHallCellList[] = {
-    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
-    {.x = 1, .y = 0},
-    {.x = 2, .y = 0},
-    {.x = 3, .y = 0, .doorFlags = DOOR_RIGHT},
-    {.end = TRUE},
-};
-
-struct DungeonRoomVariant sRoomLongHall = {
-    .cellList = &sRoomLongHallCellList,
-    .generateOnce = FALSE,
-};
-
-struct DungeonRoomVariantCellList sRoomJunctionCellList[] = {
-    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
-    {.x = 1, .y = 0},
-    {.x = 2, .y = 0, .doorFlags = DOOR_RIGHT},
-    {.x = 1, .y = -1, .doorFlags = DOOR_DOWN},
-    {.x = 1, .y = 1, .doorFlags = DOOR_UP},
-    {.end = TRUE},
-};
-
-struct DungeonRoomVariant sRoomJunction = {
-    .cellList = &sRoomJunctionCellList,
-    .generateOnce = FALSE,
-};
-
-
-struct DungeonRoomVariantCellList sRoomCornerCellList[] = {
-    {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT | DOOR_UP)},
-    {.end = TRUE},
-};
-
-struct DungeonRoomVariant sRoomCorner = {
-    .cellList = &sRoomCornerCellList,
-    .generateOnce = FALSE,
-};
-
-struct DungeonRoomVariantCellList sRoomCorner2CellList[] = {
-    {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT | DOOR_DOWN)},
-    {.end = TRUE},
-};
-
-struct DungeonRoomVariant sRoomCorner2 = {
-    .cellList = &sRoomCorner2CellList,
+    .maxLootCt = 0,
+    .requiredLoot = NULL,
     .generateOnce = FALSE,
 };
 
@@ -119,47 +63,105 @@ struct DungeonRoomVariant sRoomMiniJunc = {
     .cellList = &sRoomMiniJuncCellList,
     .model = MODEL_ROOM_MINIJUNC,
     .collision = minijunc_collision,
+    .maxLootCt = 0,
+    .requiredLoot = NULL,
     .generateOnce = FALSE,
 };
 
-struct DungeonRoomVariantCellList sRoomBigTestCellList[] = {
+struct DungeonRoomVariantCellList sRoomLobbyCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
-    {.x = 1, .y = 0},
+    {.x = 1, .y = 0, .doorFlags = DOOR_DOWN},
     {.x = 2, .y = 0},
-    {.x = 3, .y = 0, .doorFlags = DOOR_RIGHT},
 
-    {.x = 0, .y = 1},
+    {.x = 0, .y = 1, .doorFlags = DOOR_UP},
     {.x = 1, .y = 1},
-    {.x = 2, .y = 1},
-    {.x = 3, .y = 1},
-
-    {.x = 1, .y = 2},
-    {.x = 2, .y = 2},
-
-    {.x = 0, .y = -1},
-    {.x = 1, .y = -1},
-    {.x = 2, .y = -1},
-    {.x = 3, .y = -1},
-
-    {.x = 1, .y = -2},
-    {.x = 2, .y = -2},
+    {.x = 2, .y = 1, .doorFlags = DOOR_UP},
     {.end = TRUE},
 };
 
-struct DungeonRoomVariant sRoomBigTest = {
-    .cellList = &sRoomBigTestCellList,
+struct DungeonRoomVariant sRoomLobby = {
+    .cellList = &sRoomLobbyCellList,
+    .model = MODEL_ROOM_LOBBY,
+    .collision = rlobby_collision,
+    .maxLootCt = 1,
+    .requiredLoot = NULL,
+    .generateOnce = FALSE,
+};
+
+struct DungeonRoomVariantCellList sRoomTreasureCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomTreasure = {
+    .cellList = &sRoomTreasureCellList,
+    .model = MODEL_ROOM_TREASURE,
+    .collision = rtresure_collision,
+    .maxLootCt = 1,
+    .requiredLoot = NULL,
+    .generateOnce = FALSE,
+};
+
+struct DungeonRoomVariantCellList sRoomWallJumpCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0},
+    {.x = 0, .y = 1},
+    {.x = 1, .y = 1},
+    {.x = 2, .y = 1, .doorFlags = DOOR_RIGHT},
+
+    {.x = 1, .y = -1}, // Notch
+    {.end = TRUE},
+};
+
+s8 sRoomWallJumpRequiredLoot[] = {
+    MOD_JUMP, 2,
+    MOD_HIT_WALL, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonRoomVariant sRoomWallJump = {
+    .cellList = &sRoomWallJumpCellList,
+    .model = MODEL_ROOM_WALLJUMP,
+    .collision = rwalljump_collision,
+    .requiredLoot = &sRoomWallJumpRequiredLoot,
     .generateOnce = TRUE,
+};
+
+struct DungeonRoomVariantCellList sRoomLongJumpCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 0, .y = 1},
+    {.x = 1, .y = 1, .doorFlags = DOOR_UP},
+    {.end = TRUE},
+};
+
+s8 sRoomLongJumpRequiredLoot[] = {
+    MOD_ZACTION, 1,
+    MOD_HIT_WALL, 1,
+    MOD_JUMP, 1,
+    MOD_ROTATE, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonRoomVariant sRoomLongJump = {
+    .cellList = &sRoomLongJumpCellList,
+    .model = MODEL_ROOM_LONGJUMP,
+    .collision = rlongjump_collision,
+    .maxLootCt = 0,
+    .requiredLoot = sRoomLongJumpRequiredLoot,
+    .generateOnce = FALSE,
 };
 
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomHall,
-    //&sRoomCorner,
-    //&sRoomCorner2,
-    //&sRoomJunction,
-    //&sRoomMain,
     &sRoomMiniJunc,
-    //&sRoomLongHall,
-    //&sRoomBigTest,
+    &sRoomLobby,
+    &sRoomWallJump,
+    &sRoomLongJump,
+    // Treasure rooms are 2x as likely to spawn
+    &sRoomTreasure,
+    &sRoomTreasure,
 };
 
 
@@ -198,6 +200,64 @@ s32 dungeon_door_on_other_side(int xp, int yp, int j) {
         }
     }
     return FALSE;
+}
+
+s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
+    int chosen_room_index = random_u16()%sDungeonRoomCount;
+    for (int i = 0; i < 10; i++) {
+        chosen_room_index = random_u16()%sDungeonRoomCount;
+        if ((sDungeonRoomList[chosen_room_index].lootCount < sDungeonRoomList[chosen_room_index].variant->maxLootCt)&&
+            ((i>5)||(sDungeonRoomList[chosen_room_index].variant == &sRoomTreasure))) { // Prioritize treasure rooms for loot
+            sDungeonRoomList[chosen_room_index].loot[sDungeonRoomList[chosen_room_index].lootCount] = loot;
+            sDungeonRoomList[chosen_room_index].lootCount++;
+            sDungeonLootSlotsAvailible --;
+            return TRUE;
+        }
+    }
+
+    // Guess I couldn't find a random room, try every availible room instead
+    for (int i = 0; i < sDungeonRoomCount; i++) {
+        if (sDungeonRoomList[chosen_room_index].lootCount < sDungeonRoomList[chosen_room_index].variant->maxLootCt) {
+            sDungeonRoomList[chosen_room_index].loot[sDungeonRoomList[chosen_room_index].lootCount] = loot;
+            sDungeonRoomList[chosen_room_index].lootCount++;
+            sDungeonLootSlotsAvailible --;
+            return TRUE;  
+        }
+    }
+
+    sDungeonForceRegen = TRUE;
+    return FALSE;
+}
+
+void dungeon_propegate_loot_with_requirement_list(s8 * requirementList) {
+    if (requirementList != NULL) {
+        int i = 0;
+        while(requirementList[i] != MOD_EMPTY) {
+            s8 lootType = requirementList[i];
+            i++;
+            s8 lootCount = requirementList[i];
+            i++;
+
+            for (int i = 0; i < lootCount; i++) {
+                if (sDungeonInventory[lootType] < lootCount) {
+                    sDungeonInventory[lootType] ++;
+                    dungeon_place_loot_in_random_previous_room(lootType);
+                }
+            }
+        }
+    }
+}
+
+s32 dungeon_requirement_list_length(s8 * requirementList) {
+    s32 lootSlotsNeeded = 0;
+    if (requirementList != NULL) {
+        int i = 0;
+        while(requirementList[i] != MOD_EMPTY) {
+            lootSlotsNeeded++;
+            i+=2;
+        }
+    }
+    return lootSlotsNeeded;
 }
 
 void dungeon_create_room(struct DungeonRoomVariant * variant, int dir, int x, int y) {
@@ -252,6 +312,13 @@ void dungeon_create_room(struct DungeonRoomVariant * variant, int dir, int x, in
     sDungeonRoomList[sDungeonRoomCount-1].variant = variant;
     sDungeonRoomList[sDungeonRoomCount-1].xorigin = x;
     sDungeonRoomList[sDungeonRoomCount-1].yorigin = y;
+
+    sDungeonRoomList[sDungeonRoomCount-1].lootCount = 0;
+    for (int i = 0; i < 4; i++) {
+        sDungeonRoomList[sDungeonRoomCount-1].loot[i] = MOD_EMPTY;
+    }
+
+    sDungeonLootSlotsAvailible+=variant->maxLootCt;
 }
 
 int dungeon_check_room_viability(struct DungeonRoomVariant * variant, int dir, int x, int y) {
@@ -274,8 +341,9 @@ int dungeon_check_room_viability(struct DungeonRoomVariant * variant, int dir, i
     return TRUE;
 }
 
-
 void dungeon_generate_rooms_at_doors(void) {
+    sDungeonCurrentDepth++;
+
     int i_max = sDungeonCellProcessCount;
     for (int i = 0; i < i_max; i++) {
         if (sDungeonCellProcessList[i]->resolved) {continue;}
@@ -289,7 +357,7 @@ void dungeon_generate_rooms_at_doors(void) {
                 
                 int success = FALSE;
                 int trycount = 0;
-                while(!success && trycount < 10){
+                while(!success && trycount < 10) {
                     int selectedVariantIndex = random_u16() %  (sizeof(sRoomVariantList)/4);
                     struct DungeonRoomVariant * selectedVariant = sRoomVariantList[selectedVariantIndex];
 
@@ -299,9 +367,16 @@ void dungeon_generate_rooms_at_doors(void) {
                         continue;
                     }
 
+                    if (dungeon_requirement_list_length(selectedVariant->requiredLoot) > sDungeonLootSlotsAvailible) {
+                        // if not enough treasure slots, don't make this room
+                        trycount++;
+                        continue;
+                    }
+
                     if (dungeon_check_room_viability(selectedVariant,j,x,y)) {
                         sDungeonUniqueVariantGeneratedFlags |= (1<<selectedVariantIndex);
 
+                        dungeon_propegate_loot_with_requirement_list(selectedVariant->requiredLoot);
                         dungeon_create_room(selectedVariant,j,x,y);
                         success = TRUE;
                     }
@@ -321,6 +396,14 @@ void dungeon_spawn_room_objects(void) {
         roomObj->oPosZ = 32000.f - (sDungeonRoomList[i].yorigin * 2000.f);
         roomObj->oFaceAngleYaw = sDungeonRoomList[i].direction * 0x4000;
         roomObj->collisionData = segmented_to_virtual(sDungeonRoomList[i].variant->collision);
+
+        // Spawn Loot (Chests, Stars, Keys)
+        for (int j = 0; j < sDungeonRoomList[i].lootCount; j++) {
+            struct Object * chest = spawn_object(gMarioObject, MODEL_CHEST, bhvChest);
+            vec3f_copy(&chest->oPosVec,&roomObj->oPosVec);
+            chest->oPosX += 150.0f*j;
+            chest->oBehParams2ndByte = sDungeonRoomList[i].loot[j];
+        }
     }
 
     // Door holes
@@ -351,14 +434,18 @@ void dungeon_spawn_room_objects(void) {
 
 void dungeon_generate(void) {
     redo_generate:
+    sDungeonForceRegen = FALSE;
 
     // Clear dungeon data
     sDungeonRoomCount = 0;
     sDungeonLoopCount = 0;
+    sDungeonCurrentDepth = 0;
+    sDungeonLootSlotsAvailible = 0;
     sDungeonUniqueVariantGeneratedFlags = 0;
     sDungeonCellProcessCount = 0;
     
-    bzero(&sDungeonCellGrid,sizeof(sDungeonCellGrid));
+    bzero(&sDungeonCellGrid, sizeof(sDungeonCellGrid));
+    bzero(&sDungeonInventory, sizeof(sDungeonInventory));
 
     // Randomize Seed
     tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
@@ -375,7 +462,7 @@ void dungeon_generate(void) {
     dungeon_generate_rooms_at_doors();
     //dungeon_generate_rooms_at_doors();
 
-    if (sDungeonLoopCount < 2) {
+    if (sDungeonLoopCount < 2 || sDungeonForceRegen) {
         goto redo_generate;
     }
 
@@ -396,6 +483,7 @@ u8 sDebugColorList[][3] = {
 
 void dungeon_debug_print(void) {
     print_text_fmt_int(0, 200, "LOOP CT %d", sDungeonLoopCount);
+    print_text_fmt_int(0, 220, "LOOT SLOTS %d", sDungeonLootSlotsAvailible);
 
     for (int y = 0; y < 32; y++) {
         for (int x = 0; x < 32; x++) {

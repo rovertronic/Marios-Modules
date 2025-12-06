@@ -15,4 +15,12 @@ extern const LevelScript level_rogue_entry[];
 #include "doorhole/geo_header.h"
 #include "doorhole_covered/collision_header.h"
 #include "doorhole_covered/geo_header.h"
+#include "rlobby/collision_header.h"
+#include "rlobby/geo_header.h"
+#include "rtresure/collision_header.h"
+#include "rtresure/geo_header.h"
+#include "rwalljump/collision_header.h"
+#include "rwalljump/geo_header.h"
+#include "rlongjump/collision_header.h"
+#include "rlongjump/geo_header.h"
 #endif

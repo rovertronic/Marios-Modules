@@ -18,3 +18,7 @@
 #include "smallhall/geo.inc.c"
 #include "doorhole/geo.inc.c"
 #include "doorhole_covered/geo.inc.c"
+#include "rlobby/geo.inc.c"
+#include "rtresure/geo.inc.c"
+#include "rwalljump/geo.inc.c"
+#include "rlongjump/geo.inc.c"
