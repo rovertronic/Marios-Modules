@@ -199,6 +199,7 @@ enum module_id {
     MOD_ROTATE,
     MOD_IF_WALL,
     MOD_TIME_EXTEND,
+    MOD_NONMOD_STAR,
     MOD_COUNT,
 };
 

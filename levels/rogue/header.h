@@ -23,4 +23,6 @@ extern const LevelScript level_rogue_entry[];
 #include "rwalljump/geo_header.h"
 #include "rlongjump/collision_header.h"
 #include "rlongjump/geo_header.h"
+#include "carpetPoint/collision_header.h"
+#include "carpetPoint/geo_header.h"
 #endif

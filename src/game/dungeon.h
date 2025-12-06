@@ -9,6 +9,15 @@
 #define DOOR_LEFT  (1<<2)
 #define DOOR_UP    (1<<3)
 
+struct DungeonObject {
+    BehaviorScript bhv;
+    ModelID16 model;
+    s16 angle;
+    u8 param;
+    Vec3f pos;
+    u8 end;
+};
+
 struct DungeonRoomVariantCellList {
     u8 end;
     s8 x;
@@ -19,6 +28,8 @@ struct DungeonRoomVariantCellList {
 struct DungeonRoomVariant {
     struct DungeonRoomVariantCellList * cellList;
     s8 * requiredLoot;
+    Vec4f * lootLocations; // 4 = rot
+    struct DungeonObject * objectList;
 
     ModelID16 model;
     Collision * collision;

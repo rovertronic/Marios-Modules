@@ -27,3 +27,5 @@
 #include "rwalljump/model.inc.c"
 #include "rlongjump/collision.inc.c"
 #include "rlongjump/model.inc.c"
+#include "carpetPoint/collision.inc.c"
+#include "carpetPoint/model.inc.c"

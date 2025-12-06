@@ -22,3 +22,4 @@
 #include "rtresure/geo.inc.c"
 #include "rwalljump/geo.inc.c"
 #include "rlongjump/geo.inc.c"
+#include "carpetPoint/geo.inc.c"

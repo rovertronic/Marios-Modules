@@ -20,9 +20,10 @@ int sDungeonRoomCount = 0;
 int sDungeonLoopCount = 0;
 int sDungeonCurrentDepth = 0;
 int sDungeonLootSlotsAvailible = 0;
+int sDungeonCoinBalance = 0;
 u32 sDungeonUniqueVariantGeneratedFlags;
 
-struct DungeonRoom sDungeonRoomList[40];
+struct DungeonRoom sDungeonRoomList[64];
 struct DungeonCell sDungeonCellGrid[32][32];
 
 int sDungeonCellProcessCount = 0;
@@ -45,10 +46,19 @@ struct DungeonRoomVariantCellList sRoomHallCellList[] = {
     {.end = TRUE},
 };
 
+struct DungeonObject sRoomHallObjectList[] = {
+    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 0,
+    .angle = 0x4000, .pos = {0.f,0.f,0.f}},
+    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 0,
+    .angle = 0x4000, .pos = {-20.f,0.f,0.f}},
+    {.end = TRUE},
+};
+
 struct DungeonRoomVariant sRoomHall = {
     .cellList = &sRoomHallCellList,
     .model = MODEL_ROOM_SHORT_HALL,
     .collision = smallhall_collision,
+    .objectList = &sRoomHallObjectList,
     .maxLootCt = 0,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
@@ -63,6 +73,7 @@ struct DungeonRoomVariant sRoomMiniJunc = {
     .cellList = &sRoomMiniJuncCellList,
     .model = MODEL_ROOM_MINIJUNC,
     .collision = minijunc_collision,
+    .objectList = NULL,
     .maxLootCt = 0,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
@@ -79,13 +90,19 @@ struct DungeonRoomVariantCellList sRoomLobbyCellList[] = {
     {.end = TRUE},
 };
 
+Vec4f sRoomLobbyLootLocations[] = {
+    {-38.851f,11.3259f,-2.12417f, 0.f},
+};
+
 struct DungeonRoomVariant sRoomLobby = {
     .cellList = &sRoomLobbyCellList,
     .model = MODEL_ROOM_LOBBY,
     .collision = rlobby_collision,
+    .objectList = NULL,
     .maxLootCt = 1,
+    .lootLocations = &sRoomLobbyLootLocations,
     .requiredLoot = NULL,
-    .generateOnce = FALSE,
+    .generateOnce = TRUE,
 };
 
 struct DungeonRoomVariantCellList sRoomTreasureCellList[] = {
@@ -94,11 +111,17 @@ struct DungeonRoomVariantCellList sRoomTreasureCellList[] = {
     {.end = TRUE},
 };
 
+Vec4f sRoomTreasureLootLocations[] = {
+    {-26.4795f,.0f,3.27412f,90.f},
+};
+
 struct DungeonRoomVariant sRoomTreasure = {
     .cellList = &sRoomTreasureCellList,
     .model = MODEL_ROOM_TREASURE,
     .collision = rtresure_collision,
+    .objectList = NULL,
     .maxLootCt = 1,
+    .lootLocations = &sRoomTreasureLootLocations,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
 };
@@ -118,13 +141,21 @@ struct DungeonRoomVariantCellList sRoomWallJumpCellList[] = {
 s8 sRoomWallJumpRequiredLoot[] = {
     MOD_JUMP, 2,
     MOD_HIT_WALL, 1,
+    MOD_NONMOD_STAR, 2,
     MOD_EMPTY,
+};
+
+Vec4f sRoomWallJumpLootLocations[] = {
+    {-20.f,-20.8865f,1.f,180.f},
 };
 
 struct DungeonRoomVariant sRoomWallJump = {
     .cellList = &sRoomWallJumpCellList,
     .model = MODEL_ROOM_WALLJUMP,
     .collision = rwalljump_collision,
+    .objectList = NULL,
+    .maxLootCt = 1,
+    .lootLocations = &sRoomWallJumpLootLocations,
     .requiredLoot = &sRoomWallJumpRequiredLoot,
     .generateOnce = FALSE,
 };
@@ -141,6 +172,7 @@ s8 sRoomLongJumpRequiredLoot[] = {
     MOD_HIT_WALL, 1,
     MOD_JUMP, 1,
     MOD_ROTATE, 1,
+    MOD_NONMOD_STAR, 3,
     MOD_EMPTY,
 };
 
@@ -148,7 +180,7 @@ struct DungeonRoomVariant sRoomLongJump = {
     .cellList = &sRoomLongJumpCellList,
     .model = MODEL_ROOM_LONGJUMP,
     .collision = rlongjump_collision,
-    .maxLootCt = 0,
+    .objectList = NULL,
     .requiredLoot = sRoomLongJumpRequiredLoot,
     .generateOnce = FALSE,
 };
@@ -159,9 +191,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomLobby,
     &sRoomWallJump,
     &sRoomLongJump,
-    // Treasure rooms are 2x as likely to spawn
     &sRoomTreasure,
-    //&sRoomTreasure,
 };
 
 
@@ -295,7 +325,6 @@ void dungeon_create_room(struct DungeonRoomVariant * variant, int dir, int x, in
                 if (sDungeonCellGrid[yp][xp].doorFlags & (1 << j)) {
                     if (dungeon_door_on_other_side(x,y,j)) {
                         sDungeonLoopCount++;
-                        sDungeonCellGrid[y][x].id = 99;
                     }
                 }
             }
@@ -362,6 +391,11 @@ void dungeon_generate_rooms_at_doors(void) {
                     int selectedVariantIndex = random_u16() %  (sizeof(sRoomVariantList)/4);
                     struct DungeonRoomVariant * selectedVariant = sRoomVariantList[selectedVariantIndex];
 
+                    if (sDungeonRoomCount >= 50) {
+                        success = TRUE;
+                        continue;
+                    }
+
                     if (selectedVariant->generateOnce &&
                         sDungeonUniqueVariantGeneratedFlags & (1<<selectedVariantIndex)) {
                         trycount++;
@@ -398,12 +432,79 @@ void dungeon_spawn_room_objects(void) {
         roomObj->oFaceAngleYaw = sDungeonRoomList[i].direction * 0x4000;
         roomObj->collisionData = segmented_to_virtual(sDungeonRoomList[i].variant->collision);
 
+        if (sDungeonRoomList[i]. variant == &sRoomMiniJunc) {
+            for (int j = 0; j < 4; j ++) {
+                if (dungeon_door_on_other_side(sDungeonRoomList[i].xorigin,sDungeonRoomList[i].yorigin,j)) {
+                    struct Object * carpetPoint = spawn_object(gMarioObject, MODEL_DUNGEON_CARPET_POINT, bhvStaticObject);
+                    carpetPoint->oPosX = 32000.f - (sDungeonRoomList[i].xorigin * 2000.f);
+                    carpetPoint->oPosZ = 32000.f - (sDungeonRoomList[i].yorigin * 2000.f);
+                    carpetPoint->oFaceAngleYaw = j * 0x4000;
+                }
+            }
+        }
+
+
         // Spawn Loot (Chests, Stars, Keys)
         for (int j = 0; j < sDungeonRoomList[i].lootCount; j++) {
-            struct Object * chest = spawn_object(gMarioObject, MODEL_CHEST, bhvChest);
+            struct Object * chest;
+            if (sDungeonRoomList[i].loot[j] == MOD_NONMOD_STAR) {
+                chest = spawn_object(gMarioObject, MODEL_STAR, bhvStar);
+            } else {
+                chest = spawn_object(gMarioObject, MODEL_CHEST, bhvChest);
+            }
             vec3f_copy(&chest->oPosVec,&roomObj->oPosVec);
-            chest->oPosX += 150.0f*j;
+            s16 angle = sDungeonRoomList[i].direction * 0x4000;
+            chest->oPosX += (sDungeonRoomList[i].variant->lootLocations[j][0] * 100.f * sins(angle + 0x4000))
+                + (sDungeonRoomList[i].variant->lootLocations[j][1] * 100.f * sins(angle + 0x8000));
+            chest->oPosZ += (sDungeonRoomList[i].variant->lootLocations[j][0] * 100.f * coss(angle + 0x4000))
+                + (sDungeonRoomList[i].variant->lootLocations[j][1] * 100.f * coss(angle + 0x8000));
+            chest->oPosY += sDungeonRoomList[i].variant->lootLocations[j][2] * 100.f;
+            chest->oFaceAngleYaw = angle + (182.f * sDungeonRoomList[i].variant->lootLocations[j][3]);
             chest->oBehParams2ndByte = sDungeonRoomList[i].loot[j];
+
+            if (sDungeonCoinBalance>=10) {
+                //randomly make chests cost money
+                SET_BPARAM1(chest->oBehParams,10);
+                sDungeonCoinBalance-=10;
+            }
+
+            // Raise the star a bit
+            if (sDungeonRoomList[i].loot[j] == MOD_NONMOD_STAR) {
+                chest->oPosY += 100.0f;
+            }
+        }
+
+        // Spawn Objects
+        if (sDungeonRoomList[i].variant->objectList != NULL) {
+            int j = 0;
+            while(sDungeonRoomList[i].variant->objectList[j].end == FALSE) {
+                struct DungeonObject * details = &sDungeonRoomList[i].variant->objectList[j];
+                s16 angle = sDungeonRoomList[i].direction * 0x4000;
+
+                if (details->bhv == bhvCoinFormation) {
+                    if (random_u16()%2==0) {
+                        // Sometimes, don't spawn coins
+                        continue;
+                    }
+                    sDungeonCoinBalance+=5;
+                    if (details->param == 2) {
+                        sDungeonCoinBalance += 3;
+                    }
+                }
+
+                struct Object * obj = spawn_object(gMarioObject, details->model, details->bhv);
+                vec3f_copy(&obj->oPosVec,&roomObj->oPosVec);
+
+                obj->oPosX += (details->pos[0] * 100.f * sins(angle + 0x4000))
+                    + (details->pos[1] * 100.f * sins(angle + 0x8000));
+                obj->oPosZ += (details->pos[0] * 100.f * coss(angle + 0x4000))
+                    + (details->pos[1] * 100.f * coss(angle + 0x8000));
+                obj->oPosY += details->pos[2] * 100.f;
+                obj->oFaceAngleYaw = angle + details->angle;;
+                obj->oBehParams2ndByte = details->param;
+
+                j++;
+            }
         }
     }
 
@@ -442,6 +543,7 @@ void dungeon_generate(void) {
     sDungeonLoopCount = 0;
     sDungeonCurrentDepth = 0;
     sDungeonLootSlotsAvailible = 0;
+    sDungeonCoinBalance = 0;
     sDungeonUniqueVariantGeneratedFlags = 0;
     sDungeonCellProcessCount = 0;
     
@@ -456,12 +558,9 @@ void dungeon_generate(void) {
     //dungeon_create_room(&sRoomHall  ,0,8,8);
     dungeon_create_room(&sRoomMiniJunc  ,0,16,16);
 
-    dungeon_generate_rooms_at_doors();
-    dungeon_generate_rooms_at_doors();
-    dungeon_generate_rooms_at_doors();
-    dungeon_generate_rooms_at_doors();
-    dungeon_generate_rooms_at_doors();
-    //dungeon_generate_rooms_at_doors();
+    for (int i = 0; i < 20; i++) {
+        dungeon_generate_rooms_at_doors();
+    }
 
     if (sDungeonLoopCount < 2 || sDungeonForceRegen) {
         goto redo_generate;
@@ -484,7 +583,7 @@ u8 sDebugColorList[][3] = {
 
 void dungeon_debug_print(void) {
     print_text_fmt_int(0, 200, "LOOP CT %d", sDungeonLoopCount);
-    print_text_fmt_int(0, 220, "LOOT SLOTS %d", sDungeonLootSlotsAvailible);
+    print_text_fmt_int(0, 220, "ITEM SLOTS %d", sDungeonLootSlotsAvailible);
 
     for (int y = 0; y < 32; y++) {
         for (int x = 0; x < 32; x++) {
@@ -497,13 +596,6 @@ void dungeon_debug_print(void) {
                     sDebugColorList[sDungeonCellGrid[y][x].id%6][0],
                     sDebugColorList[sDungeonCellGrid[y][x].id%6][1],
                     sDebugColorList[sDungeonCellGrid[y][x].id%6][2]);
-
-                    if (sDungeonCellGrid[y][x].id == 99) {
-                        print_utf8_color(".",40+x*3, 40+y*3,
-                        255,
-                        0,
-                        0);
-                    }
                 #endif
             }
         }
