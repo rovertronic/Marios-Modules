@@ -102,7 +102,7 @@ struct DungeonRoomVariant sRoomLobby = {
     .maxLootCt = 1,
     .lootLocations = &sRoomLobbyLootLocations,
     .requiredLoot = NULL,
-    .generateOnce = TRUE,
+    .generateOnce = FALSE,
 };
 
 struct DungeonRoomVariantCellList sRoomTreasureCellList[] = {
@@ -284,15 +284,15 @@ s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
 
     // Guess I couldn't find a random room, try every availible room instead
     for (int i = 0; i < sDungeonRoomCount; i++) {
-        if (sDungeonRoomList[chosen_room_index].lootCount < sDungeonRoomList[chosen_room_index].variant->maxLootCt) {
-            sDungeonRoomList[chosen_room_index].loot[sDungeonRoomList[chosen_room_index].lootCount] = loot;
-            sDungeonRoomList[chosen_room_index].lootCount++;
+        if (sDungeonRoomList[i].lootCount < sDungeonRoomList[i].variant->maxLootCt) {
+            sDungeonRoomList[i].loot[sDungeonRoomList[i].lootCount] = loot;
+            sDungeonRoomList[i].lootCount++;
             sDungeonLootSlotsAvailible --;
             return TRUE;  
         }
     }
 
-    //sDungeonForceRegen = TRUE;
+    sDungeonForceRegen = TRUE;
     return FALSE;
 }
 
@@ -510,7 +510,7 @@ void dungeon_spawn_room_objects(void) {
                 }
             }
 
-            if (sDungeonCoinBalance>=10) {
+            if ((random_u16()%2==0)&&sDungeonCoinBalance>=10) {
                 //randomly make chests cost money
                 SET_BPARAM1(chest->oBehParams,10);
                 sDungeonCoinBalance-=10;
@@ -532,6 +532,7 @@ void dungeon_spawn_room_objects(void) {
                 if (details->bhv == bhvCoinFormation) {
                     if (random_u16()%2==0) {
                         // Sometimes, don't spawn coins
+                        j++;
                         continue;
                     }
                     sDungeonCoinBalance+=5;
@@ -608,9 +609,17 @@ void dungeon_generate(void) {
         dungeon_generate_rooms_at_doors();
     }
 
-    // Fill remaining loot rooms with mystery chests
-    while(sDungeonLootSlotsAvailible > 0) {
-        dungeon_place_loot_in_random_previous_room(MOD_NONMOD_MYSTERY_CHEST);
+    // Manually fill remaining empty treasure rooms and challenge rooms with mystery chests and stars
+    for (int i = 0; i < sDungeonRoomCount; i++) {
+        if ((sDungeonRoomList[i].variant == &sRoomTreasure || sDungeonRoomList[i].variant->requiredLoot) &&
+            sDungeonRoomList[i].lootCount == 0 && sDungeonRoomList[i].variant->maxLootCt > 0) {
+            sDungeonRoomList[i].lootCount = 1;
+            if (random_u16()%2==0) {
+                sDungeonRoomList[i].loot[0] = MOD_NONMOD_STAR;
+            } else {
+                sDungeonRoomList[i].loot[0] = MOD_NONMOD_MYSTERY_CHEST;
+            }
+        }
     }
 
     if (sDungeonLoopCount < 2 || sDungeonForceRegen) {
