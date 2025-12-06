@@ -185,6 +185,41 @@ struct DungeonRoomVariant sRoomLongJump = {
     .generateOnce = FALSE,
 };
 
+struct DungeonRoomVariantCellList sRoomVanishHopCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0, .doorFlags = DOOR_RIGHT},
+
+    {.x = 0, .y = 1},
+    {.x = 1, .y = 1},
+    {.x = 2, .y = 1},
+
+    {.x = 0, .y = -1},
+    {.x = 1, .y = -1},
+    {.x = 2, .y = -1},
+
+    {.end = TRUE},
+};
+
+s8 sRoomVanishHopRequiredLoot[] = {
+    MOD_JUMP, 1,
+    MOD_POW, 1,
+    MOD_CAP, 1,
+    MOD_NONMOD_STAR, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonRoomVariant sRoomVanishHop = {
+    .cellList = &sRoomVanishHopCellList,
+    .model = MODEL_ROOM_VANISHHOP,
+    .collision = vanishhop_collision,
+    .objectList = NULL,
+    .maxLootCt = 0,
+    //.lootLocations = &sRoomWallJumpLootLocations,
+    .requiredLoot = &sRoomVanishHopRequiredLoot,
+    .generateOnce = TRUE,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomHall,
     &sRoomMiniJunc,
@@ -192,6 +227,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomWallJump,
     &sRoomLongJump,
     &sRoomTreasure,
+    &sRoomVanishHop,
 };
 
 
@@ -256,7 +292,7 @@ s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
         }
     }
 
-    sDungeonForceRegen = TRUE;
+    //sDungeonForceRegen = TRUE;
     return FALSE;
 }
 
@@ -447,10 +483,15 @@ void dungeon_spawn_room_objects(void) {
         // Spawn Loot (Chests, Stars, Keys)
         for (int j = 0; j < sDungeonRoomList[i].lootCount; j++) {
             struct Object * chest;
-            if (sDungeonRoomList[i].loot[j] == MOD_NONMOD_STAR) {
-                chest = spawn_object(gMarioObject, MODEL_STAR, bhvStar);
-            } else {
-                chest = spawn_object(gMarioObject, MODEL_CHEST, bhvChest);
+            switch (sDungeonRoomList[i].loot[j]) {
+                case MOD_NONMOD_STAR:
+                    chest = spawn_object(gMarioObject, MODEL_STAR, bhvStar);
+                break;
+                case MOD_NONMOD_MYSTERY_CHEST:
+                    chest = spawn_object(gMarioObject, MODEL_MCHEST, bhvMysteryChest);
+                    break;
+                default:
+                    chest = spawn_object(gMarioObject, MODEL_CHEST, bhvChest);
             }
             vec3f_copy(&chest->oPosVec,&roomObj->oPosVec);
             s16 angle = sDungeonRoomList[i].direction * 0x4000;
@@ -461,6 +502,13 @@ void dungeon_spawn_room_objects(void) {
             chest->oPosY += sDungeonRoomList[i].variant->lootLocations[j][2] * 100.f;
             chest->oFaceAngleYaw = angle + (182.f * sDungeonRoomList[i].variant->lootLocations[j][3]);
             chest->oBehParams2ndByte = sDungeonRoomList[i].loot[j];
+
+            if (sDungeonRoomList[i].loot[j] == MOD_NONMOD_MYSTERY_CHEST) {
+                chest->oBehParams2ndByte = 0;
+                if (random_u16()%3==0) {
+                    chest->oBehParams2ndByte = 1;
+                }
+            }
 
             if (sDungeonCoinBalance>=10) {
                 //randomly make chests cost money
@@ -554,12 +602,15 @@ void dungeon_generate(void) {
     tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
 
     // Build First Room
-    //dungeon_create_room(&sRoomJunction,0,8,8);
-    //dungeon_create_room(&sRoomHall  ,0,8,8);
     dungeon_create_room(&sRoomMiniJunc  ,0,16,16);
 
     for (int i = 0; i < 20; i++) {
         dungeon_generate_rooms_at_doors();
+    }
+
+    // Fill remaining loot rooms with mystery chests
+    while(sDungeonLootSlotsAvailible > 0) {
+        dungeon_place_loot_in_random_previous_room(MOD_NONMOD_MYSTERY_CHEST);
     }
 
     if (sDungeonLoopCount < 2 || sDungeonForceRegen) {

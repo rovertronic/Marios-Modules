@@ -603,6 +603,7 @@ enum new_models {
     MODEL_ROOM_TREASURE,
     MODEL_ROOM_WALLJUMP,
     MODEL_ROOM_LONGJUMP,
+    MODEL_ROOM_VANISHHOP,
 };
 
 #endif // MODEL_IDS_H

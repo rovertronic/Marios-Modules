@@ -5,6 +5,7 @@ const GeoLayout rtresure_geo[] = {
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, rtresure_rtresure_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, rtresure_rtresure_mesh_layer_4),
+		GEO_TRANSLATE_NODE(LAYER_OPAQUE, -2648, 327, 0),
 	GEO_CLOSE_NODE(),
 	GEO_END(),
 };

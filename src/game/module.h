@@ -200,6 +200,7 @@ enum module_id {
     MOD_IF_WALL,
     MOD_TIME_EXTEND,
     MOD_NONMOD_STAR,
+    MOD_NONMOD_MYSTERY_CHEST,
     MOD_COUNT,
 };
 

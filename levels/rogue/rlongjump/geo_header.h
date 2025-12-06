@@ -7,7 +7,7 @@ extern u8 rlongjump_tisou_pal_rgba16[];
 extern u8 rlongjump_conk_i8[];
 extern Vtx rlongjump_rlongjump_mesh_layer_1_vtx_0[31];
 extern Gfx rlongjump_rlongjump_mesh_layer_1_tri_0[];
-extern Vtx rlongjump_rlongjump_mesh_layer_1_vtx_1[116];
+extern Vtx rlongjump_rlongjump_mesh_layer_1_vtx_1[154];
 extern Gfx rlongjump_rlongjump_mesh_layer_1_tri_1[];
 extern Vtx rlongjump_rlongjump_mesh_layer_1_vtx_2[170];
 extern Gfx rlongjump_rlongjump_mesh_layer_1_tri_2[];
