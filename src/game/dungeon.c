@@ -126,7 +126,7 @@ struct DungeonRoomVariant sRoomWallJump = {
     .model = MODEL_ROOM_WALLJUMP,
     .collision = rwalljump_collision,
     .requiredLoot = &sRoomWallJumpRequiredLoot,
-    .generateOnce = TRUE,
+    .generateOnce = FALSE,
 };
 
 struct DungeonRoomVariantCellList sRoomLongJumpCellList[] = {
@@ -161,7 +161,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomLongJump,
     // Treasure rooms are 2x as likely to spawn
     &sRoomTreasure,
-    &sRoomTreasure,
+    //&sRoomTreasure,
 };
 
 
@@ -207,7 +207,8 @@ s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
     for (int i = 0; i < 10; i++) {
         chosen_room_index = random_u16()%sDungeonRoomCount;
         if ((sDungeonRoomList[chosen_room_index].lootCount < sDungeonRoomList[chosen_room_index].variant->maxLootCt)&&
-            ((i>5)||(sDungeonRoomList[chosen_room_index].variant == &sRoomTreasure))) { // Prioritize treasure rooms for loot
+            // Prioritize treasure rooms and challenge rooms for loot
+            ((i>5)||(sDungeonRoomList[chosen_room_index].variant == &sRoomTreasure)||(sDungeonRoomList[chosen_room_index].variant->requiredLoot))) {
             sDungeonRoomList[chosen_room_index].loot[sDungeonRoomList[chosen_room_index].lootCount] = loot;
             sDungeonRoomList[chosen_room_index].lootCount++;
             sDungeonLootSlotsAvailible --;
