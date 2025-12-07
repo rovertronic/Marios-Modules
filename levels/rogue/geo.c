@@ -24,3 +24,7 @@
 #include "rlongjump/geo.inc.c"
 #include "carpetPoint/geo.inc.c"
 #include "vanishhop/geo.inc.c"
+#include "rfnab/geo.inc.c"
+#include "rbtcm/geo.inc.c"
+#include "baldi/geo.inc.c"
+#include "baldidoor/geo.inc.c"

@@ -32,6 +32,10 @@ const LevelScript level_rogue_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_WALLJUMP, rwalljump_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_LONGJUMP, rlongjump_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_VANISHHOP, vanishhop_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_FNAB, rfnab_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BTCM, rbtcm_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BALDI, baldi_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_BALDI_DOOR, baldidoor_geo),
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 

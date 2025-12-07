@@ -220,14 +220,86 @@ struct DungeonRoomVariant sRoomVanishHop = {
     .generateOnce = TRUE,
 };
 
+struct DungeonRoomVariantCellList sRoomFnabCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT|DOOR_RIGHT)},
+    {.x = 0, .y = 1},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomFnab = {
+    .cellList = &sRoomFnabCellList,
+    .model = MODEL_ROOM_FNAB,
+    .collision = rfnab_collision,
+    .objectList = NULL,
+    .maxLootCt = 0,
+    //.lootLocations = &sRoomWallJumpLootLocations,
+    //.requiredLoot = &sRoomVanishHopRequiredLoot,
+    .generateOnce = TRUE,
+};
+
+struct DungeonRoomVariantCellList sRoomBtcmCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0},
+
+    {.x = 0, .y = 1},
+    {.x = 1, .y = 1},
+    {.x = 2, .y = 1},
+
+    {.x = 0, .y = -1},
+    {.x = 1, .y = -1},
+    {.x = 2, .y = -1},
+
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomBtcm = {
+    .cellList = &sRoomBtcmCellList,
+    .model = MODEL_ROOM_BTCM,
+    .collision = rbtcm_collision,
+    .objectList = NULL,
+    .maxLootCt = 0,
+    //.lootLocations = &sRoomWallJumpLootLocations,
+    //.requiredLoot = &sRoomVanishHopRequiredLoot,
+    .generateOnce = TRUE,
+};
+
+Vec4f sRoomBaldiLootLocations[] = {
+    {-12.3897f,.0f,.0f,.0f},
+};
+
+struct DungeonObject sRoomBaldiObjectList[] = {
+    {.bhv = bhvStaticObject, .model = MODEL_DUNGEON_BALDI_DOOR, .param = 0,
+    .angle = 0x0, .pos = {-2.26746f,0.f,0.f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomBaldi = {
+    .cellList = &sRoomTreasureCellList,
+    .model = MODEL_ROOM_BALDI,
+    .collision = baldi_collision,
+    .objectList = sRoomBaldiObjectList,
+    .maxLootCt = 1,
+    .lootLocations = &sRoomBaldiLootLocations,
+    .requiredLoot = NULL,
+    .generateOnce = TRUE,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomHall,
     &sRoomMiniJunc,
     &sRoomLobby,
-    &sRoomWallJump,
-    &sRoomLongJump,
     &sRoomTreasure,
+
+    // Challenge Rooms
+    &sRoomLongJump,
     &sRoomVanishHop,
+    &sRoomWallJump,
+
+    // Easter-Egg Rooms
+    &sRoomFnab,
+    &sRoomBtcm,
+    &sRoomBaldi,
 };
 
 

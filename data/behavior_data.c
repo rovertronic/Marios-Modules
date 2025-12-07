@@ -6143,6 +6143,7 @@ const BehaviorScript bhvChest[] = {
     SET_HITBOX(/*Radius*/ 100, /*Height*/ 200),
     SET_INT(oIntangibleTimer, 0),
     SET_HOME(),
+    SET_FLOAT(oDrawingDistance, 10000),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_chest),
         SET_INT(oInteractStatus, INT_STATUS_NONE),
