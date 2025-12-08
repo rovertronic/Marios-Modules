@@ -341,9 +341,9 @@ s32 dungeon_door_on_other_side(int xp, int yp, int j) {
 }
 
 s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
-    int chosen_room_index = random_u16()%sDungeonRoomCount;
+    int chosen_room_index = tinymt32_generate_u32(&gGlobalRandomState)%sDungeonRoomCount;
     for (int i = 0; i < 10; i++) {
-        chosen_room_index = random_u16()%sDungeonRoomCount;
+        chosen_room_index = tinymt32_generate_u32(&gGlobalRandomState)%sDungeonRoomCount;
         if ((sDungeonRoomList[chosen_room_index].lootCount < sDungeonRoomList[chosen_room_index].variant->maxLootCt)&&
             // Prioritize treasure rooms and challenge rooms for loot
             ((i>5)||(sDungeonRoomList[chosen_room_index].variant == &sRoomTreasure)||(sDungeonRoomList[chosen_room_index].variant->requiredLoot))) {
@@ -496,10 +496,10 @@ void dungeon_generate_rooms_at_doors(void) {
                 int success = FALSE;
                 int trycount = 0;
                 while(!success && trycount < 10) {
-                    int selectedVariantIndex = random_u16() %  (sizeof(sRoomVariantList)/4);
+                    u32 selectedVariantIndex = tinymt32_generate_u32(&gGlobalRandomState) %  (sizeof(sRoomVariantList)/4);
                     struct DungeonRoomVariant * selectedVariant = sRoomVariantList[selectedVariantIndex];
 
-                    if (sDungeonRoomCount >= 50) {
+                    if (sDungeonRoomCount >= 64) {
                         success = TRUE;
                         continue;
                     }
@@ -577,12 +577,12 @@ void dungeon_spawn_room_objects(void) {
 
             if (sDungeonRoomList[i].loot[j] == MOD_NONMOD_MYSTERY_CHEST) {
                 chest->oBehParams2ndByte = 0;
-                if (random_u16()%3==0) {
+                if (tinymt32_generate_u32(&gGlobalRandomState)%3==0) {
                     chest->oBehParams2ndByte = 1;
                 }
             }
 
-            if ((random_u16()%2==0)&&sDungeonCoinBalance>=10) {
+            if ((tinymt32_generate_u32(&gGlobalRandomState)%2==0)&&sDungeonCoinBalance>=10) {
                 //randomly make chests cost money
                 SET_BPARAM1(chest->oBehParams,10);
                 sDungeonCoinBalance-=10;
@@ -602,7 +602,7 @@ void dungeon_spawn_room_objects(void) {
                 s16 angle = sDungeonRoomList[i].direction * 0x4000;
 
                 if (details->bhv == bhvCoinFormation) {
-                    if (random_u16()%2==0) {
+                    if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
                         // Sometimes, don't spawn coins
                         j++;
                         continue;
@@ -656,6 +656,9 @@ void dungeon_spawn_room_objects(void) {
 }
 
 void dungeon_generate(void) {
+    // Randomize Seed
+    tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
+
     redo_generate:
     sDungeonForceRegen = FALSE;
 
@@ -671,13 +674,10 @@ void dungeon_generate(void) {
     bzero(&sDungeonCellGrid, sizeof(sDungeonCellGrid));
     bzero(&sDungeonInventory, sizeof(sDungeonInventory));
 
-    // Randomize Seed
-    tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
-
     // Build First Room
     dungeon_create_room(&sRoomMiniJunc  ,0,16,16);
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 50; i++) {
         dungeon_generate_rooms_at_doors();
     }
 
@@ -686,7 +686,7 @@ void dungeon_generate(void) {
         if ((sDungeonRoomList[i].variant == &sRoomTreasure || sDungeonRoomList[i].variant->requiredLoot) &&
             sDungeonRoomList[i].lootCount == 0 && sDungeonRoomList[i].variant->maxLootCt > 0) {
             sDungeonRoomList[i].lootCount = 1;
-            if (random_u16()%2==0) {
+            if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
                 sDungeonRoomList[i].loot[0] = MOD_NONMOD_STAR;
             } else {
                 sDungeonRoomList[i].loot[0] = MOD_NONMOD_MYSTERY_CHEST;
@@ -694,7 +694,7 @@ void dungeon_generate(void) {
         }
     }
 
-    if (sDungeonLoopCount < 2 || sDungeonForceRegen) {
+    if (sDungeonLoopCount < 2 || sDungeonForceRegen || sDungeonRoomCount < 50) {
         goto redo_generate;
     }
 

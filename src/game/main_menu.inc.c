@@ -451,6 +451,7 @@ void logic_main_menu(void) {
                         break;
                     case 2:
                         gMainMenuWarpLocation = 4;
+                        gMariosModulesSave.file[gMariosModulesSaveIndex].seed = (sMainMenuSeedShaker[0] | (sMainMenuSeedShaker[1] << 16));
                         level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
                         gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;
                         gModuleTutorialState = TUTORIAL_DONE;
