@@ -1834,6 +1834,7 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 
     // Updates once per frame:
     mario_title_logic();
+    dungeon_set_mario_room();
     vec3f_get_dist_and_angle(gMarioState->prevPos, gMarioState->pos, &gMarioState->moveSpeed, &gMarioState->movePitch, &gMarioState->moveYaw);
     vec3f_get_lateral_dist(gMarioState->prevPos, gMarioState->pos, &gMarioState->lateralSpeed);
     vec3f_copy(gMarioState->prevPos, gMarioState->pos);

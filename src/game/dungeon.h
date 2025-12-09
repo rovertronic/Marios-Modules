@@ -4,6 +4,8 @@
 #ifndef DUNGEON_H
 #define DUNGEON_H
 
+extern struct DungeonRoom * gDungeonMarioRoom;
+
 #define DOOR_RIGHT (1<<0)
 #define DOOR_DOWN  (1<<1)
 #define DOOR_LEFT  (1<<2)
@@ -38,11 +40,12 @@ struct DungeonRoomVariant {
 };
 
 struct DungeonRoom {
-    u32 neighborFlag;
+    u32 neighborFlag[2];
     u8 direction;
     u8 xorigin;
     u8 yorigin;
     u8 lootCount;
+    u8 id;
     s8 loot[4];
     struct DungeonRoomVariant * variant;
     struct Object * obj;
@@ -58,5 +61,7 @@ struct DungeonCell {
 
 void dungeon_generate(void);
 void dungeon_debug_print(void);
+void dungeon_set_mario_room(void);
+s32 dungeon_room_check_neighbor_flag(struct DungeonRoom * room, int id);
 
 #endif

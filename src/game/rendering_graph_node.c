@@ -21,6 +21,7 @@
 #include "level_geo.h"
 #include "mario.h"
 #include "module.h"
+#include "dungeon.h"
 
 #include "config.h"
 #include "config/config_world.h"
@@ -1152,9 +1153,10 @@ void visualise_object_hitbox(struct Object *node) {
  * Process an object node.
  */
 void geo_process_object(struct Object *node) {
-    if (gRenderPass == 1 && node != (struct Object *)&gPreviewMario) {
-        return;
-    }
+    if (gRenderPass == 1 && node != (struct Object *)&gPreviewMario) {return;}
+    if (node->dungeonRoomId != -1 && !dungeon_room_check_neighbor_flag(gDungeonMarioRoom, node->dungeonRoomId )) {return;}
+
+
     if (node->header.gfx.areaIndex == gCurGraphNodeRoot->areaIndex) {
         s32 isInvisible = (node->header.gfx.node.flags & GRAPH_RENDER_INVISIBLE);
         // Maintain throw matrix pointer if the game is paused as it won't be updated.

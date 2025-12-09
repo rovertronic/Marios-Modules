@@ -334,6 +334,9 @@ struct Object {
               struct Object * objRider;
               Vec3f saddlePos;
 
+              s8 dungeonRoomId;
+              s8 dungeonRoomId2;
+
               struct ElementHitbox * element;
 };
 

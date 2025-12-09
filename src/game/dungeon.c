@@ -8,13 +8,11 @@
 #include "model_ids.h"
 #include "behavior_data.h"
 #include "module.h"
+#include "level_update.h"
 
 #include "levels/rogue/header.h"
 
-
-#define DEBUG_PRINT_MODE 1
-// 0 - Room Nums
-// 1 - More Compact
+struct DungeonRoom * gDungeonMarioRoom = NULL;
 
 int sDungeonRoomCount = 0;
 int sDungeonLoopCount = 0;
@@ -302,6 +300,12 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomBaldi,
 };
 
+struct DungeonRoom * dungeon_get_mario_room(void) {
+    u32 x = (((-gMarioState->pos[0])+32000.f + 1000.f)/2000.f);
+    u32 y = (((-gMarioState->pos[2])+32000.f + 1000.f)/2000.f);
+    if (sDungeonCellGrid[y][x].id == 0) {return NULL;}
+    return &sDungeonRoomList[ sDungeonCellGrid[y][x].id-1 ];
+}
 
 s32 dungeon_is_cell_occupied(int x, int y) {
     if ((x < 0)||(x >= 32)||
@@ -311,6 +315,7 @@ s32 dungeon_is_cell_occupied(int x, int y) {
     return (sDungeonCellGrid[y][x].id != 0);
 }
 
+struct DungeonCell * sDungeonDoorOtherSideRet = NULL;
 s32 dungeon_door_on_other_side(int xp, int yp, int j) {
     int x = xp + (sDirectionList[j][0]);
     int y = yp - (sDirectionList[j][1]);
@@ -334,6 +339,7 @@ s32 dungeon_door_on_other_side(int xp, int yp, int j) {
         }
         if (sDungeonCellGrid[y][x].id > 0 &&
             (sDungeonCellGrid[y][x].doorFlags & oppositeflag)) {
+            sDungeonDoorOtherSideRet = &sDungeonCellGrid[y][x];
             return TRUE;
         }
     }
@@ -399,7 +405,20 @@ s32 dungeon_requirement_list_length(s8 * requirementList) {
     return lootSlotsNeeded;
 }
 
-void dungeon_create_room(struct DungeonRoomVariant * variant, int dir, int x, int y) {
+void dungeon_room_set_neighbor_flag(struct DungeonRoom * room, int id) {
+    int index = id/32;
+    int flag = id%32;
+    room->neighborFlag[index] |= (1 << flag);
+}
+
+s32 dungeon_room_check_neighbor_flag(struct DungeonRoom * room, int id) {
+    if (room == NULL) {return 0;}
+    int index = id/32;
+    int flag = id%32;
+    return (room->neighborFlag[index] & (1 << flag)) != 0;
+}
+
+struct DungeonRoom * dungeon_create_room(struct DungeonRoomVariant * variant, int dir, int x, int y) {
     struct DungeonRoomVariantCellList * cellList = variant->cellList;
     sDungeonRoomCount++;
 
@@ -450,6 +469,9 @@ void dungeon_create_room(struct DungeonRoomVariant * variant, int dir, int x, in
     sDungeonRoomList[sDungeonRoomCount-1].variant = variant;
     sDungeonRoomList[sDungeonRoomCount-1].xorigin = x;
     sDungeonRoomList[sDungeonRoomCount-1].yorigin = y;
+    sDungeonRoomList[sDungeonRoomCount-1].id = sDungeonRoomCount-1;
+
+    dungeon_room_set_neighbor_flag(&sDungeonRoomList[sDungeonRoomCount-1],sDungeonRoomCount-1); //self
 
     sDungeonRoomList[sDungeonRoomCount-1].lootCount = 0;
     for (int i = 0; i < 4; i++) {
@@ -457,6 +479,8 @@ void dungeon_create_room(struct DungeonRoomVariant * variant, int dir, int x, in
     }
 
     sDungeonLootSlotsAvailible+=variant->maxLootCt;
+
+    return &sDungeonRoomList[sDungeonRoomCount-1];
 }
 
 int dungeon_check_room_viability(struct DungeonRoomVariant * variant, int dir, int x, int y) {
@@ -520,7 +544,11 @@ void dungeon_generate_rooms_at_doors(void) {
                         sDungeonUniqueVariantGeneratedFlags |= (1<<selectedVariantIndex);
 
                         dungeon_propegate_loot_with_requirement_list(selectedVariant->requiredLoot);
-                        dungeon_create_room(selectedVariant,j,x,y);
+                        struct DungeonRoom * created_room = dungeon_create_room(selectedVariant,j,x,y);
+
+                        dungeon_room_set_neighbor_flag(created_room,sDungeonCellProcessList[i]->id-1);
+                        dungeon_room_set_neighbor_flag(&sDungeonRoomList[sDungeonCellProcessList[i]->id-1],created_room->id);
+
                         success = TRUE;
                     }
                     trycount++;
@@ -539,6 +567,7 @@ void dungeon_spawn_room_objects(void) {
         roomObj->oPosZ = 32000.f - (sDungeonRoomList[i].yorigin * 2000.f);
         roomObj->oFaceAngleYaw = sDungeonRoomList[i].direction * 0x4000;
         roomObj->collisionData = segmented_to_virtual(sDungeonRoomList[i].variant->collision);
+        roomObj->dungeonRoomId = i;
 
         if (sDungeonRoomList[i]. variant == &sRoomMiniJunc) {
             for (int j = 0; j < 4; j ++) {
@@ -574,6 +603,7 @@ void dungeon_spawn_room_objects(void) {
             chest->oPosY += sDungeonRoomList[i].variant->lootLocations[j][2] * 100.f;
             chest->oFaceAngleYaw = angle + (182.f * sDungeonRoomList[i].variant->lootLocations[j][3]);
             chest->oBehParams2ndByte = sDungeonRoomList[i].loot[j];
+            chest->dungeonRoomId = i;
 
             if (sDungeonRoomList[i].loot[j] == MOD_NONMOD_MYSTERY_CHEST) {
                 chest->oBehParams2ndByte = 0;
@@ -623,6 +653,7 @@ void dungeon_spawn_room_objects(void) {
                 obj->oPosY += details->pos[2] * 100.f;
                 obj->oFaceAngleYaw = angle + details->angle;;
                 obj->oBehParams2ndByte = details->param;
+                obj->dungeonRoomId = i;
 
                 j++;
             }
@@ -650,6 +681,10 @@ void dungeon_spawn_room_objects(void) {
                 doorObj->oPosX = (32000.f - (sDungeonCellProcessList[i]->x * 2000.f)) - (1000.f * sDirectionList[j][0]);
                 doorObj->oPosZ = (32000.f - (sDungeonCellProcessList[i]->y * 2000.f)) + (1000.f * sDirectionList[j][1]);
                 doorObj->oFaceAngleYaw = j * 0x4000;
+                doorObj->dungeonRoomId = sDungeonCellProcessList[i]->id-1;
+                if (dungeon_door_on_other_side(sDungeonCellProcessList[i]->x,sDungeonCellProcessList[i]->y,j)) {
+                    doorObj->dungeonRoomId2 = sDungeonDoorOtherSideRet->id-1;
+                }
             }
         }
     }
@@ -720,16 +755,22 @@ void dungeon_debug_print(void) {
     for (int y = 0; y < 32; y++) {
         for (int x = 0; x < 32; x++) {
             if (sDungeonCellGrid[y][x].id != 0) {
-                #if DEBUG_PRINT_MODE == 0
-                    print_text_fmt_int(x*16, y*16, "%d", sDungeonCellGrid[y][x].id);
-                #else
-                    utf8_print_reset();
-                    print_utf8_color(".",40+x*3, 40+y*3,
-                    sDebugColorList[sDungeonCellGrid[y][x].id%6][0],
-                    sDebugColorList[sDungeonCellGrid[y][x].id%6][1],
-                    sDebugColorList[sDungeonCellGrid[y][x].id%6][2]);
-                #endif
+                utf8_print_reset();
+                print_utf8_color(".",40+x*3, 40+y*3,
+                sDebugColorList[sDungeonCellGrid[y][x].id%6][0],
+                sDebugColorList[sDungeonCellGrid[y][x].id%6][1],
+                sDebugColorList[sDungeonCellGrid[y][x].id%6][2]);
             }
         }
     }
+
+    if (dungeon_get_mario_room()) {
+        int x = dungeon_get_mario_room()->xorigin;
+        int y = dungeon_get_mario_room()->yorigin;
+        print_utf8_color(".",40+x*3, 40+y*3,255,0,0);
+    }
+}
+
+void dungeon_set_mario_room(void) {
+    gDungeonMarioRoom = dungeon_get_mario_room();
 }
