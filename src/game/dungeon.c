@@ -278,13 +278,11 @@ struct DungeonRoomVariant sRoomBtcm = {
     .easterEgg = TRUE,
 };
 
-Vec4f sRoomBaldiLootLocations[] = {
-    {-12.3897f,.0f,.0f,.0f},
-};
-
 struct DungeonObject sRoomBaldiObjectList[] = {
     {.bhv = bhvStaticObject, .model = MODEL_DUNGEON_BALDI_DOOR, .param = 0,
     .angle = 0x0, .pos = {-2.26746f,0.f,0.f}},
+    {.bhv = bhvMysteryChest, .model = MODEL_MCHEST, .param = 1,
+    .angle = 0x4000, .pos = {-12.3897f,0.f,0.f}},
     {.end = TRUE},
 };
 
@@ -294,7 +292,7 @@ struct DungeonRoomVariant sRoomBaldi = {
     .collision = baldi_collision,
     .objectList = sRoomBaldiObjectList,
     .maxLootCt = 1,
-    .lootLocations = &sRoomBaldiLootLocations,
+    .lootLocations = NULL,
     .requiredLoot = NULL,
     .easterEgg = TRUE,
 };
