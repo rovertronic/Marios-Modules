@@ -7,7 +7,6 @@
 #include "object_list_processor.h"
 #include "model_ids.h"
 #include "behavior_data.h"
-#include "module.h"
 #include "level_update.h"
 
 #include "levels/rogue/header.h"
@@ -737,6 +736,8 @@ void dungeon_spawn_room_objects(void) {
 void dungeon_generate(void) {
     // Randomize Seed
     tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
+
+    texgen_generate();
 
     redo_generate:
     sDungeonForceRegen = FALSE;
