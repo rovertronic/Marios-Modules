@@ -29,6 +29,7 @@ struct DungeonCell * sDungeonCellProcessList[256];
 
 u8 sDungeonInventory[MOD_COUNT]; // Index = Mod Type, Value = Count
 u8 sDungeonForceRegen = FALSE;
+u8 sDungeonEasterEggGenerated = FALSE;
 
 s8 sDirectionList[4][2] = {
     { 1, 0}, // Right
@@ -224,6 +225,13 @@ struct DungeonRoomVariantCellList sRoomFnabCellList[] = {
     {.end = TRUE},
 };
 
+s8 sRoomFnabRequiredLoot[] = {
+    MOD_JUMP, 1,
+    MOD_CAP, 1,
+    MOD_NONMOD_STAR, 1,
+    MOD_EMPTY,
+};
+
 struct DungeonRoomVariant sRoomFnab = {
     .cellList = &sRoomFnabCellList,
     .model = MODEL_ROOM_FNAB,
@@ -231,8 +239,8 @@ struct DungeonRoomVariant sRoomFnab = {
     .objectList = NULL,
     .maxLootCt = 0,
     //.lootLocations = &sRoomWallJumpLootLocations,
-    //.requiredLoot = &sRoomVanishHopRequiredLoot,
-    .generateOnce = TRUE,
+    .requiredLoot = &sRoomFnabRequiredLoot,
+    .easterEgg = TRUE,
 };
 
 struct DungeonRoomVariantCellList sRoomBtcmCellList[] = {
@@ -251,6 +259,14 @@ struct DungeonRoomVariantCellList sRoomBtcmCellList[] = {
     {.end = TRUE},
 };
 
+s8 sRoomBtcmRequiredLoot[] = {
+    MOD_JUMP, 2,
+    MOD_HIT_WALL, 1,
+    MOD_POW2, 1,
+    MOD_NONMOD_STAR, 3,
+    MOD_EMPTY,
+};
+
 struct DungeonRoomVariant sRoomBtcm = {
     .cellList = &sRoomBtcmCellList,
     .model = MODEL_ROOM_BTCM,
@@ -258,8 +274,8 @@ struct DungeonRoomVariant sRoomBtcm = {
     .objectList = NULL,
     .maxLootCt = 0,
     //.lootLocations = &sRoomWallJumpLootLocations,
-    //.requiredLoot = &sRoomVanishHopRequiredLoot,
-    .generateOnce = TRUE,
+    .requiredLoot = &sRoomBtcmRequiredLoot,
+    .easterEgg = TRUE,
 };
 
 Vec4f sRoomBaldiLootLocations[] = {
@@ -280,7 +296,7 @@ struct DungeonRoomVariant sRoomBaldi = {
     .maxLootCt = 1,
     .lootLocations = &sRoomBaldiLootLocations,
     .requiredLoot = NULL,
-    .generateOnce = TRUE,
+    .easterEgg = TRUE,
 };
 
 struct DungeonRoomVariant * sRoomVariantList[] = {
@@ -456,7 +472,7 @@ struct DungeonRoom * dungeon_create_room(struct DungeonRoomVariant * variant, in
                     if (dungeon_door_on_other_side(x,y,j)) {
 
                         dungeon_room_set_neighbor_flag(thisRoom,sDungeonDoorOtherSideRet->id-1);
-                        dungeon_room_set_neighbor_flag( &sDungeonRoomList[sDungeonDoorOtherSideRet->id-1], thisRoom->id);
+                        dungeon_room_set_neighbor_flag( &sDungeonRoomList[sDungeonDoorOtherSideRet->id-1], sDungeonRoomCount-1);
 
                         sDungeonLoopCount++;
                     }
@@ -549,8 +565,23 @@ void dungeon_generate_rooms_at_doors(void) {
                         continue;
                     }
 
+                    if (selectedVariant->easterEgg && sDungeonCurrentDepth < 6) {
+                        trycount++;
+                        continue;
+                    } 
+
+                    if (sDungeonEasterEggGenerated && selectedVariant->easterEgg) {
+                        // only generate 1 easter egg per level, and farther in
+                        trycount++;
+                        continue;
+                    }
+
                     if (dungeon_check_room_viability(selectedVariant,j,x,y)) {
                         sDungeonUniqueVariantGeneratedFlags |= (1<<selectedVariantIndex);
+
+                        if (selectedVariant->easterEgg) {
+                            sDungeonEasterEggGenerated = TRUE;
+                        }
 
                         dungeon_propegate_loot_with_requirement_list(selectedVariant->requiredLoot);
                         struct DungeonRoom * created_room = dungeon_create_room(selectedVariant,j,x,y);
@@ -705,6 +736,7 @@ void dungeon_generate(void) {
 
     redo_generate:
     sDungeonForceRegen = FALSE;
+    sDungeonEasterEggGenerated = FALSE;
 
     // Clear dungeon data
     sDungeonRoomCount = 0;
@@ -737,6 +769,10 @@ void dungeon_generate(void) {
                 sDungeonRoomList[i].loot[0] = MOD_NONMOD_MYSTERY_CHEST;
             }
         }
+    }
+
+    if (sDungeonEasterEggGenerated == FALSE) {
+        sDungeonForceRegen = TRUE;
     }
 
     if (sDungeonLoopCount < 2 || sDungeonForceRegen || sDungeonRoomCount < 50) {

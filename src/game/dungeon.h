@@ -37,6 +37,7 @@ struct DungeonRoomVariant {
     Collision * collision;
     u8 maxLootCt:2;
     u8 generateOnce:1;
+    u8 easterEgg:1;
 };
 
 struct DungeonRoom {
