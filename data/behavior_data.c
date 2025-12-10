@@ -6413,3 +6413,12 @@ const BehaviorScript bhvDungeonProcGenRoom[] = {
     CALL_NATIVE(load_object_static_model),
     BREAK(),
 };
+
+extern void bhv_baldi_door(void);
+const BehaviorScript bhvBaldiDoor[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_baldi_door),
+    END_LOOP(),
+};

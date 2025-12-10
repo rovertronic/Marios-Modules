@@ -278,11 +278,16 @@ struct DungeonRoomVariant sRoomBtcm = {
     .easterEgg = TRUE,
 };
 
+s8 sRoomBaldiRequiredLoot[] = {
+    MOD_ATTACK, 1,
+    MOD_EMPTY,
+};
+
 struct DungeonObject sRoomBaldiObjectList[] = {
-    {.bhv = bhvStaticObject, .model = MODEL_DUNGEON_BALDI_DOOR, .param = 0,
+    {.bhv = bhvBaldiDoor, .model = MODEL_DUNGEON_BALDI_DOOR, .param = 0,
     .angle = 0x0, .pos = {-2.26746f,0.f,0.f}},
     {.bhv = bhvMysteryChest, .model = MODEL_MCHEST, .param = 1,
-    .angle = 0x4000, .pos = {-12.3897f,0.f,0.f}},
+    .angle = 0x4000, .pos = {-13.3897f,0.f,0.f}},
     {.end = TRUE},
 };
 
@@ -290,10 +295,10 @@ struct DungeonRoomVariant sRoomBaldi = {
     .cellList = &sRoomTreasureCellList,
     .model = MODEL_ROOM_BALDI,
     .collision = baldi_collision,
-    .objectList = sRoomBaldiObjectList,
-    .maxLootCt = 1,
+    .objectList = &sRoomBaldiObjectList,
+    .maxLootCt = 0,
     .lootLocations = NULL,
-    .requiredLoot = NULL,
+    .requiredLoot = &sRoomBaldiRequiredLoot,
     .easterEgg = TRUE,
 };
 
@@ -322,8 +327,9 @@ struct DungeonRoom * dungeon_get_mario_room(void) {
 }
 
 s32 dungeon_is_cell_occupied(int x, int y) {
-    if ((x < 0)||(x >= 32)||
-        (y < 0)||(y >= 32)) {
+    // 0 and 32 are not allowed due to collision bugs
+    if ((x < 1)||(x >= 31)||
+        (y < 1)||(y >= 31)) {
         return TRUE;
     }
     return (sDungeonCellGrid[y][x].id != 0);

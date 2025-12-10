@@ -1636,3 +1636,21 @@ void bhv_fire_goomba(void) {
     //obj_ride_obj(goomba3,goomba2);
     obj_ride_obj(goomba2,goomba1);
 }
+
+// lmao
+void bhv_baldi_door(void) {
+    switch(o->oAction) {
+        case 0:
+            if ((gMarioState->flags & MARIO_PUNCHING) && lateral_dist_between_objects(o,gMarioObject) < 600.0f) {
+                o->oAction = 1;
+                o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
+            }
+            break;
+        case 1:
+            if (o->oTimer > 50) {
+                o->oAction = 0;
+                o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
+            }
+            break;
+    }
+}
