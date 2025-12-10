@@ -1154,11 +1154,16 @@ void visualise_object_hitbox(struct Object *node) {
  */
 void geo_process_object(struct Object *node) {
     if (gRenderPass == 1 && node != (struct Object *)&gPreviewMario) {return;}
-    if (node->dungeonRoomId != -1 && !dungeon_room_check_neighbor_flag(gDungeonMarioRoom, node->dungeonRoomId )) {return;}
-
+    if (!dungeon_room_is_visible(node->dungeonRoom[0]) &&
+    !dungeon_room_is_visible(node->dungeonRoom[1])) {
+        quat_from_zxy_euler(node->header.gfx.rotLerp,node->header.gfx.angle);
+        // Prevent 1-Frame flicker
+        return;
+    }
 
     if (node->header.gfx.areaIndex == gCurGraphNodeRoot->areaIndex) {
         s32 isInvisible = (node->header.gfx.node.flags & GRAPH_RENDER_INVISIBLE);
+
         // Maintain throw matrix pointer if the game is paused as it won't be updated.
 
         frameLerpPos(node->header.gfx.posVideoCache,node->header.gfx.posLerp);

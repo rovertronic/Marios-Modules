@@ -62,6 +62,6 @@ struct DungeonCell {
 void dungeon_generate(void);
 void dungeon_debug_print(void);
 void dungeon_set_mario_room(void);
-s32 dungeon_room_check_neighbor_flag(struct DungeonRoom * room, int id);
+s32 dungeon_room_is_visible(struct DungeonRoom * room);
 
 #endif

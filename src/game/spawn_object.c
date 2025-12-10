@@ -203,8 +203,8 @@ struct Object *allocate_object(struct ObjectNode *objList) {
     obj->objRiding = NULL;
     obj->objRider = NULL;
 
-    obj->dungeonRoomId = -1;
-    obj->dungeonRoomId2 = -1;
+    obj->dungeonRoom[0] = NULL;
+    obj->dungeonRoom[1] = NULL;
 
     return obj;
 }
