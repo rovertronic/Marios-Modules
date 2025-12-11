@@ -25,6 +25,23 @@ u32 sColorPalletepixelFloats[][3] = {
     {0xB5D6B2,0x53131E,0x5A464C},
 };
 
+u16 * sBrickTextures[] = {
+    &texgensamples_Material27_rgba16,
+    &texgensamples_SmoothBrickWhite_rgba16,
+    &texgensamples_VarietyBrick_rgba16,
+};
+
+u16 * sTileTextures[] = {
+    &texgensamples_itimatu2_rgba16,
+    &texgensamples_tile2_rgba16,
+};
+
+u16 * sAltWallTextures[] = {
+    &texgensamples_pipes_rgba16,
+    &texgensamples_nightsky_rgba16,
+    &texgensamples_stucco_rgba16,
+};
+
 void rgba5551_to_f32(u16 pixelBits, f32 *pixelFloat)
 {
     u16 R = (pixelBits >> 11) & 0x1F;   // 5 bits
@@ -90,6 +107,32 @@ void texgen_colorize_rgba16(u16 * texture, u16 * texout, int size, u32 color) {
 }
 
 void texgen_generate(void) {
-    u16 * texture = segmented_to_virtual(&rlobby_brick2_pal_rgba16);
-    texgen_colorize_rgba16( texture, texture, 2048, 0xFF0000  );
+    int colorPalletIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sColorPalletepixelFloats)/12);
+    int brickTextureIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBrickTextures)/4);
+    int tileTextureIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTileTextures)/4);
+    int altWallTextureIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sAltWallTextures)/4);
+
+    u16 * texture;
+
+    // Generate Brick Texture
+    texture = segmented_to_virtual(sBrickTextures[brickTextureIndex]);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureBrick), 4096, sColorPalletepixelFloats[colorPalletIndex][1]  );
+
+    // Generate Carpet Texture
+    texture = segmented_to_virtual(&texgensamples_CarpetGreyscale_rgba16);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureCarpet), 2048, sColorPalletepixelFloats[colorPalletIndex][0]  );
+
+    // Generate Tile Texture
+    u32 tileColor = 0xFFFFFF;
+    if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
+        tileColor = sColorPalletepixelFloats[colorPalletIndex][2];
+    }
+
+    texture = segmented_to_virtual(sTileTextures[tileTextureIndex]);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureTile), 2048, tileColor  );
+
+    // Generate Alt Wall Texture
+
+    texture = segmented_to_virtual(sAltWallTextures[tileTextureIndex]);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureAltWall), 4096, 0xFFFFFF  );
 }

@@ -686,6 +686,9 @@ Gfx *geo_render_preview_mario(s32 callContext, struct GraphNode *node, UNUSED Ma
                 vec3f_copy(gPreviewMario.posVideoCache, gModulePreviewPos);
                 vec3f_copy(gPreviewMario.scale, mario->header.gfx.scale);
 
+                ((struct Object *) &gPreviewMario)->dungeonRoom[0] = NULL;
+                ((struct Object *) &gPreviewMario)->dungeonRoom[1] = NULL;
+
                 gPreviewMario.animInfo = mario->header.gfx.animInfo;
                 ((struct GraphNode *) &gPreviewMario)->flags |= GRAPH_RENDER_ACTIVE;
             } else {

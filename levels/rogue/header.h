@@ -34,4 +34,5 @@ extern const LevelScript level_rogue_entry[];
 #include "baldi/collision_header.h"
 #include "baldi/geo_header.h"
 #include "baldidoor/geo_header.h"
+#include "texgensamples/header.h"
 #endif

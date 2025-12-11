@@ -207,13 +207,17 @@ s8 sRoomVanishHopRequiredLoot[] = {
     MOD_EMPTY,
 };
 
+Vec4f sRoomVanishHopLootLocations[] = {
+    {5.56952f,20.3674f,0.0f},
+};
+
 struct DungeonRoomVariant sRoomVanishHop = {
     .cellList = &sRoomVanishHopCellList,
     .model = MODEL_ROOM_VANISHHOP,
     .collision = vanishhop_collision,
     .objectList = NULL,
-    .maxLootCt = 0,
-    //.lootLocations = &sRoomWallJumpLootLocations,
+    .maxLootCt = 1,
+    .lootLocations = &sRoomVanishHopLootLocations,
     .requiredLoot = &sRoomVanishHopRequiredLoot,
     .generateOnce = TRUE,
 };

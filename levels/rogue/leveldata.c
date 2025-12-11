@@ -8,6 +8,11 @@
 #include "textures.h"
 #include "dialog_ids.h"
 
+u16 gDungeonTextureBrick[4096] = {0};
+u16 gDungeonTextureCarpet[2048] = {0};
+u16 gDungeonTextureTile[2048] = {0};
+u16 gDungeonTextureAltWall[4096] = {0};
+
 #include "make_const_nonconst.h"
 
 #include "leveldata.inc.c"
@@ -38,3 +43,4 @@
 #include "baldi/collision.inc.c"
 #include "baldi/model.inc.c"
 #include "baldidoor/model.inc.c"
+#include "texgensamples/model.inc.c"
