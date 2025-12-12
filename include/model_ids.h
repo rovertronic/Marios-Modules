@@ -610,6 +610,7 @@ enum new_models {
     MODEL_ROOM_FNAB,
     MODEL_ROOM_BTCM,
     MODEL_ROOM_BALDI,
+    MODEL_ROOM_WOOD,
 };
 
 #endif // MODEL_IDS_H

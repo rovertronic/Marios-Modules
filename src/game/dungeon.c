@@ -37,7 +37,10 @@ s8 sDirectionList[4][2] = {
     { 0,-1}, // Up
 };
 
-// Room Definitions
+/* ROOM DATA */
+
+// Hallway Room
+
 struct DungeonRoomVariantCellList sRoomHallCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
     {.x = 1, .y = 0, .doorFlags = DOOR_RIGHT},
@@ -62,6 +65,8 @@ struct DungeonRoomVariant sRoomHall = {
     .generateOnce = FALSE,
 };
 
+// Mini Junction Room
+
 struct DungeonRoomVariantCellList sRoomMiniJuncCellList[] = {
     {.x = 0, .y = 0, .doorFlags = 0xF},
     {.end = TRUE},
@@ -76,6 +81,8 @@ struct DungeonRoomVariant sRoomMiniJunc = {
     .requiredLoot = NULL,
     .generateOnce = FALSE,
 };
+
+// Lobby Room
 
 struct DungeonRoomVariantCellList sRoomLobbyCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
@@ -103,6 +110,8 @@ struct DungeonRoomVariant sRoomLobby = {
     .generateOnce = FALSE,
 };
 
+// Treasure Room
+
 struct DungeonRoomVariantCellList sRoomTreasureCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
     {.x = 1, .y = 0},
@@ -123,6 +132,8 @@ struct DungeonRoomVariant sRoomTreasure = {
     .requiredLoot = NULL,
     .generateOnce = FALSE,
 };
+
+// Wall Kick Challenge Room
 
 struct DungeonRoomVariantCellList sRoomWallJumpCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
@@ -147,16 +158,38 @@ Vec4f sRoomWallJumpLootLocations[] = {
     {-20.f,-20.8865f,1.f,180.f},
 };
 
+struct DungeonObject sRoomWallJumpObjectList[] = {
+    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 1,
+    .angle = 0, .pos = {-20.f+.4f,5.54237f,0.f}},
+    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 1,
+    .angle = 0, .pos = {-20.f-.4f,5.54237f,0.f}},
+    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 1,
+    .angle = 0, .pos = {-20.f,    5.54237f+.4f,0.f}},
+    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 1,
+    .angle = 0, .pos = {-20.f,    5.54237f-.4f,0.f}},
+
+
+    {.bhv = bhvFireSpitter, .model = MODEL_BOWLING_BALL, .param = 1,
+    .angle = 0, .pos = {-14.f,-0.457629f,0.f}},
+    {.bhv = bhvFireSpitter, .model = MODEL_BOWLING_BALL, .param = 1,
+    .angle = 0, .pos = {-26.f,11.5424f,0.f}},
+    {.bhv = bhvFireSpitter, .model = MODEL_BOWLING_BALL, .param = 1,
+    .angle = 0, .pos = {-14.f,11.5424f,0.f}},
+    {.end = TRUE},
+};
+
 struct DungeonRoomVariant sRoomWallJump = {
     .cellList = &sRoomWallJumpCellList,
     .model = MODEL_ROOM_WALLJUMP,
     .collision = rwalljump_collision,
-    .objectList = NULL,
+    .objectList = &sRoomWallJumpObjectList,
     .maxLootCt = 1,
     .lootLocations = &sRoomWallJumpLootLocations,
     .requiredLoot = &sRoomWallJumpRequiredLoot,
     .generateOnce = FALSE,
 };
+
+// Long Jump Rotate Challenge Room
 
 struct DungeonRoomVariantCellList sRoomLongJumpCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
@@ -183,6 +216,8 @@ struct DungeonRoomVariant sRoomLongJump = {
     .generateOnce = FALSE,
 };
 
+// Vanish Cap Jump Challenge Room
+
 struct DungeonRoomVariantCellList sRoomVanishHopCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
     {.x = 1, .y = 0},
@@ -208,7 +243,7 @@ s8 sRoomVanishHopRequiredLoot[] = {
 };
 
 Vec4f sRoomVanishHopLootLocations[] = {
-    {5.56952f,20.3674f,0.0f},
+    {5.56952f,20.3674f,270.0f},
 };
 
 struct DungeonRoomVariant sRoomVanishHop = {
@@ -221,6 +256,8 @@ struct DungeonRoomVariant sRoomVanishHop = {
     .requiredLoot = &sRoomVanishHopRequiredLoot,
     .generateOnce = TRUE,
 };
+
+// Nightshift at the Beta Museum Easter Egg Room
 
 struct DungeonRoomVariantCellList sRoomFnabCellList[] = {
     {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT|DOOR_RIGHT)},
@@ -245,6 +282,8 @@ struct DungeonRoomVariant sRoomFnab = {
     .requiredLoot = &sRoomFnabRequiredLoot,
     .easterEgg = TRUE,
 };
+
+// Beyond the Cursed Mirror Easter Egg Room
 
 struct DungeonRoomVariantCellList sRoomBtcmCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
@@ -281,6 +320,8 @@ struct DungeonRoomVariant sRoomBtcm = {
     .easterEgg = TRUE,
 };
 
+// Baldi Easter Egg Room
+
 s8 sRoomBaldiRequiredLoot[] = {
     MOD_ATTACK, 1,
     MOD_EMPTY,
@@ -305,6 +346,51 @@ struct DungeonRoomVariant sRoomBaldi = {
     .easterEgg = TRUE,
 };
 
+// Wood Storage Room
+
+struct DungeonObject sRoomWoodObjectList[] = {
+    {.bhv = bhvBreakableBox, .model = MODEL_BREAKABLE_BOX, .param = 0,
+    .angle = 0x0, .pos = {-5.f, -5.f,0.f}},
+    {.bhv = bhvBreakableBox, .model = MODEL_BREAKABLE_BOX, .param = 0,
+    .angle = 0x0, .pos = {-5.f, 5.f, 0.f}},
+    {.bhv = bhvBreakableBox, .model = MODEL_BREAKABLE_BOX, .param = 0,
+    .angle = 0x0, .pos = {-5.f, 0.f, 0.f}},
+
+    {.bhv = bhvBreakableBox, .model = MODEL_BREAKABLE_BOX, .param = 0,
+    .angle = 0x0, .pos = {.0f, -5.f,0.f}},
+    {.bhv = bhvBreakableBox, .model = MODEL_BREAKABLE_BOX, .param = 0,
+    .angle = 0x0, .pos = {.0f, 5.f, 0.f}},
+    {.bhv = bhvBreakableBox, .model = MODEL_BREAKABLE_BOX, .param = 0,
+    .angle = 0x0, .pos = {.0f, 0.f, 0.f}},
+
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariantCellList sRoomWoodCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.end = TRUE},
+};
+
+s8 sRoomWoodRequiredLoot[] = {
+    MOD_ATTACK, 1,
+    MOD_EMPTY
+};
+
+Vec4f sRoomWoodLootLocations[] = {
+    {-5.0f,0.0f,0.0f,90.0f},
+};
+
+struct DungeonRoomVariant sRoomWood = {
+    .cellList = &sRoomWoodCellList,
+    .model = MODEL_ROOM_WOOD,
+    .collision = rboxes_collision,
+    .objectList = &sRoomWoodObjectList,
+    .maxLootCt = 1,
+    .lootLocations = &sRoomWoodLootLocations,
+    .requiredLoot = &sRoomWoodRequiredLoot,
+    .generateOnce = TRUE,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomHall,
     &sRoomMiniJunc,
@@ -315,6 +401,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomLongJump,
     &sRoomVanishHop,
     &sRoomWallJump,
+    &sRoomWood,
 
     // Easter-Egg Rooms
     &sRoomFnab,

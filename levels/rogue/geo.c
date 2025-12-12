@@ -28,3 +28,4 @@
 #include "rbtcm/geo.inc.c"
 #include "baldi/geo.inc.c"
 #include "baldidoor/geo.inc.c"
+#include "rboxes/geo.inc.c"

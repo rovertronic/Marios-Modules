@@ -44,3 +44,5 @@ u16 gDungeonTextureAltWall[4096] = {0};
 #include "baldi/model.inc.c"
 #include "baldidoor/model.inc.c"
 #include "texgensamples/model.inc.c"
+#include "rboxes/model.inc.c"
+#include "rboxes/collision.inc.c"
