@@ -46,3 +46,5 @@ u16 gDungeonTextureAltWall[4096] = {0};
 #include "texgensamples/model.inc.c"
 #include "rboxes/model.inc.c"
 #include "rboxes/collision.inc.c"
+#include "spaceworld/collision.inc.c"
+#include "spaceworld/model.inc.c"

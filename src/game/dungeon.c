@@ -391,10 +391,47 @@ struct DungeonRoomVariant sRoomWood = {
     .generateOnce = TRUE,
 };
 
+// Spaceworld Junction/Challenge Room
+
+struct DungeonRoomVariantCellList sRoomSpaceworldCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0, .doorFlags = DOOR_RIGHT},
+
+    {.x = 0, .y = 1},
+    {.x = 1, .y = 1},
+    {.x = 2, .y = 1},
+
+    {.x = 0, .y = -1},
+    {.x = 1, .y = -1, .doorFlags = DOOR_DOWN},
+    {.x = 2, .y = -1},
+
+    {.x = 1, .y = 2, .doorFlags = DOOR_UP},
+
+    {.end = TRUE},
+};
+
+s8 sRoomSpaceworldRequiredLoot[] = {
+    MOD_JUMP, 1,
+    MOD_NONMOD_STAR, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonRoomVariant sRoomSpaceworld = {
+    .cellList = &sRoomSpaceworldCellList,
+    .model = MODEL_ROOM_SPACEWORLD,
+    .collision = spaceworld_collision,
+    .objectList = NULL,
+    .maxLootCt = 0,
+    //.lootLocations = &sRoomWallJumpLootLocations,
+    .requiredLoot = &sRoomSpaceworldRequiredLoot,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomHall,
     &sRoomMiniJunc,
     &sRoomLobby,
+    &sRoomSpaceworld,
     &sRoomTreasure,
 
     // Challenge Rooms
@@ -871,7 +908,7 @@ void dungeon_generate(void) {
         sDungeonForceRegen = TRUE;
     }
 
-    if (sDungeonLoopCount < 2 || sDungeonForceRegen || sDungeonRoomCount < 50) {
+    if (sDungeonLoopCount < 2 || sDungeonForceRegen || sDungeonRoomCount < 5) {
         goto redo_generate;
     }
 

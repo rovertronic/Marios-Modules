@@ -1,7 +1,7 @@
 extern u8 texgensamples_Material27_rgba16[];
 extern u8 texgensamples_SmoothBrickWhite_rgba16[];
 extern u8 texgensamples_VarietyBrick_rgba16[];
-extern u8 texgensamples_CarpetGreyscale_rgba16[];
+extern u8 texgensamples_CarpetGrayscale_rgba16[];
 extern u8 texgensamples_itimatu2_rgba16[];
 extern u8 texgensamples_tile2_rgba16[];
 extern u8 texgensamples_stucco_rgba16[];

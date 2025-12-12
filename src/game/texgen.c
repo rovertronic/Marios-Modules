@@ -119,7 +119,7 @@ void texgen_generate(void) {
     texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureBrick), 4096, sColorPalletepixelFloats[colorPalletIndex][1]  );
 
     // Generate Carpet Texture
-    texture = segmented_to_virtual(&texgensamples_CarpetGreyscale_rgba16);
+    texture = segmented_to_virtual(&texgensamples_CarpetGrayscale_rgba16);
     texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureCarpet), 2048, sColorPalletepixelFloats[colorPalletIndex][0]  );
 
     // Generate Tile Texture

@@ -37,4 +37,6 @@ extern const LevelScript level_rogue_entry[];
 #include "texgensamples/header.h"
 #include "rboxes/geo_header.h"
 #include "rboxes/collision_header.h"
+#include "spaceworld/collision_header.h"
+#include "spaceworld/geo_header.h"
 #endif

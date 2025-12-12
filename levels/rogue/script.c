@@ -46,6 +46,7 @@ const LevelScript level_rogue_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BALDI, baldi_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_BALDI_DOOR, baldidoor_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_WOOD, rboxes_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SPACEWORLD, spaceworld_geo),
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 
