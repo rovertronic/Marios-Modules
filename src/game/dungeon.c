@@ -473,9 +473,49 @@ struct DungeonRoomVariant sRoomFacade1 = {
     .model = MODEL_ROOM_FACADE1,
     .collision = facade1_collision,
     .objectList = &sRoomFacade1ObjectList,
-    .maxLootCt = 1,
+    .maxLootCt = 0,
     .lootLocations = &sRoomFacade1LootLocations,
     .requiredLoot = NULL,
+};
+
+// Garden Hallway Room
+
+struct DungeonRoomVariantCellList sRoomGardenHallCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0, .doorFlags = DOOR_RIGHT},
+    {.end = TRUE},
+};
+
+/*
+struct DungeonObject sRoomGardenHallObjectList[] = {
+    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 0,
+    .angle = 0x4000, .pos = {0.f,0.f,0.f}},
+    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 0,
+    .angle = 0x4000, .pos = {-20.f,0.f,0.f}},
+    {.end = TRUE},
+};
+*/
+
+Vec4f sRoomGardenHallLootLocations[] = {
+    {-35.9208f,-5.39018f,-3.69411f,90.0f},
+};
+
+s8 sRoomGardenHallRequiredLoot[] = {
+    MOD_JUMP, 1,
+    MOD_NONMOD_STAR, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonRoomVariant sRoomGardenHall = {
+    .cellList = &sRoomGardenHallCellList,
+    .model = MODEL_ROOM_GARDENHALL,
+    .collision = rgardenhall_collision,
+    .objectList = NULL,//&sRoomHallObjectList,
+    .maxLootCt = 1,
+    .lootLocations = &sRoomGardenHallLootLocations,
+    .requiredLoot = &sRoomGardenHallRequiredLoot,
+    .generateOnce = FALSE,
 };
 
 struct DungeonRoomVariant * sRoomVariantList[] = {
@@ -483,6 +523,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomMiniJunc,
     &sRoomLobby,
     &sRoomSpaceworld,
+    &sRoomGardenHall,
     &sRoomTreasure,
 
     // Challenge Rooms

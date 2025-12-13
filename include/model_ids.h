@@ -617,6 +617,7 @@ enum new_models {
     MODEL_ROOM_WOOD,
     MODEL_ROOM_SPACEWORLD,
     MODEL_ROOM_FACADE1,
+    MODEL_ROOM_GARDENHALL,
 };
 
 #endif // MODEL_IDS_H

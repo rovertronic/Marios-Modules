@@ -51,3 +51,5 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "spaceworld/model.inc.c"
 #include "facade1/model.inc.c"
 #include "facade1/collision.inc.c"
+#include "rgardenhall/collision.inc.c"
+#include "rgardenhall/model.inc.c"
