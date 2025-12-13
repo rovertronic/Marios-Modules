@@ -30,3 +30,4 @@
 #include "baldidoor/geo.inc.c"
 #include "rboxes/geo.inc.c"
 #include "spaceworld/geo.inc.c"
+#include "facade1/geo.inc.c"

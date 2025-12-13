@@ -5,6 +5,7 @@
 #define DUNGEON_H
 
 extern struct DungeonRoom * gDungeonMarioRoom;
+extern u16 gDungeonTreeModel;
 
 #define DOOR_RIGHT (1<<0)
 #define DOOR_DOWN  (1<<1)

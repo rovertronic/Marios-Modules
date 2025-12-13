@@ -135,4 +135,9 @@ void texgen_generate(void) {
 
     texture = segmented_to_virtual(sAltWallTextures[tileTextureIndex]);
     texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureAltWall), 4096, 0xFFFFFF  );
+
+    // Generate Shingles Texture
+
+    texture = segmented_to_virtual(&texgensamples_shingles_rgba16);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureShingles), 2048, sColorPalletepixelFloats[colorPalletIndex][2]  );
 }

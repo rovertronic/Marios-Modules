@@ -39,4 +39,6 @@ extern const LevelScript level_rogue_entry[];
 #include "rboxes/collision_header.h"
 #include "spaceworld/collision_header.h"
 #include "spaceworld/geo_header.h"
+#include "facade1/geo_header.h"
+#include "facade1/collision_header.h"
 #endif

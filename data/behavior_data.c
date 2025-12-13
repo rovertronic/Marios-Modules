@@ -1718,6 +1718,20 @@ const BehaviorScript bhvTreeLeaf[] = {
     END_LOOP(),
 };
 
+extern void bhv_dungeon_tree(void);
+const BehaviorScript bhvTreeDungeon[] = {
+    BEGIN(OBJ_LIST_POLELIKE),
+    BILLBOARD(),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_OPACITY_FROM_CAMERA_DIST)),
+    SET_INT(oInteractType, INTERACT_POLE),
+    SET_HITBOX(/*Radius*/ 80, /*Height*/ 500),
+    SET_INT(oIntangibleTimer, 0),
+    CALL_NATIVE(bhv_dungeon_tree),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_pole_base_loop),
+    END_LOOP(),
+};
+
 const BehaviorScript bhvAnotherTiltingPlatform[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),

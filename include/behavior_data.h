@@ -570,5 +570,6 @@ extern const BehaviorScript bhvFireGoomba[];
 extern const BehaviorScript bhvSilverStar[];
 extern const BehaviorScript bhvDungeonProcGenRoom[];
 extern const BehaviorScript bhvBaldiDoor[];
+extern const BehaviorScript bhvTreeDungeon[];
 
 #endif // BEHAVIOR_DATA_H

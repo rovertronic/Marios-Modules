@@ -12,6 +12,7 @@ u16 gDungeonTextureBrick[4096] = {0};
 u16 gDungeonTextureCarpet[2048] = {0};
 u16 gDungeonTextureTile[2048] = {0};
 u16 gDungeonTextureAltWall[4096] = {0};
+u16 gDungeonTextureShingles[2048] = {0};
 
 #include "make_const_nonconst.h"
 
@@ -48,3 +49,5 @@ u16 gDungeonTextureAltWall[4096] = {0};
 #include "rboxes/collision.inc.c"
 #include "spaceworld/collision.inc.c"
 #include "spaceworld/model.inc.c"
+#include "facade1/model.inc.c"
+#include "facade1/collision.inc.c"

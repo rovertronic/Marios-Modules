@@ -20,6 +20,8 @@ int sDungeonLootSlotsAvailible = 0;
 int sDungeonCoinBalance = 0;
 u32 sDungeonUniqueVariantGeneratedFlags;
 
+u16 gDungeonTreeModel = 0;
+
 struct DungeonRoom sDungeonRoomList[64];
 struct DungeonCell sDungeonCellGrid[32][32];
 
@@ -425,6 +427,55 @@ struct DungeonRoomVariant sRoomSpaceworld = {
     .maxLootCt = 0,
     //.lootLocations = &sRoomWallJumpLootLocations,
     .requiredLoot = &sRoomSpaceworldRequiredLoot,
+};
+
+// Facade 1 Room
+
+struct DungeonRoomVariantCellList sRoomFacade1CellList[] = {
+    {.x = 0, .y = 0},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0},
+    {.x = 3, .y = 0, .doorFlags = DOOR_RIGHT},
+
+    {.x = 0, .y = 1},
+    {.x = 1, .y = 1},
+    {.x = 2, .y = 1},
+    {.x = 3, .y = 1},
+
+    {.x = 0, .y = -1},
+    {.x = 1, .y = -1},
+    {.x = 2, .y = -1},
+    {.x = 3, .y = -1},
+
+    {.x = 4, .y = -1},
+
+    {.end = TRUE},
+};
+
+struct DungeonObject sRoomFacade1ObjectList[] = {
+    {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-16.7277f, -3.57431f, -3.86778f}},
+    {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-19.8878f, 3.55515f, -2.78238f}},
+    {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-25.2649f,-0.354316f,-0.866209f}},
+    {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-37.1143f,-18.4017f,-0.868808f}},
+    {.end = TRUE},
+};
+
+Vec4f sRoomFacade1LootLocations[] = {
+    {-76.7321f,-21.8378f,-7.76184,90.f},
+};
+
+struct DungeonRoomVariant sRoomFacade1 = {
+    .cellList = &sRoomFacade1CellList,
+    .model = MODEL_ROOM_FACADE1,
+    .collision = facade1_collision,
+    .objectList = &sRoomFacade1ObjectList,
+    .maxLootCt = 1,
+    .lootLocations = &sRoomFacade1LootLocations,
+    .requiredLoot = NULL,
 };
 
 struct DungeonRoomVariant * sRoomVariantList[] = {
@@ -866,6 +917,10 @@ void dungeon_generate(void) {
     tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
 
     texgen_generate();
+    gDungeonTreeModel = MODEL_DUNGEON_TREE_1;
+    if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
+        gDungeonTreeModel = MODEL_DUNGEON_TREE_2;
+    }
 
     redo_generate:
     sDungeonForceRegen = FALSE;
@@ -885,7 +940,7 @@ void dungeon_generate(void) {
     bzero(&sDungeonInventory, sizeof(sDungeonInventory));
 
     // Build First Room
-    dungeon_create_room(&sRoomMiniJunc  ,0,16,16);
+    dungeon_create_room(&sRoomFacade1  ,0,16,16);
 
     for (int i = 0; i < 50; i++) {
         dungeon_generate_rooms_at_doors();
@@ -950,7 +1005,9 @@ void dungeon_debug_print(void) {
         for (int x = 0; x < 32; x++) {
             if (sDungeonCellGrid[y][x].id != 0) {
                 utf8_print_reset();
-                if (dungeon_room_is_visible(&sDungeonRoomList[sDungeonCellGrid[y][x].id-1])) {
+                int roomIndex = sDungeonCellGrid[y][x].id-1;
+                if (roomIndex < 0) {return;}
+                if (dungeon_room_is_visible(&sDungeonRoomList[roomIndex])) {
                     print_utf8_color(".",40+x*3, 40+y*3,
                     255,
                     255,

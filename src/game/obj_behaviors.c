@@ -34,6 +34,7 @@
 #include "rumble_init.h"
 #include "module.h"
 #include "levels/temple/header.h"
+#include "dungeon.h"
 
 /**
  * @file obj_behaviors.c
@@ -1653,4 +1654,8 @@ void bhv_baldi_door(void) {
             }
             break;
     }
+}
+
+void bhv_dungeon_tree(void) {
+    cur_obj_set_model(gDungeonTreeModel);
 }
