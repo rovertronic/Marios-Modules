@@ -43,4 +43,6 @@ extern const LevelScript level_rogue_entry[];
 #include "facade1/collision_header.h"
 #include "rgardenhall/collision_header.h"
 #include "rgardenhall/geo_header.h"
+#include "rfurnace/collision_header.h"
+#include "rfurnace/geo_header.h"
 #endif

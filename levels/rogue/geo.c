@@ -32,3 +32,4 @@
 #include "spaceworld/geo.inc.c"
 #include "facade1/geo.inc.c"
 #include "rgardenhall/geo.inc.c"
+#include "rfurnace/geo.inc.c"

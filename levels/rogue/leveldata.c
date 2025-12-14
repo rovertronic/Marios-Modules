@@ -53,3 +53,5 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "facade1/collision.inc.c"
 #include "rgardenhall/collision.inc.c"
 #include "rgardenhall/model.inc.c"
+#include "rfurnace/collision.inc.c"
+#include "rfurnace/model.inc.c"

@@ -518,6 +518,35 @@ struct DungeonRoomVariant sRoomGardenHall = {
     .generateOnce = FALSE,
 };
 
+// Furnace Room
+
+s8 sRoomFurnaceRequiredLoot[] = {
+    MOD_JUMP, 1,
+    MOD_POW2, 1,
+    MOD_GRAV, 1,
+    MOD_PLATFORM, 2,
+    MOD_ZACTION, 1,
+    MOD_TIMER, 1,
+    MOD_REPEAT, 1,
+    MOD_NONMOD_STAR, 5,
+    MOD_EMPTY,  
+};
+
+Vec4f sRoomFurnceLootLocations[] = {
+    {-43.587f,-6.55491f,0.0f,0.0f},
+};
+
+struct DungeonRoomVariant sRoomFurnace = {
+    .cellList = &sRoomGardenHallCellList,
+    .model = MODEL_ROOM_FURNACE,
+    .collision = rfurnace_collision,
+    .objectList = NULL,
+    .maxLootCt = 1,
+    .lootLocations = &sRoomFurnceLootLocations,
+    .requiredLoot = &sRoomFurnaceRequiredLoot,
+    .generateOnce = TRUE,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomHall,
     &sRoomMiniJunc,
@@ -531,6 +560,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomVanishHop,
     &sRoomWallJump,
     &sRoomWood,
+    &sRoomFurnace,
 
     // Easter-Egg Rooms
     &sRoomFnab,
@@ -987,16 +1017,12 @@ void dungeon_generate(void) {
         dungeon_generate_rooms_at_doors();
     }
 
-    // Manually fill remaining empty treasure rooms and challenge rooms with mystery chests and stars
+    // Manually fill remaining empty treasure rooms and challenge rooms with mystery chests
     for (int i = 0; i < sDungeonRoomCount; i++) {
         if ((sDungeonRoomList[i].variant == &sRoomTreasure || sDungeonRoomList[i].variant->requiredLoot) &&
             sDungeonRoomList[i].lootCount == 0 && sDungeonRoomList[i].variant->maxLootCt > 0) {
             sDungeonRoomList[i].lootCount = 1;
-            if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
-                sDungeonRoomList[i].loot[0] = MOD_NONMOD_STAR;
-            } else {
-                sDungeonRoomList[i].loot[0] = MOD_NONMOD_MYSTERY_CHEST;
-            }
+            sDungeonRoomList[i].loot[0] = MOD_NONMOD_MYSTERY_CHEST;
         }
     }
 
