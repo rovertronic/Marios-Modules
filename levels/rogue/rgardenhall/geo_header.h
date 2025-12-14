@@ -21,7 +21,7 @@ extern u8 rgardenhall_fakeskybox_ci8[];
 extern u8 rgardenhall_fakeskybox_pal_rgba16[];
 extern Vtx rgardenhall_rgardenhall_mesh_layer_1_vtx_0[67];
 extern Gfx rgardenhall_rgardenhall_mesh_layer_1_tri_0[];
-extern Vtx rgardenhall_rgardenhall_mesh_layer_1_vtx_1[28];
+extern Vtx rgardenhall_rgardenhall_mesh_layer_1_vtx_1[32];
 extern Gfx rgardenhall_rgardenhall_mesh_layer_1_tri_1[];
 extern Vtx rgardenhall_rgardenhall_mesh_layer_1_vtx_2[63];
 extern Gfx rgardenhall_rgardenhall_mesh_layer_1_tri_2[];
