@@ -5,7 +5,7 @@ include util.mk
 # Default target
 default: all
 
-TARGET_STRING := marios_modules
+TARGET_STRING := marios_modules_2
 
 # Preprocessor definitions
 DEFINES :=
