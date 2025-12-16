@@ -547,18 +547,19 @@ Lights1 defaultLight = gdSPDefLights1(
 );
 
 Vec3f globalLightDirection = { 0x28, 0x28, 0x28 };
+Vec3f titleLightDirection = { -0x28, 0x28, 0x28 };
 
-void setup_global_light() {
+void setup_global_light(Vec3f dir) {
     Lights1* curLight = (Lights1*)alloc_display_list(sizeof(Lights1));
     bcopy(&defaultLight, curLight, sizeof(Lights1));
 
 #ifdef WORLDSPACE_LIGHTING
-    curLight->l->l.dir[0] = (s8)(globalLightDirection[0]);
-    curLight->l->l.dir[1] = (s8)(globalLightDirection[1]);
-    curLight->l->l.dir[2] = (s8)(globalLightDirection[2]);
+    curLight->l->l.dir[0] = (s8)(dir[0]);
+    curLight->l->l.dir[1] = (s8)(dir[1]);
+    curLight->l->l.dir[2] = (s8)(dir[2]);
 #else
     Vec3f transformedLightDirection;
-    linear_mtxf_transpose_mul_vec3f(gCameraTransform, transformedLightDirection, globalLightDirection);
+    linear_mtxf_transpose_mul_vec3f(gCameraTransform, transformedLightDirection, dir);
     curLight->l->l.dir[0] = (s8)(transformedLightDirection[0]);
     curLight->l->l.dir[1] = (s8)(transformedLightDirection[1]);
     curLight->l->l.dir[2] = (s8)(transformedLightDirection[2]);
@@ -581,7 +582,7 @@ void geo_process_camera(struct GraphNodeCamera *node) {
 
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(rollMtx), G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH);
 
-    if (gRenderPass == 1) {
+    if (gRenderPass > 0) {
         Vec3f offsetPos = {gModulePreviewPos[0]-250.0f,gModulePreviewPos[1],gModulePreviewPos[2]+800.0f};
         Vec3f offsetFoc = {gModulePreviewPos[0]-250.0f,gModulePreviewPos[1],gModulePreviewPos[2]};
         mtxf_lookat(gCameraTransform, offsetPos, offsetFoc, node->roll);
@@ -617,7 +618,7 @@ void geo_process_camera(struct GraphNodeCamera *node) {
     for (int i = 0; i < 3; i++) {
         scaledCamera[3][i] /= WORLD_SCALE;
     }
-    if (gRenderPass == 1) {
+    if (gRenderPass > 0) {
         scaledCamera[3][3] *= 4.0f;
     }
     // Convert the scaled matrix to fixed-point and integrate it into the projection matrix stack
@@ -627,7 +628,12 @@ void geo_process_camera(struct GraphNodeCamera *node) {
 #endif
 
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(viewMtx), G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH);
-    setup_global_light();
+
+    if (gRenderPass != 2) {
+        setup_global_light(globalLightDirection);
+    } else {
+        setup_global_light(titleLightDirection);
+    }
 
     if (node->fnNode.node.children != 0) {
         gCurGraphNodeCamera = node;
@@ -1153,7 +1159,7 @@ void visualise_object_hitbox(struct Object *node) {
  * Process an object node.
  */
 void geo_process_object(struct Object *node) {
-    if (gRenderPass == 1 && node != (struct Object *)&gPreviewMario) {return;}
+    if (gRenderPass > 0 && node != (struct Object *)&gPreviewMario && node != (struct Object *)&gGameTitle) {return;}
     if (!dungeon_room_is_visible(node->dungeonRoom[0]) &&
     !dungeon_room_is_visible(node->dungeonRoom[1])) {
         quat_from_zxy_euler(node->header.gfx.rotLerp,node->header.gfx.angle);

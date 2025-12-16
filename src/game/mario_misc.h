@@ -10,6 +10,7 @@
 extern struct GraphNodeObject gMirrorMario;
 extern struct MarioBodyState gBodyStates[2];
 extern struct GraphNodeObject gPreviewMario;
+extern struct GraphNodeObject gGameTitle;
 
 #ifdef KEEP_MARIO_HEAD
 Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, Mat4 *mtx);
@@ -33,5 +34,6 @@ Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat
 Gfx *geo_mirror_mario_backface_culling(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx);
 Gfx *geo_mario_gate_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx);
 Gfx *geo_render_preview_mario(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx);
+Gfx *geo_render_game_title(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx);
 
 #endif // MARIO_MISC_H

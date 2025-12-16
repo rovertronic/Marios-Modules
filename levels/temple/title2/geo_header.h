@@ -1,0 +1,15 @@
+extern const GeoLayout title2_geo[];
+extern u8 title2_mm2_title_texture_ci8[];
+extern u8 title2_mm2_title_texture_pal_rgba16[];
+extern u8 title2_f3d_specular_i8[];
+extern Vtx title2_title2_mesh_layer_1_vtx_cull[8];
+extern Vtx title2_title2_mesh_layer_1_vtx_0[1319];
+extern Gfx title2_title2_mesh_layer_1_tri_0[];
+extern Vtx title2_title2_mesh_layer_1_vtx_1[729];
+extern Gfx title2_title2_mesh_layer_1_tri_1[];
+extern Gfx mat_title2_f3d_logotexture[];
+extern Gfx mat_revert_title2_f3d_logotexture[];
+extern Gfx mat_title2_f3d_specular[];
+extern Gfx mat_revert_title2_f3d_specular[];
+extern Gfx title2_title2_mesh_layer_1[];
+extern Gfx title2_final_revert_mesh_layer_1[];

@@ -123,7 +123,7 @@ Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *conte
     RoomData room;
 
     if (callContext == GEO_CONTEXT_RENDER && gMarioObject != NULL) {
-        if (gRenderPass == 1) {
+        if (gRenderPass > 0) {
             // Room 1 always for displaying preview mario.
             switchCase->selectedCase = 0;
             return NULL;

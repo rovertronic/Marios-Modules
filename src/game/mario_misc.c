@@ -78,6 +78,7 @@ static s8 gMarioAttackScaleAnimation[3 * 6] = {
 struct MarioBodyState gBodyStates[2]; // 2nd is never accessed in practice, most likely Luigi related
 struct GraphNodeObject gMirrorMario;  // copy of Mario's geo node for drawing mirror Mario
 struct GraphNodeObject gPreviewMario;
+struct GraphNodeObject gGameTitle;
 
 // This whole file is weirdly organized. It has to be the same file due
 // to rodata boundaries and function aligns, which means the programmer
@@ -694,6 +695,52 @@ Gfx *geo_render_preview_mario(s32 callContext, struct GraphNode *node, UNUSED Ma
             } else {
                 ((struct GraphNode *) &gMirrorMario)->flags &= ~GRAPH_RENDER_ACTIVE;
                 geo_remove_child(&gPreviewMario.node);
+            }
+            break;
+    }
+    return NULL;
+}
+
+Vec3f sTitlePos;
+Vec3s sTitleAngle = {0,-5261,0};
+
+Gfx *geo_render_game_title(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+    struct Object *mario = gMarioStates[0].marioObj;
+
+    sTitlePos[0] = gModulePreviewPos[0]-250.0f;
+    sTitlePos[1] = gModulePreviewPos[1];
+    sTitlePos[2] = gModulePreviewPos[2];
+
+    switch (callContext) {
+        case GEO_CONTEXT_CREATE:
+            init_graph_node_object(NULL, &gGameTitle, NULL, gVec3fZero, gVec3sZero, gVec3fOne);
+            break;
+        case GEO_CONTEXT_AREA_LOAD:
+            geo_add_child(node, &gGameTitle.node);
+            break;
+        case GEO_CONTEXT_AREA_UNLOAD:
+            geo_remove_child(&gGameTitle.node);
+            break;
+        case GEO_CONTEXT_RENDER:
+            if (gRenderPass == 2) {
+                geo_add_child(node, &gGameTitle.node);
+
+                gGameTitle.sharedChild = gLoadedGraphNodes[MODEL_GAME_TITLE];
+                gGameTitle.areaIndex = mario->header.gfx.areaIndex;
+                vec3s_copy(gGameTitle.angle, sTitleAngle);
+                vec3f_copy(gGameTitle.pos, sTitlePos);
+                vec3f_copy(gGameTitle.posCache, sTitlePos);
+                vec3f_copy(gGameTitle.posVideoCache, sTitlePos);
+                vec3f_copy(gGameTitle.scale, mario->header.gfx.scale);
+
+                ((struct Object *) &gGameTitle)->dungeonRoom[0] = NULL;
+                ((struct Object *) &gGameTitle)->dungeonRoom[1] = NULL;
+
+                gGameTitle.animInfo = mario->header.gfx.animInfo;
+                ((struct GraphNode *) &gGameTitle)->flags |= GRAPH_RENDER_ACTIVE;
+            } else {
+                ((struct GraphNode *) &gMirrorMario)->flags &= ~GRAPH_RENDER_ACTIVE;
+                geo_remove_child(&gGameTitle.node);
             }
             break;
     }

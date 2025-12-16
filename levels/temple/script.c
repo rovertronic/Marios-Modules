@@ -36,6 +36,7 @@ const LevelScript level_temple_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_SHREDDER, shredder_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ASRIELCAGE, asrielcage_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ORANGEPOLE, orangepole_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_GAME_TITLE, title2_geo),
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 
