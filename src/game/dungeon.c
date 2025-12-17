@@ -13,6 +13,7 @@
 #include "levels/rogue/header.h"
 
 struct DungeonRoom * gDungeonMarioRoom = NULL;
+u32 sDungeonDiscoveredFlags[2];
 
 int sDungeonRoomCount = 0;
 int sDungeonLoopCount = 0;
@@ -1121,6 +1122,13 @@ void dungeon_debug_print(void) {
 
 void dungeon_set_mario_room(void) {
     gDungeonMarioRoom = dungeon_get_mario_room();
+
+    if (gDungeonMarioRoom != NULL) {
+        int id = gDungeonMarioRoom->id;
+        int index = id/32;
+        int flag = id%32;
+        sDungeonDiscoveredFlags[index] |= (1 << flag);
+    }
 }
 
 void dungeon_print_minimap(f32 mapZoom) {
@@ -1128,17 +1136,23 @@ void dungeon_print_minimap(f32 mapZoom) {
     create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.02f * mapZoom, 0.02f * mapZoom, 1.0f);
 
     for (int i = 0; i < sDungeonRoomCount; i++) {
-        f32 dungeon_room_x = (32000.0f - (sDungeonRoomList[i].xorigin * 2000.0f)) - gMarioState->pos[0];
-        f32 dungeon_room_y = (32000.0f - (sDungeonRoomList[i].yorigin * 2000.0f)) - gMarioState->pos[2];
 
-        Gfx * minimapDL = sDungeonRoomList[i].variant->minimapDL;
-        if (minimapDL != NULL) {
-            create_dl_translation_matrix(MENU_MTX_PUSH, dungeon_room_x, dungeon_room_y, 0);
-            create_dl_rotation_matrix(MENU_MTX_NOPUSH, sDungeonRoomList[i].direction*-90.0f, 0, 0, 1.0f);
-            gSPDisplayList(gDisplayListHead++, minimapDL);
-            gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+        int id = sDungeonRoomList[i].id;
+        int index = id/32;
+        int flag = id%32;
+        
+        if (sDungeonDiscoveredFlags[index] & (1 << flag)) {
+            f32 dungeon_room_x = (32000.0f - (sDungeonRoomList[i].xorigin * 2000.0f)) - gMarioState->pos[0];
+            f32 dungeon_room_y = (32000.0f - (sDungeonRoomList[i].yorigin * 2000.0f)) - gMarioState->pos[2];
+
+            Gfx * minimapDL = sDungeonRoomList[i].variant->minimapDL;
+            if (minimapDL != NULL) {
+                create_dl_translation_matrix(MENU_MTX_PUSH, dungeon_room_x, dungeon_room_y, 0);
+                create_dl_rotation_matrix(MENU_MTX_NOPUSH, sDungeonRoomList[i].direction*-90.0f, 0, 0, 1.0f);
+                gSPDisplayList(gDisplayListHead++, minimapDL);
+                gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+            }
         }
-
     }
 
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);

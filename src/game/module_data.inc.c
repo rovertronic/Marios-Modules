@@ -327,7 +327,6 @@ void module_timer(struct module_execution_thread * met, u8 call_context) {
 
                 met->halted = FALSE;
                 met->x++;
-                met->mod = 0;
                 break;
             }
             break;
