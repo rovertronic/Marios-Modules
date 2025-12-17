@@ -29,3 +29,4 @@
 #include "minimap8/model.inc.c"
 #include "minimap10/model.inc.c"
 #include "minimap11/model.inc.c"
+#include "title2/model.inc.c"

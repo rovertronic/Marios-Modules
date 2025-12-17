@@ -20,3 +20,4 @@
 #include "shredder/geo.inc.c"
 #include "asrielcage/geo.inc.c"
 #include "orangepole/geo.inc.c"
+#include "title2/geo.inc.c"

@@ -25,6 +25,7 @@ const GeoLayout temple_area_1_geo[] = {
 			GEO_BRANCH(1, temple_dl_9room_geo),
 		GEO_CLOSE_NODE(),
 		GEO_ASM(0, geo_render_preview_mario),
+		GEO_ASM(0, geo_render_game_title),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };

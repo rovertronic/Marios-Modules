@@ -361,8 +361,7 @@ void render_main_menu(void) {
     switch(gMainMenuState) {
         case MAIN_MENU_TITLE:
             gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-            print_set_envcolour(255, 255, 255, sMainMenuTransition*255.0f);
-            render_multi_image(micons_mmodules_title_rgba16, 0, 40, 320, 124, 1, 1, G_CYC_1CYCLE);
+            gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
             break;
         case MAIN_MENU_MAIN:
             render_main_menu_hand();
