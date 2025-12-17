@@ -576,8 +576,6 @@ void render_hud(void) {
         create_dl_ortho_matrix();
 #endif
 
-        dungeon_debug_print();
-
         if (gCurrentArea != NULL && gCurrentArea->camera->mode == CAMERA_MODE_INSIDE_CANNON) {
             render_hud_cannon_reticle();
         }

@@ -747,10 +747,6 @@ struct DungeonRoom * dungeon_create_room(struct DungeonRoomVariant * variant, in
                 // j = dir
                 if (sDungeonCellGrid[yp][xp].doorFlags & (1 << j)) {
                     if (dungeon_door_on_other_side(x,y,j)) {
-
-                        dungeon_room_set_neighbor_flag(thisRoom,sDungeonDoorOtherSideRet->id-1);
-                        dungeon_room_set_neighbor_flag( &sDungeonRoomList[sDungeonDoorOtherSideRet->id-1], sDungeonRoomCount-1);
-
                         sDungeonLoopCount++;
                     }
                 }
@@ -861,15 +857,23 @@ void dungeon_generate_rooms_at_doors(void) {
                         }
 
                         dungeon_propegate_loot_with_requirement_list(selectedVariant->requiredLoot);
-                        struct DungeonRoom * created_room = dungeon_create_room(selectedVariant,j,x,y);
-
-                        dungeon_room_set_neighbor_flag(created_room,origin_room->id);
-                        dungeon_room_set_neighbor_flag(origin_room,created_room->id);
+                        dungeon_create_room(selectedVariant,j,x,y);
 
                         success = TRUE;
                     }
                     trycount++;
                 }
+            }
+        }
+    }
+}
+
+void dungeon_calculate_all_neighbor_flags(void) {
+    for (int i = 0; i < sDungeonCellProcessCount; i++) {
+        struct DungeonCell * cell = sDungeonCellProcessList[i];
+        for (int j = 0; j < 4; j++) {
+            if (dungeon_door_on_other_side(cell->x,cell->y,j)) {
+                dungeon_room_set_neighbor_flag( &sDungeonRoomList[cell->id-1] , sDungeonDoorOtherSideRet->id-1);
             }
         }
     }
@@ -1058,11 +1062,12 @@ void dungeon_generate(void) {
         goto redo_generate;
     }
 
+    // Calculate cull flags
+    dungeon_calculate_all_neighbor_flags();
+
     // Finished, spawn objects
     dungeon_spawn_room_objects();
 }
-
-int debugmode = 0;
 
 u8 sDebugColorList[][3] = {
     {255,255,255},
