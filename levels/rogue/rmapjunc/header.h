@@ -1,0 +1,9 @@
+extern Vtx rmapjunc_rmapjunc_mesh_vtx_0[4];
+extern Gfx rmapjunc_rmapjunc_mesh_tri_0[];
+extern Vtx rmapjunc_rmapjunc_mesh_vtx_1[8];
+extern Gfx rmapjunc_rmapjunc_mesh_tri_1[];
+extern Gfx mat_rmapjunc_map_mat_1_layer1[];
+extern Gfx mat_revert_rmapjunc_map_mat_1_layer1[];
+extern Gfx mat_rmapjunc_map_mat_3_layer1[];
+extern Gfx mat_revert_rmapjunc_map_mat_3_layer1[];
+extern Gfx rmapjunc_rmapjunc_mesh[];

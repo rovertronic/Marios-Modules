@@ -1,0 +1,141 @@
+Vtx rzmapigzag_rzmapigzag_mesh_vtx_0[17] = {
+	{{ {-300, 450, 0}, 0, {-16, 957}, {255, 255, 255, 255} }},
+	{{ {-350, -450, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+	{{ {923, -450, 0}, 0, {968, 35}, {255, 255, 255, 255} }},
+	{{ {923, 450, 0}, 0, {968, 957}, {255, 255, 255, 255} }},
+	{{ {-950, 450, 0}, 0, {-16, 957}, {255, 255, 255, 255} }},
+	{{ {-950, -500, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+	{{ {-350, -450, 0}, 0, {-16, 35}, {255, 255, 255, 255} }},
+	{{ {-350, -1137, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+	{{ {-950, -1187, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+	{{ {-350, -1787, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+	{{ {-1000, -1787, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+	{{ {-1544, -1787, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+	{{ {-1494, -1187, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+	{{ {-2444, -1837, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+	{{ {-2444, -1187, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+	{{ {-1544, -2923, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+	{{ {-2444, -2923, 0}, 0, {-16, -16}, {255, 255, 255, 255} }},
+};
+
+Gfx rzmapigzag_rzmapigzag_mesh_tri_0[] = {
+	gsSPVertex(rzmapigzag_rzmapigzag_mesh_vtx_0 + 0, 17, 0),
+	gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+	gsSP2Triangles(0, 4, 5, 0, 0, 5, 6, 0),
+	gsSP2Triangles(5, 7, 1, 0, 5, 8, 7, 0),
+	gsSP2Triangles(8, 9, 7, 0, 8, 10, 9, 0),
+	gsSP2Triangles(8, 11, 10, 0, 8, 12, 11, 0),
+	gsSP2Triangles(12, 13, 11, 0, 12, 14, 13, 0),
+	gsSP2Triangles(13, 15, 11, 0, 13, 16, 15, 0),
+	gsSPEndDisplayList(),
+};
+
+Vtx rzmapigzag_rzmapigzag_mesh_vtx_1[32] = {
+	{{ {923, 450, 0}, 0, {968, 957}, {0, 0, 127, 255} }},
+	{{ {973, 500, 0}, 0, {1008, 1008}, {0, 0, 127, 255} }},
+	{{ {-300, 500, 0}, 0, {-16, 1008}, {0, 0, 127, 255} }},
+	{{ {923, -450, 0}, 0, {968, 35}, {0, 0, 127, 255} }},
+	{{ {973, -500, 0}, 0, {1008, -16}, {0, 0, 127, 255} }},
+	{{ {-350, -450, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-300, -500, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-350, -1137, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-300, -1137, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-350, -1787, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-300, -1837, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-1000, -1787, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-1000, -1837, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-1544, -1787, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-1494, -1837, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-1544, -2923, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-1494, -2973, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-2444, -2923, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-2494, -2973, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-2444, -1837, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-2494, -1837, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-2444, -1187, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-2494, -1137, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-1494, -1187, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-1494, -1137, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-950, -1187, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-1000, -1137, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-950, -500, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-1000, -500, 0}, 0, {-16, -16}, {0, 0, 127, 255} }},
+	{{ {-950, 450, 0}, 0, {-16, 957}, {0, 0, 127, 255} }},
+	{{ {-1000, 500, 0}, 0, {-16, 1008}, {0, 0, 127, 255} }},
+	{{ {-300, 450, 0}, 0, {-16, 957}, {0, 0, 127, 255} }},
+};
+
+Gfx rzmapigzag_rzmapigzag_mesh_tri_1[] = {
+	gsSPVertex(rzmapigzag_rzmapigzag_mesh_vtx_1 + 0, 32, 0),
+	gsSP2Triangles(0, 1, 2, 0, 3, 1, 0, 0),
+	gsSP2Triangles(3, 4, 1, 0, 5, 4, 3, 0),
+	gsSP2Triangles(5, 6, 4, 0, 7, 6, 5, 0),
+	gsSP2Triangles(7, 8, 6, 0, 9, 8, 7, 0),
+	gsSP2Triangles(9, 10, 8, 0, 11, 10, 9, 0),
+	gsSP2Triangles(11, 12, 10, 0, 13, 12, 11, 0),
+	gsSP2Triangles(13, 14, 12, 0, 15, 14, 13, 0),
+	gsSP2Triangles(15, 16, 14, 0, 17, 16, 15, 0),
+	gsSP2Triangles(17, 18, 16, 0, 19, 18, 17, 0),
+	gsSP2Triangles(19, 20, 18, 0, 21, 20, 19, 0),
+	gsSP2Triangles(21, 22, 20, 0, 23, 22, 21, 0),
+	gsSP2Triangles(23, 24, 22, 0, 25, 24, 23, 0),
+	gsSP2Triangles(25, 26, 24, 0, 27, 26, 25, 0),
+	gsSP2Triangles(27, 28, 26, 0, 29, 28, 27, 0),
+	gsSP2Triangles(29, 30, 28, 0, 31, 30, 29, 0),
+	gsSP2Triangles(31, 2, 30, 0, 0, 2, 31, 0),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_rzmapigzag_map_mat_1_layer1[] = {
+	gsSPClearGeometryMode(G_LIGHTING | G_ZBUFFER | G_SHADE),
+	gsDPPipeSync(),
+	gsDPSetCombineLERP(0, 0, 0, PRIMITIVE, 0, 0, 0, 1, 0, 0, 0, PRIMITIVE, 0, 0, 0, 1),
+	gsDPSetAlphaDither(G_AD_NOISE),
+	gsDPSetRenderMode(G_RM_OPA_SURF, G_RM_OPA_SURF2),
+	gsSPTexture(65535, 65535, 0, 0, 1),
+	gsDPSetPrimColor(0, 0, 67, 149, 255, 255),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_revert_rzmapigzag_map_mat_1_layer1[] = {
+	gsSPSetGeometryMode(G_LIGHTING | G_ZBUFFER | G_SHADE),
+	gsDPPipeSync(),
+	gsDPSetAlphaDither(G_AD_DISABLE),
+	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_rzmapigzag_map_mat_3_layer1[] = {
+	gsSPClearGeometryMode(G_ZBUFFER | G_SHADE),
+	gsDPPipeSync(),
+	gsDPSetCombineLERP(0, 0, 0, PRIMITIVE, 0, 0, 0, ENVIRONMENT, 0, 0, 0, PRIMITIVE, 0, 0, 0, ENVIRONMENT),
+	gsDPSetAlphaDither(G_AD_NOISE),
+	gsDPSetRenderMode(G_RM_OPA_SURF, G_RM_OPA_SURF2),
+	gsSPTexture(65535, 65535, 0, 0, 1),
+	gsDPSetPrimColor(0, 0, 146, 197, 255, 255),
+	gsSPEndDisplayList(),
+};
+
+Gfx mat_revert_rzmapigzag_map_mat_3_layer1[] = {
+	gsSPSetGeometryMode(G_ZBUFFER | G_SHADE),
+	gsDPPipeSync(),
+	gsDPSetAlphaDither(G_AD_DISABLE),
+	gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
+	gsSPEndDisplayList(),
+};
+
+Gfx rzmapigzag_rzmapigzag_mesh[] = {
+	gsSPDisplayList(mat_rzmapigzag_map_mat_1_layer1),
+	gsSPDisplayList(rzmapigzag_rzmapigzag_mesh_tri_0),
+	gsSPDisplayList(mat_revert_rzmapigzag_map_mat_1_layer1),
+	gsSPDisplayList(mat_rzmapigzag_map_mat_3_layer1),
+	gsSPDisplayList(rzmapigzag_rzmapigzag_mesh_tri_1),
+	gsSPDisplayList(mat_revert_rzmapigzag_map_mat_3_layer1),
+	gsDPPipeSync(),
+	gsSPSetGeometryMode(G_LIGHTING),
+	gsSPClearGeometryMode(G_TEXTURE_GEN),
+	gsDPSetCombineLERP(0, 0, 0, SHADE, 0, 0, 0, ENVIRONMENT, 0, 0, 0, SHADE, 0, 0, 0, ENVIRONMENT),
+	gsSPTexture(65535, 65535, 0, 0, 0),
+	gsSPEndDisplayList(),
+};
+

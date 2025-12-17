@@ -1,0 +1,9 @@
+extern Vtx rmaplobby_rmaplobby_mesh_vtx_0[10];
+extern Gfx rmaplobby_rmaplobby_mesh_tri_0[];
+extern Vtx rmaplobby_rmaplobby_mesh_vtx_1[20];
+extern Gfx rmaplobby_rmaplobby_mesh_tri_1[];
+extern Gfx mat_rmaplobby_map_mat_1_layer1[];
+extern Gfx mat_revert_rmaplobby_map_mat_1_layer1[];
+extern Gfx mat_rmaplobby_map_mat_3_layer1[];
+extern Gfx mat_revert_rmaplobby_map_mat_3_layer1[];
+extern Gfx rmaplobby_rmaplobby_mesh[];

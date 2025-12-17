@@ -20,6 +20,7 @@
 #include "frame_lerp.h"
 #include "seq_ids.h"
 #include "levels/temple/header.h"
+#include "dungeon.h"
 
 u8 gModuleTutorialState = TUTORIAL_WAIT_FOR_MODULE_COLLECT;
 struct ScreenMessage sScreenMessageList[15];
@@ -28,7 +29,7 @@ s8 sScreenMessageIndex = -1;
 
 u8 gModuleMenuOpen = FALSE;
 u8 gMiniMapOpen = FALSE;
-f32 gMiniMapZoom = 1.0f;
+f32 sMiniMapZoom = 1.0f;
 u8 gModuleMenuMode = MODULE_MENU_MODE_NORMAL;
 s8 gRecycleChestContent = MOD_EMPTY;
 s8 gRecycledModule = MOD_EMPTY;
@@ -768,30 +769,34 @@ Gfx * sMinimapRoomDls[32] = {
 
 extern void shade_screen(void);
 void print_mini_map(void) {
-    gMiniMapZoom += (gPlayer1Controller->rawStickY/400.0f) * gFrameLerpDeltaTime;
-    gMiniMapZoom = CLAMP(gMiniMapZoom,0.5f,1.0f);
+    sMiniMapZoom += (gPlayer1Controller->rawStickY/400.0f) * gFrameLerpDeltaTime;
+    sMiniMapZoom = CLAMP(sMiniMapZoom,0.333f,1.0f);
 
-    f32 mario_x_to_map_x = (gMarioState->pos[0]/-50.f) * gMiniMapZoom;
-    f32 mario_z_to_map_y = (gMarioState->pos[2]/50.f) * gMiniMapZoom;
+    f32 mario_x_to_map_x = (gMarioState->pos[0]/-50.f) * sMiniMapZoom;
+    f32 mario_z_to_map_y = (gMarioState->pos[2]/50.f) * sMiniMapZoom;
 
     shade_screen();
 
-    create_dl_translation_matrix(MENU_MTX_PUSH, 160.f + mario_x_to_map_x, 120.f + mario_z_to_map_y, 0);
-    create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.02f * gMiniMapZoom, 0.02f * gMiniMapZoom, 1.0f);
+    if (gCurrLevelNum == LEVEL_TEMPLE) {
+        create_dl_translation_matrix(MENU_MTX_PUSH, 160.f + mario_x_to_map_x, 120.f + mario_z_to_map_y, 0);
+        create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.02f * sMiniMapZoom, 0.02f * sMiniMapZoom, 1.0f);
 
-    if (gMarioCurrentRoom >= 13 && gMarioCurrentRoom <= 17) {
-        // Hardcoded upstairs DL
-    } else {
-        for (int i = 0; i < 32; i++) {
-            if (sMinimapRoomDls[i] != NULL &&
-                (gMariosModulesSave.file[gMariosModulesSaveIndex].room_discover_flags & (1 << i))
-            ) {
-                gSPDisplayList(gDisplayListHead++, sMinimapRoomDls[i]);
+        if (gMarioCurrentRoom >= 13 && gMarioCurrentRoom <= 17) {
+            // Hardcoded upstairs DL
+        } else {
+            for (int i = 0; i < 32; i++) {
+                if (sMinimapRoomDls[i] != NULL &&
+                    (gMariosModulesSave.file[gMariosModulesSaveIndex].room_discover_flags & (1 << i))
+                ) {
+                    gSPDisplayList(gDisplayListHead++, sMinimapRoomDls[i]);
+                }
             }
         }
-    }
 
-    gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+        gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+    } else {
+        dungeon_print_minimap(sMiniMapZoom);
+    }
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     print_texture(micons_cap_rgba16, 16, 160-8, 120-8);

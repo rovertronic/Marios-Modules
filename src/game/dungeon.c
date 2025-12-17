@@ -8,6 +8,7 @@
 #include "model_ids.h"
 #include "behavior_data.h"
 #include "level_update.h"
+#include "ingame_menu.h"
 
 #include "levels/rogue/header.h"
 
@@ -58,6 +59,8 @@ struct DungeonObject sRoomHallObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomHall = {
+    .minimapDL = &rmaphall_rmaphall_mesh,
+
     .cellList = &sRoomHallCellList,
     .model = MODEL_ROOM_SHORT_HALL,
     .collision = smallhall_collision,
@@ -75,6 +78,8 @@ struct DungeonRoomVariantCellList sRoomMiniJuncCellList[] = {
 };
 
 struct DungeonRoomVariant sRoomMiniJunc = {
+    .minimapDL = &rmapjunc_rmapjunc_mesh,
+
     .cellList = &sRoomMiniJuncCellList,
     .model = MODEL_ROOM_MINIJUNC,
     .collision = minijunc_collision,
@@ -102,6 +107,8 @@ Vec4f sRoomLobbyLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomLobby = {
+    .minimapDL = &rmaplobby_rmaplobby_mesh,
+
     .cellList = &sRoomLobbyCellList,
     .model = MODEL_ROOM_LOBBY,
     .collision = rlobby_collision,
@@ -125,6 +132,8 @@ Vec4f sRoomTreasureLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomTreasure = {
+    .minimapDL = &rmaptreasure_rmaptreasure_mesh,
+
     .cellList = &sRoomTreasureCellList,
     .model = MODEL_ROOM_TREASURE,
     .collision = rtresure_collision,
@@ -181,6 +190,8 @@ struct DungeonObject sRoomWallJumpObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomWallJump = {
+    .minimapDL = &rmapwallkick_rmapwallkick_mesh,
+
     .cellList = &sRoomWallJumpCellList,
     .model = MODEL_ROOM_WALLJUMP,
     .collision = rwalljump_collision,
@@ -210,6 +221,8 @@ s8 sRoomLongJumpRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomLongJump = {
+    .minimapDL = &rzmapigzag_rzmapigzag_mesh,
+    
     .cellList = &sRoomLongJumpCellList,
     .model = MODEL_ROOM_LONGJUMP,
     .collision = rlongjump_collision,
@@ -249,6 +262,8 @@ Vec4f sRoomVanishHopLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomVanishHop = {
+    .minimapDL = &rmapvanishhop_rmapvanishhop_mesh,
+    
     .cellList = &sRoomVanishHopCellList,
     .model = MODEL_ROOM_VANISHHOP,
     .collision = vanishhop_collision,
@@ -383,6 +398,8 @@ Vec4f sRoomWoodLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomWood = {
+    .minimapDL = &rmapjunc_rmapjunc_mesh,
+
     .cellList = &sRoomWoodCellList,
     .model = MODEL_ROOM_WOOD,
     .collision = rboxes_collision,
@@ -420,6 +437,8 @@ s8 sRoomSpaceworldRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomSpaceworld = {
+    .minimapDL = rmapspaceworld_rmapspaceworld_mesh,
+
     .cellList = &sRoomSpaceworldCellList,
     .model = MODEL_ROOM_SPACEWORLD,
     .collision = spaceworld_collision,
@@ -469,6 +488,8 @@ Vec4f sRoomFacade1LootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomFacade1 = {
+    .minimapDL = &rmapfacade1_rmapfacade1_mesh,
+
     .cellList = &sRoomFacade1CellList,
     .model = MODEL_ROOM_FACADE1,
     .collision = facade1_collision,
@@ -508,6 +529,8 @@ s8 sRoomGardenHallRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomGardenHall = {
+    .minimapDL = &rmapgarden_rmapgarden_mesh,
+
     .cellList = &sRoomGardenHallCellList,
     .model = MODEL_ROOM_GARDENHALL,
     .collision = rgardenhall_collision,
@@ -1098,4 +1121,25 @@ void dungeon_debug_print(void) {
 
 void dungeon_set_mario_room(void) {
     gDungeonMarioRoom = dungeon_get_mario_room();
+}
+
+void dungeon_print_minimap(f32 mapZoom) {
+    create_dl_translation_matrix(MENU_MTX_PUSH, 160.f, 120.f, 0);
+    create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.02f * mapZoom, 0.02f * mapZoom, 1.0f);
+
+    for (int i = 0; i < sDungeonRoomCount; i++) {
+        f32 dungeon_room_x = (32000.0f - (sDungeonRoomList[i].xorigin * 2000.0f)) - gMarioState->pos[0];
+        f32 dungeon_room_y = (32000.0f - (sDungeonRoomList[i].yorigin * 2000.0f)) - gMarioState->pos[2];
+
+        Gfx * minimapDL = sDungeonRoomList[i].variant->minimapDL;
+        if (minimapDL != NULL) {
+            create_dl_translation_matrix(MENU_MTX_PUSH, dungeon_room_x, dungeon_room_y, 0);
+            create_dl_rotation_matrix(MENU_MTX_NOPUSH, sDungeonRoomList[i].direction*-90.0f, 0, 0, 1.0f);
+            gSPDisplayList(gDisplayListHead++, minimapDL);
+            gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+        }
+
+    }
+
+    gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }

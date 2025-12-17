@@ -1,0 +1,9 @@
+extern Vtx rmapgarden_rmapgarden_mesh_vtx_0[18];
+extern Gfx rmapgarden_rmapgarden_mesh_tri_0[];
+extern Vtx rmapgarden_rmapgarden_mesh_vtx_1[40];
+extern Gfx rmapgarden_rmapgarden_mesh_tri_1[];
+extern Gfx mat_rmapgarden_map_mat_1_layer1[];
+extern Gfx mat_revert_rmapgarden_map_mat_1_layer1[];
+extern Gfx mat_rmapgarden_map_mat_3_layer1[];
+extern Gfx mat_revert_rmapgarden_map_mat_3_layer1[];
+extern Gfx rmapgarden_rmapgarden_mesh[];

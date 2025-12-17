@@ -1,0 +1,9 @@
+extern Vtx rzmapigzag_rzmapigzag_mesh_vtx_0[17];
+extern Gfx rzmapigzag_rzmapigzag_mesh_tri_0[];
+extern Vtx rzmapigzag_rzmapigzag_mesh_vtx_1[32];
+extern Gfx rzmapigzag_rzmapigzag_mesh_tri_1[];
+extern Gfx mat_rzmapigzag_map_mat_1_layer1[];
+extern Gfx mat_revert_rzmapigzag_map_mat_1_layer1[];
+extern Gfx mat_rzmapigzag_map_mat_3_layer1[];
+extern Gfx mat_revert_rzmapigzag_map_mat_3_layer1[];
+extern Gfx rzmapigzag_rzmapigzag_mesh[];

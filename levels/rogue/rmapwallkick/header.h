@@ -1,0 +1,9 @@
+extern Vtx rmapwallkick_rmapwallkick_mesh_vtx_0[12];
+extern Gfx rmapwallkick_rmapwallkick_mesh_tri_0[];
+extern Vtx rmapwallkick_rmapwallkick_mesh_vtx_1[24];
+extern Gfx rmapwallkick_rmapwallkick_mesh_tri_1[];
+extern Gfx mat_rmapwallkick_map_mat_1_layer1[];
+extern Gfx mat_revert_rmapwallkick_map_mat_1_layer1[];
+extern Gfx mat_rmapwallkick_map_mat_3_layer1[];
+extern Gfx mat_revert_rmapwallkick_map_mat_3_layer1[];
+extern Gfx rmapwallkick_rmapwallkick_mesh[];
