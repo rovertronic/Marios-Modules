@@ -276,9 +276,12 @@ extern u8 gMainMenuState;
 extern u8 gMainMenuTargetState;
 extern u8 gModuleTutorialState;
 extern int gMainMenuWarpLocation;
+extern int gMainMenuTitleAnimationIndex;
 
 enum {
+    MAIN_MENU_TITLE_TRANSITION_1,
     MAIN_MENU_TITLE,
+    MAIN_MENU_TITLE_TRANSITION_2,
     MAIN_MENU_MAIN,
     MAIN_MENU_FILE,
     MAIN_MENU_CREDITS,

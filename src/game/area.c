@@ -448,8 +448,10 @@ void render_game(void) {
             geo_process_root(gCurrentArea->graphNode, gViewportOverride, gViewportClip, gFBSetColor);
         }
 
-        gRenderPass = 2;
-        geo_process_root(gCurrentArea->graphNode, gViewportOverride, gViewportClip, gFBSetColor);
+        if (gMainMenuTitleAnimationIndex > -1) {
+            gRenderPass = 2;
+            geo_process_root(gCurrentArea->graphNode, gViewportOverride, gViewportClip, gFBSetColor);
+        }
 
 #ifdef S2DEX_TEXT_ENGINE
         s2d_init();

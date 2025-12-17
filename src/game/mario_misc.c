@@ -704,16 +704,53 @@ Gfx *geo_render_preview_mario(s32 callContext, struct GraphNode *node, UNUSED Ma
 Vec3f sTitlePos;
 Vec3s sTitleAngle = {0,-5261,0};
 
+const f32 intro_scale_table[] = {
+    0.016000f, 0.052000f, 0.002500f, 0.148300f,
+    0.189200f, 0.035200f, 0.471600f, 0.525300f,
+    0.116600f, 0.875800f, 0.947000f, 0.222100f,
+    1.250500f, 1.341300f, 0.327000f, 1.485400f,
+    1.594900f, 0.406500f, 1.230500f, 1.563700f,
+    0.464300f, 0.913900f, 1.351300f, 0.520200f,
+    1.022900f, 1.216100f, 0.574400f, 1.122300f,
+    1.097200f, 0.627000f, 1.028300f, 0.955600f,
+    0.678100f, 0.934800f, 1.049400f, 0.727700f,
+    0.994200f, 1.005200f, 0.775900f, 1.070200f,
+    0.961500f, 0.822900f, 0.995600f, 0.995000f,
+    0.868700f, 0.991600f, 1.005700f, 0.913500f,
+    1.016500f, 0.985200f, 0.957200f, 0.985200f,
+    1.007100f, 1.000000f, 0.999900f, 0.999800f,
+    1.010600f, 1.000000f, 1.000000f, 1.000000f,
+};
+/*
+// 0x0700C880
+const f32 intro_seg7_table_scale_2[] = {
+    1.000000f, 1.000000f, 1.000000f, 0.987300f,
+    0.987300f, 0.987300f, 0.951400f, 0.951400f,
+    0.951400f, 0.896000f, 0.896000f, 0.896000f,
+    0.824600f, 0.824600f, 0.824600f, 0.740700f,
+    0.740700f, 0.740700f, 0.648000f, 0.648000f,
+    0.648000f, 0.549900f, 0.549900f, 0.549900f,
+    0.450100f, 0.450100f, 0.450100f, 0.352000f,
+    0.352000f, 0.352000f, 0.259300f, 0.259300f,
+    0.259300f, 0.175400f, 0.175400f, 0.175400f,
+    0.104000f, 0.104000f, 0.104000f, 0.048600f,
+    0.048600f, 0.048600f, 0.012800f, 0.012800f,
+    0.012800f, 0.000000f, 0.000000f, 0.000000f,
+};
+*/
+
 Gfx *geo_render_game_title(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct Object *mario = gMarioStates[0].marioObj;
 
-    sTitlePos[0] = gModulePreviewPos[0]-250.0f;
+    sTitlePos[0] = gModulePreviewPos[0]-270.0f;
     sTitlePos[1] = gModulePreviewPos[1];
     sTitlePos[2] = gModulePreviewPos[2];
 
     switch (callContext) {
         case GEO_CONTEXT_CREATE:
             init_graph_node_object(NULL, &gGameTitle, NULL, gVec3fZero, gVec3sZero, gVec3fOne);
+            vec3f_set(gGameTitle.scale,0,0,0);
+            vec3f_set(gGameTitle.scaleLerp,0,0,0);
             break;
         case GEO_CONTEXT_AREA_LOAD:
             geo_add_child(node, &gGameTitle.node);
@@ -731,7 +768,10 @@ Gfx *geo_render_game_title(s32 callContext, struct GraphNode *node, UNUSED Mat4 
                 vec3f_copy(gGameTitle.pos, sTitlePos);
                 vec3f_copy(gGameTitle.posCache, sTitlePos);
                 vec3f_copy(gGameTitle.posVideoCache, sTitlePos);
-                vec3f_copy(gGameTitle.scale, mario->header.gfx.scale);
+                int scaleIndex = MIN(gMainMenuTitleAnimationIndex,19)*3;
+                vec3f_set(gGameTitle.scale, intro_scale_table[scaleIndex],
+                    intro_scale_table[scaleIndex+1],
+                    intro_scale_table[scaleIndex+2]);
 
                 ((struct Object *) &gGameTitle)->dungeonRoom[0] = NULL;
                 ((struct Object *) &gGameTitle)->dungeonRoom[1] = NULL;

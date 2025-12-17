@@ -1,6 +1,10 @@
 struct mariosModulesSaveGame gMariosModulesSave;
 int gMariosModulesSaveIndex = 0;
 int gMainMenuWarpLocation = 2;
+int gMainMenuTitleAnimationIndex = -1;
+
+u8 sMainMenuShowTitle = FALSE;
+int sMainMenuModuleTimer = 0;
 
 void save_marios_modules(Vec3f pos) {
     int size = sizeof(struct mariosModulesSaveGame);
@@ -91,8 +95,8 @@ void marios_modules_savefile_load_position(void) {
 // MARIO'S MODULES: MAIN FUCKING MENU
 
 u8 sMainMenuTitleAlpha = 255;
-u8 gMainMenuState = MAIN_MENU_TITLE;
-u8 gMainMenuTargetState = MAIN_MENU_TITLE;
+u8 gMainMenuState = MAIN_MENU_TITLE_TRANSITION_1;
+u8 gMainMenuTargetState = MAIN_MENU_TITLE_TRANSITION_1;
 f32 sMainMenuTransition = 1.0f;
 s8 sMainMenuIndex = 0;
 u16 sMainMenuSeedShaker[2];
@@ -406,12 +410,33 @@ void logic_main_menu(void) {
     } else {
         sMainMenuTransition = CLAMP(sMainMenuTransition+.1f,0.0f,1.0f);
     }
+    if (sMainMenuShowTitle) {
+        gMainMenuTitleAnimationIndex ++;
+    } else {
+        gMainMenuTitleAnimationIndex --;
+    }
+    gMainMenuTitleAnimationIndex = CLAMP(gMainMenuTitleAnimationIndex,-1,19);
     switch(gMainMenuState) {
+        case MAIN_MENU_TITLE_TRANSITION_1:
+            if (sMainMenuModuleTimer++ >= 20) {
+                gMainMenuTargetState = MAIN_MENU_TITLE;
+                gMainMenuState = MAIN_MENU_TITLE;
+                sMainMenuModuleTimer = 0;
+                sMainMenuShowTitle = TRUE;
+            }
+            break;
         case MAIN_MENU_TITLE:
             if (sMainMenuTitleAlpha > 0) {
                 if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
-                    gMainMenuTargetState = MAIN_MENU_MAIN;
+                    gMainMenuTargetState = MAIN_MENU_TITLE_TRANSITION_2;
+                    sMainMenuShowTitle = FALSE;
                 }
+            }
+            break;
+        case MAIN_MENU_TITLE_TRANSITION_2:
+            if (sMainMenuModuleTimer++ >= 10) {
+                gMainMenuTargetState = MAIN_MENU_MAIN;
+                sMainMenuModuleTimer = 0;
             }
             break;
         case MAIN_MENU_MAIN:
