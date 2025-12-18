@@ -28,7 +28,6 @@ s8 sScreenMessageCount = -1;
 s8 sScreenMessageIndex = -1;
 
 u8 gModuleMenuOpen = FALSE;
-u8 gMiniMapOpen = FALSE;
 f32 sMiniMapZoom = 1.0f;
 u8 gModuleMenuMode = MODULE_MENU_MODE_NORMAL;
 s8 gRecycleChestContent = MOD_EMPTY;
@@ -191,6 +190,14 @@ void init_module_inventory(void) {
 
     // Starter inventory
     inventory[4][7] = MOD_MONITOR;
+
+    // Minimap code (I'm serious)
+    inventory[10][0] = MOD_IF_INPUT;
+    inventoryParam[10][0] = 7;
+    inventory[10][1] = MOD_IF;
+    inventory[10][2] = MOD_MINIMAP;
+    inventory[10][3] = MOD_ENDBLOCK;
+
 
     tinymt32_init(&gGlobalRandomState,0);
 
@@ -448,19 +455,6 @@ void control_module_menu(void) {
     // Always turn off passive effects when in menu
     gMarioState->passiveFlag = 0;
 
-    // Handle Minimap viewage
-    if (gMiniMapOpen) {
-        if (!(gPlayer1Controller->buttonDown & Z_TRIG)) {
-            gMiniMapOpen = FALSE;
-        }
-        return;
-    }
-
-    if (gPlayer1Controller->buttonDown & Z_TRIG) {
-        gMiniMapOpen = TRUE;
-        return;
-    }
-
     // handle panel changing
     if (gPlayer1Controller->buttonPressed & R_TRIG) {
         inventory_panel = (INVENTORY_PANEL_CT+inventory_panel+1)%INVENTORY_PANEL_CT;
@@ -640,7 +634,7 @@ void control_module_menu(void) {
             modified_inventory = TRUE;
         }
 
-        if (module_in_hand == MOD_EMPTY && gPlayer1Controller->buttonPressed & B_BUTTON) {
+        if (gPlayer1Controller->buttonPressed & Z_TRIG) {
             inventory_vis_x -= 10.0f;
             for (int j = 0; j < INVENTORY_SLOTS_X; j++) {
                 for (int i = 1; i < INVENTORY_SLOTS_X; i++) {
@@ -772,6 +766,8 @@ void print_mini_map(void) {
     sMiniMapZoom += (gPlayer1Controller->rawStickY/400.0f) * gFrameLerpDeltaTime;
     sMiniMapZoom = CLAMP(sMiniMapZoom,0.333f,1.0f);
 
+    sMiniMapZoom = .333f;
+
     f32 mario_x_to_map_x = (gMarioState->pos[0]/-50.f) * sMiniMapZoom;
     f32 mario_z_to_map_y = (gMarioState->pos[2]/50.f) * sMiniMapZoom;
 
@@ -806,11 +802,6 @@ void print_mini_map(void) {
 
 char print_buffer[500];
 void print_module_menu(void) {
-    if (gMiniMapOpen) {
-        print_mini_map();
-        return;
-    }
-
     gSPDisplayList(gDisplayListHead++,ui_ui_mesh);
 
     gPrintModuleDarken=1;

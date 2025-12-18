@@ -9,7 +9,6 @@
 #define INVENTORY_SLOTS_X 8
 
 extern u8 gModuleMenuOpen;
-extern u8 gMiniMapOpen;
 extern u8 gModuleMenuMode;
 extern s8 gRecycleChestContent;
 extern s8 gRecycledModule;
@@ -201,6 +200,7 @@ enum module_id {
     MOD_TIME_EXTEND,
     MOD_NONMOD_STAR,
     MOD_NONMOD_MYSTERY_CHEST,
+    MOD_MINIMAP,
     MOD_COUNT,
 };
 
@@ -236,6 +236,7 @@ enum {
     PASSIVE_FLAG_RUN,
     PASSIVE_FLAG_HOLD,
     PASSIVE_FLAG_DEFENSE,
+    PASSIVE_FLAG_MINIMAP,
 };
 
 enum {
@@ -354,6 +355,7 @@ void module_update(void);
 void print_module_menu(void);
 void print_module_hud_status(void);
 void print_module_generic_message(void);
+void print_mini_map(void);
 void init_module_inventory(void);
 s32 handle_module_inputs(void);
 void control_module_menu(void);

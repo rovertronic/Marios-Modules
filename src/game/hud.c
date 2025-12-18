@@ -576,6 +576,10 @@ void render_hud(void) {
         create_dl_ortho_matrix();
 #endif
 
+        if (gMarioState->passiveFlag & (1 << PASSIVE_FLAG_MINIMAP)) {
+            print_mini_map();
+        }
+
         if (gCurrentArea != NULL && gCurrentArea->camera->mode == CAMERA_MODE_INSIDE_CANNON) {
             render_hud_cannon_reticle();
         }

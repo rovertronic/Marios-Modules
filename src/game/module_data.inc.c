@@ -1372,4 +1372,15 @@ struct module_info module_infos[] = {
         .creative = TRUE,
         .loot_tier = LOOT_TIER_1,
     },
+    [MOD_MINIMAP] = {
+        .name = "Minimap",
+        .type = MTYPE_PASSIVE,
+        .tex = micons_script_rgba16,
+        .desc = "Shows minimap of the current level.",
+        .func = module_passive_effect,
+        .extra_data = PASSIVE_FLAG_MINIMAP,
+        .cooldown = .0f,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_2,
+    },
 };
