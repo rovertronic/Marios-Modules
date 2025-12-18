@@ -636,6 +636,7 @@ s32 dungeon_door_on_other_side(int xp, int yp, int j) {
             return TRUE;
         }
     }
+    sDungeonDoorOtherSideRet = NULL;
     return FALSE;
 }
 
@@ -706,6 +707,7 @@ void dungeon_room_set_neighbor_flag(struct DungeonRoom * room, int id) {
 
 s32 dungeon_room_is_visible(struct DungeonRoom * room) {
     if (room == NULL) {return TRUE;}
+    if (gDungeonMarioRoom == NULL) {return TRUE;}
 
     int id = room->id;
     int index = id/32;
@@ -989,10 +991,14 @@ void dungeon_spawn_room_objects(void) {
                 struct Object * doorObj2 = NULL;
                 if (dungeon_door_on_other_side(sDungeonCellProcessList[i]->x,sDungeonCellProcessList[i]->y,j)) {
                     if (j == 0 || j == 1) {
-                        doorObj = spawn_object(gMarioObject, MODEL_DUNGEON_DOORHOLE ,bhvDungeonProcGenRoom);
                         doorObj2 = spawn_object(gMarioObject, MODEL_DUNGEON_DOOR ,bhvDungeonDoor);
                         doorObj2->oFaceAngleYaw = (j+1) * 0x4000;
+                        doorObj2->dungeonRoom[0] = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
+                        if (sDungeonDoorOtherSideRet) {
+                            doorObj2->dungeonRoom[1] = &sDungeonRoomList[sDungeonDoorOtherSideRet->id-1];
+                        }
 
+                        doorObj = spawn_object(gMarioObject, MODEL_DUNGEON_DOORHOLE ,bhvDungeonProcGenRoom);
                         doorObj->collisionData = segmented_to_virtual(doorhole_collision);
                     } else {
                         doorObj = spawn_object(gMarioObject, MODEL_NONE, bhvStaticObject);

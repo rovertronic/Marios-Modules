@@ -6420,13 +6420,16 @@ const BehaviorScript bhvSilverStar[] = {
     END_LOOP(),
 };
 
+extern void bhv_dungeon_room(void);
 const BehaviorScript bhvDungeonProcGenRoom[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT)),
     BEGIN_REPEAT(1),
     END_REPEAT(),
     CALL_NATIVE(load_object_static_model),
-    BREAK(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_dungeon_room),
+    END_LOOP(),
 };
 
 extern void bhv_baldi_door(void);
@@ -6438,6 +6441,7 @@ const BehaviorScript bhvBaldiDoor[] = {
     END_LOOP(),
 };
 
+extern void bhv_dungeon_door(void);
 const BehaviorScript bhvDungeonDoor[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT | OBJ_FLAG_DONT_CALC_COLL_DIST)),
@@ -6447,7 +6451,7 @@ const BehaviorScript bhvDungeonDoor[] = {
     CALL_NATIVE(bhv_init_bdoor),
     SET_HOME(),
     BEGIN_LOOP(),
-        CALL_NATIVE(bhv_bdoor),
+        CALL_NATIVE(bhv_dungeon_door),
         CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };

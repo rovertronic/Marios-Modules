@@ -1285,6 +1285,9 @@ void bhv_bdoor(void) {
     u8 needs_key = (o->oBehParams2ndByte==1);
     u8 open = FALSE;
     vec3_get_dist(gMarioState->pos,&o->oHomeVec,&dist);
+    if (dist < 800.0f && (o->oAction == 1 || o->oAction == 2)) {
+        open = TRUE;
+    }
     if (dist < 400.0f && o->oAction != 4) {
         open = TRUE;
 
@@ -1658,4 +1661,66 @@ void bhv_baldi_door(void) {
 
 void bhv_dungeon_tree(void) {
     cur_obj_set_model(gDungeonTreeModel);
+}
+
+void bhv_dungeon_door(void) {
+    u8 open = !(!dungeon_room_is_visible(o->dungeonRoom[0]) || !dungeon_room_is_visible(o->dungeonRoom[1]));
+
+    switch(o->oAction) {
+        case 0:
+            if (open) {
+                o->oAction = 1;
+            }
+            break;
+        case 1:
+            o->oPosY += 25.0f;
+            if (o->oPosY > o->oHomeY + 500.0f) {
+                o->oAction = 2;
+                o->oPosY = o->oHomeY + 500.0f;
+            }
+            break;
+        case 2:
+            if (!open) {
+                o->oAction = 3;
+            }
+            break;
+        case 3:
+            o->oPosY -= 25.0f;
+            if (o->oPosY < o->oHomeY) {
+                o->oAction = 0;
+                o->oPosY = o->oHomeY;
+            }
+            break;
+        case 4://door unlock anim
+            if (o->oTimer>=50) {
+                obj_save_bin_write(o);
+                gMarioState->numKeys--;
+                o->oBehParams2ndByte = 0;
+                cur_obj_set_model(MODEL_BDOOR);
+                o->oAction = 0;
+            }
+            break;
+    }
+}
+
+void bhv_dungeon_room(void) {
+    u8 visible = !(!dungeon_room_is_visible(o->dungeonRoom[0]) && !dungeon_room_is_visible(o->dungeonRoom[1]));
+
+    switch(o->oAction) {
+        case 0:
+            o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
+            if (visible) {
+                o->oAction = 1;
+            }
+            break;
+        case 1:
+            o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
+            if (visible) {
+                o->oTimer = 0;
+            }
+            if (o->oTimer > 30) {
+                o->oAction = 0;
+            }
+            break;
+    }
 }
