@@ -55,4 +55,7 @@ extern const LevelScript level_rogue_entry[];
 #include "rmapwallkick/header.h"
 #include "rmapvanishhop/header.h"
 #include "rzmapigzag/header.h"
+#include "rmapdoor/header.h"
+#include "dungeondoor/collision_header.h"
+#include "dungeondoor/geo_header.h"
 #endif

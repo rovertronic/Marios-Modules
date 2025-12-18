@@ -54,6 +54,7 @@
 #include "levels/bowser_2/header.h"
 #include "levels/ttm/header.h"
 #include "levels/temple/header.h"
+#include "levels/rogue/header.h"
 
 #include "make_const_nonconst.h"
 #include "behavior_data.h"
@@ -6421,7 +6422,7 @@ const BehaviorScript bhvSilverStar[] = {
 
 const BehaviorScript bhvDungeonProcGenRoom[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT)),
     BEGIN_REPEAT(1),
     END_REPEAT(),
     CALL_NATIVE(load_object_static_model),
@@ -6434,5 +6435,19 @@ const BehaviorScript bhvBaldiDoor[] = {
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_baldi_door),
+    END_LOOP(),
+};
+
+const BehaviorScript bhvDungeonDoor[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT | OBJ_FLAG_DONT_CALC_COLL_DIST)),
+    LOAD_COLLISION_DATA(dungeondoor_collision),
+    SET_FLOAT(oDrawingDistance, 10000),
+    SET_FLOAT(oCollisionDistance, 3000),
+    CALL_NATIVE(bhv_init_bdoor),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_bdoor),
+        CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };

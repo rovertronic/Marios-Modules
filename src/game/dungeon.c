@@ -986,9 +986,13 @@ void dungeon_spawn_room_objects(void) {
         for (int j = 0; j < 4; j++) {
             if (sDungeonCellProcessList[i]->doorFlags & (1<<j)) {
                 struct Object * doorObj;
+                struct Object * doorObj2 = NULL;
                 if (dungeon_door_on_other_side(sDungeonCellProcessList[i]->x,sDungeonCellProcessList[i]->y,j)) {
                     if (j == 0 || j == 1) {
                         doorObj = spawn_object(gMarioObject, MODEL_DUNGEON_DOORHOLE ,bhvDungeonProcGenRoom);
+                        doorObj2 = spawn_object(gMarioObject, MODEL_DUNGEON_DOOR ,bhvDungeonDoor);
+                        doorObj2->oFaceAngleYaw = (j+1) * 0x4000;
+
                         doorObj->collisionData = segmented_to_virtual(doorhole_collision);
                     } else {
                         doorObj = spawn_object(gMarioObject, MODEL_NONE, bhvStaticObject);
@@ -1005,6 +1009,9 @@ void dungeon_spawn_room_objects(void) {
                 doorObj->dungeonRoom[1] = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
                 if (dungeon_door_on_other_side(sDungeonCellProcessList[i]->x,sDungeonCellProcessList[i]->y,j)) {
                     doorObj->dungeonRoom[1] =  &sDungeonRoomList[sDungeonDoorOtherSideRet->id-1];
+                }
+                if (doorObj2) {
+                    vec3f_copy(&doorObj2->oPosVec,&doorObj->oPosVec);
                 }
             }
         }
@@ -1140,6 +1147,7 @@ void dungeon_print_minimap(f32 mapZoom) {
     create_dl_translation_matrix(MENU_MTX_PUSH, 160.f, 120.f, 0);
     create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.02f * mapZoom, 0.02f * mapZoom, 1.0f);
 
+    // Render all discovered rooms
     for (int i = 0; i < sDungeonRoomCount; i++) {
 
         int id = sDungeonRoomList[i].id;
@@ -1156,6 +1164,34 @@ void dungeon_print_minimap(f32 mapZoom) {
                 create_dl_rotation_matrix(MENU_MTX_NOPUSH, sDungeonRoomList[i].direction*-90.0f, 0, 0, 1.0f);
                 gSPDisplayList(gDisplayListHead++, minimapDL);
                 gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+            }
+        }
+    }
+
+    // Render all doors in discovered rooms
+    // Doors are rendered separately so that doors that lead nowhere are invisible
+    for (int i = 0; i < sDungeonCellProcessCount; i++) {
+
+        int id = sDungeonCellProcessList[i]->id-1;
+        int index = id/32;
+        int flag = id%32;
+        
+        for (int j = 0; j < 2; j++) {
+            if (dungeon_door_on_other_side(sDungeonCellProcessList[i]->x,sDungeonCellProcessList[i]->y,j)) {
+                
+                int id2 = sDungeonDoorOtherSideRet->id-1;
+                int index2 = id2/32;
+                int flag2 = id2%32;
+
+                if ((sDungeonDiscoveredFlags[index] & (1 << flag)) || (sDungeonDiscoveredFlags[index2] & (1 << flag2))) {
+                    f32 dungeon_door_x = ((32000.0f - (sDungeonCellProcessList[i]->x * 2000.0f)) - (1000.f * sDirectionList[j][0])) - gMarioState->pos[0];
+                    f32 dungeon_door_y = ((32000.0f - (sDungeonCellProcessList[i]->y * 2000.0f)) + (1000.f * sDirectionList[j][1])) - gMarioState->pos[2];
+
+                    create_dl_translation_matrix(MENU_MTX_PUSH, dungeon_door_x, dungeon_door_y, 0);
+                    create_dl_rotation_matrix(MENU_MTX_NOPUSH, j*-90.0f, 0, 0, 1.0f);
+                    gSPDisplayList(gDisplayListHead++, rmapdoor_rmapdoor_mesh);
+                    gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+                }
             }
         }
     }
