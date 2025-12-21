@@ -571,6 +571,39 @@ struct DungeonRoomVariant sRoomFurnace = {
     .generateOnce = TRUE,
 };
 
+// Grindr Room
+
+struct DungeonRoomVariantCellList sRoomGrindrCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 0, .y = 1}, 
+    {.x = 1, .y = 1},
+    {.end = TRUE},
+};
+
+struct DungeonObject sRoomGrindrObjectList[] = {
+    {.bhv = bhvRecycleInterface, .model = MODEL_NONE, .param = 0,
+    .angle = 0x0, .pos = {-19.9601f,12.6791f,4.38218f}},
+    {.bhv = bhvRecycleChest, .model = MODEL_CHEST, .param = 0,
+    .angle = 0x0, .pos = {-12.6849f,19.8072f,0.656494f}},
+    {.bhv = bhvRecycleHole, .model = MODEL_NONE, .param = 0,
+    .angle = 0x0, .pos = {-16.9478f,12.2288f,4.38218f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomGrindr = {
+    .minimapDL = &rmapgrindr_rmapgrindr_mesh,
+
+    .cellList = &sRoomGrindrCellList,
+    .model = MODEL_ROOM_GRINDR,
+    .collision = rgrinder_collision,
+    .objectList = &sRoomGrindrObjectList,
+    .maxLootCt = 0,
+    .lootLocations = NULL,
+    .requiredLoot = NULL,
+    .generateOnce = TRUE,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomHall,
     &sRoomMiniJunc,
@@ -578,6 +611,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomSpaceworld,
     &sRoomGardenHall,
     &sRoomTreasure,
+    &sRoomGrindr,
 
     // Challenge Rooms
     &sRoomLongJump,

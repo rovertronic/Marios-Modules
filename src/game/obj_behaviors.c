@@ -1495,10 +1495,10 @@ void bhv_shredder(void) {
 void bhv_module_shred(void) {
     o->oFaceAngleYaw = 0x4000;
     switch(o->oAction) {
-        case 0:
-            o->oHomeX = -7119;
-            o->oHomeY = 2203;
-            o->oHomeZ = -17429;
+        case 0:;
+            struct Object * recyclehole = cur_obj_nearest_object_with_behavior(bhvRecycleHole);
+            if (recyclehole == NULL) {return;}
+            vec3f_copy(&o->oHomeVec,&recyclehole->oPosVec);
 
             o->oAction++;
             break;

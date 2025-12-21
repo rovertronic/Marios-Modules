@@ -1,6 +1,6 @@
-extern Vtx rmaptreasure_rmaptreasure_mesh_vtx_0[4];
+extern Vtx rmaptreasure_rmaptreasure_mesh_vtx_0[16];
 extern Gfx rmaptreasure_rmaptreasure_mesh_tri_0[];
-extern Vtx rmaptreasure_rmaptreasure_mesh_vtx_1[8];
+extern Vtx rmaptreasure_rmaptreasure_mesh_vtx_1[24];
 extern Gfx rmaptreasure_rmaptreasure_mesh_tri_1[];
 extern Gfx mat_rmaptreasure_map_mat_1_layer1[];
 extern Gfx mat_revert_rmaptreasure_map_mat_1_layer1[];

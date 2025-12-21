@@ -1,0 +1,9 @@
+extern Vtx rmapgrindr_rmapgrindr_mesh_vtx_0[4];
+extern Gfx rmapgrindr_rmapgrindr_mesh_tri_0[];
+extern Vtx rmapgrindr_rmapgrindr_mesh_vtx_1[8];
+extern Gfx rmapgrindr_rmapgrindr_mesh_tri_1[];
+extern Gfx mat_rmapgrindr_map_mat_1_layer1[];
+extern Gfx mat_revert_rmapgrindr_map_mat_1_layer1[];
+extern Gfx mat_rmapgrindr_map_mat_3_layer1[];
+extern Gfx mat_revert_rmapgrindr_map_mat_3_layer1[];
+extern Gfx rmapgrindr_rmapgrindr_mesh[];

@@ -68,3 +68,6 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "rmapdoor/model.inc.c"
 #include "dungeondoor/collision.inc.c"
 #include "dungeondoor/model.inc.c"
+#include "rgrindr/model.inc.c"
+#include "rgrinder/collision.inc.c"
+#include "rmapgrindr/model.inc.c"

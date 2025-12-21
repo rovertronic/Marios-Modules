@@ -34,3 +34,4 @@
 #include "rgardenhall/geo.inc.c"
 #include "rfurnace/geo.inc.c"
 #include "dungeondoor/geo.inc.c"
+#include "rgrindr/geo.inc.c"

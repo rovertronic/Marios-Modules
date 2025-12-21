@@ -36,7 +36,7 @@ const LevelScript level_temple_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_SHREDDER, shredder_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ASRIELCAGE, asrielcage_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ORANGEPOLE, orangepole_geo), 
-	LOAD_MODEL_FROM_GEO(MODEL_GAME_TITLE, title2_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_GAME_TITLE, title2_geo), 
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 
@@ -220,6 +220,7 @@ const LevelScript level_temple_entry[] = {
 		OBJECT(MODEL_MCHEST, -2172, 2077, -1411, 0, 45, 0, (0 << 16), bhvMysteryChest),
 		OBJECT(MODEL_MCHEST, -10814, 989, -4912, 0, 43, 0, (0 << 16), bhvMysteryChest),
 		OBJECT(MODEL_ORANGEPOLE, 487, 2006, -1443, 0, 0, 0, (200 << 16), bhvPoleGrabbing),
+		OBJECT(MODEL_NONE, -7119, 2269, -17429, 0, 0, 0, 0x00000000, bhvRecycleHole),
 		OBJECT(MODEL_NONE, -6817, 2269, -17384, 0, 0, 0, 0x00000000, bhvRecycleInterface),
 		OBJECT(MODEL_NONE, -3606, 4057, -3230, 0, 0, 0, 0x00000000, bhvRedCoinManager),
 		OBJECT(MODEL_NONE, 356, 4942, 6657, 0, 0, 0, 0x00000000, bhvRedCoinSpawner),
