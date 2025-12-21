@@ -1204,10 +1204,10 @@ void mode_8_directions_camera(struct Camera *c) {
             vec3f_diff(camera_looknormal,c->focus,c->pos);
             vec3f_normalize(camera_looknormal);
 
-            f32 thickMul = 35.0f;
+            f32 thickMul = 5.0f;
 
-            if (hit_to_mario_dist < 300.0f) {
-                thickMul -= 300.0f-hit_to_mario_dist;
+            if (hit_to_mario_dist < 110.0f) {
+                thickMul -= 110.0f-hit_to_mario_dist;
             }
 
             thick[0] = camera_looknormal[0] * thickMul;
