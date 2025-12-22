@@ -92,6 +92,8 @@ struct DungeonRoomVariant sRoomHall = {
     .maxLootCt = 0,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
+
+    .rarity = 2,
 };
 
 // Mini Junction Room
@@ -113,6 +115,7 @@ struct DungeonRoomVariantCellList sRoomMiniJuncCellList[] = {
     {.end = TRUE},
 };
 
+// Coins variant
 struct DungeonRoomVariant sRoomMiniJunc1 = {
     .minimapDL = &rmapjunc_rmapjunc_mesh,
 
@@ -123,8 +126,11 @@ struct DungeonRoomVariant sRoomMiniJunc1 = {
     .maxLootCt = 0,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
+
+    .rarity = 2,
 };
 
+// Enemy spawn variant
 struct DungeonRoomVariant sRoomMiniJunc2 = {
     .minimapDL = &rmapjunc_rmapjunc_mesh,
 
@@ -135,6 +141,8 @@ struct DungeonRoomVariant sRoomMiniJunc2 = {
     .maxLootCt = 0,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
+
+    .rarity = 4,
 };
 
 // Lobby Room
@@ -954,6 +962,13 @@ void dungeon_generate_rooms_at_doors(void) {
 
                     if (sDungeonEasterEggGenerated && selectedVariant->easterEgg) {
                         // only generate 1 easter egg per level, and farther in
+                        trycount++;
+                        continue;
+                    }
+
+                    if (selectedVariant->rarity > 0 &&
+                        (tinymt32_generate_u32(&gGlobalRandomState) % selectedVariant->rarity != 0)) {
+                        // Roll for room rarity
                         trycount++;
                         continue;
                     }

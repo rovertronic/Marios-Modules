@@ -42,6 +42,7 @@ struct DungeonRoomVariant {
     u8 maxLootCt:2;
     u8 generateOnce:1;
     u8 easterEgg:1;
+    u8 rarity;
 };
 
 struct DungeonRoom {
