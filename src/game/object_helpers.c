@@ -384,6 +384,12 @@ struct Object *spawn_object_at_origin(struct Object *parent, UNUSED s32 unusedAr
     obj->header.gfx.areaIndex = parent->header.gfx.areaIndex;
     obj->header.gfx.activeAreaIndex = parent->header.gfx.areaIndex;
 
+    obj->dungeonRoom[0] = parent->dungeonRoom[0];
+    obj->dungeonRoom[1] = parent->dungeonRoom[1];
+    if (parent->oFlags & OBJ_FLAG_DUNGEON_CULL) {
+        obj->oFlags |= OBJ_FLAG_DUNGEON_CULL;
+    }
+
     geo_obj_init((struct GraphNodeObject *) &obj->header.gfx, gLoadedGraphNodes[model], gVec3fZero, gVec3sZero);
 
     return obj;
@@ -1861,6 +1867,7 @@ s32 is_item_in_array(s8 item, s8 *array) {
 }
 
 void bhv_init_room(void) {
+    if (gCurrLevelNum == LEVEL_ROGUE) {return;}
     o->oRoom = get_room_at_pos(o->oPosX, o->oPosY, o->oPosZ);
 }
 

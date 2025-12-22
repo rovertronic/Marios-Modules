@@ -140,7 +140,7 @@ void bhv_scuttlebug_loop(void) {
     cur_obj_move_standard(-50);
     obj_element_enemy_loop();
 
-    Vec3f modulePos = {o->oPosX,o->oPosY+140.0f,o->oPosZ};
+    Vec3f modulePos = {o->oPosX,o->oPosY+110.0f,o->oPosZ};
     vec3f_copy(o->saddlePos,modulePos);
 }
 

@@ -302,4 +302,7 @@ void bhv_mr_i_body_loop(void) {
     }
 
     o->oInteractStatus = INT_STATUS_NONE;
+
+    Vec3f modulePos = {o->oPosX,o->oPosY+150.0f,o->oPosZ};
+    vec3f_copy(o->saddlePos,modulePos);
 }

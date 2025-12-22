@@ -45,6 +45,9 @@ void bhv_fire_spitter_update(void) {
 
     cur_obj_move_standard(78);
 
+    Vec3f modulePos = {o->oPosX,o->oPosY+100.0f,o->oPosZ};
+    vec3f_copy(o->saddlePos,modulePos);
+
     if (o->objRiding == NULL && o->oBehParams2ndByte == 0) {
         obj_mark_for_deletion(o);
     }

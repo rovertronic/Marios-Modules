@@ -149,6 +149,8 @@ void bhv_snufit_loop(void) {
             o->oPosX = o->oHomeX + 100.0f * coss(o->oSnufitCircularPeriod);
             o->oPosY = o->oHomeY + 8.0f * coss(4000 * gGlobalTimer);
             o->oPosZ = o->oHomeZ + 100.0f * sins(o->oSnufitCircularPeriod);
+        } else {
+            o->oPosY += 50.0f;
         }
 
         o->oSnufitBodyScale
@@ -163,8 +165,8 @@ void bhv_snufit_loop(void) {
         }
 
         obj_element_enemy_loop();
-        Vec3f modulePos = {o->oPosX,o->oPosY+140.0f,o->oPosZ};
-        enemy_module_set_position(modulePos);
+        Vec3f modulePos = {o->oPosX,o->oPosY+50.0f,o->oPosZ};
+        vec3f_copy(o->saddlePos,modulePos);
 
         cur_obj_scale(o->oSnufitScale);
         obj_check_attacks(&sSnufitHitbox, o->oAction);

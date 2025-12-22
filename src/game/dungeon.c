@@ -41,6 +41,29 @@ s8 sDirectionList[4][2] = {
     { 0,-1}, // Up
 };
 
+/* ENEMY DATA */
+
+struct DungeonObject sBottomEnemyList[] = {
+    {.bhv = bhvGoomba, .model = MODEL_GOOMBA, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+    {.bhv = bhvScuttlebug, .model = MODEL_SCUTTLEBUG, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+    {.bhv = bhvMrI, .model = MODEL_MR_I, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+};
+
+struct DungeonObject sTopEnemyList[] = {
+    {.bhv = bhvStackGoomba, .model = MODEL_GOOMBA, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+    {.bhv = bhvFireSpitter, .model = MODEL_BOWLING_BALL, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+    {.bhv = bhvSnufit, .model = MODEL_SNUFIT, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+};
+
+struct DungeonObject * gDungeonEnemies[3];
+
+
 /* ROOM DATA */
 
 // Hallway Room
@@ -73,18 +96,42 @@ struct DungeonRoomVariant sRoomHall = {
 
 // Mini Junction Room
 
+struct DungeonObject sRoomJuncObjectList1[] = {
+    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 2,
+    .angle = 0x0, .pos = {0.f,0.f,0.f}},
+    {.end = TRUE},
+};
+
+struct DungeonObject sRoomJuncObjectList2[] = {
+    {.bhv = bhvDungeonElite, .model = MODEL_NONE, .param = 0,
+    .angle = 0x0, .pos = {0.f,0.f,0.f}},
+    {.end = TRUE},
+};
+
 struct DungeonRoomVariantCellList sRoomMiniJuncCellList[] = {
     {.x = 0, .y = 0, .doorFlags = 0xF},
     {.end = TRUE},
 };
 
-struct DungeonRoomVariant sRoomMiniJunc = {
+struct DungeonRoomVariant sRoomMiniJunc1 = {
     .minimapDL = &rmapjunc_rmapjunc_mesh,
 
     .cellList = &sRoomMiniJuncCellList,
     .model = MODEL_ROOM_MINIJUNC,
     .collision = minijunc_collision,
-    .objectList = NULL,
+    .objectList = &sRoomJuncObjectList2,
+    .maxLootCt = 0,
+    .requiredLoot = NULL,
+    .generateOnce = FALSE,
+};
+
+struct DungeonRoomVariant sRoomMiniJunc2 = {
+    .minimapDL = &rmapjunc_rmapjunc_mesh,
+
+    .cellList = &sRoomMiniJuncCellList,
+    .model = MODEL_ROOM_MINIJUNC,
+    .collision = minijunc_collision,
+    .objectList = &sRoomJuncObjectList1,
     .maxLootCt = 0,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
@@ -629,8 +676,9 @@ struct DungeonRoomVariant sRoomCaveJump = {
 };
 
 struct DungeonRoomVariant * sRoomVariantList[] = {
+    &sRoomMiniJunc1,
+    &sRoomMiniJunc2,
     &sRoomHall,
-    &sRoomMiniJunc,
     &sRoomLobby,
     &sRoomSpaceworld,
     &sRoomGardenHall,
@@ -952,7 +1000,7 @@ void dungeon_spawn_room_objects(void) {
         roomObj->dungeonRoom[0] = &sDungeonRoomList[i];
         roomObj->dungeonRoom[1] = &sDungeonRoomList[i];
 
-        if (sDungeonRoomList[i]. variant == &sRoomMiniJunc) {
+        if (sDungeonRoomList[i].variant->model == MODEL_ROOM_MINIJUNC) {
             for (int j = 0; j < 4; j ++) {
                 if (dungeon_door_on_other_side(sDungeonRoomList[i].xorigin,sDungeonRoomList[i].yorigin,j)) {
                     struct Object * carpetPoint = spawn_object(gMarioObject, MODEL_DUNGEON_CARPET_POINT, bhvStaticObject);
@@ -986,6 +1034,10 @@ void dungeon_spawn_room_objects(void) {
             chest->oPosY += sDungeonRoomList[i].variant->lootLocations[j][2] * 100.f;
             chest->oFaceAngleYaw = angle + (182.f * sDungeonRoomList[i].variant->lootLocations[j][3]);
             chest->oBehParams2ndByte = sDungeonRoomList[i].loot[j];
+
+            chest->dungeonRoom[0] = &sDungeonRoomList[i];
+            chest->dungeonRoom[1] = &sDungeonRoomList[i];
+            chest->oFlags |= OBJ_FLAG_DUNGEON_CULL;
 
             if (sDungeonRoomList[i].loot[j] == MOD_NONMOD_MYSTERY_CHEST) {
                 chest->oBehParams2ndByte = 0;
@@ -1035,6 +1087,10 @@ void dungeon_spawn_room_objects(void) {
                 obj->oPosY += details->pos[2] * 100.f;
                 obj->oFaceAngleYaw = angle + details->angle;;
                 obj->oBehParams2ndByte = details->param;
+
+                obj->dungeonRoom[0] = &sDungeonRoomList[i];
+                obj->dungeonRoom[1] = &sDungeonRoomList[i];
+                obj->oFlags |= OBJ_FLAG_DUNGEON_CULL;
 
                 j++;
             }
@@ -1087,11 +1143,20 @@ void dungeon_generate(void) {
     // Randomize Seed
     tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
 
+    // Change textures
     texgen_generate();
+
+    // Pick a random tree type
     gDungeonTreeModel = MODEL_DUNGEON_TREE_1;
     if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
         gDungeonTreeModel = MODEL_DUNGEON_TREE_2;
     }
+
+    // Pick random enemies
+    int s = sizeof(sBottomEnemyList[0]);
+    gDungeonEnemies[0] = &sBottomEnemyList[tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBottomEnemyList)/s)];
+    gDungeonEnemies[1] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
+    gDungeonEnemies[2] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
 
     redo_generate:
     sDungeonForceRegen = FALSE;

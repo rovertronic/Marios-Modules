@@ -955,5 +955,14 @@ void cur_obj_update(void) {
         o->oVelY = 0.0f;
     }
 
+    if (objFlags & OBJ_FLAG_DUNGEON_CULL) {
+        u8 visible = !(!dungeon_room_is_visible(o->dungeonRoom[0]) && !dungeon_room_is_visible(o->dungeonRoom[1]));
+        if (visible) {
+            o->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+        } else {
+            o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
+        }
+    }
+
     frameLerp_cache_pos(o->header.gfx.pos,o->header.gfx.posCache,o->header.gfx.posVideoCache);
 }

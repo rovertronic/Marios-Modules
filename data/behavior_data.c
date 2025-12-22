@@ -6461,3 +6461,10 @@ const BehaviorScript bhvDungeonDoor[] = {
         CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };
+
+extern void bhv_dungeon_elite(void);
+const BehaviorScript bhvDungeonElite[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    CALL_NATIVE(bhv_dungeon_elite),
+    DEACTIVATE(),
+};
