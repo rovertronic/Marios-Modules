@@ -604,6 +604,30 @@ struct DungeonRoomVariant sRoomGrindr = {
     .generateOnce = TRUE,
 };
 
+// Cave Jump Room
+
+s8 sRoomCaveJumpRequiredLoot[] = {
+    MOD_JUMP, 1,
+    MOD_PASSIVE, 1,
+    MOD_IF_FLOOR, 1,
+    MOD_TIMER, 1,
+    MOD_FLIP_VEL, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonRoomVariant sRoomCaveJump = {
+    .minimapDL = &rmapgarden_rmapgarden_mesh,
+
+    .cellList = &sRoomGardenHallCellList,
+    .model = MODEL_ROOM_CAVEJUMP,
+    .collision = rcavejump_collision,
+    .objectList = NULL,
+    .maxLootCt = 0,
+    .lootLocations = NULL,
+    .requiredLoot = &sRoomCaveJumpRequiredLoot,
+    .generateOnce = TRUE,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomHall,
     &sRoomMiniJunc,
@@ -619,6 +643,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomWallJump,
     &sRoomWood,
     &sRoomFurnace,
+    &sRoomCaveJump,
 
     // Easter-Egg Rooms
     &sRoomFnab,

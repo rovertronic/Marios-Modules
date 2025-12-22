@@ -257,6 +257,10 @@ void tutorial_handler(void) {
 void module_update(void) {
     tutorial_handler();
 
+    if (GROUNDED) {
+        gMarioState->playerGravityControl = TRUE;
+    }
+
     for (int i = 0; i < MODULE_EXEC_COUNT; i++) {
         struct module_execution_thread * met = &module_execution_threads[i];
         if (met->cooldown) {
@@ -286,7 +290,7 @@ void module_update(void) {
             }
             escape_halt:
             if (!met->halted) {
-                while(read_mod != MOD_EMPTY) {                    
+                while(read_mod != MOD_EMPTY) {
                     if (1 << module_infos[read_mod].type & inventory_row_info[met->y].whitelist_flags) {
                         met->extra_data = module_infos[read_mod].extra_data;
                         met->option = inventoryParam[met->y][met->x];
@@ -297,6 +301,11 @@ void module_update(void) {
                             met->x++;
                         }
                         met->cooltime += module_infos[read_mod].cooldown*30.0f;
+
+                        if (met == &module_execution_threads[MODULE_EXEC_PASSIVE] && met->doaircooldown) {
+                            // Automatic jumps will always use full height
+                            gMarioState->playerGravityControl = FALSE;
+                        }
 
                         if (inventory_row_info[met->y].wrap && met->x == INVENTORY_SLOTS_X) {
                             met->x = 0;

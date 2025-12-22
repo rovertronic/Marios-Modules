@@ -1348,7 +1348,7 @@ struct module_info module_infos[] = {
         .desc = "Always makes Mario jump as high as possible.",
         .func = module_passive_effect,
         .extra_data = PASSIVE_FLAG_HOLD,
-        .creative = TRUE,
+        .creative = FALSE,
     },
     [MOD_DEFENSE] = {
         .name = "Defense",
@@ -1380,7 +1380,7 @@ struct module_info module_infos[] = {
         .func = module_passive_effect,
         .extra_data = PASSIVE_FLAG_MINIMAP,
         .cooldown = .0f,
-        .creative = TRUE,
+        .creative = FALSE,
         .loot_tier = LOOT_TIER_2,
     },
 };

@@ -53,6 +53,7 @@ const LevelScript level_rogue_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_GARDENHALL, rgardenhall_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_FURNACE, rfurnace_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_GRINDR, rgrindr_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_CAVEJUMP, rcavejump_geo),
 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_1, bubbly_tree_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_2, spiky_tree_geo),

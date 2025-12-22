@@ -473,6 +473,8 @@ struct MarioState {
 #ifdef PREVENT_DEATH_LOOP
              u8  isDead : 1;
 #endif
+             u8 playerGravityControl:1;
+             
            Vec3f lastSafePos;
            Vec3f prevPos;
              f32 lateralSpeed;

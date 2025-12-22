@@ -35,3 +35,4 @@
 #include "rfurnace/geo.inc.c"
 #include "dungeondoor/geo.inc.c"
 #include "rgrindr/geo.inc.c"
+#include "rcavejump/geo.inc.c"
