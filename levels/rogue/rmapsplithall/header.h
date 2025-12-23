@@ -1,0 +1,9 @@
+extern Vtx rmapsplithall_rmapsplithall_mesh_vtx_0[43];
+extern Gfx rmapsplithall_rmapsplithall_mesh_tri_0[];
+extern Vtx rmapsplithall_rmapsplithall_mesh_vtx_1[60];
+extern Gfx rmapsplithall_rmapsplithall_mesh_tri_1[];
+extern Gfx mat_rmapsplithall_map_mat_1_layer1[];
+extern Gfx mat_revert_rmapsplithall_map_mat_1_layer1[];
+extern Gfx mat_rmapsplithall_map_mat_3_layer1[];
+extern Gfx mat_revert_rmapsplithall_map_mat_3_layer1[];
+extern Gfx rmapsplithall_rmapsplithall_mesh[];

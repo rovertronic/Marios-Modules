@@ -624,6 +624,7 @@ enum new_models {
     MODEL_ROOM_FURNACE,
     MODEL_ROOM_GRINDR,
     MODEL_ROOM_CAVEJUMP,
+    MODEL_ROOM_SPLITHALL,
 };
 
 #endif // MODEL_IDS_H

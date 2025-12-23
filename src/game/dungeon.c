@@ -173,6 +173,8 @@ struct DungeonRoomVariant sRoomLobby = {
     .lootLocations = &sRoomLobbyLootLocations,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
+
+    .rarity = 2,
 };
 
 // Treasure Room
@@ -671,7 +673,7 @@ s8 sRoomCaveJumpRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomCaveJump = {
-    .minimapDL = &rmapgarden_rmapgarden_mesh,
+    .minimapDL = &rmapcavejump_rmapcavejump_mesh,
 
     .cellList = &sRoomGardenHallCellList,
     .model = MODEL_ROOM_CAVEJUMP,
@@ -683,11 +685,41 @@ struct DungeonRoomVariant sRoomCaveJump = {
     .generateOnce = TRUE,
 };
 
+// Split Hall Room
+
+struct DungeonRoomVariantCellList sRoomSplitHallCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0, .doorFlags = DOOR_UP},
+    {.x = 0, .y = -1, .doorFlags = DOOR_LEFT}, 
+    {.x = 1, .y = -1},
+    {.x = 2, .y = -1},
+
+    {.x = 2, .y = -2, .doorFlags = DOOR_DOWN},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomSplitHall = {
+    .minimapDL = &rmapsplithall_rmapsplithall_mesh,
+
+    .cellList = &sRoomSplitHallCellList,
+    .model = MODEL_ROOM_SPLITHALL,
+    .collision = rsplithall_collision,
+    .objectList = NULL,
+    .maxLootCt = 0,
+    .lootLocations = NULL,
+    .requiredLoot = NULL,
+    .generateOnce = FALSE,
+
+    .rarity = 2,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomMiniJunc1,
     &sRoomMiniJunc2,
     &sRoomHall,
     &sRoomLobby,
+    &sRoomSplitHall,
     &sRoomSpaceworld,
     &sRoomGardenHall,
     &sRoomTreasure,
