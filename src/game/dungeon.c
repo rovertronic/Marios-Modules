@@ -1354,7 +1354,7 @@ void dungeon_print_minimap(f32 mapZoom) {
         int flag = id%32;
         
         for (int j = 0; j < 2; j++) {
-            if (dungeon_door_on_other_side(sDungeonCellProcessList[i]->x,sDungeonCellProcessList[i]->y,j)) {
+            if ( ((1<<j) & sDungeonCellProcessList[i]->doorFlags) && dungeon_door_on_other_side(sDungeonCellProcessList[i]->x,sDungeonCellProcessList[i]->y,j)) {
                 
                 int id2 = sDungeonDoorOtherSideRet->id-1;
                 int index2 = id2/32;
