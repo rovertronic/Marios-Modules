@@ -889,15 +889,16 @@ void print_module_menu(void) {
 
         gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
         gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160);
-        render_4slice(25,170,195,125);
+        render_4slice(25,180,195,125);
 
         utf8_print_reset();
         gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
 
-        sprintf(print_buffer,"Chests: %d/%d\nStars: %d/%d",
+        sprintf(print_buffer,"Chests: %d/%d\nStars: %d/%d\nSeed: %d",
         save_bin_get_flag_total(SAVE_BIN_CHESTS),save_bin_get_max_total(SAVE_BIN_CHESTS),
-        save_bin_get_flag_total(SAVE_BIN_STARS), save_bin_get_max_total(SAVE_BIN_STARS));
-        print_utf8(print_buffer,30,145);
+        save_bin_get_flag_total(SAVE_BIN_STARS), save_bin_get_max_total(SAVE_BIN_STARS),
+        gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
+        print_utf8(print_buffer,30,160);
     }
 
     // PRINT PANEL INFO
