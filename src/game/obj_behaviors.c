@@ -1744,3 +1744,40 @@ void bhv_dungeon_elite(void) {
     obj_ride_obj(goomba3,goomba2);
     obj_ride_obj(goomba2,goomba1);
 }
+
+int sSilverStarCt = 0;
+void bhv_silver_star(void) {
+    struct Object * mySwitch = cur_obj_nearest_object_with_behavior(bhvFloorSwitchHiddenObjects);
+    if (!mySwitch) {return;}
+
+    o->oFaceAngleYaw += 0x200;
+
+    switch(o->oAction) {
+        case 0:
+            cur_obj_hide();
+            if (mySwitch->oAction > 0) {
+                o->oAction++;
+            }
+            break;
+        case 1:
+            cur_obj_unhide();
+            if (mySwitch->oAction == 0) {
+                o->oAction=0;
+                break;
+            }
+            if (obj_check_if_collided_with_object(o, gMarioObject)) {
+                cur_obj_hide();
+                o->oAction++;
+                sSilverStarCt++;
+                play_sound(SOUND_MENU_COLLECT_SECRET + (((u8) sSilverStarCt-1) << 16), gGlobalSoundSource);
+                spawn_orange_number(sSilverStarCt, 0, 0, 0);
+            }
+            break;
+        case 2: // Collected
+            if (mySwitch->oAction == 0) {
+                o->oAction=0;
+                break;
+            }
+            break;
+    }    
+}

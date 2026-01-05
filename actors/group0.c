@@ -65,3 +65,4 @@
 #include "key/collision.inc.c"
 #include "key/model.inc.c"
 #include "hover/collision.inc.c"
+#include "silver_star/model.inc.c"

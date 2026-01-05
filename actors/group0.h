@@ -435,4 +435,5 @@ extern const struct Animation *const wiggler_seg5_anims_0500EC8C[];
 
 #include "hover/collision_header.h"
 
+#include "silver_star/geo_header.h"
 #endif

@@ -1,4 +1,7 @@
 
+extern int sSilverStarCt;
+// probably shouldn't do this but idgaf
+
 /**
  * Behavior for bhvFloorSwitchHardcodedModel, bhvFloorSwitchGrills, and
  * bhvFloorSwitchAnimatesObject.
@@ -22,6 +25,7 @@ void bhv_purple_switch_loop(void) {
                 && lateral_dist_between_objects(o, gMarioObject) < 127.5f
             ) {
                 o->oAction = PURPLE_SWITCH_ACT_PRESSED;
+                sSilverStarCt = 0;
             }
             break;
 
@@ -53,15 +57,19 @@ void bhv_purple_switch_loop(void) {
                 if (o->oBehParams2ndByte == 1 && gMarioObject->platform != o) {
                     o->oAction++;
                 } else {
-                    if (o->oTimer < 360) {
+                    if (o->oTimer < 360 + GET_BPARAM3(o->oBehParams)*2) {
                         play_sound(SOUND_GENERAL2_SWITCH_TICK_FAST, gGlobalSoundSource);
                     } else {
                         play_sound(SOUND_GENERAL2_SWITCH_TICK_SLOW, gGlobalSoundSource);
                     }
-                    if (o->oTimer > 400) {
+                    if (o->oTimer > 400 + GET_BPARAM3(o->oBehParams)*2) {
                         o->oAction = PURPLE_SWITCH_ACT_WAIT_FOR_MARIO_TO_GET_OFF;
                     }
                 }
+            }
+            if (gButtonPressId == 3 && sSilverStarCt >= 5) {
+                o->oAction = 99;
+                spawn_default_star(o->oPosX,o->oPosY+400.0f,o->oPosZ);
             }
             break;
 

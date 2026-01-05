@@ -276,7 +276,7 @@ const LevelScript level_temple_entry[] = {
 		OBJECT(MODEL_NONE, 6555, 1805, -13361, 0, 0, 0, (8 << 24), bhvStar),
 		OBJECT(MODEL_NONE, -777, 4089, 10579, 0, 0, 0, 0x00000000, bhvStar),
 		OBJECT(MODEL_NONE, -684, 8218, -7532, 0, 0, 0, 0x00000000, bhvStar),
-		OBJECT(MODEL_PURPLE_SWITCH, -18091, 2193, -18566, 0, 0, 0, (1), bhvFloorSwitchHiddenObjects),
+		OBJECT(MODEL_PURPLE_SWITCH, -18091, 2193, -18566, 0, 0, 0, (30 << 8) | (3), bhvFloorSwitchHiddenObjects),
 		OBJECT(MODEL_SWOOP, -327, 2684, -10859, 0, 0, 0, 0x00000000, bhvSwoop),
 		OBJECT(MODEL_SWOOP, -902, 2223, -9027, 0, -78, 0, 0x00000000, bhvSwoop),
 		OBJECT(MODEL_THWOMP, -3613, 789, -199, 0, 90, 0, 0x00000000, bhvThwomp),

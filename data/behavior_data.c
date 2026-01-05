@@ -6419,10 +6419,14 @@ const BehaviorScript bhvFireGoomba[] = {
     END_LOOP(),
 };
 
+extern void bhv_silver_star(void);
 const BehaviorScript bhvSilverStar[] = {
     BEGIN(OBJ_LIST_LEVEL),
+    SET_HITBOX(/*Radius*/ 100, /*Height*/ 100),
+    SET_INT(oIntangibleTimer, 0),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     BEGIN_LOOP(),
-
+        CALL_NATIVE(bhv_silver_star),
     END_LOOP(),
 };
 
