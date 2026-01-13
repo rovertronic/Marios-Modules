@@ -494,15 +494,30 @@ s8 sRoomSpaceworldRequiredLoot[] = {
     MOD_EMPTY,
 };
 
+struct DungeonObject sRoomSpaceworldObjectList[] = {
+    {.bhv = bhvDungeonElite, .model = MODEL_NONE, .param = 0,
+    .angle = 0x0, .pos = {-38.1277f,-17.9106f,0.001601f}},
+    {.bhv = bhvDungeonElite, .model = MODEL_NONE, .param = 0,
+    .angle = 0x0, .pos = {-14.9495f,8.34227f,-7.76702f}},
+    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 2,
+    .angle = 0x4000, .pos = {-20.f,-8.98236,-4.6068}},
+    {.end = TRUE},
+};
+
+Vec4f sRoomSpaceworldLootLocations[] = {
+    {-20.f,-8.98236,-4.6068,180.0f},
+    {1.42143f,-18.3056f,5.53684f,135.0f},
+};
+
 struct DungeonRoomVariant sRoomSpaceworld = {
     .minimapDL = rmapspaceworld_rmapspaceworld_mesh,
 
     .cellList = &sRoomSpaceworldCellList,
     .model = MODEL_ROOM_SPACEWORLD,
     .collision = spaceworld_collision,
-    .objectList = NULL,
-    .maxLootCt = 0,
-    //.lootLocations = &sRoomWallJumpLootLocations,
+    .objectList = &sRoomSpaceworldObjectList,
+    .maxLootCt = 2,
+    .lootLocations = &sRoomSpaceworldLootLocations,
     .requiredLoot = &sRoomSpaceworldRequiredLoot,
 };
 
