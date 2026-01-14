@@ -202,6 +202,40 @@ struct DungeonRoomVariant sRoomTreasure = {
     .generateOnce = FALSE,
 };
 
+Vec4f sRoomSuperTreasureLootLocations[] = {
+    {-26.4795f,.0f,3.27412f,    90.f},
+    {-0.935974f,-6.25049,0.0f,  260.0f},
+    {-13.9541f,2.81523,0.0f,    70.0f},
+    {-24.4241f,6.42857f,2.69053f,   120.0f},
+};
+
+struct DungeonObject sRoomSuperTreasureObjectList[] = {
+    {.bhv = bhvExclamationBox, .model = MODEL_EXCLAMATION_BOX, .param = 6,
+    .angle = 0, .pos = {-16.8906f,0.0f,5.32855f}},
+    {.end = TRUE},
+};
+
+s8 sRoomSuperTreasureRequiredLoot[] = {
+    MOD_NONMOD_KEY, 1,
+    MOD_JUMP, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonRoomVariant sRoomSuperTreasure = {
+    .minimapDL = &rmaptreasure_rmaptreasure_mesh,
+
+    .cellList = &sRoomTreasureCellList,
+    .model = MODEL_ROOM_SUPER_TREASURE,
+    .collision = rtresure_collision,
+    .objectList = &sRoomSuperTreasureObjectList,
+    .maxLootCt = 4,
+    .lootLocations = &sRoomSuperTreasureLootLocations,
+    .requiredLoot = &sRoomSuperTreasureRequiredLoot,
+    .generateOnce = TRUE,
+
+    .rarity = 4,
+};
+
 // Wall Kick Challenge Room
 
 struct DungeonRoomVariantCellList sRoomWallJumpCellList[] = {
@@ -811,6 +845,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomSpaceworld,
     &sRoomGardenHall,
     &sRoomTreasure,
+    &sRoomSuperTreasure,
     &sRoomGrindr,
 
     // Challenge Rooms
