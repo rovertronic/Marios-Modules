@@ -216,7 +216,6 @@ struct DungeonObject sRoomSuperTreasureObjectList[] = {
 };
 
 s8 sRoomSuperTreasureRequiredLoot[] = {
-    MOD_NONMOD_KEY, 1,
     MOD_JUMP, 1,
     MOD_EMPTY,
 };
@@ -698,11 +697,6 @@ struct DungeonObject sRoomGrindrObjectList[] = {
     {.end = TRUE},
 };
 
-s8 sRoomGrindrRequiredLoot[] = {
-    MOD_NONMOD_KEY, 1,
-    MOD_EMPTY,
-};
-
 struct DungeonRoomVariant sRoomGrindr = {
     .minimapDL = &rmapgrindr_rmapgrindr_mesh,
 
@@ -712,7 +706,7 @@ struct DungeonRoomVariant sRoomGrindr = {
     .objectList = &sRoomGrindrObjectList,
     .maxLootCt = 0,
     .lootLocations = NULL,
-    .requiredLoot = &sRoomGrindrRequiredLoot,
+    .requiredLoot = NULL,
     .generateOnce = TRUE,
     .needKey = TRUE,
 };
@@ -1146,6 +1140,11 @@ void dungeon_generate_rooms_at_doors(void) {
                         }
 
                         dungeon_propegate_loot_with_requirement_list(selectedVariant->requiredLoot);
+
+                        if (selectedVariant->needKey) {
+                            dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
+                        }
+
                         dungeon_create_room(selectedVariant,j,x,y);
 
                         success = TRUE;
