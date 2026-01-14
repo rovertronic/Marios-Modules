@@ -40,6 +40,7 @@ struct DungeonRoomVariant {
     ModelID16 model;
     Collision * collision;
     u8 maxLootCt:3;
+    u8 starCt:2;
     u8 generateOnce:1;
     u8 easterEgg:1;
     u8 needKey:1;

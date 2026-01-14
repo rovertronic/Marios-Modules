@@ -838,6 +838,7 @@ struct DungeonRoomVariant sRoomAutoMaze = {
     .collision = rmaze_collision,
     .objectList = &sRoomAutoMazeObjectList,
     .maxLootCt = 1,
+    .starCt = 1,
     .lootLocations = &sRoomAutoMazeLootLocations,
     .requiredLoot = &sRoomAutoMazeRequiredLoot,
     .generateOnce = TRUE,
@@ -1055,6 +1056,7 @@ struct DungeonRoom * dungeon_create_room(struct DungeonRoomVariant * variant, in
     }
 
     sDungeonLootSlotsAvailible+=variant->maxLootCt;
+    sDungeonInventory[MOD_NONMOD_STAR]+=variant->starCt;
 
     return thisRoom;
 }
