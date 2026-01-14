@@ -1306,7 +1306,11 @@ void bhv_bdoor(void) {
     }
     if (needs_key) {
         open = FALSE;
-        cur_obj_set_model(MODEL_BDOOR_LOCKED);
+        if (obj_has_behavior(o,bhvBdoor)) {
+            cur_obj_set_model(MODEL_BDOOR_LOCKED);
+        } else {
+            cur_obj_set_model(MODEL_DUNGEON_DOOR);
+        }
     }
 
     switch(o->oAction) {
@@ -1341,7 +1345,11 @@ void bhv_bdoor(void) {
                 obj_save_bin_write(o);
                 gMarioState->numKeys--;
                 o->oBehParams2ndByte = 0;
-                cur_obj_set_model(MODEL_BDOOR);
+                if (obj_has_behavior(o,bhvBdoor)) {
+                    cur_obj_set_model(MODEL_BDOOR);
+                } else {
+                    cur_obj_set_model(MODEL_DUNGEON_DOOR);
+                }
                 o->oAction = 0;
             }
             break;

@@ -232,6 +232,7 @@ struct DungeonRoomVariant sRoomSuperTreasure = {
     .lootLocations = &sRoomSuperTreasureLootLocations,
     .requiredLoot = &sRoomSuperTreasureRequiredLoot,
     .generateOnce = TRUE,
+    .needKey = TRUE,
 
     .rarity = 4,
 };
@@ -540,7 +541,7 @@ struct DungeonObject sRoomSpaceworldObjectList[] = {
 
 Vec4f sRoomSpaceworldLootLocations[] = {
     {-20.f,-8.98236,-4.6068,180.0f},
-    {1.42143f,-18.3056f,5.53684f,135.0f},
+    {1.42143f,-18.3056f,5.53684f,315.0f},
 };
 
 struct DungeonRoomVariant sRoomSpaceworld = {
@@ -697,6 +698,11 @@ struct DungeonObject sRoomGrindrObjectList[] = {
     {.end = TRUE},
 };
 
+s8 sRoomGrindrRequiredLoot[] = {
+    MOD_NONMOD_KEY, 1,
+    MOD_EMPTY,
+};
+
 struct DungeonRoomVariant sRoomGrindr = {
     .minimapDL = &rmapgrindr_rmapgrindr_mesh,
 
@@ -706,8 +712,9 @@ struct DungeonRoomVariant sRoomGrindr = {
     .objectList = &sRoomGrindrObjectList,
     .maxLootCt = 0,
     .lootLocations = NULL,
-    .requiredLoot = NULL,
+    .requiredLoot = &sRoomGrindrRequiredLoot,
     .generateOnce = TRUE,
+    .needKey = TRUE,
 };
 
 // Cave Jump Room
@@ -1278,7 +1285,15 @@ void dungeon_spawn_room_objects(void) {
                 struct Object * doorObj2 = NULL;
                 if (dungeon_door_on_other_side(sDungeonCellProcessList[i]->x,sDungeonCellProcessList[i]->y,j)) {
                     if (j == 0 || j == 1) {
-                        doorObj2 = spawn_object(gMarioObject, MODEL_DUNGEON_DOOR ,bhvDungeonDoor);
+                        BehaviorScript * doorType = bhvDungeonDoor;
+                        if (sDungeonRoomList[sDungeonDoorOtherSideRet->id-1].variant->needKey) {
+                            doorType = bhvDungeonDoorLocked;
+                        }
+                        if (sDungeonRoomList[sDungeonCellProcessList[i]->id-1].variant->needKey) {
+                            doorType = bhvDungeonDoorLocked;
+                        }
+
+                        doorObj2 = spawn_object(gMarioObject, MODEL_DUNGEON_DOOR ,doorType);
                         doorObj2->oFaceAngleYaw = (j+1) * 0x4000;
                         doorObj2->dungeonRoom[0] = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
                         if (sDungeonDoorOtherSideRet) {
