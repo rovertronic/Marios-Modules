@@ -1,11 +1,11 @@
 extern const GeoLayout rmaze_geo[];
 extern Vtx rmaze_rmaze_mesh_layer_1_vtx_0[603];
 extern Gfx rmaze_rmaze_mesh_layer_1_tri_0[];
-extern Vtx rmaze_rmaze_mesh_layer_1_vtx_1[508];
+extern Vtx rmaze_rmaze_mesh_layer_1_vtx_1[621];
 extern Gfx rmaze_rmaze_mesh_layer_1_tri_1[];
 extern Vtx rmaze_rmaze_mesh_layer_1_vtx_2[8];
 extern Gfx rmaze_rmaze_mesh_layer_1_tri_2[];
-extern Vtx rmaze_rmaze_mesh_layer_5_vtx_0[221];
+extern Vtx rmaze_rmaze_mesh_layer_5_vtx_0[239];
 extern Gfx rmaze_rmaze_mesh_layer_5_tri_0[];
 extern Gfx mat_rmaze_col_standard[];
 extern Gfx mat_revert_rmaze_col_standard[];
