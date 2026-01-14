@@ -67,4 +67,6 @@ extern const LevelScript level_rogue_entry[];
 #include "rsplithall/geo_header.h"
 #include "rmapsplithall/header.h"
 #include "rmapcavejump/header.h"
+#include "rmaze/collision_header.h"
+#include "rmaze/geo_header.h"
 #endif

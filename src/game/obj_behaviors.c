@@ -1201,6 +1201,10 @@ void bhv_dungeon_manager(void) {
 
 void bhv_volume(void) {
     f32 scale = (GET_BPARAM4(o->oBehParams)+1)*400.0f;
+    if (gCurrLevelNum == LEVEL_ROGUE) {
+        scale*=.5f;
+    }
+
     if (
         (ABS(gMarioState->pos[0] - o->oPosX) < scale)&&
         (ABS(gMarioState->pos[1] - o->oPosY) < scale)&&

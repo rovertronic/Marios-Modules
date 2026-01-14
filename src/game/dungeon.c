@@ -316,7 +316,7 @@ s8 sRoomVanishHopRequiredLoot[] = {
 };
 
 Vec4f sRoomVanishHopLootLocations[] = {
-    {5.56952f,20.3674f,270.0f},
+    {5.56952f,20.3674f,270.0f,0.0f},
 };
 
 struct DungeonRoomVariant sRoomVanishHop = {
@@ -732,6 +732,76 @@ struct DungeonRoomVariant sRoomSplitHall = {
     .rarity = 2,
 };
 
+// Auto-Maze Challenge Room
+
+struct DungeonRoomVariantCellList sRoomAutoMazeCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0},
+
+    {.x = 0, .y = 1},
+    {.x = 1, .y = 1},
+    {.x = 2, .y = 1, .doorFlags = DOOR_UP},
+
+    {.x = 0, .y = -1},
+    {.x = 1, .y = -1},
+    {.x = 2, .y = -1},
+
+    {.end = TRUE},
+};
+
+s8 sRoomAutoMazeRequiredLoot[] = {
+    MOD_PASSIVE, 1,
+    MOD_SPD, 1,
+    MOD_IF_WALL, 1,
+    MOD_ROTATE, 1,
+    MOD_TIMER, 1,
+    MOD_ATTACK, 1,
+    MOD_JUMP, 1,
+    MOD_CAP, 1,
+    MOD_EMPTY,
+};
+
+Vec4f sRoomAutoMazeLootLocations[] = {
+    {-36.4302f,-27.7367f,1.29287f,180.0f},
+};
+
+struct DungeonObject sRoomAutoMazeObjectList[] = {
+    {.bhv = bhvStar, .model = MODEL_NONE, .param = 0,
+    .angle = 0x0, .pos = {-44.6066f,0.0f,7.32332f}},
+    // Entrance
+    {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_DISCONNECT,
+    .angle = 0x0, .pos = {-5.53006f,0.0f,0.0f}},
+    {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_RECONNECT,
+    .angle = 0x0, .pos = {-1.42793f,0.0f,0.0f}},
+    // Treasure
+    {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_DISCONNECT,
+    .angle = 0x0, .pos = {-36.9067f,-17.463f,0.0f}},
+    {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_RECONNECT,
+    .angle = 0x0, .pos = {-36.9067f,-21.5635f,0.0f}},
+    //Exit
+    {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_DISCONNECT,
+    .angle = 0x0, .pos = {-36.9067f,18.5196f,0.0f}},
+    {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_RECONNECT,
+    .angle = 0x0, .pos = {-36.9067f,22.5841f,0.0f}},
+    //Star
+
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomAutoMaze = {
+    .minimapDL = NULL,//&rmapvanishhop_rmapvanishhop_mesh,
+    
+    .cellList = &sRoomAutoMazeCellList,
+    .model = MODEL_ROOM_AUTOMAZE,
+    .collision = rmaze_collision,
+    .objectList = &sRoomAutoMazeObjectList,
+    .maxLootCt = 1,
+    .lootLocations = &sRoomAutoMazeLootLocations,
+    .requiredLoot = &sRoomAutoMazeRequiredLoot,
+    .generateOnce = TRUE,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomMiniJunc1,
     &sRoomMiniJunc2,
@@ -750,6 +820,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomWood,
     &sRoomFurnace,
     &sRoomCaveJump,
+    &sRoomAutoMaze,
 
     // Easter-Egg Rooms
     &sRoomFnab,
@@ -1152,6 +1223,7 @@ void dungeon_spawn_room_objects(void) {
                 obj->oPosY += details->pos[2] * 100.f;
                 obj->oFaceAngleYaw = angle + details->angle;;
                 obj->oBehParams2ndByte = details->param;
+                SET_BPARAM4(obj->oBehParams,0);
 
                 obj->dungeonRoom[0] = &sDungeonRoomList[i];
                 obj->dungeonRoom[1] = &sDungeonRoomList[i];

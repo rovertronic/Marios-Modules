@@ -37,3 +37,4 @@
 #include "rgrindr/geo.inc.c"
 #include "rcavejump/geo.inc.c"
 #include "rsplithall/geo.inc.c"
+#include "rmaze/geo.inc.c"

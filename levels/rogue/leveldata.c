@@ -77,3 +77,5 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "rsplithall/model.inc.c"
 #include "rmapsplithall/model.inc.c"
 #include "rmapcavejump/model.inc.c"
+#include "rmaze/collision.inc.c"
+#include "rmaze/model.inc.c"
