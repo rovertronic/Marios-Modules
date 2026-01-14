@@ -679,11 +679,14 @@ struct DungeonRoomVariant sRoomGrindr = {
 // Cave Jump Room
 
 s8 sRoomCaveJumpRequiredLoot[] = {
-    MOD_JUMP, 1,
-    MOD_PASSIVE, 1,
-    MOD_IF_FLOOR, 1,
+
+    MOD_JUMP, 2,
+    MOD_HIT_WALL, 1,
     MOD_TIMER, 1,
-    MOD_FLIP_VEL, 1,
+    MOD_TORNADO, 1,
+    MOD_POW, 1,
+    MOD_NONMOD_STAR, 3,
+
     MOD_EMPTY,
 };
 
