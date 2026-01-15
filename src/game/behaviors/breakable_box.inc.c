@@ -12,6 +12,20 @@ struct ObjectHitbox sBreakableBoxHitbox = {
     /* hurtboxHeight:     */ 200,
 };
 
+struct ObjectHitbox sBreakableBoxWallHitbox = {
+    /* interactType:      */ INTERACT_BREAKABLE,
+    /* downOffset:        */  0,
+    /* damageOrCoinValue: */   0,
+    /* health:            */   1,
+    /* numLootCoins:      */   0,
+    /* radius:            */ 180,
+    /* height:            */ 200,
+    /* hurtboxRadius:     */ 150,
+    /* hurtboxHeight:     */ 200,
+};
+
+extern int sSilverStarCt;
+
 void breakable_box_init(void) {
     o->oHiddenObjectSwitchObj = NULL;
     o->oAnimState = BREAKABLE_BOX_ANIM_STATE_CORK_BOX;
@@ -25,8 +39,15 @@ void breakable_box_init(void) {
 
 void hidden_breakable_box_actions(void) {
     struct Object *switchObj;
-    obj_set_hitbox(o, &sBreakableBoxHitbox);
     cur_obj_set_model(MODEL_BREAKABLE_BOX);
+    o->oFlags &= ~OBJ_FLAG_DUNGEON_CULL;
+
+    if (o->oBehParams2ndByte == 2) {
+        obj_set_hitbox(o, &sBreakableBoxWallHitbox);
+    } else {
+        obj_set_hitbox(o, &sBreakableBoxHitbox);
+    }
+
     switch (o->oAction) {
         case BREAKABLE_BOX_ACT_HIDDEN:
             cur_obj_disable_rendering();
@@ -46,12 +67,21 @@ void hidden_breakable_box_actions(void) {
             break;
         case BREAKABLE_BOX_ACT_ACTIVE:
             cur_obj_become_tangible();
-            if (cur_obj_wait_then_blink(360, 20)) o->oAction = BREAKABLE_BOX_ACT_HIDDEN;
+            if (!gMarioState->bonkSignal && o->oBehParams2ndByte == 2) {
+                cur_obj_become_intangible();
+            }
+            if (cur_obj_wait_then_blink(360 + GET_BPARAM3(o->oHiddenObjectSwitchObj->oBehParams)*2, 20)) o->oAction = BREAKABLE_BOX_ACT_HIDDEN;
             if (cur_obj_was_attacked_or_ground_pounded()) {
                 spawn_mist_particles();
                 spawn_triangle_break_particles(30, MODEL_DIRT_ANIMATION, 3.0f, TINY_DIRT_PARTICLE_ANIM_STATE_YELLOW);
                 o->oAction = BREAKABLE_BOX_ACT_BROKEN;
                 cur_obj_play_sound_2(SOUND_GENERAL_BREAK_BOX);
+
+                if (o->oBehParams2ndByte == 2) {
+                    sSilverStarCt++;
+                    play_sound(SOUND_MENU_COLLECT_SECRET + (((u8) sSilverStarCt-1) << 16), gGlobalSoundSource);
+                    spawn_orange_number(sSilverStarCt, 0, 0, 0);
+                }
             }
             load_object_collision_model();
             break;
@@ -93,10 +123,10 @@ void hidden_unbreakable_box_actions(void) {
 }
 
 void bhv_hidden_object_loop(void) {
-    if (o->oBehParams2ndByte == BREAKABLE_BOX_BP_NO_COINS) {
-        hidden_breakable_box_actions();
-    } else {
+    if (o->oBehParams2ndByte == 1) {
         hidden_unbreakable_box_actions();
+    } else {
+        hidden_breakable_box_actions();
     }
 }
 

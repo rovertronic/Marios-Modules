@@ -253,7 +253,7 @@ struct DungeonRoomVariantCellList sRoomWallJumpCellList[] = {
 s8 sRoomWallJumpRequiredLoot[] = {
     MOD_JUMP, 2,
     MOD_HIT_WALL, 1,
-    MOD_NONMOD_STAR, 2,
+    MOD_NONMOD_STAR, 1,
     MOD_EMPTY,
 };
 
@@ -308,7 +308,7 @@ s8 sRoomLongJumpRequiredLoot[] = {
     MOD_HIT_WALL, 1,
     MOD_JUMP, 1,
     MOD_ROTATE, 1,
-    MOD_NONMOD_STAR, 3,
+    MOD_NONMOD_STAR, 2,
     MOD_EMPTY,
 };
 
@@ -414,7 +414,7 @@ s8 sRoomBtcmRequiredLoot[] = {
     MOD_JUMP, 2,
     MOD_HIT_WALL, 1,
     MOD_POW2, 1,
-    MOD_NONMOD_STAR, 3,
+    MOD_NONMOD_STAR, 1,
     MOD_EMPTY,
 };
 
@@ -524,7 +524,6 @@ struct DungeonRoomVariantCellList sRoomSpaceworldCellList[] = {
 
 s8 sRoomSpaceworldRequiredLoot[] = {
     MOD_JUMP, 1,
-    MOD_NONMOD_STAR, 1,
     MOD_EMPTY,
 };
 
@@ -631,7 +630,6 @@ Vec4f sRoomGardenHallLootLocations[] = {
 
 s8 sRoomGardenHallRequiredLoot[] = {
     MOD_JUMP, 1,
-    MOD_NONMOD_STAR, 1,
     MOD_EMPTY,
 };
 
@@ -658,7 +656,7 @@ s8 sRoomFurnaceRequiredLoot[] = {
     MOD_ZACTION, 1,
     MOD_TIMER, 1,
     MOD_REPEAT, 1,
-    MOD_NONMOD_STAR, 5,
+    MOD_NONMOD_STAR, 4,
     MOD_EMPTY,  
 };
 
@@ -838,6 +836,57 @@ struct DungeonRoomVariant sRoomAutoMaze = {
     .generateOnce = TRUE,
 };
 
+// Silver Pillar Room
+
+struct DungeonRoomVariantCellList sRoomSilverPillarCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 0, .y = -1}, 
+    {.x = 1, .y = -1},
+    {.end = TRUE},
+};
+
+s8 sRoomSilverPillarRequiredLoot[] = {
+    MOD_JUMP, 1,
+    MOD_POW2, 1,
+    MOD_INPUT, 1,
+    MOD_TORNADO, 1,
+    MOD_FLIP_VEL, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonObject sRoomSilverPillarObjectList[] = {
+    {.bhv = bhvFloorSwitchHiddenObjects, .model = MODEL_PURPLE_SWITCH, .param3 = 45, .param4 = 3,
+    .angle = 0x0, .pos = {-12.8849f,-3.73941f,0.0f}},
+
+    {.bhv = bhvHiddenObject, .model = MODEL_NONE, .param = 2,
+    .angle = 0x0, .pos = {-2.59638f,0.632364f,2.77627f + 2.f}},
+    {.bhv = bhvHiddenObject, .model = MODEL_NONE, .param = 2,
+    .angle = 0x0, .pos = {-5.16027f,-12.2529f,4.96802f + 2.f}},
+    {.bhv = bhvHiddenObject, .model = MODEL_NONE, .param = 2,
+    .angle = 0x0, .pos = {-17.2566f,-12.5816f,4.00643f + 2.f}},
+    {.bhv = bhvHiddenObject, .model = MODEL_NONE, .param = 2,
+    .angle = 0x0, .pos = {-23.1733f,-2.26022f,3.66879f + 2.f}},
+    {.bhv = bhvHiddenObject, .model = MODEL_NONE, .param = 2,
+    .angle = 0x0, .pos = {-19.7956f,2.15918f,1.2763f}},
+    
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomSilverPillar = {
+    .minimapDL = NULL,
+
+    .cellList = &sRoomSilverPillarCellList,
+    .model = MODEL_ROOM_SILVER_PILLAR,
+    .collision = rsilverpillar_collision,
+    .objectList = &sRoomSilverPillarObjectList,
+    .maxLootCt = 0,
+    .starCt = 1,
+    .lootLocations = NULL,
+    .requiredLoot = &sRoomSilverPillarRequiredLoot,
+    .generateOnce = TRUE,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomMiniJunc1,
     &sRoomMiniJunc2,
@@ -858,6 +907,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomFurnace,
     &sRoomCaveJump,
     &sRoomAutoMaze,
+    &sRoomSilverPillar,
 
     // Easter-Egg Rooms
     &sRoomFnab,
@@ -1266,7 +1316,8 @@ void dungeon_spawn_room_objects(void) {
                 obj->oPosY += details->pos[2] * 100.f;
                 obj->oFaceAngleYaw = angle + details->angle;;
                 obj->oBehParams2ndByte = details->param;
-                SET_BPARAM4(obj->oBehParams,0);
+                SET_BPARAM3(obj->oBehParams,details->param3);
+                SET_BPARAM4(obj->oBehParams,details->param4);
 
                 obj->dungeonRoom[0] = &sDungeonRoomList[i];
                 obj->dungeonRoom[1] = &sDungeonRoomList[i];

@@ -70,4 +70,6 @@ extern const LevelScript level_rogue_entry[];
 #include "rmaze/collision_header.h"
 #include "rmaze/geo_header.h"
 #include "rsupertreasure/geo_header.h"
+#include "rsilverpillar/collision_header.h"
+#include "rsilverpillar/geo_header.h"
 #endif

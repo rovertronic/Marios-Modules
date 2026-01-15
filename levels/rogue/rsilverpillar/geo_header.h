@@ -1,0 +1,10 @@
+extern const GeoLayout rsilverpillar_geo[];
+extern Vtx rsilverpillar_rsilverpillar_mesh_layer_1_vtx_0[4];
+extern Gfx rsilverpillar_rsilverpillar_mesh_layer_1_tri_0[];
+extern Vtx rsilverpillar_rsilverpillar_mesh_layer_1_vtx_1[200];
+extern Gfx rsilverpillar_rsilverpillar_mesh_layer_1_tri_1[];
+extern Gfx mat_rsilverpillar_col_standard[];
+extern Gfx mat_revert_rsilverpillar_col_standard[];
+extern Gfx mat_rsilverpillar_col_cam_col[];
+extern Gfx mat_revert_rsilverpillar_col_cam_col[];
+extern Gfx rsilverpillar_rsilverpillar_mesh_layer_1[];

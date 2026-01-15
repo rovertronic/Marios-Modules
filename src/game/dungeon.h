@@ -18,6 +18,8 @@ struct DungeonObject {
     ModelID16 model;
     s16 angle;
     u8 param;
+    u8 param3;
+    u8 param4;
     Vec3f pos;
     u8 end;
 };

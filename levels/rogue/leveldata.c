@@ -80,3 +80,5 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "rmaze/collision.inc.c"
 #include "rmaze/model.inc.c"
 #include "rsupertreasure/model.inc.c"
+#include "rsilverpillar/collision.inc.c"
+#include "rsilverpillar/model.inc.c"

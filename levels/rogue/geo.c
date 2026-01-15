@@ -39,3 +39,4 @@
 #include "rsplithall/geo.inc.c"
 #include "rmaze/geo.inc.c"
 #include "rsupertreasure/geo.inc.c"
+#include "rsilverpillar/geo.inc.c"

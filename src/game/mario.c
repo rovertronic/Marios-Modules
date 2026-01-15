@@ -1823,6 +1823,8 @@ s16 gNearestRedCoinDist = -1;
 s32 execute_mario_action(UNUSED struct Object *obj) {
     s32 inLoop = TRUE;
 
+    gMarioState->bonkSignal = FALSE;
+
     struct Object * nearestRedCoin = cur_obj_nearest_object_with_behavior(bhvRedCoin);
     gNearestRedCoinDist = -1;
     if (nearestRedCoin) {
@@ -1943,6 +1945,8 @@ void init_mario(void) {
     if (gCurrLevelNum == LEVEL_ROGUE) {
         dungeon_generate();
     }
+
+    gMarioState->bonkSignal = FALSE;
 
     gMarioState->actionTimer = 0;
     gMarioState->framesSinceA = 0xFF;

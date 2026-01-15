@@ -709,6 +709,7 @@ s32 act_twirling(struct MarioState *m) {
 
         case AIR_STEP_HIT_WALL:
             mario_bonk_reflection(m, FALSE);
+            m->bonkSignal = TRUE;
             break;
 
         case AIR_STEP_HIT_LAVA_WALL:
@@ -1612,6 +1613,7 @@ s32 act_jump_kick(struct MarioState *m) {
             break;
 
         case AIR_STEP_HIT_WALL:
+            m->bonkSignal = TRUE;
             mario_set_forward_vel(m, 0.0f);
             break;
     }
