@@ -325,6 +325,7 @@ void module_timer(struct module_execution_thread * met, u8 call_context) {
             if (met->timer >= time) {
                 module_log_message(met,"Timer finished.",0);
 
+                met->time_mod = 0;
                 met->halted = FALSE;
                 met->x++;
                 break;
