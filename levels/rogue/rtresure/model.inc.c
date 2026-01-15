@@ -1504,7 +1504,7 @@ Gfx rtresure_rtresure_mesh_layer_4_tri_0[] = {
 };
 
 
-Gfx mat_rtresure_f3dlite_material_009[] = {
+Gfx mat_rtresure_brownbrick2[] = {
 	gsSPClearGeometryMode(G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0, TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0),
@@ -1522,7 +1522,7 @@ Gfx mat_rtresure_f3dlite_material_009[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_revert_rtresure_f3dlite_material_009[] = {
+Gfx mat_revert_rtresure_brownbrick2[] = {
 	gsSPSetGeometryMode(G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
@@ -1572,8 +1572,8 @@ Gfx mat_revert_rtresure_dungeontiles[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_rtresure_f3dlite_material_007[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+Gfx mat_rtresure_castlefence[] = {
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -1590,15 +1590,15 @@ Gfx mat_rtresure_f3dlite_material_007[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_revert_rtresure_f3dlite_material_007[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+Gfx mat_revert_rtresure_castlefence[] = {
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_rtresure_f3dlite_material_005[] = {
+Gfx mat_rtresure_brownbrick1[] = {
 	gsSPClearGeometryMode(G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0, TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0),
@@ -1616,7 +1616,7 @@ Gfx mat_rtresure_f3dlite_material_005[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_revert_rtresure_f3dlite_material_005[] = {
+Gfx mat_revert_rtresure_brownbrick1[] = {
 	gsSPSetGeometryMode(G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
@@ -1667,18 +1667,18 @@ Gfx mat_revert_rtresure_dungeonAltWall[] = {
 };
 
 Gfx rtresure_rtresure_mesh_layer_1[] = {
-	gsSPDisplayList(mat_rtresure_f3dlite_material_009),
+	gsSPDisplayList(mat_rtresure_brownbrick2),
 	gsSPDisplayList(rtresure_rtresure_mesh_layer_1_tri_0),
-	gsSPDisplayList(mat_revert_rtresure_f3dlite_material_009),
+	gsSPDisplayList(mat_revert_rtresure_brownbrick2),
 	gsSPDisplayList(mat_rtresure_dungeoncarpet),
 	gsSPDisplayList(rtresure_rtresure_mesh_layer_1_tri_1),
 	gsSPDisplayList(mat_revert_rtresure_dungeoncarpet),
 	gsSPDisplayList(mat_rtresure_dungeontiles),
 	gsSPDisplayList(rtresure_rtresure_mesh_layer_1_tri_2),
 	gsSPDisplayList(mat_revert_rtresure_dungeontiles),
-	gsSPDisplayList(mat_rtresure_f3dlite_material_005),
+	gsSPDisplayList(mat_rtresure_brownbrick1),
 	gsSPDisplayList(rtresure_rtresure_mesh_layer_1_tri_3),
-	gsSPDisplayList(mat_revert_rtresure_f3dlite_material_005),
+	gsSPDisplayList(mat_revert_rtresure_brownbrick1),
 	gsSPDisplayList(mat_rtresure_pillar),
 	gsSPDisplayList(rtresure_rtresure_mesh_layer_1_tri_4),
 	gsSPDisplayList(mat_revert_rtresure_pillar),
@@ -1696,9 +1696,9 @@ Gfx rtresure_rtresure_mesh_layer_1[] = {
 };
 
 Gfx rtresure_rtresure_mesh_layer_4[] = {
-	gsSPDisplayList(mat_rtresure_f3dlite_material_007),
+	gsSPDisplayList(mat_rtresure_castlefence),
 	gsSPDisplayList(rtresure_rtresure_mesh_layer_4_tri_0),
-	gsSPDisplayList(mat_revert_rtresure_f3dlite_material_007),
+	gsSPDisplayList(mat_revert_rtresure_castlefence),
 	gsDPPipeSync(),
 	gsSPSetGeometryMode(G_LIGHTING),
 	gsSPClearGeometryMode(G_TEXTURE_GEN),
