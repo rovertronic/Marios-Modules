@@ -852,6 +852,8 @@ s8 sRoomSilverPillarRequiredLoot[] = {
     MOD_INPUT, 1,
     MOD_TORNADO, 1,
     MOD_FLIP_VEL, 1,
+
+    MOD_NONMOD_STAR, 2,
     MOD_EMPTY,
 };
 
@@ -869,6 +871,13 @@ struct DungeonObject sRoomSilverPillarObjectList[] = {
     .angle = 0x0, .pos = {-23.1733f,-2.26022f,3.66879f + 2.f}},
     {.bhv = bhvHiddenObject, .model = MODEL_NONE, .param = 2,
     .angle = 0x0, .pos = {-19.7956f,2.15918f,1.2763f}},
+
+    {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {0.653854f, -13.7033f, 0.f}},
+    {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-14.2749f, -16.3512f, 0.f}},
+    {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-26.1449f, -9.86834f, 0.f}},
     
     {.end = TRUE},
 };
