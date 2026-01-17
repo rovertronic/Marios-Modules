@@ -890,6 +890,21 @@ struct DungeonObject sRoomSilverPillarObjectList[] = {
     {.end = TRUE},
 };
 
+// Blade & Sorcery Room
+
+struct DungeonRoomVariant sRoomBns = {
+    .minimapDL = &rmapjunc_rmapjunc_mesh,
+
+    .cellList = &sRoomTreasureCellList,
+    .model = MODEL_ROOM_BNS,
+    .collision = rbns_collision,
+    .objectList = NULL,
+    .maxLootCt = 0,
+    .lootLocations = NULL,
+    .requiredLoot = NULL,
+    .easterEgg = TRUE,
+};
+
 struct DungeonRoomVariant sRoomSilverPillar = {
     .minimapDL = &rmapsilverpillar_rmapsilverpillar_mesh,
 
@@ -930,6 +945,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomFnab,
     &sRoomBtcm,
     &sRoomBaldi,
+    &sRoomBns,
 };
 
 struct DungeonRoom * dungeon_get_mario_room(void) {
@@ -1164,7 +1180,7 @@ void dungeon_generate_rooms_at_doors(void) {
                     u32 selectedVariantIndex = tinymt32_generate_u32(&gGlobalRandomState) %  (sizeof(sRoomVariantList)/4);
                     struct DungeonRoomVariant * selectedVariant = sRoomVariantList[selectedVariantIndex];
 
-                    if (sDungeonRoomCount >= 64) {
+                    if (sDungeonRoomCount >= 63) {
                         success = TRUE;
                         continue;
                     }
@@ -1237,6 +1253,7 @@ s32 dungeon_generate_boss_room(void) {
                 struct DungeonRoomVariant * selectedVariant = &sRoomFacade1;
 
                 if (dungeon_check_room_viability(selectedVariant,j,x,y)) {
+                    dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
                     dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
                     dungeon_create_room(selectedVariant,j,x,y);
                     return TRUE;

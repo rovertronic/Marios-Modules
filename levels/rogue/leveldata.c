@@ -85,3 +85,5 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "rmapsilverpillar/model.inc.c"
 #include "rmapbtcm/model.inc.c"
 #include "rmapfurnace/model.inc.c"
+#include "rbns/collision.inc.c"
+#include "rbns/model.inc.c"

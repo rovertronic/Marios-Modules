@@ -75,4 +75,6 @@ extern const LevelScript level_rogue_entry[];
 #include "rmapsilverpillar/header.h"
 #include "rmapbtcm/header.h"
 #include "rmapfurnace/header.h"
+#include "rbns/collision_header.h"
+#include "rbns/geo_header.h"
 #endif

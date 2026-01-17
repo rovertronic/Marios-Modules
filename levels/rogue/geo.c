@@ -40,3 +40,4 @@
 #include "rmaze/geo.inc.c"
 #include "rsupertreasure/geo.inc.c"
 #include "rsilverpillar/geo.inc.c"
+#include "rbns/geo.inc.c"
