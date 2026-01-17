@@ -291,7 +291,7 @@ struct DungeonRoomVariant sRoomWallJump = {
     .maxLootCt = 1,
     .lootLocations = &sRoomWallJumpLootLocations,
     .requiredLoot = &sRoomWallJumpRequiredLoot,
-    .generateOnce = FALSE,
+    .generateOnce = TRUE,
 };
 
 // Long Jump Rotate Challenge Room
@@ -382,6 +382,8 @@ s8 sRoomFnabRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomFnab = {
+    .minimapDL = &rmapjunc_rmapjunc_mesh,
+
     .cellList = &sRoomFnabCellList,
     .model = MODEL_ROOM_FNAB,
     .collision = rfnab_collision,
@@ -419,6 +421,8 @@ s8 sRoomBtcmRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomBtcm = {
+    .minimapDL = &rmapbtcm_rmapbtcm_mesh,
+
     .cellList = &sRoomBtcmCellList,
     .model = MODEL_ROOM_BTCM,
     .collision = rbtcm_collision,
@@ -445,6 +449,8 @@ struct DungeonObject sRoomBaldiObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomBaldi = {
+    .minimapDL = &rmapjunc_rmapjunc_mesh,
+
     .cellList = &sRoomTreasureCellList,
     .model = MODEL_ROOM_BALDI,
     .collision = baldi_collision,
@@ -643,7 +649,7 @@ struct DungeonRoomVariant sRoomGardenHall = {
     .maxLootCt = 1,
     .lootLocations = &sRoomGardenHallLootLocations,
     .requiredLoot = &sRoomGardenHallRequiredLoot,
-    .generateOnce = FALSE,
+    .generateOnce = TRUE,
 };
 
 // Furnace Room
@@ -665,6 +671,8 @@ Vec4f sRoomFurnceLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomFurnace = {
+    .minimapDL = &rmapfurnace_rmapfurnace_mesh,
+
     .cellList = &sRoomGardenHallCellList,
     .model = MODEL_ROOM_FURNACE,
     .collision = rfurnace_collision,
@@ -883,7 +891,7 @@ struct DungeonObject sRoomSilverPillarObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomSilverPillar = {
-    .minimapDL = NULL,
+    .minimapDL = &rmapsilverpillar_rmapsilverpillar_mesh,
 
     .cellList = &sRoomSilverPillarCellList,
     .model = MODEL_ROOM_SILVER_PILLAR,

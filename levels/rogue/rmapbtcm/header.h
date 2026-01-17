@@ -1,0 +1,9 @@
+extern Vtx rmapbtcm_rmapbtcm_mesh_vtx_0[21];
+extern Gfx rmapbtcm_rmapbtcm_mesh_tri_0[];
+extern Vtx rmapbtcm_rmapbtcm_mesh_vtx_1[44];
+extern Gfx rmapbtcm_rmapbtcm_mesh_tri_1[];
+extern Gfx mat_rmapbtcm_map_mat_1_layer1[];
+extern Gfx mat_revert_rmapbtcm_map_mat_1_layer1[];
+extern Gfx mat_rmapbtcm_map_mat_3_layer1[];
+extern Gfx mat_revert_rmapbtcm_map_mat_3_layer1[];
+extern Gfx rmapbtcm_rmapbtcm_mesh[];

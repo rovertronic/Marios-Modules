@@ -1,0 +1,9 @@
+extern Vtx rmapsilverpillar_rmapsilverpillar_mesh_vtx_0[16];
+extern Gfx rmapsilverpillar_rmapsilverpillar_mesh_tri_0[];
+extern Vtx rmapsilverpillar_rmapsilverpillar_mesh_vtx_1[32];
+extern Gfx rmapsilverpillar_rmapsilverpillar_mesh_tri_1[];
+extern Gfx mat_rmapsilverpillar_map_mat_1_layer1[];
+extern Gfx mat_revert_rmapsilverpillar_map_mat_1_layer1[];
+extern Gfx mat_rmapsilverpillar_map_mat_3_layer1[];
+extern Gfx mat_revert_rmapsilverpillar_map_mat_3_layer1[];
+extern Gfx rmapsilverpillar_rmapsilverpillar_mesh[];

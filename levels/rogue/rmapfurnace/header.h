@@ -1,0 +1,9 @@
+extern Vtx rmapfurnace_rmapfurnace_mesh_vtx_0[4];
+extern Gfx rmapfurnace_rmapfurnace_mesh_tri_0[];
+extern Vtx rmapfurnace_rmapfurnace_mesh_vtx_1[8];
+extern Gfx rmapfurnace_rmapfurnace_mesh_tri_1[];
+extern Gfx mat_rmapfurnace_map_mat_1_layer1[];
+extern Gfx mat_revert_rmapfurnace_map_mat_1_layer1[];
+extern Gfx mat_rmapfurnace_map_mat_3_layer1[];
+extern Gfx mat_revert_rmapfurnace_map_mat_3_layer1[];
+extern Gfx rmapfurnace_rmapfurnace_mesh[];
