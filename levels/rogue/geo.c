@@ -43,3 +43,4 @@
 #include "rbns/geo.inc.c"
 #include "rclock/geo.inc.c"
 #include "dungeonclockhand/geo.inc.c"
+#include "rredcoin/geo.inc.c"

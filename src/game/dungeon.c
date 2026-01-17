@@ -9,6 +9,7 @@
 #include "behavior_data.h"
 #include "level_update.h"
 #include "ingame_menu.h"
+#include "engine/surface_collision.h"
 
 #include "levels/rogue/header.h"
 
@@ -20,6 +21,7 @@ int sDungeonLoopCount = 0;
 int sDungeonCurrentDepth = 0;
 int sDungeonLootSlotsAvailible = 0;
 int sDungeonCoinBalance = 0;
+int sDungeonRedCoinRoomMax = 0;
 u32 sDungeonUniqueVariantGeneratedFlags;
 
 u16 gDungeonTreeModel = 0;
@@ -955,6 +957,30 @@ struct DungeonRoomVariant sRoomClock = {
     .generateOnce = TRUE,
 };
 
+// Red Coin Room
+
+struct DungeonObject sRoomRedCoinObjectList[] = {
+    {.bhv = bhvFloorSwitchGrills, .model = MODEL_PURPLE_SWITCH, .param4 = 4,
+    .angle = 0x4000, .pos = {-11.7972f,0.0f,1.0f}},
+    {.bhv = bhvHiddenRedCoinStar, .model = MODEL_NONE, .param = 8,
+    .angle = 0x0, .pos = {0.0f,0.0f,2.0f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRedCoin = {
+    .minimapDL = &rmaptreasure_rmaptreasure_mesh,
+
+    .cellList = &sRoomTreasureCellList,
+    .model = MODEL_ROOM_RED_COIN,
+    .collision = rredcoin_collision,
+    .objectList = &sRoomRedCoinObjectList,
+    .maxLootCt = 0,
+    .starCt = 1,
+    .lootLocations = NULL,
+    .requiredLoot = NULL,
+    .generateOnce = TRUE,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomMiniJunc1,
     &sRoomMiniJunc2,
@@ -977,6 +1003,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomAutoMaze,
     &sRoomSilverPillar,
     &sRoomClock,
+    &sRoomRedCoin,
 
     // Easter-Egg Rooms
     &sRoomFnab,
@@ -1234,7 +1261,7 @@ void dungeon_generate_rooms_at_doors(void) {
                         continue;
                     }
 
-                    if (selectedVariant->easterEgg && sDungeonCurrentDepth < 6) {
+                    if ((selectedVariant->easterEgg || selectedVariant == &sRoomRedCoin) && sDungeonCurrentDepth < 6) {
                         trycount++;
                         continue;
                     } 
@@ -1266,6 +1293,10 @@ void dungeon_generate_rooms_at_doors(void) {
                         }
 
                         dungeon_create_room(selectedVariant,j,x,y);
+
+                        if (selectedVariant == &sRoomRedCoin) {
+                            sDungeonRedCoinRoomMax = sDungeonRoomCount;
+                        }
 
                         success = TRUE;
                     }
@@ -1475,6 +1506,30 @@ void dungeon_spawn_room_objects(void) {
     }
 }
 
+void dungeon_spawn_room_red_coins(void) {
+    int redCoinsSpawned = 0;
+    while (redCoinsSpawned < 8) {
+        int x = tinymt32_generate_u32(&gGlobalRandomState) % 32;
+        int y = tinymt32_generate_u32(&gGlobalRandomState) % 32;
+
+        if (sDungeonCellGrid[y][x].id < sDungeonRedCoinRoomMax) {
+            f32 fx = 32000.f - (x * 2000.f) +    (tinymt32_generate_float(&gGlobalRandomState) * 2000.0f - 1000.0f);
+            f32 fz = 32000.f - (y * 2000.f) +    (tinymt32_generate_float(&gGlobalRandomState) * 2000.0f - 1000.0f);;
+            struct Surface * floor;
+            f32 rcy = find_floor(fx,4000.0f,fz,&floor);
+
+            if (floor && !SURFACE_IS_UNSAFE(floor->type) && floor->object->dungeonRoom[0] != &sDungeonRoomList[0]) {
+                struct Object * rc = spawn_object(gMarioObject, MODEL_RED_COIN ,bhvRedCoin);
+                rc->oPosX = fx;
+                rc->oPosZ = fz;
+                rc->oPosY = rcy;
+                redCoinsSpawned++;
+            }
+        }
+    }
+}
+
+
 void dungeon_generate(void) {
     // Randomize Seed
     tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
@@ -1506,6 +1561,7 @@ void dungeon_generate(void) {
     sDungeonCoinBalance = 0;
     sDungeonUniqueVariantGeneratedFlags = 0;
     sDungeonCellProcessCount = 0;
+    sDungeonRedCoinRoomMax = 0;
     
     bzero(&sDungeonRoomList, sizeof(sDungeonRoomList));
     bzero(&sDungeonCellGrid, sizeof(sDungeonCellGrid));

@@ -71,6 +71,10 @@ void bhv_purple_switch_loop(void) {
                 o->oAction = 99;
                 spawn_default_star(o->oPosX,o->oPosY+400.0f,o->oPosZ);
             }
+            if (GET_BPARAM4(o->oBehParams) == 4) {
+                dungeon_spawn_room_red_coins();
+                o->oAction = 99;
+            }
             break;
 
         /**

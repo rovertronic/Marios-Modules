@@ -74,5 +74,6 @@ void dungeon_debug_print(void);
 void dungeon_set_mario_room(void);
 s32 dungeon_room_is_visible(struct DungeonRoom * room);
 void dungeon_print_minimap(f32 mapZoom);
+void dungeon_spawn_room_red_coins(void);
 
 #endif

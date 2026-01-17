@@ -91,3 +91,5 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "rclock/model.inc.c"
 #include "dungeonclockhand/model.inc.c"
 #include "dungeonclockhand/collision.inc.c"
+#include "rredcoin/collision.inc.c"
+#include "rredcoin/model.inc.c"
