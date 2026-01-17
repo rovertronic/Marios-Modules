@@ -41,3 +41,5 @@
 #include "rsupertreasure/geo.inc.c"
 #include "rsilverpillar/geo.inc.c"
 #include "rbns/geo.inc.c"
+#include "rclock/geo.inc.c"
+#include "dungeonclockhand/geo.inc.c"

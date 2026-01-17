@@ -6487,3 +6487,13 @@ const BehaviorScript bhvDungeonElite[] = {
     CALL_NATIVE(bhv_dungeon_elite),
     DEACTIVATE(),
 };
+
+const BehaviorScript bhvDungeonClockHand[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    LOAD_COLLISION_DATA(dungeonclockhand_collision),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    BEGIN_LOOP(),
+        ADD_INT(oFaceAngleYaw, -0x100),
+        CALL_NATIVE(load_object_collision_model),
+    END_LOOP(),
+};

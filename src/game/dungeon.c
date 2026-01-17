@@ -890,6 +890,20 @@ struct DungeonObject sRoomSilverPillarObjectList[] = {
     {.end = TRUE},
 };
 
+struct DungeonRoomVariant sRoomSilverPillar = {
+    .minimapDL = &rmapsilverpillar_rmapsilverpillar_mesh,
+
+    .cellList = &sRoomSilverPillarCellList,
+    .model = MODEL_ROOM_SILVER_PILLAR,
+    .collision = rsilverpillar_collision,
+    .objectList = &sRoomSilverPillarObjectList,
+    .maxLootCt = 0,
+    .starCt = 1,
+    .lootLocations = NULL,
+    .requiredLoot = &sRoomSilverPillarRequiredLoot,
+    .generateOnce = TRUE,
+};
+
 // Blade & Sorcery Room
 
 struct DungeonRoomVariant sRoomBns = {
@@ -905,17 +919,39 @@ struct DungeonRoomVariant sRoomBns = {
     .easterEgg = TRUE,
 };
 
-struct DungeonRoomVariant sRoomSilverPillar = {
-    .minimapDL = &rmapsilverpillar_rmapsilverpillar_mesh,
+// Clock Room
 
-    .cellList = &sRoomSilverPillarCellList,
-    .model = MODEL_ROOM_SILVER_PILLAR,
-    .collision = rsilverpillar_collision,
-    .objectList = &sRoomSilverPillarObjectList,
-    .maxLootCt = 0,
-    .starCt = 1,
-    .lootLocations = NULL,
-    .requiredLoot = &sRoomSilverPillarRequiredLoot,
+struct DungeonRoomVariantCellList sRoomClockCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT | DOOR_DOWN | DOOR_UP)},
+    {.x = 1, .y = 0},
+    {.end = TRUE},
+};
+
+s8 sRoomClockRequiredLoot[] = {
+    MOD_CAP, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonObject sRoomClockObjectList[] = {
+    {.bhv = bhvDungeonClockHand, .model = MODEL_DUNGEON_CLOCKHAND,
+    .angle = 0x0, .pos = {0.0f,0.0f,0.0f}},
+    {.end = TRUE},
+};
+
+Vec4f sRoomClockLootLocations[] = {
+    {-11.0f,0.0f,0.0f,  90.f},
+};
+
+struct DungeonRoomVariant sRoomClock = {
+    .minimapDL = &rmapjunc_rmapjunc_mesh,
+
+    .cellList = &sRoomClockCellList,
+    .model = MODEL_ROOM_CLOCK,
+    .collision = rclock_collision,
+    .objectList = &sRoomClockObjectList,
+    .maxLootCt = 1,
+    .lootLocations = &sRoomClockLootLocations,
+    .requiredLoot = &sRoomClockRequiredLoot,
     .generateOnce = TRUE,
 };
 
@@ -940,6 +976,7 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomCaveJump,
     &sRoomAutoMaze,
     &sRoomSilverPillar,
+    &sRoomClock,
 
     // Easter-Egg Rooms
     &sRoomFnab,
@@ -1241,7 +1278,9 @@ void dungeon_generate_rooms_at_doors(void) {
 
 s32 dungeon_generate_boss_room(void) {
     int i_max = sDungeonCellProcessCount;
-    for (int i = 0; i < i_max; i++) {
+
+    // Check latest generated rooms first, which will make the boss room generate deep in
+    for (int i = i_max-1; i >= 0; i--) {
         struct DungeonRoom * origin_room = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
 
         for (int j = 0; j < 4; j++) {
@@ -1250,7 +1289,7 @@ s32 dungeon_generate_boss_room(void) {
                 int x = sDungeonCellProcessList[i]->x + (sDirectionList[j][0]);
                 int y = sDungeonCellProcessList[i]->y - (sDirectionList[j][1]);
 
-                struct DungeonRoomVariant * selectedVariant = &sRoomFacade1;
+                struct DungeonRoomVariant * selectedVariant = &sRoomBns;
 
                 if (dungeon_check_room_viability(selectedVariant,j,x,y)) {
                     dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);

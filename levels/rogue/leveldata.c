@@ -87,3 +87,7 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "rmapfurnace/model.inc.c"
 #include "rbns/collision.inc.c"
 #include "rbns/model.inc.c"
+#include "rclock/collision.inc.c"
+#include "rclock/model.inc.c"
+#include "dungeonclockhand/model.inc.c"
+#include "dungeonclockhand/collision.inc.c"
