@@ -1223,6 +1223,30 @@ void dungeon_generate_rooms_at_doors(void) {
     }
 }
 
+s32 dungeon_generate_boss_room(void) {
+    int i_max = sDungeonCellProcessCount;
+    for (int i = 0; i < i_max; i++) {
+        struct DungeonRoom * origin_room = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
+
+        for (int j = 0; j < 4; j++) {
+            // j = dir
+            if (sDungeonCellProcessList[i]->doorFlags & (1 << j)) {
+                int x = sDungeonCellProcessList[i]->x + (sDirectionList[j][0]);
+                int y = sDungeonCellProcessList[i]->y - (sDirectionList[j][1]);
+
+                struct DungeonRoomVariant * selectedVariant = &sRoomFacade1;
+
+                if (dungeon_check_room_viability(selectedVariant,j,x,y)) {
+                    dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
+                    dungeon_create_room(selectedVariant,j,x,y);
+                    return TRUE;
+                }
+            }
+        }
+    }
+    return FALSE;
+}
+
 void dungeon_calculate_all_neighbor_flags(void) {
     for (int i = 0; i < sDungeonCellProcessCount; i++) {
         struct DungeonCell * cell = sDungeonCellProcessList[i];
@@ -1436,6 +1460,10 @@ void dungeon_generate(void) {
 
     for (int i = 0; i < 50; i++) {
         dungeon_generate_rooms_at_doors();
+    }
+
+    if (!dungeon_generate_boss_room()) {
+        sDungeonForceRegen = TRUE;
     }
 
     // Manually fill remaining empty treasure rooms and challenge rooms with mystery chests
