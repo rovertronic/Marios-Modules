@@ -982,18 +982,22 @@ struct DungeonRoomVariant sRoomRedCoin = {
 };
 
 struct DungeonRoomVariant * sRoomVariantList[] = {
+    // Transition Rooms
     &sRoomMiniJunc1,
     &sRoomMiniJunc2,
     &sRoomHall,
     &sRoomLobby,
     &sRoomSplitHall,
     &sRoomSpaceworld,
-    &sRoomGardenHall,
+
+    // Special Rooms
     &sRoomTreasure,
     &sRoomSuperTreasure,
     &sRoomGrindr,
 
     // Challenge Rooms
+    &sRoomGardenHall,
+    &sRoomClock,
     &sRoomLongJump,
     &sRoomVanishHop,
     &sRoomWallJump,
@@ -1002,7 +1006,6 @@ struct DungeonRoomVariant * sRoomVariantList[] = {
     &sRoomCaveJump,
     &sRoomAutoMaze,
     &sRoomSilverPillar,
-    &sRoomClock,
     &sRoomRedCoin,
 
     // Easter-Egg Rooms
