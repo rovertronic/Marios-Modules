@@ -632,6 +632,7 @@ enum new_models {
     MODEL_ROOM_BNS,
     MODEL_ROOM_CLOCK,
     MODEL_ROOM_RED_COIN,
+    MODEL_ROOM_BOSS,
 };
 
 #endif // MODEL_IDS_H

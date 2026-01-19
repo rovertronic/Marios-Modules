@@ -981,6 +981,48 @@ struct DungeonRoomVariant sRoomRedCoin = {
     .generateOnce = TRUE,
 };
 
+// Boss Room
+
+struct DungeonRoomVariantCellList sRoomBossCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0},
+    {.x = 3, .y = 0},
+    {.x = 4, .y = 0},
+    {.x = 5, .y = 0},
+
+    // I wish I was joking
+    {.x = 6, .y = 0},
+    {.x = 7, .y = 0},
+    {.x = 6, .y = 1},
+    {.x = 7, .y = 1},
+    {.x = 6, .y = -1},
+    {.x = 7, .y = -1},
+    {.end = TRUE},
+};
+
+struct DungeonObject sRoomBossObjectList[] = {
+    {.bhv = bhvDungeonDoorLocked, .model = MODEL_DUNGEON_DOOR, .param = 1,
+    .angle = 0x4000, .pos = {-90.0236f,0.0f,16.3737f}},
+    {.bhv = bhvStaticObject, .model = MODEL_KINGBOBOMB_GLOBAL, .param = 0,
+    .angle = 0x4000, .pos = {-109.687f,0.0f,13.7393f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomBoss = {
+    .minimapDL = &rmapboss_rmapboss_mesh,
+
+    .cellList = &sRoomBossCellList,
+    .model = MODEL_ROOM_BOSS,
+    .collision = rboss_collision,
+    .objectList = &sRoomBossObjectList,
+    .maxLootCt = 0,
+    .lootLocations = NULL,
+    .requiredLoot = NULL,
+    .generateOnce = TRUE,
+    .needKey = TRUE,
+};
+
 struct DungeonRoomVariant * sRoomVariantList[] = {
     // Transition Rooms
     &sRoomMiniJunc1,
@@ -1323,7 +1365,7 @@ s32 dungeon_generate_boss_room(void) {
                 int x = sDungeonCellProcessList[i]->x + (sDirectionList[j][0]);
                 int y = sDungeonCellProcessList[i]->y - (sDirectionList[j][1]);
 
-                struct DungeonRoomVariant * selectedVariant = &sRoomBns;
+                struct DungeonRoomVariant * selectedVariant = &sRoomBoss;
 
                 if (dungeon_check_room_viability(selectedVariant,j,x,y)) {
                     dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);

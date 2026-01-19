@@ -83,4 +83,7 @@ extern const LevelScript level_rogue_entry[];
 #include "dungeonclockhand/collision_header.h"
 #include "rredcoin/collision_header.h"
 #include "rredcoin/geo_header.h"
+#include "rboss/collision_header.h"
+#include "rboss/geo_header.h"
+#include "rmapboss/header.h"
 #endif

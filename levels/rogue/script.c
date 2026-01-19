@@ -63,6 +63,7 @@ const LevelScript level_rogue_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BNS, rbns_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_CLOCK, rclock_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RED_COIN, rredcoin_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BOSS, rboss_geo),
 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_1, bubbly_tree_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_2, spiky_tree_geo),

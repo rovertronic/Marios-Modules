@@ -57,13 +57,6 @@ How will you cross it?",
     [NEWTEXT_BOSS_2] = "I am @Y@Wigginator.@@\nFace my wiggler missiles!",
     [NEWTEXT_BOSS_DEFEAT_1] = "You have passed the test. You may now proceed.",
     [NEWTEXT_BOSS_DEFEAT_1_FOID] = "I can't believe I was defeated by the likes of you!\nYou have passed the test. You may now proceed.",
-    /*
-    The joke is that there's this X user named "Ryan Hakueri" who absolutely despises woman,
-    and can't help himself but express to the world how much he hates them. But he also loves
-    touhou and femboys. He unironically uses terms such as 'Foid'. I am eternally fascinated by
-    this individual, his name and profile picture is iconic and is an earworm stuck in my brain,
-    so I must reference him in my hack. Autistic Breeder is a close second.
-    */
     [NEWTEXT_SAVE] = "- POINT OF ADVICE -\nDon't forget to @G@save@@ frequently!",
 };
 

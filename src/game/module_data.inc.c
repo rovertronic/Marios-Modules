@@ -1192,9 +1192,6 @@ struct module_info module_infos[] = {
         .type = MTYPE_VANITY,
         .tex = micons_woman_rgba16,
         .desc = "Swaps to alternative hardware + voicebox.",
-        //Ryan left twitter... rip
-        //edit: he's BACK
-        //.desc = "Changes Mario's gender to @R@WOMAN@@.",
         .func = module_woman,
     },
 

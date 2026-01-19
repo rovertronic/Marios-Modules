@@ -1,0 +1,13 @@
+extern Vtx rmapboss_rmapboss_mesh_vtx_0[24];
+extern Gfx rmapboss_rmapboss_mesh_tri_0[];
+extern Vtx rmapboss_rmapboss_mesh_vtx_1[48];
+extern Gfx rmapboss_rmapboss_mesh_tri_1[];
+extern Vtx rmapboss_rmapboss_mesh_vtx_2[4];
+extern Gfx rmapboss_rmapboss_mesh_tri_2[];
+extern Gfx mat_rmapboss_map_mat_1_layer1[];
+extern Gfx mat_revert_rmapboss_map_mat_1_layer1[];
+extern Gfx mat_rmapboss_map_mat_3_layer1[];
+extern Gfx mat_revert_rmapboss_map_mat_3_layer1[];
+extern Gfx mat_rmapboss_map_mat_2_layer1[];
+extern Gfx mat_revert_rmapboss_map_mat_2_layer1[];
+extern Gfx rmapboss_rmapboss_mesh[];

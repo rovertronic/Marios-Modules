@@ -671,7 +671,7 @@ static void get_optimal_coll_dist(struct Object *obj) {
 }
 #endif
 
-static TerrainData sVertexData[2000];
+static TerrainData sVertexData[3000];
 
 /**
  * Transform an object's vertices, reload them, and render the object.
