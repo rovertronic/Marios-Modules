@@ -1594,6 +1594,12 @@ void dungeon_generate(void) {
     gDungeonEnemies[1] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
     gDungeonEnemies[2] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
 
+    // Shuffle location of chest in wood room
+    f32 * randomPos = sRoomWoodObjectList[tinymt32_generate_u32(&gGlobalRandomState)%6].pos;
+    sRoomWoodLootLocations[0][0] = randomPos[0];
+    sRoomWoodLootLocations[0][1] = randomPos[1];
+    sRoomWoodLootLocations[0][2] = randomPos[2];
+
     redo_generate:
     sDungeonForceRegen = FALSE;
     sDungeonEasterEggGenerated = FALSE;
@@ -1613,7 +1619,7 @@ void dungeon_generate(void) {
     bzero(&sDungeonInventory, sizeof(sDungeonInventory));
 
     // Build First Room
-    dungeon_create_room(&sRoomFacade1  ,0,16,16);
+    dungeon_create_room(&sRoomWood  ,0,16,16);
 
     for (int i = 0; i < 50; i++) {
         dungeon_generate_rooms_at_doors();
