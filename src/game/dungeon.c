@@ -863,7 +863,7 @@ s8 sRoomSilverPillarRequiredLoot[] = {
     MOD_TORNADO, 1,
     MOD_FLIP_VEL, 1,
 
-    MOD_NONMOD_STAR, 2,
+    MOD_NONMOD_STAR, 1,
     MOD_EMPTY,
 };
 
@@ -1004,7 +1004,7 @@ struct DungeonRoomVariantCellList sRoomBossCellList[] = {
 struct DungeonObject sRoomBossObjectList[] = {
     {.bhv = bhvDungeonDoorLocked, .model = MODEL_DUNGEON_DOOR, .param = 1,
     .angle = 0x4000, .pos = {-90.0236f,0.0f,16.3737f}},
-    {.bhv = bhvStaticObject, .model = MODEL_KINGBOBOMB_GLOBAL, .param = 0,
+    {.bhv = bhvKingBobomb, .model = MODEL_KINGBOBOMB_GLOBAL, .param = 0,
     .angle = 0x4000, .pos = {-109.687f,0.0f,13.7393f}},
     {.end = TRUE},
 };
