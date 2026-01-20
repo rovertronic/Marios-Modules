@@ -1619,7 +1619,7 @@ void dungeon_generate(void) {
     bzero(&sDungeonInventory, sizeof(sDungeonInventory));
 
     // Build First Room
-    dungeon_create_room(&sRoomWood  ,0,16,16);
+    dungeon_create_room(&sRoomFacade1  ,0,16,16);
 
     for (int i = 0; i < 50; i++) {
         dungeon_generate_rooms_at_doors();
