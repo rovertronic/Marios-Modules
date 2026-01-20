@@ -21,6 +21,7 @@
 #include "seq_ids.h"
 #include "levels/temple/header.h"
 #include "dungeon.h"
+#include "engine/surface_collision.h"
 
 u8 gModuleTutorialState = TUTORIAL_WAIT_FOR_MODULE_COLLECT;
 struct ScreenMessage sScreenMessageList[15];

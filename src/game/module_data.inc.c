@@ -731,6 +731,50 @@ void module_time_extend(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+struct WallCollisionData sSensorWallData;
+
+void module_sensor(struct module_execution_thread * met, u8 call_context) {
+    int detected = FALSE;
+
+    if (met->option == 3) {
+        struct Surface * floor;
+        f32 floory = find_floor(gMarioState->pos[0],gMarioState->pos[1],gMarioState->pos[2],&floor);
+        if (floor && ABS(floory - gMarioState->pos[1]) < 50.0f && floor->type == SURFACE_BURNING) {
+            detected = TRUE;
+        }
+    } else {
+        sSensorWallData.x = gMarioState->pos[0];
+        sSensorWallData.y = gMarioState->pos[1];
+        sSensorWallData.z = gMarioState->pos[2];
+        sSensorWallData.radius = 150.0f;
+        sSensorWallData.offsetY = 50.0f;
+
+        find_wall_collisions(&sSensorWallData);
+
+        for (int i = 0; i < sSensorWallData.numWalls; i++) {
+            switch(met->option) {
+                case 0:
+                    detected = TRUE;
+                break;
+                case 1:
+                    if (sSensorWallData.walls[i]->type == SURFACE_VANISH_CAP_WALLS) {
+                        detected = TRUE;
+                    }
+                break;
+                case 2:
+                    if (sSensorWallData.walls[i]->type == SURFACE_BURNING) {
+                        detected = TRUE;
+                    }
+                break;
+            }
+        }
+    }
+
+    add_met_condition(met,detected);
+
+    met->x++;
+}
+
 Vec3f moduleRed = {1.0f,0.0f,0.0f};
 Vec3f moduleBlue = {0.0f,0.0f,1.0f};
 Vec3f moduleGreen = {0.0f,1.0f,0.0f};
@@ -808,6 +852,14 @@ char * rotateOptions[] = {
     "180 degrees",
     "90 degrees counter-clockwise",
     "To analog stick direction",
+    NULL,
+};
+
+char * sensorOptions[] = {
+    "Any wall.",
+    "A vanish wall.",
+    "A lava wall.",
+    "A lava floor.",
     NULL,
 };
 
@@ -1267,7 +1319,7 @@ struct module_info module_infos[] = {
 
     [MOD_STOP] = {
         .name = "Stop",
-        .type = MTYPE_LOGIC,
+        .type = MTYPE_COND,
         .tex = micons_stop_rgba16,
         .desc = "Stops the sequence prematurely.",
         .func = module_stop,
@@ -1380,5 +1432,16 @@ struct module_info module_infos[] = {
         .cooldown = .0f,
         .creative = FALSE,
         .loot_tier = LOOT_TIER_2,
+    },
+
+    [MOD_IF_SENSOR] = {
+        .name = "Surface Proximity Sensor",
+        .type = MTYPE_LOGIC,
+        .tex = micons_wall_rgba16,
+        .desc = "Checks if Mario is close to touching...",
+        .func = module_sensor,
+        .options = sensorOptions,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 };

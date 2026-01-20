@@ -201,6 +201,7 @@ enum module_id {
     MOD_NONMOD_STAR,
     MOD_NONMOD_MYSTERY_CHEST,
     MOD_MINIMAP,
+    MOD_IF_SENSOR,
     MOD_COUNT,
 };
 
