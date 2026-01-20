@@ -96,3 +96,6 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "rboss/collision.inc.c"
 #include "rboss/model.inc.c"
 #include "rmapboss/model.inc.c"
+#include "juncblock/model.inc.c"
+#include "clockblock/model.inc.c"
+#include "juncblock/collision.inc.c"

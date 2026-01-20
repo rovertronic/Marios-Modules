@@ -1,6 +1,6 @@
 void scroll_rboss_rboss_mesh_layer_1_vtx_7() {
 	int i = 0;
-	int count = 326;
+	int count = 388;
 	int width = 128 * 0x20;
 	int height = 128 * 0x20;
 

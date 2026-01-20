@@ -123,6 +123,7 @@ struct DungeonRoomVariant sRoomMiniJunc1 = {
 
     .cellList = &sRoomMiniJuncCellList,
     .model = MODEL_ROOM_MINIJUNC,
+    .doorBlockModel = MODEL_DUNGEON_JUNCBLOCK,
     .collision = minijunc_collision,
     .objectList = &sRoomJuncObjectList2,
     .maxLootCt = 0,
@@ -138,6 +139,7 @@ struct DungeonRoomVariant sRoomMiniJunc2 = {
 
     .cellList = &sRoomMiniJuncCellList,
     .model = MODEL_ROOM_MINIJUNC,
+    .doorBlockModel = MODEL_DUNGEON_JUNCBLOCK,
     .collision = minijunc_collision,
     .objectList = &sRoomJuncObjectList1,
     .maxLootCt = 0,
@@ -949,6 +951,7 @@ struct DungeonRoomVariant sRoomClock = {
 
     .cellList = &sRoomClockCellList,
     .model = MODEL_ROOM_CLOCK,
+    .doorBlockModel = MODEL_DUNGEON_CLOCKBLOCK,
     .collision = rclock_collision,
     .objectList = &sRoomClockObjectList,
     .maxLootCt = 1,
@@ -1532,8 +1535,13 @@ void dungeon_spawn_room_objects(void) {
                         obj_mark_for_deletion(doorObj);
                     }
                 } else {
-                    doorObj = spawn_object(gMarioObject, MODEL_DUNGEON_DOORHOLE_COVERED ,bhvDungeonProcGenRoom);
-                    doorObj->collisionData = segmented_to_virtual(doorhole_covered_collision);
+                    ModelID16 model = MODEL_DUNGEON_DOORHOLE_COVERED;
+                    struct DungeonRoomVariant * variant = sDungeonRoomList[sDungeonCellProcessList[i]->id-1].variant;
+                    if (variant->doorBlockModel != 0) {
+                        model = variant->doorBlockModel;
+                    }
+                    doorObj = spawn_object(gMarioObject, model ,bhvDungeonProcGenRoom);
+                    doorObj->collisionData = segmented_to_virtual(juncblock_collision);
                 }
                 doorObj->oPosX = (32000.f - (sDungeonCellProcessList[i]->x * 2000.f)) - (1000.f * sDirectionList[j][0]);
                 doorObj->oPosZ = (32000.f - (sDungeonCellProcessList[i]->y * 2000.f)) + (1000.f * sDirectionList[j][1]);

@@ -40,6 +40,7 @@ struct DungeonRoomVariant {
     struct DungeonObject * objectList;
 
     ModelID16 model;
+    ModelID16 doorBlockModel;
     Collision * collision;
     u8 maxLootCt:3;
     u8 starCt:2;
