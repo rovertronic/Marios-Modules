@@ -99,3 +99,4 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "juncblock/model.inc.c"
 #include "clockblock/model.inc.c"
 #include "juncblock/collision.inc.c"
+#include "rmap_maze/model.inc.c"
