@@ -354,7 +354,7 @@ s8 sRoomVanishHopRequiredLoot[] = {
 };
 
 Vec4f sRoomVanishHopLootLocations[] = {
-    {5.56952f,20.3674f,270.0f,0.0f},
+    {5.56952f,20.3674f,0.0f,270.0f},
 };
 
 struct DungeonRoomVariant sRoomVanishHop = {
