@@ -57,6 +57,7 @@ struct DungeonRoom {
     u8 yorigin;
     u8 lootCount;
     u8 id;
+    u8 challengeLv; // How many challenges to access this room
     s8 loot[4];
     struct DungeonRoomVariant * variant;
     struct Object * obj;

@@ -1122,10 +1122,17 @@ s32 dungeon_door_on_other_side(int xp, int yp, int j) {
 }
 
 s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
+    int minLv = 0;
+    if (loot == MOD_NONMOD_KEY) {
+        // Make sure keys are actually challenging to get
+        minLv = 2;
+    }
+
     int chosen_room_index = tinymt32_generate_u32(&gGlobalRandomState)%sDungeonRoomCount;
     for (int i = 0; i < 10; i++) {
         chosen_room_index = tinymt32_generate_u32(&gGlobalRandomState)%sDungeonRoomCount;
         if ((sDungeonRoomList[chosen_room_index].lootCount < sDungeonRoomList[chosen_room_index].variant->maxLootCt)&&
+            sDungeonRoomList[chosen_room_index].challengeLv >= minLv &&
             // Prioritize treasure rooms and challenge rooms for loot
             ((i>5)||(sDungeonRoomList[chosen_room_index].variant == &sRoomTreasure)||(sDungeonRoomList[chosen_room_index].variant->requiredLoot))) {
             sDungeonRoomList[chosen_room_index].loot[sDungeonRoomList[chosen_room_index].lootCount] = loot;
@@ -1137,7 +1144,8 @@ s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
 
     // Guess I couldn't find a random room, try every availible room instead
     for (int i = 0; i < sDungeonRoomCount; i++) {
-        if (sDungeonRoomList[i].lootCount < sDungeonRoomList[i].variant->maxLootCt) {
+        if (sDungeonRoomList[i].lootCount < sDungeonRoomList[i].variant->maxLootCt &&
+            sDungeonRoomList[chosen_room_index].challengeLv >= minLv) {
             sDungeonRoomList[i].loot[sDungeonRoomList[i].lootCount] = loot;
             sDungeonRoomList[i].lootCount++;
             sDungeonLootSlotsAvailible --;
@@ -1286,12 +1294,12 @@ int dungeon_check_room_viability(struct DungeonRoomVariant * variant, int dir, i
 void dungeon_generate_rooms_at_doors(void) {
     sDungeonCurrentDepth++;
 
-    int i_max = sDungeonCellProcessCount;
-    for (int i = 0; i < i_max; i++) {
+    int iMax = sDungeonCellProcessCount;
+    for (int i = 0; i < iMax; i++) {
         if (sDungeonCellProcessList[i]->resolved) {continue;}
         sDungeonCellProcessList[i]->resolved = TRUE;
 
-        struct DungeonRoom * origin_room = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
+        struct DungeonRoom * originRoom = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
 
         for (int j = 0; j < 4; j++) {
             // j = dir
@@ -1341,7 +1349,11 @@ void dungeon_generate_rooms_at_doors(void) {
                     }
 
                     if (dungeon_check_room_viability(selectedVariant,j,x,y)) {
-                        sDungeonUniqueVariantGeneratedFlags |= (1<<selectedVariantIndex);
+                        int isUnique = FALSE;
+                        if (!(sDungeonUniqueVariantGeneratedFlags & (1<<selectedVariantIndex))) {
+                            sDungeonUniqueVariantGeneratedFlags |= (1<<selectedVariantIndex);
+                            isUnique = TRUE;
+                        }
 
                         if (selectedVariant->easterEgg) {
                             sDungeonEasterEggGenerated = TRUE;
@@ -1353,7 +1365,13 @@ void dungeon_generate_rooms_at_doors(void) {
                             dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
                         }
 
-                        dungeon_create_room(selectedVariant,j,x,y);
+                        struct DungeonRoom * createdRoom = dungeon_create_room(selectedVariant,j,x,y);
+
+                        int challengeLv = originRoom->challengeLv;
+                        if (selectedVariant->requiredLoot && isUnique) {
+                            challengeLv++;
+                        }
+                        createdRoom->challengeLv = challengeLv;
 
                         if (selectedVariant == &sRoomRedCoin) {
                             sDungeonRedCoinRoomMax = sDungeonRoomCount;
@@ -1369,11 +1387,15 @@ void dungeon_generate_rooms_at_doors(void) {
 }
 
 s32 dungeon_generate_boss_room(void) {
-    int i_max = sDungeonCellProcessCount;
+    int iMax = sDungeonCellProcessCount;
 
     // Check latest generated rooms first, which will make the boss room generate deep in
-    for (int i = i_max-1; i >= 0; i--) {
-        struct DungeonRoom * origin_room = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
+    for (int i = iMax-1; i >= 0; i--) {
+        struct DungeonRoom * originRoom = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
+
+        if (originRoom->challengeLv < 4) {
+            continue;
+        }
 
         for (int j = 0; j < 4; j++) {
             // j = dir
@@ -1382,7 +1404,6 @@ s32 dungeon_generate_boss_room(void) {
                 int y = sDungeonCellProcessList[i]->y - (sDirectionList[j][1]);
 
                 struct DungeonRoomVariant * selectedVariant = &sRoomBoss;
-
                 if (dungeon_check_room_viability(selectedVariant,j,x,y)) {
                     dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
                     dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
@@ -1640,8 +1661,7 @@ void dungeon_generate(void) {
     bzero(&sDungeonInventory, sizeof(sDungeonInventory));
 
     // Build First Room
-    //dungeon_create_room(&sRoomFacade1  ,0,16,16);
-    dungeon_create_room(&sRoomAutoMaze  ,0,16,16);
+    dungeon_create_room(&sRoomFacade1, 0, 16, 16);
 
     for (int i = 0; i < 50; i++) {
         dungeon_generate_rooms_at_doors();
@@ -1700,6 +1720,7 @@ void dungeon_debug_print(void) {
                 nflagct++;
             }
         }
+        print_text_fmt_int(0, 160, "CHLV %d", gDungeonMarioRoom->challengeLv);
     }
     print_text_fmt_int(0, 180, "NFLAGS %d", nflagct);
 
