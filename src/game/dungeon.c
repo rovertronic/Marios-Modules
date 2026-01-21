@@ -562,6 +562,7 @@ struct DungeonRoomVariant sRoomSpaceworld = {
     .maxLootCt = 2,
     .lootLocations = &sRoomSpaceworldLootLocations,
     .requiredLoot = &sRoomSpaceworldRequiredLoot,
+    .generateOnce = TRUE,
 };
 
 // Facade 1 Room
