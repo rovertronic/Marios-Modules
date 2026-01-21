@@ -819,17 +819,30 @@ struct DungeonObject sRoomAutoMazeObjectList[] = {
     .angle = 0x0, .pos = {-5.53006f,0.0f,0.0f}},
     {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_RECONNECT,
     .angle = 0x0, .pos = {-1.42793f,0.0f,0.0f}},
+
+    // Entrance 2
+    {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_DISCONNECT,
+    .angle = 0x0, .pos = {-5.53006f,-5.72149f,0.0f}},
+    {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_RECONNECT,
+    .angle = 0x0, .pos = {-1.42793f,-5.72149f,0.0f}},
+
     // Treasure
     {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_DISCONNECT,
     .angle = 0x0, .pos = {-36.9067f,-17.463f,0.0f}},
     {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_RECONNECT,
     .angle = 0x0, .pos = {-36.9067f,-21.5635f,0.0f}},
+
     //Exit
     {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_DISCONNECT,
     .angle = 0x0, .pos = {-36.9067f,18.5196f,0.0f}},
     {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_RECONNECT,
     .angle = 0x0, .pos = {-36.9067f,22.5841f,0.0f}},
+    
     //Star
+    {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_DISCONNECT,
+    .angle = 0x0, .pos = {-38.5384f,0.0f,6.84446f}},
+    {.bhv = bhvVolume, .model = MODEL_NONE, .param = VOLUME_RECONNECT,
+    .angle = 0x0, .pos = {-42.6803f,0.0f,6.84446f}},
 
     {.end = TRUE},
 };
@@ -1627,7 +1640,8 @@ void dungeon_generate(void) {
     bzero(&sDungeonInventory, sizeof(sDungeonInventory));
 
     // Build First Room
-    dungeon_create_room(&sRoomFacade1  ,0,16,16);
+    //dungeon_create_room(&sRoomFacade1  ,0,16,16);
+    dungeon_create_room(&sRoomAutoMaze  ,0,16,16);
 
     for (int i = 0; i < 50; i++) {
         dungeon_generate_rooms_at_doors();

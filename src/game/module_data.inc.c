@@ -16,6 +16,7 @@ s32 storagePanelCondition(void) {
 }
 
 s32 passivePanelCondition(void) {
+    if (creativePanelCondition()) {return TRUE;}
     return ( (gMariosModulesSave.file[gMariosModulesSaveIndex].flags & SAVE_FLAG_PASSIVE) != 0 );
 }
 
