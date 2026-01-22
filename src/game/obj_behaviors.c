@@ -1309,7 +1309,7 @@ void bhv_bdoor(void) {
         if (obj_has_behavior(o,bhvBdoor)) {
             cur_obj_set_model(MODEL_BDOOR_LOCKED);
         } else {
-            cur_obj_set_model(MODEL_DUNGEON_DOOR);
+            cur_obj_set_model(MODEL_DUNGEON_DOOR_LOCKED);
         }
     }
 
@@ -1424,6 +1424,9 @@ void bhv_module_collect(void) {
 
 void bhv_key_open(void) {
     struct Object * keyDoor = cur_obj_nearest_object_with_behavior(bhvBdoor);
+    if (gCurrLevelNum == LEVEL_ROGUE) {
+        keyDoor = cur_obj_nearest_object_with_behavior(bhvDungeonDoorLocked);
+    }
 
     if (keyDoor) {
         o->oHomeX = keyDoor->oHomeX;

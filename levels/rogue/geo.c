@@ -47,3 +47,4 @@
 #include "rboss/geo.inc.c"
 #include "juncblock/geo.inc.c"
 #include "clockblock/geo.inc.c"
+#include "dungeondoorlocked/geo.inc.c"

@@ -47,6 +47,7 @@ const LevelScript level_rogue_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BALDI, baldi_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_BALDI_DOOR, baldidoor_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_DOOR, dungeondoor_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_DOOR_LOCKED, dungeondoorlocked_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_CLOCKHAND, dungeonclockhand_geo),
 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_WOOD, rboxes_geo), 
