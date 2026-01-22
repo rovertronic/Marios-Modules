@@ -58,6 +58,7 @@ f32 find_room_floor(f32 x, f32 y, f32 z, struct Surface **pfloor);
 s32 get_room_at_pos(f32 x, f32 y, f32 z);
 s32 find_water_level_and_floor(s32 x, s32 y, s32 z, struct Surface **pfloor);
 s32 find_water_level(s32 x, s32 z);
+f32 find_red_coin_zone_floor(s32 xPos, s32 yPos, s32 zPos, struct Surface **pfloor);
 s32 find_poison_gas_level(s32 x, s32 z);
 #ifdef VANILLA_DEBUG
 void debug_surface_list_info(f32 xPos, f32 zPos);

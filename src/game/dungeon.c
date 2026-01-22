@@ -1604,14 +1604,18 @@ void dungeon_spawn_room_red_coins(void) {
             f32 fx = 32000.f - (x * 2000.f) +    (tinymt32_generate_float(&gGlobalRandomState) * 2000.0f - 1000.0f);
             f32 fz = 32000.f - (y * 2000.f) +    (tinymt32_generate_float(&gGlobalRandomState) * 2000.0f - 1000.0f);;
             struct Surface * floor;
-            f32 rcy = find_floor(fx,4000.0f,fz,&floor);
+            f32 rcy = find_red_coin_zone_floor(fx,4000.0f,fz,&floor);
 
-            if (floor && !SURFACE_IS_UNSAFE(floor->type) && floor->object->dungeonRoom[0] != &sDungeonRoomList[0]) {
-                struct Object * rc = spawn_object(gMarioObject, MODEL_RED_COIN ,bhvRedCoin);
-                rc->oPosX = fx;
-                rc->oPosZ = fz;
-                rc->oPosY = rcy;
-                redCoinsSpawned++;
+            if (floor) {
+                // Red coin zone found, now find normal floor beneath it
+                rcy = find_floor(fx,rcy-10.0f,fz,&floor);
+                if (floor) {
+                    struct Object * rc = spawn_object(gMarioObject, MODEL_RED_COIN ,bhvRedCoin);
+                    rc->oPosX = fx;
+                    rc->oPosZ = fz;
+                    rc->oPosY = rcy;
+                    redCoinsSpawned++;
+                }
             }
         }
     }
