@@ -22,6 +22,7 @@ int sDungeonCurrentDepth = 0;
 int sDungeonLootSlotsAvailible = 0;
 int sDungeonCoinBalance = 0;
 int sDungeonRedCoinRoomMax = 0;
+int sDungeonTargetRoomCount = 0;
 u32 sDungeonUniqueVariantGeneratedFlags;
 
 u16 gDungeonTreeModel = 0;
@@ -68,7 +69,29 @@ struct DungeonObject * gDungeonEnemies[3];
 
 #include "dungeon_room_data.inc.c"
 
-struct DungeonRoomVariant * sRoomVariantList[] = {
+struct DungeonRoomVariant * sLv1RoomVariantList[] = {
+    // Transition Rooms
+    &sRoomMiniJunc1,
+    &sRoomMiniJunc2,
+    &sRoomHall,
+    &sRoomLobby,
+    &sRoomSplitHall,
+
+    // Special Rooms
+    &sRoomTreasure,
+
+    // Challenge Rooms
+    &sRoomGardenHall,
+    &sRoomClock,
+    &sRoomVanishHop,
+    &sRoomWallJump,
+    &sRoomWood,
+    &sRoomCaveJump,
+    &sRoomSilverPillar,
+    &sRoomRedCoin,
+};
+
+struct DungeonRoomVariant * sLv2RoomVariantList[] = {
     // Transition Rooms
     &sRoomMiniJunc1,
     &sRoomMiniJunc2,
@@ -342,7 +365,7 @@ void dungeon_generate_rooms_at_doors(struct DungeonRoomVariant ** variantList, i
                     u32 selectedVariantIndex = tinymt32_generate_u32(&gGlobalRandomState) % (size/4);
                     struct DungeonRoomVariant * selectedVariant = variantList[selectedVariantIndex];
 
-                    if (sDungeonRoomCount >= 63) {
+                    if (sDungeonRoomCount >= sDungeonTargetRoomCount) {
                         success = TRUE;
                         continue;
                     }
@@ -689,7 +712,38 @@ void dungeon_shuffle_wood_room_treasure(void) {
 }
 
 void dungeon_generate_lv1(void) {
+    // Level 1 use a fixed tree type
+    gDungeonTreeModel = MODEL_DUNGEON_TREE_3;
 
+    // Pick random enemies
+    int s = sizeof(sBottomEnemyList[0]);
+    gDungeonEnemies[0] = &sBottomEnemyList[tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBottomEnemyList)/s)];
+    gDungeonEnemies[1] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
+    gDungeonEnemies[2] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
+
+    // Shuffle location of chest in wood room
+    dungeon_shuffle_wood_room_treasure();
+
+    redo_generate:
+
+    // Clear dungeon data
+    dungeon_clear_data();
+
+    // Build First Room
+    dungeon_create_room(&sRoomFacade2, 0, 16, 16);
+
+    // Generate dungeon rooms
+    sDungeonTargetRoomCount = 20;
+    for (int i = 0; i < 50; i++) {
+        dungeon_generate_rooms_at_doors(sLv1RoomVariantList,sizeof(sLv1RoomVariantList));
+    }
+
+    // Place the boss key
+    dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
+
+    if (sDungeonForceRegen || sDungeonRoomCount < 9 || sDungeonInventory[MOD_NONMOD_STAR] < 1) {
+        goto redo_generate;
+    }
 }
 
 void dungeon_generate_lv2(void) {
@@ -717,8 +771,9 @@ void dungeon_generate_lv2(void) {
     dungeon_create_room(&sRoomFacade1, 0, 16, 16);
 
     // Generate dungeon rooms
+    sDungeonTargetRoomCount = 63;
     for (int i = 0; i < 50; i++) {
-        dungeon_generate_rooms_at_doors(sRoomVariantList,sizeof(sRoomVariantList));
+        dungeon_generate_rooms_at_doors(sLv2RoomVariantList,sizeof(sLv2RoomVariantList));
     }
 
     // Place the boss room

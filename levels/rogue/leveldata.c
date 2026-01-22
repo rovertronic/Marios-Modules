@@ -101,3 +101,5 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "juncblock/collision.inc.c"
 #include "rmap_maze/model.inc.c"
 #include "dungeondoorlocked/model.inc.c"
+#include "rfacade2/collision.inc.c"
+#include "rfacade2/model.inc.c"

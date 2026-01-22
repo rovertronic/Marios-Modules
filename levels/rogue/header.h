@@ -91,4 +91,6 @@ extern const LevelScript level_rogue_entry[];
 #include "juncblock/collision_header.h"
 #include "rmap_maze/header.h"
 #include "dungeondoorlocked/geo_header.h"
+#include "rfacade2/collision_header.h"
+#include "rfacade2/geo_header.h"
 #endif

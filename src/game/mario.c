@@ -1943,7 +1943,7 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 
 void init_mario(void) {
     if (gCurrLevelNum == LEVEL_ROGUE) {
-        dungeon_generate(1);
+        dungeon_generate(0);
     }
 
     gMarioState->bonkSignal = FALSE;

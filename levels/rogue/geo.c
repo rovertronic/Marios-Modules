@@ -48,3 +48,4 @@
 #include "juncblock/geo.inc.c"
 #include "clockblock/geo.inc.c"
 #include "dungeondoorlocked/geo.inc.c"
+#include "rfacade2/geo.inc.c"

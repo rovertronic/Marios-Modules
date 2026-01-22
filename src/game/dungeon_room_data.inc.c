@@ -105,7 +105,7 @@ struct DungeonRoomVariant sRoomLobby = {
     .model = MODEL_ROOM_LOBBY,
     .collision = rlobby_collision,
     .objectList = NULL,
-    .maxLootCt = 1,
+    .maxLootCt = 0,
     .lootLocations = &sRoomLobbyLootLocations,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
@@ -970,4 +970,43 @@ struct DungeonRoomVariant sRoomBoss = {
     .requiredLoot = NULL,
     .generateOnce = TRUE,
     .needKey = TRUE,
+};
+
+// Facade 2 (Level 1)
+
+struct DungeonRoomVariantCellList sRoomFacade2CellList[] = {
+    {.x = 0, .y = 0},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0},
+
+    {.x = 0, .y = -1},
+    {.x = 1, .y = -1},
+    {.x = 2, .y = -1, .doorFlags = DOOR_RIGHT},
+
+    {.x = 0, .y = -2},
+    {.x = 1, .y = -2, .doorFlags = DOOR_DOWN},
+    {.x = 2, .y = -2},
+
+    {.x = 3, .y = -2},
+
+    {.x = 2, .y = -3},
+    {.x = 3, .y = -3},
+};
+
+struct DungeonObject sRoomFacade2ObjectList[] = {
+    {.bhv = bhvDungeonDoorLocked, .model = MODEL_DUNGEON_DOOR, .param = 1,
+    .angle = -0x2000, .pos = {-53.0235f,-53.0235f,5.32303f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomFacade2 = {
+    .minimapDL = NULL,//&rmapfacade1_rmapfacade1_mesh,
+
+    .cellList = &sRoomFacade2CellList,
+    .model = MODEL_ROOM_FACADE2,
+    .collision = rfacade2_collision,
+    .objectList = &sRoomFacade2ObjectList,
+    .maxLootCt = 0,
+    .lootLocations = NULL,
+    .requiredLoot = NULL,
 };
