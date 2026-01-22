@@ -2231,7 +2231,7 @@ Gfx mat_revert_vanishhop_f3dlite_material_014[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_vanishhop_f3dlite_material_015[] = {
+Gfx mat_vanishhop_reallava[] = {
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(0, 0, 0, TEXEL0, 0, 0, 0, ENVIRONMENT, 0, 0, 0, TEXEL0, 0, 0, 0, ENVIRONMENT),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -2248,7 +2248,7 @@ Gfx mat_vanishhop_f3dlite_material_015[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_revert_vanishhop_f3dlite_material_015[] = {
+Gfx mat_revert_vanishhop_reallava[] = {
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -2356,9 +2356,9 @@ Gfx vanishhop_vanishhop_mesh_layer_1[] = {
 	gsSPDisplayList(mat_vanishhop_f3dlite_material_014),
 	gsSPDisplayList(vanishhop_vanishhop_mesh_layer_1_tri_1),
 	gsSPDisplayList(mat_revert_vanishhop_f3dlite_material_014),
-	gsSPDisplayList(mat_vanishhop_f3dlite_material_015),
+	gsSPDisplayList(mat_vanishhop_reallava),
 	gsSPDisplayList(vanishhop_vanishhop_mesh_layer_1_tri_2),
-	gsSPDisplayList(mat_revert_vanishhop_f3dlite_material_015),
+	gsSPDisplayList(mat_revert_vanishhop_reallava),
 	gsSPDisplayList(mat_vanishhop_f3dlite_material_016),
 	gsSPDisplayList(vanishhop_vanishhop_mesh_layer_1_tri_3),
 	gsSPDisplayList(mat_revert_vanishhop_f3dlite_material_016),

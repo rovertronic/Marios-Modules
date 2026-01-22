@@ -2764,7 +2764,7 @@ Gfx mat_revert_facade1_dungeonshingles[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_facade1_f3dlite_material_001[] = {
+Gfx mat_facade1_castletrim[] = {
 	gsSPClearGeometryMode(G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0, TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0),
@@ -2782,7 +2782,7 @@ Gfx mat_facade1_f3dlite_material_001[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_revert_facade1_f3dlite_material_001[] = {
+Gfx mat_revert_facade1_castletrim[] = {
 	gsSPSetGeometryMode(G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
@@ -2999,9 +2999,9 @@ Gfx facade1_facade1_mesh_layer_1[] = {
 	gsSPDisplayList(mat_facade1_dungeonshingles),
 	gsSPDisplayList(facade1_facade1_mesh_layer_1_tri_2),
 	gsSPDisplayList(mat_revert_facade1_dungeonshingles),
-	gsSPDisplayList(mat_facade1_f3dlite_material_001),
+	gsSPDisplayList(mat_facade1_castletrim),
 	gsSPDisplayList(facade1_facade1_mesh_layer_1_tri_3),
-	gsSPDisplayList(mat_revert_facade1_f3dlite_material_001),
+	gsSPDisplayList(mat_revert_facade1_castletrim),
 	gsSPDisplayList(mat_facade1_path),
 	gsSPDisplayList(facade1_facade1_mesh_layer_1_tri_4),
 	gsSPDisplayList(mat_revert_facade1_path),

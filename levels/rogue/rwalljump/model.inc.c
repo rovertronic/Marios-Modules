@@ -2534,7 +2534,7 @@ Gfx mat_revert_rwalljump_dungeonbricks[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_rwalljump_f3dlite_material_005[] = {
+Gfx mat_rwalljump_brownbrick1[] = {
 	gsSPClearGeometryMode(G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0, TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0),
@@ -2552,7 +2552,7 @@ Gfx mat_rwalljump_f3dlite_material_005[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_revert_rwalljump_f3dlite_material_005[] = {
+Gfx mat_revert_rwalljump_brownbrick1[] = {
 	gsSPSetGeometryMode(G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
@@ -2581,7 +2581,7 @@ Gfx mat_revert_rwalljump_dungeoncarpet[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_rwalljump_f3dlite_material_009[] = {
+Gfx mat_rwalljump_brownbrick2[] = {
 	gsSPClearGeometryMode(G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0, TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0),
@@ -2599,7 +2599,7 @@ Gfx mat_rwalljump_f3dlite_material_009[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_revert_rwalljump_f3dlite_material_009[] = {
+Gfx mat_revert_rwalljump_brownbrick2[] = {
 	gsSPSetGeometryMode(G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
@@ -2607,7 +2607,7 @@ Gfx mat_revert_rwalljump_f3dlite_material_009[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_rwalljump_f3dlite_material_007[] = {
+Gfx mat_rwalljump_castlefence[] = {
 	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
@@ -2625,7 +2625,7 @@ Gfx mat_rwalljump_f3dlite_material_007[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx mat_revert_rwalljump_f3dlite_material_007[] = {
+Gfx mat_revert_rwalljump_castlefence[] = {
 	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
@@ -2703,15 +2703,15 @@ Gfx rwalljump_rwalljump_mesh_layer_1[] = {
 	gsSPDisplayList(mat_rwalljump_dungeonbricks),
 	gsSPDisplayList(rwalljump_rwalljump_mesh_layer_1_tri_1),
 	gsSPDisplayList(mat_revert_rwalljump_dungeonbricks),
-	gsSPDisplayList(mat_rwalljump_f3dlite_material_005),
+	gsSPDisplayList(mat_rwalljump_brownbrick1),
 	gsSPDisplayList(rwalljump_rwalljump_mesh_layer_1_tri_2),
-	gsSPDisplayList(mat_revert_rwalljump_f3dlite_material_005),
+	gsSPDisplayList(mat_revert_rwalljump_brownbrick1),
 	gsSPDisplayList(mat_rwalljump_dungeoncarpet),
 	gsSPDisplayList(rwalljump_rwalljump_mesh_layer_1_tri_3),
 	gsSPDisplayList(mat_revert_rwalljump_dungeoncarpet),
-	gsSPDisplayList(mat_rwalljump_f3dlite_material_009),
+	gsSPDisplayList(mat_rwalljump_brownbrick2),
 	gsSPDisplayList(rwalljump_rwalljump_mesh_layer_1_tri_4),
-	gsSPDisplayList(mat_revert_rwalljump_f3dlite_material_009),
+	gsSPDisplayList(mat_revert_rwalljump_brownbrick2),
 	gsSPDisplayList(mat_rwalljump_pillar),
 	gsSPDisplayList(rwalljump_rwalljump_mesh_layer_1_tri_5),
 	gsSPDisplayList(mat_revert_rwalljump_pillar),
@@ -2732,9 +2732,9 @@ Gfx rwalljump_rwalljump_mesh_layer_1[] = {
 };
 
 Gfx rwalljump_rwalljump_mesh_layer_4[] = {
-	gsSPDisplayList(mat_rwalljump_f3dlite_material_007),
+	gsSPDisplayList(mat_rwalljump_castlefence),
 	gsSPDisplayList(rwalljump_rwalljump_mesh_layer_4_tri_0),
-	gsSPDisplayList(mat_revert_rwalljump_f3dlite_material_007),
+	gsSPDisplayList(mat_revert_rwalljump_castlefence),
 	gsDPPipeSync(),
 	gsSPSetGeometryMode(G_LIGHTING),
 	gsSPClearGeometryMode(G_TEXTURE_GEN),
