@@ -71,7 +71,7 @@ struct DungeonCell {
     u8 resolved:1;
 };
 
-void dungeon_generate(void);
+void dungeon_generate(int level);
 void dungeon_debug_print(void);
 void dungeon_set_mario_room(void);
 s32 dungeon_room_is_visible(struct DungeonRoom * room);

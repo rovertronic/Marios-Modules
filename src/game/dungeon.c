@@ -33,6 +33,7 @@ int sDungeonCellProcessCount = 0;
 struct DungeonCell * sDungeonCellProcessList[256];
 
 u8 sDungeonInventory[MOD_COUNT]; // Index = Mod Type, Value = Count
+u8 sDungeonTotalInventory[MOD_COUNT]; // Tally of previous levels
 u8 sDungeonForceRegen = FALSE;
 u8 sDungeonEasterEggGenerated = FALSE;
 
@@ -649,6 +650,9 @@ void dungeon_spawn_room_red_coins(void) {
 }
 
 void dungeon_clear_data(void) {
+    sDungeonForceRegen = FALSE;
+    sDungeonEasterEggGenerated = FALSE;
+
     sDungeonRoomCount = 0;
     sDungeonLoopCount = 0;
     sDungeonCurrentDepth = 0;
@@ -660,7 +664,11 @@ void dungeon_clear_data(void) {
     
     bzero(&sDungeonRoomList, sizeof(sDungeonRoomList));
     bzero(&sDungeonCellGrid, sizeof(sDungeonCellGrid));
-    bzero(&sDungeonInventory, sizeof(sDungeonInventory));
+    bcopy(&sDungeonTotalInventory, &sDungeonInventory, sizeof(sDungeonInventory));
+}
+
+void dungeon_sync_inventory(void) {
+    bcopy(&sDungeonInventory, &sDungeonTotalInventory, sizeof(sDungeonInventory));
 }
 
 void dungeon_fill_empty_treasure_rooms(void) {
@@ -680,13 +688,11 @@ void dungeon_shuffle_wood_room_treasure(void) {
     sRoomWoodLootLocations[0][2] = randomPos[2];
 }
 
-void dungeon_generate(void) {
-    // Randomize Seed
-    tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
+void dungeon_generate_lv1(void) {
 
-    // Change textures
-    texgen_generate();
+}
 
+void dungeon_generate_lv2(void) {
     // Pick a random tree type
     gDungeonTreeModel = MODEL_DUNGEON_TREE_1;
     if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
@@ -703,8 +709,6 @@ void dungeon_generate(void) {
     dungeon_shuffle_wood_room_treasure();
 
     redo_generate:
-    sDungeonForceRegen = FALSE;
-    sDungeonEasterEggGenerated = FALSE;
 
     // Clear dungeon data
     dungeon_clear_data();
@@ -720,9 +724,6 @@ void dungeon_generate(void) {
     // Place the boss room
     dungeon_generate_boss_room(&sRoomBoss);
 
-    // Manually fill remaining empty treasure rooms and challenge rooms with mystery chests
-    dungeon_fill_empty_treasure_rooms();
-
     if (sDungeonEasterEggGenerated == FALSE) {
         sDungeonForceRegen = TRUE;
     }
@@ -730,11 +731,48 @@ void dungeon_generate(void) {
     if (sDungeonLoopCount < 2 || sDungeonForceRegen || sDungeonRoomCount < 5) {
         goto redo_generate;
     }
+}
 
-    // Calculate cull flags
+void dungeon_generate_lv3(void) {
+
+}
+
+void dungeon_generate(int level) {
+    // Randomize Seed
+    tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
+
+    // Clear multi-level item tally
+    bzero(&sDungeonTotalInventory, sizeof(sDungeonTotalInventory));
+
+    switch(level) {
+        case 0: // Mini Dungeon, Oasis
+            dungeon_generate_lv1();
+            break;
+        case 1: // Big Dungeon
+            dungeon_generate_lv1();
+            dungeon_sync_inventory();
+
+            /*
+            for (int i = 0; i < MOD_COUNT; i++) {
+                for (int j = 0; j < sDungeonTotalInventory[i]; j++) {
+                    add_inventory(i);
+                }
+            }*/
+            dungeon_generate_lv2();
+            break;
+        case 2: // Bowser Level
+            dungeon_generate_lv1();
+            dungeon_sync_inventory();
+            dungeon_generate_lv2();
+            dungeon_sync_inventory();
+            dungeon_generate_lv3();
+            break;
+    }
+
+    dungeon_fill_empty_treasure_rooms();
     dungeon_calculate_all_neighbor_flags();
 
-    // Finished, spawn objects
+    texgen_generate();
     dungeon_spawn_room_objects();
 }
 
