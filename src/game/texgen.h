@@ -11,5 +11,7 @@ extern u16 gDungeonTextureCarpet[2048];
 extern u16 gDungeonTextureTile[2048];
 extern u16 gDungeonTextureAltWall[4096];
 extern u16 gDungeonTextureShingles[2048];
+extern u16 gDungeonTextureCloudBrick1[4096];
+extern u16 gDungeonTextureCloudBrick2[4096];
 
 #endif

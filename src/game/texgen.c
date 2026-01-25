@@ -102,7 +102,10 @@ void texgen_colorize_rgba16(u16 * texture, u16 * texout, int size, u32 color) {
             newColorFloat[j] = colorFloat[j] * texFloat[j];
         }
 
-        texout[i] = f32_to_rgba5551(&newColorFloat);
+        // Respects alpha
+        if (colorFloat[3] > .5f) {
+            texout[i] = f32_to_rgba5551(&newColorFloat);
+        }
     }
 }
 
@@ -140,4 +143,14 @@ void texgen_generate(void) {
 
     texture = segmented_to_virtual(&texgensamples_shingles_rgba16);
     texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureShingles), 2048, sColorPalletepixelFloats[colorPalletIndex][2]  );
+
+    // Generate Cloud Bricks
+
+    texture = segmented_to_virtual(&texgensamples_texgenbrick_rgba16);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureCloudBrick1), 4096, sColorPalletepixelFloats[colorPalletIndex][1]  );
+    texgen_colorize_rgba16( segmented_to_virtual(&texgensamples_clouds_rgba16), segmented_to_virtual(&gDungeonTextureCloudBrick1), 4096, 0xFFFFFFFF  );
+
+    texgen_colorize_rgba16( segmented_to_virtual(&texgensamples_texgenbrick_rgba16), segmented_to_virtual(&gDungeonTextureCloudBrick2), 4096, sColorPalletepixelFloats[colorPalletIndex][1]  );
+    texgen_colorize_rgba16( segmented_to_virtual(&texgensamples_clouds_rgba16), segmented_to_virtual(&gDungeonTextureCloudBrick2), 4096, 0xFFFFFFFF  );
+    texgen_colorize_rgba16( segmented_to_virtual(&texgensamples_hillz_rgba16), segmented_to_virtual(&gDungeonTextureCloudBrick2), 4096, sColorPalletepixelFloats[colorPalletIndex][2]  );
 }

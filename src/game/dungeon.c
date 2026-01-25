@@ -75,6 +75,7 @@ struct DungeonRoomVariant * sLv1RoomVariantList[] = {
     &sRoomMiniJunc2,
     &sRoomHall,
     &sRoomLobby,
+    &sRoomLobby2,
     &sRoomSplitHall,
 
     // Special Rooms
@@ -97,6 +98,7 @@ struct DungeonRoomVariant * sLv2RoomVariantList[] = {
     &sRoomMiniJunc2,
     &sRoomHall,
     &sRoomLobby,
+    &sRoomLobby2,
     &sRoomSplitHall,
     &sRoomSpaceworld,
 
@@ -364,7 +366,7 @@ void dungeon_generate_rooms_at_doors(struct DungeonRoomVariant ** variantList, i
                 
                 int success = FALSE;
                 int trycount = 0;
-                while(!success && trycount < 10) {
+                while(!success && trycount < 30) {
                     u32 selectedVariantIndex = tinymt32_generate_u32(&gGlobalRandomState) % (size/4);
                     struct DungeonRoomVariant * selectedVariant = variantList[selectedVariantIndex];
 

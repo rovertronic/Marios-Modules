@@ -108,7 +108,7 @@ struct DungeonRoomVariant sRoomLobby = {
     .maxLootCt = 0,
     .lootLocations = &sRoomLobbyLootLocations,
     .requiredLoot = NULL,
-    .generateOnce = FALSE,
+    .generateOnce = TRUE,
 
     .rarity = 2,
 };
@@ -703,7 +703,7 @@ struct DungeonRoomVariant sRoomSplitHall = {
     .maxLootCt = 0,
     .lootLocations = NULL,
     .requiredLoot = NULL,
-    .generateOnce = FALSE,
+    .generateOnce = TRUE,
 
     .rarity = 2,
 };
@@ -1007,4 +1007,34 @@ struct DungeonRoomVariant sRoomFacade2 = {
     .maxLootCt = 0,
     .lootLocations = NULL,
     .requiredLoot = NULL,
+};
+
+// Lobby 2
+
+struct DungeonRoomVariantCellList sRoomLobby2CellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0, .doorFlags = DOOR_RIGHT, .worldY = 560},
+
+    {.x = 0, .y = 1,},
+    {.x = 1, .y = 1, .doorFlags = DOOR_UP},
+    {.x = 2, .y = 1, .doorFlags = DOOR_UP, .worldY = 560},
+
+    {.x = 0, .y = -1},
+    {.x = 1, .y = -1, .doorFlags = DOOR_DOWN},
+    {.x = 2, .y = -1, .doorFlags = DOOR_DOWN, .worldY = 560},
+
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomLobby2 = {
+    .minimapDL = NULL,
+
+    .cellList = &sRoomLobby2CellList,
+    .model = MODEL_ROOM_LOBBY2,
+    .collision = rlobby2_collision,
+    .objectList = NULL,
+    .maxLootCt = 0,
+    .lootLocations = NULL,
+    .requiredLoot = NULL,
+    .generateOnce = TRUE,
 };

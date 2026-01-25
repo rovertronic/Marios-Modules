@@ -13,6 +13,8 @@ u16 gDungeonTextureCarpet[2048] = {0};
 u16 gDungeonTextureTile[2048] = {0};
 u16 gDungeonTextureAltWall[4096] = {0};
 u16 gDungeonTextureShingles[2048] = {0};
+u16 gDungeonTextureCloudBrick1[4096] = {0};
+u16 gDungeonTextureCloudBrick2[4096] = {0};
 
 #include "make_const_nonconst.h"
 
@@ -103,3 +105,5 @@ u16 gDungeonTextureShingles[2048] = {0};
 #include "dungeondoorlocked/model.inc.c"
 #include "rfacade2/collision.inc.c"
 #include "rfacade2/model.inc.c"
+#include "rlobby2/collision.inc.c"
+#include "rlobby2/model.inc.c"
