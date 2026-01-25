@@ -29,6 +29,7 @@ struct DungeonRoomVariantCellList {
     s8 x;
     s8 y;
     u8 doorFlags;
+    s16 worldY;
 };
 
 struct DungeonRoomVariant {
@@ -56,6 +57,7 @@ struct DungeonRoom {
     u8 xorigin;
     u8 yorigin;
     u8 lootCount;
+    s16 worldY;
     u8 id;
     u8 challengeLv; // How many challenges to access this room
     s8 loot[4];
@@ -69,6 +71,7 @@ struct DungeonCell {
     u8 x;
     u8 y:7;
     u8 resolved:1;
+    s16 worldY;
 };
 
 void dungeon_generate(int level);

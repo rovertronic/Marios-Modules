@@ -452,14 +452,12 @@ struct DungeonRoomVariantCellList sRoomSpaceworldCellList[] = {
     {.x = 2, .y = 0, .doorFlags = DOOR_RIGHT},
 
     {.x = 0, .y = 1},
-    {.x = 1, .y = 1},
+    {.x = 1, .y = 1, .doorFlags = DOOR_UP, .worldY = -776},
     {.x = 2, .y = 1},
 
     {.x = 0, .y = -1},
     {.x = 1, .y = -1, .doorFlags = DOOR_DOWN},
     {.x = 2, .y = -1},
-
-    {.x = 1, .y = 2, .doorFlags = DOOR_UP},
 
     {.end = TRUE},
 };
