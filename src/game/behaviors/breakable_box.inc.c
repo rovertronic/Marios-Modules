@@ -24,7 +24,9 @@ struct ObjectHitbox sBreakableBoxWallHitbox = {
     /* hurtboxHeight:     */ 200,
 };
 
+// yeah... i lieded about these being static vars... who cares
 extern int sSilverStarCt;
+extern struct DungeonRoomVariant * sRoomWood;
 
 void breakable_box_init(void) {
     o->oHiddenObjectSwitchObj = NULL;
@@ -130,6 +132,24 @@ void bhv_hidden_object_loop(void) {
     }
 }
 
+void spawn_dungeon_woodroom_junk(void) {
+    if (o->dungeonRoom[0]->variant == &sRoomWood) {
+        struct Object * nearestTreasure = cur_obj_nearest_object_with_behavior(bhvChest);
+        if (dist_between_objects(nearestTreasure,o) > 10.0f) {
+            nearestTreasure = cur_obj_nearest_object_with_behavior(bhvStar);
+            if (dist_between_objects(nearestTreasure,o) > 100.0f) {
+                if (random_u16()%2==0) {
+                    struct Object * amp = spawn_object(o,MODEL_AMP,bhvHomingAmp);
+                    amp->oPosY += 20.0f;
+                } else {
+                    o->oNumLootCoins = 2;
+                    obj_explode_and_spawn_coins(46.0f, COIN_TYPE_YELLOW);
+                }
+            }
+        }
+    }
+}
+
 void bhv_breakable_box_loop(void) {
     obj_set_hitbox(o, &sBreakableBoxHitbox);
     cur_obj_set_model(MODEL_BREAKABLE_BOX);
@@ -137,5 +157,6 @@ void bhv_breakable_box_loop(void) {
     if (cur_obj_was_attacked_or_ground_pounded()) {
         obj_explode_and_spawn_coins(46.0f, COIN_TYPE_YELLOW);
         create_sound_spawner(SOUND_GENERAL_BREAK_BOX);
+        spawn_dungeon_woodroom_junk();
     }
 }
