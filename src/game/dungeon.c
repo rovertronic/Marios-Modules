@@ -882,12 +882,18 @@ void dungeon_generate(int level) {
             dungeon_generate_lv1();
             dungeon_sync_inventory();
 
-            /*
+#ifdef DUNGEON_DEBUG
             for (int i = 0; i < MOD_COUNT; i++) {
                 for (int j = 0; j < sDungeonTotalInventory[i]; j++) {
+                    if (sDungeonTotalInventory[i] == MOD_NONMOD_STAR||
+                    sDungeonTotalInventory[i] == MOD_NONMOD_KEY) {
+                        continue;
+                    }
                     add_inventory(i);
                 }
-            }*/
+            }
+#endif
+
             dungeon_generate_lv2();
             break;
         case 2: // Bowser Level
