@@ -4,6 +4,8 @@
 #ifndef DUNGEON_H
 #define DUNGEON_H
 
+//#define DUNGEON_DEBUG
+
 extern struct DungeonRoom * gDungeonMarioRoom;
 extern struct DungeonObject * gDungeonEnemies[3];
 extern u16 gDungeonTreeModel;

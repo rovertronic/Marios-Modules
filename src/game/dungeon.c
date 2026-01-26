@@ -23,6 +23,7 @@ int sDungeonLootSlotsAvailible = 0;
 int sDungeonCoinBalance = 0;
 int sDungeonRedCoinRoomMax = 0;
 int sDungeonTargetRoomCount = 0;
+int sDungeonRemovedPointlessRooms = 0;
 u32 sDungeonUniqueVariantGeneratedFlags;
 
 u16 gDungeonTreeModel = 0;
@@ -315,8 +316,6 @@ struct DungeonRoom * dungeon_create_room(struct DungeonRoomVariant * variant, in
     thisRoom->id = sDungeonRoomCount-1;
     thisRoom->worldY = worldY;
 
-    dungeon_room_set_neighbor_flag(thisRoom,sDungeonRoomCount-1); //self
-
     thisRoom->lootCount = 0;
     for (int i = 0; i < 4; i++) {
         thisRoom->loot[i] = MOD_EMPTY;
@@ -326,6 +325,29 @@ struct DungeonRoom * dungeon_create_room(struct DungeonRoomVariant * variant, in
     sDungeonInventory[MOD_NONMOD_STAR]+=variant->starCt;
 
     return thisRoom;
+}
+
+void dungeon_deconstruct_room(struct DungeonRoom * room) {
+    struct DungeonRoomVariant * variant = room->variant;
+    int x = room->xorigin;
+    int y = room->yorigin;
+    int dir = room->direction;
+    struct DungeonRoomVariantCellList * cellList = variant->cellList;
+
+    room->variant = NULL;
+
+    int ndir = (dir+1)%4;
+    int index = 0;
+    while(variant->cellList[index].end == FALSE) {
+        int xp = x + (variant->cellList[index].x * sDirectionList[dir][0])
+                   + (variant->cellList[index].y * sDirectionList[dir][1]);
+        int yp = y + (variant->cellList[index].x * sDirectionList[ndir][0])
+                   + (variant->cellList[index].y * sDirectionList[ndir][1]);
+        sDungeonCellGrid[yp][xp].id = 0;
+        sDungeonCellGrid[yp][xp].doorFlags = 0;
+
+        index++;
+    }
 }
 
 int dungeon_check_room_viability(struct DungeonRoomVariant * variant, int dir, int x, int y) {
@@ -474,8 +496,13 @@ s32 dungeon_generate_boss_room(struct DungeonRoomVariant * selectedVariant) {
 }
 
 void dungeon_calculate_all_neighbor_flags(void) {
+    for (int i = 0; i < sDungeonRoomCount; i++) {
+        sDungeonRoomList[i].neighborFlag[0] = 0;
+        sDungeonRoomList[i].neighborFlag[1] = 0;
+    }
     for (int i = 0; i < sDungeonCellProcessCount; i++) {
         struct DungeonCell * cell = sDungeonCellProcessList[i];
+        dungeon_room_set_neighbor_flag( &sDungeonRoomList[cell->id-1] , cell->id-1);
         for (int j = 0; j < 4; j++) {
             if (dungeon_door_on_other_side(cell->x,cell->y,j)) {
                 dungeon_room_set_neighbor_flag( &sDungeonRoomList[cell->id-1] , sDungeonDoorOtherSideRet->id-1);
@@ -484,10 +511,49 @@ void dungeon_calculate_all_neighbor_flags(void) {
     }
 }
 
+void dungeon_remove_pointless_rooms(void) {
+    int pointlessRoomsThisPass;
+    do {
+        pointlessRoomsThisPass = 0;
+        for (int i = 0; i < sDungeonRoomCount; i++) {
+            struct DungeonRoom * room = &sDungeonRoomList[i];
+
+            int neighborCount = 0;
+            for (int j = 0; j < 32; j++) {
+                if (room->neighborFlag[0] & (1<<j)) {
+                    neighborCount++;
+                }
+            }
+            for (int j = 0; j < 32; j++) {
+                if (room->neighborFlag[1] & (1<<j)) {
+                    neighborCount++;
+                }
+            }
+
+            if (room->variant != NULL &&
+                neighborCount <= 2 && room->lootCount == 0 &&
+                // Keyed rooms, star rooms, origin rooms, and easter eggs are NOT pointless
+                !room->variant->needKey && room->variant->starCt == 0 &&
+                !room->variant->easterEgg &&
+                room->variant != &sRoomFacade1 && room->variant != &sRoomFacade2) {
+
+                pointlessRoomsThisPass++;
+                sDungeonRemovedPointlessRooms++;
+                dungeon_deconstruct_room(room);
+            }
+        }
+        dungeon_calculate_all_neighbor_flags();
+    } while (pointlessRoomsThisPass > 0);
+}
+
 void dungeon_spawn_room_objects(void) {
 
     // Rooms
     for (int i = 0; i < sDungeonRoomCount; i++) {
+        if (sDungeonRoomList[i].variant == NULL) {
+            // Do not spawn deconstructed rooms
+            continue;
+        }
         struct Object * roomObj = spawn_object(gMarioObject, sDungeonRoomList[i].variant->model ,bhvDungeonProcGenRoom);
         roomObj->oPosX = 32000.f - (sDungeonRoomList[i].xorigin * 2000.f);
         roomObj->oPosZ = 32000.f - (sDungeonRoomList[i].yorigin * 2000.f);
@@ -692,6 +758,7 @@ void dungeon_clear_data(void) {
     sDungeonUniqueVariantGeneratedFlags = 0;
     sDungeonCellProcessCount = 0;
     sDungeonRedCoinRoomMax = 0;
+    sDungeonRemovedPointlessRooms = 0;
     
     bzero(&sDungeonRoomList, sizeof(sDungeonRoomList));
     bzero(&sDungeonCellGrid, sizeof(sDungeonCellGrid));
@@ -834,6 +901,7 @@ void dungeon_generate(int level) {
 
     dungeon_fill_empty_treasure_rooms();
     dungeon_calculate_all_neighbor_flags();
+    dungeon_remove_pointless_rooms();
 
     texgen_generate();
     dungeon_spawn_room_objects();
@@ -849,8 +917,8 @@ u8 sDebugColorList[][3] = {
 };
 
 void dungeon_debug_print(void) {
-    print_text_fmt_int(0, 200, "LOOP CT %d", sDungeonLoopCount);
-    print_text_fmt_int(0, 220, "ITEM SLOTS %d", sDungeonLootSlotsAvailible);
+    print_text_fmt_int(30, 200, "LOOP CT %d", sDungeonLoopCount);
+    print_text_fmt_int(30, 220, "ITEM SLOTS %d", sDungeonLootSlotsAvailible);
 
     int nflagct = 0;
     if (gDungeonMarioRoom) {
@@ -864,9 +932,10 @@ void dungeon_debug_print(void) {
                 nflagct++;
             }
         }
-        print_text_fmt_int(0, 160, "CHLV %d", gDungeonMarioRoom->challengeLv);
+        print_text_fmt_int(30, 160, "CHLV %d", gDungeonMarioRoom->challengeLv);
     }
-    print_text_fmt_int(0, 180, "NFLAGS %d", nflagct);
+    print_text_fmt_int(30, 180, "NFLAGS %d", nflagct);
+    print_text_fmt_int(30, 140, "SHAVED %d", sDungeonRemovedPointlessRooms);
 
     u32 x = (((-gMarioState->pos[0])+32000.f + 1000.f)/2000.f);
     u32 y = (((-gMarioState->pos[2])+32000.f + 1000.f)/2000.f);

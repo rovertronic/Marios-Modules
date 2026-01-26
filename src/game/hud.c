@@ -576,6 +576,10 @@ void render_hud(void) {
         create_dl_ortho_matrix();
 #endif
 
+#ifdef DUNGEON_DEBUG
+        dungeon_debug_print();
+#endif
+
         if (gMarioState->passiveFlag & (1 << PASSIVE_FLAG_MINIMAP)) {
             print_mini_map();
         }
