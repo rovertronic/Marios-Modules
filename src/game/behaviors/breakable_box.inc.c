@@ -151,7 +151,7 @@ void spawn_dungeon_woodroom_junk(void) {
             hasTreasure = TRUE;
         } else {
             nearestTreasure = cur_obj_nearest_object_with_behavior(bhvStar);
-            if (nearestTreasure && dist_between_objects(o,nearestTreasure) < 100.0f) {
+            if (nearestTreasure && dist_between_objects(o,nearestTreasure) < 150.0f) {
                 hasTreasure = TRUE;
             }
         }
