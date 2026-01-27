@@ -71,6 +71,9 @@ struct DungeonObject * gDungeonEnemies[3];
 #include "dungeon_room_data.inc.c"
 
 struct DungeonRoomVariant * sLv1RoomVariantList[] = {
+    // Freebie Stars
+    &sRoomPush,
+
     // Transition Rooms
     &sRoomMiniJunc1,
     &sRoomMiniJunc2,
@@ -84,7 +87,6 @@ struct DungeonRoomVariant * sLv1RoomVariantList[] = {
 
     // Challenge Rooms
     &sRoomGardenHall,
-    &sRoomClock,
     &sRoomVanishHop,
     &sRoomWallJump,
     &sRoomWood,
@@ -191,6 +193,12 @@ s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
             sDungeonRoomList[chosen_room_index].challengeLv >= minLv &&
             // Prioritize treasure rooms and challenge rooms for loot
             ((i>5)||(sDungeonRoomList[chosen_room_index].variant == &sRoomTreasure)||(sDungeonRoomList[chosen_room_index].variant->requiredLoot))) {
+
+            // Do not put stars in treasure rooms. Lame.
+            if (loot == MOD_NONMOD_STAR && sDungeonRoomList[chosen_room_index].variant == &sRoomTreasure) {
+                continue;
+            }
+
             sDungeonRoomList[chosen_room_index].loot[sDungeonRoomList[chosen_room_index].lootCount] = loot;
             sDungeonRoomList[chosen_room_index].lootCount++;
             sDungeonLootSlotsAvailible --;
@@ -201,7 +209,13 @@ s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
     // Guess I couldn't find a random room, try every availible room instead
     for (int i = 0; i < sDungeonRoomCount; i++) {
         if (sDungeonRoomList[i].lootCount < sDungeonRoomList[i].variant->maxLootCt &&
-            sDungeonRoomList[chosen_room_index].challengeLv >= minLv) {
+            sDungeonRoomList[i].challengeLv >= minLv) {
+
+            // Do not put stars in treasure rooms. Lame.
+            if (loot == MOD_NONMOD_STAR && sDungeonRoomList[i].variant == &sRoomTreasure) {
+                continue;
+            }
+
             sDungeonRoomList[i].loot[sDungeonRoomList[i].lootCount] = loot;
             sDungeonRoomList[i].lootCount++;
             sDungeonLootSlotsAvailible --;
@@ -423,6 +437,12 @@ void dungeon_generate_rooms_at_doors(struct DungeonRoomVariant ** variantList, i
                     if (selectedVariant->rarity > 0 &&
                         (tinymt32_generate_u32(&gGlobalRandomState) % selectedVariant->rarity != 0)) {
                         // Roll for room rarity
+                        trycount++;
+                        continue;
+                    }
+
+                    // Jump mod removes integrity of freebie challenges
+                    if (selectedVariant == &sRoomPush && sDungeonInventory[MOD_JUMP] > 0) {
                         trycount++;
                         continue;
                     }

@@ -30,9 +30,11 @@ void bhv_pushable_loop(void) {
         s16 angleToMario = obj_angle_to_object(o, gMarioObject);
         if (abs_angle_diff(angleToMario, gMarioObject->oMoveAngleYaw) > 0x4000) {
             o->oMoveAngleYaw = (s16)((gMarioObject->oMoveAngleYaw + 0x2000) & 0xc000);
-            if (check_if_moving_over_floor(8.0f, 150.0f)) {
-                o->oForwardVel = 4.0f;
+            if (check_if_moving_over_floor(8.0f, 225.0f)) {
+                o->oForwardVel = 12.0f;
                 cur_obj_play_sound_1(SOUND_ENV_METAL_BOX_PUSH);
+                gMarioState->pos[0] += sins(o->oMoveAngleYaw) * o->oForwardVel;
+                gMarioState->pos[2] += coss(o->oMoveAngleYaw) * o->oForwardVel;
             }
         }
     }

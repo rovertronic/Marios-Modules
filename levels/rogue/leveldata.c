@@ -107,3 +107,5 @@ u16 gDungeonTextureCloudBrick2[4096] = {0};
 #include "rfacade2/model.inc.c"
 #include "rlobby2/collision.inc.c"
 #include "rlobby2/model.inc.c"
+#include "rpush/collision.inc.c"
+#include "rpush/model.inc.c"

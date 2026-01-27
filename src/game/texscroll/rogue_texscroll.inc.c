@@ -7,6 +7,7 @@
 #include "levels/rogue/rfurnace/texscroll.inc.c"
 #include "levels/rogue/rcavejump/texscroll.inc.c"
 #include "levels/rogue/rboss/texscroll.inc.c"
+#include "levels/rogue/rfacade2/texscroll.inc.c"
 void scroll_textures_rogue() {
 	scroll_rogue_level_geo_rfnab();
 	scroll_rogue_level_geo_rbtcm();
@@ -16,4 +17,5 @@ void scroll_textures_rogue() {
 	scroll_rogue_level_geo_rfurnace();
 	scroll_rogue_level_geo_rcavejump();
 	scroll_rogue_level_geo_rboss();
+	scroll_rogue_level_geo_rfacade2();
 }

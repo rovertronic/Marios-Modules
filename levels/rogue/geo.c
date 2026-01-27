@@ -50,3 +50,4 @@
 #include "dungeondoorlocked/geo.inc.c"
 #include "rfacade2/geo.inc.c"
 #include "rlobby2/geo.inc.c"
+#include "rpush/geo.inc.c"

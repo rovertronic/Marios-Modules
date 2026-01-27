@@ -1829,6 +1829,7 @@ const BehaviorScript bhvPushableMetalBox[] = {
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     LOAD_COLLISION_DATA(metal_box_seg8_collision_08024C28),
     SET_FLOAT(oCollisionDistance, 500),
+    SCALE(/*Unused*/ 0, /*Field*/ 147),
     SET_HOME(),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_pushable_loop),

@@ -352,7 +352,7 @@ s8 sRoomBtcmRequiredLoot[] = {
     MOD_JUMP, 2,
     MOD_HIT_WALL, 1,
     MOD_POW2, 1,
-    MOD_NONMOD_STAR, 1,
+    MOD_NONMOD_STAR, 2,
     MOD_EMPTY,
 };
 
@@ -809,7 +809,7 @@ s8 sRoomSilverPillarRequiredLoot[] = {
     MOD_TORNADO, 1,
     MOD_FLIP_VEL, 1,
 
-    MOD_NONMOD_STAR, 1,
+    MOD_NONMOD_STAR, 2,
     MOD_EMPTY,
 };
 
@@ -982,7 +982,7 @@ struct DungeonRoomVariantCellList sRoomFacade2CellList[] = {
     {.x = 2, .y = -1, .doorFlags = DOOR_RIGHT},
 
     {.x = 0, .y = -2},
-    {.x = 1, .y = -2, .doorFlags = DOOR_DOWN},
+    {.x = 1, .y = -2, .doorFlags = DOOR_DOWN, .worldY = 400},
     {.x = 2, .y = -2},
 
     {.x = 3, .y = -2},
@@ -1035,6 +1035,47 @@ struct DungeonRoomVariant sRoomLobby2 = {
     .objectList = NULL,
     .maxLootCt = 0,
     .lootLocations = NULL,
+    .requiredLoot = NULL,
+    .generateOnce = TRUE,
+};
+
+// Box Push Freebie Star Room
+
+struct DungeonRoomVariantCellList sRoomPushCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0},
+
+    {.x = 1, .y = -1},
+    {.x = 2, .y = -1, .doorFlags = DOOR_DOWN, .worldY = 412},
+
+    {.end = TRUE},
+};
+
+struct DungeonObject sRoomPushObjectList[] = {
+    {.bhv = bhvPushableMetalBox, .model = MODEL_METAL_BOX, .param = 0,
+    .angle = 0, .pos = {-21.6136f,-2.55578f,-0.374972f}},
+    {.bhv = bhvPushableMetalBox, .model = MODEL_METAL_BOX, .param = 0,
+    .angle = 0, .pos = {-41.0017f,1.94423f,-0.375026f}},
+    {.bhv = bhvStar, .model = MODEL_NONE, .param = 0,
+    .angle = 0x0, .pos = {-26.1232f,-2.55577f,5.12489f}},
+    {.end = TRUE},
+};
+
+Vec4f sRoomPushLootLocations[] = {
+    {-18.1967f,-11.5693f,4.12489f,  90.f},
+};
+
+struct DungeonRoomVariant sRoomPush = {
+    .minimapDL = NULL,
+
+    .cellList = &sRoomPushCellList,
+    .model = MODEL_ROOM_PUSH,
+    .collision = rpush_collision,
+    .objectList = &sRoomPushObjectList,
+    .maxLootCt = 1,
+    .starCt = 1,
+    .lootLocations = &sRoomPushLootLocations,
     .requiredLoot = NULL,
     .generateOnce = TRUE,
 };
