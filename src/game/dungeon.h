@@ -9,6 +9,7 @@
 extern struct DungeonRoom * gDungeonMarioRoom;
 extern struct DungeonObject * gDungeonEnemies[3];
 extern u16 gDungeonTreeModel;
+extern Vec3f gDungeonSpawnLocation;
 
 #define DOOR_RIGHT (1<<0)
 #define DOOR_DOWN  (1<<1)

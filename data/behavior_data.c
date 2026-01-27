@@ -6450,8 +6450,6 @@ extern void bhv_dungeon_room(void);
 const BehaviorScript bhvDungeonProcGenRoom[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT)),
-    BEGIN_REPEAT(1),
-    END_REPEAT(),
     CALL_NATIVE(load_object_static_model),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_dungeon_room),
@@ -6497,4 +6495,10 @@ const BehaviorScript bhvDungeonClockHand[] = {
         ADD_INT(oFaceAngleYaw, -0x100),
         CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
+};
+
+const BehaviorScript bhvDungeonSpawn[] = {
+    BEGIN(OBJ_LIST_DEFAULT),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    BREAK(),
 };

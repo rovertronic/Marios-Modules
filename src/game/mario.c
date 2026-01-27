@@ -1991,6 +1991,10 @@ void init_mario(void) {
         gMainMenuState = MAIN_MENU_CLOSED;
     }
 
+    if (gCurrLevelNum == LEVEL_ROGUE) {
+        vec3f_copy(gMarioState->pos,gDungeonSpawnLocation);
+    }
+
     vec3f_copy(gMarioState->prevPos, gMarioState->pos);
     vec3_zero(gMarioState->vel);
     gMarioState->floorHeight =

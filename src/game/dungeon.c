@@ -28,6 +28,8 @@ u32 sDungeonUniqueVariantGeneratedFlags;
 
 u16 gDungeonTreeModel = 0;
 
+Vec3f gDungeonSpawnLocation;
+
 struct DungeonRoom sDungeonRoomList[64];
 struct DungeonCell sDungeonCellGrid[32][32];
 
@@ -669,6 +671,10 @@ void dungeon_spawn_room_objects(void) {
                 obj->dungeonRoom[1] = &sDungeonRoomList[i];
                 obj->oFlags |= OBJ_FLAG_DUNGEON_CULL;
 
+                if (details->bhv == bhvDungeonSpawn) {
+                    vec3f_copy(gDungeonSpawnLocation,&obj->oPosVec);
+                }
+
                 j++;
             }
         }
@@ -816,7 +822,7 @@ void dungeon_generate_lv1(void) {
     dungeon_clear_data();
 
     // Build First Room
-    dungeon_create_room(&sRoomFacade2, 0, 16, 16, 0);
+    dungeon_create_room(&sRoomFacade2, 0, 2, 16, 0);
 
     // Generate dungeon rooms
     sDungeonTargetRoomCount = 20;
@@ -854,7 +860,7 @@ void dungeon_generate_lv2(void) {
     dungeon_clear_data();
 
     // Build First Room
-    dungeon_create_room(&sRoomFacade1, 0, 16, 16, 0);
+    dungeon_create_room(&sRoomFacade1, 0, 2, 16, 0);
 
     // Generate dungeon rooms
     sDungeonTargetRoomCount = 63;

@@ -527,6 +527,8 @@ struct DungeonObject sRoomFacade1ObjectList[] = {
     .angle = 0, .pos = {-25.2649f,-0.354316f,-0.866209f}},
     {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
     .angle = 0, .pos = {-37.1143f,-18.4017f,-0.868808f}},
+    {.bhv = bhvDungeonSpawn, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-8.16344f,1.99048f,-5.66878f}},
     {.end = TRUE},
 };
 
@@ -994,6 +996,14 @@ struct DungeonRoomVariantCellList sRoomFacade2CellList[] = {
 struct DungeonObject sRoomFacade2ObjectList[] = {
     {.bhv = bhvDungeonDoorLocked, .model = MODEL_DUNGEON_DOOR, .param = 1,
     .angle = -0x2000, .pos = {-53.0235f,-53.0235f,5.32303f}},
+    {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-30.5241f,-13.7438f,6.00313f}},
+    {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-30.5374f,-18.9782f,5.234f}},
+    {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-8.9286f,-30.9459f,3.0471f}},
+    {.bhv = bhvDungeonSpawn, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-1.57651f,0.551928f,5.13467f}},
     {.end = TRUE},
 };
 
