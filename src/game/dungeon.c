@@ -69,6 +69,7 @@ struct DungeonObject sTopEnemyList[] = {
 };
 
 struct DungeonObject * gDungeonEnemies[3];
+struct DungeonObject * gDungeonAboomboomination[5];
 
 #include "dungeon_room_data.inc.c"
 
@@ -811,7 +812,13 @@ void dungeon_generate_lv1(void) {
     int s = sizeof(sBottomEnemyList[0]);
     gDungeonEnemies[0] = &sBottomEnemyList[tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBottomEnemyList)/s)];
     gDungeonEnemies[1] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
-    gDungeonEnemies[2] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
+    gDungeonEnemies[2] = NULL;
+
+    // The dungeon boss is just enemey spam, lol
+    gDungeonAboomboomination[0] = &sBottomEnemyList[tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBottomEnemyList)/s)];
+    for (int i = 1; i < 5; i++) {
+        gDungeonAboomboomination[i] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
+    }
 
     // Shuffle location of chest in wood room
     dungeon_shuffle_wood_room_treasure();

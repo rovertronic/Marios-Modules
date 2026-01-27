@@ -1750,13 +1750,17 @@ void bhv_dungeon_room(void) {
 void bhv_dungeon_elite(void) {
     struct Object * goomba1 = spawn_object(o,gDungeonEnemies[0]->model,gDungeonEnemies[0]->bhv);
     struct Object * goomba2 = spawn_object(o,gDungeonEnemies[1]->model,gDungeonEnemies[1]->bhv);
-    struct Object * goomba3 = spawn_object(o,gDungeonEnemies[2]->model,gDungeonEnemies[2]->bhv);
+    struct Object * goomba3;
+    if (gDungeonEnemies[2] != NULL) {
+        goomba3 = spawn_object(o,gDungeonEnemies[2]->model,gDungeonEnemies[2]->bhv);
+    }
 
     goomba1->parentObj = goomba1->parentObj;
     goomba2->parentObj = goomba2->parentObj;
-    goomba3->parentObj = goomba3->parentObj;
-
-    obj_ride_obj(goomba3,goomba2);
+    if (gDungeonEnemies[2] != NULL) {
+        goomba3->parentObj = goomba3->parentObj;
+        obj_ride_obj(goomba3,goomba2);
+    }
     obj_ride_obj(goomba2,goomba1);
 }
 
