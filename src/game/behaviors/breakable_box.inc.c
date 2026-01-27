@@ -132,20 +132,31 @@ void bhv_hidden_object_loop(void) {
     }
 }
 
+void random_spawn_coins_or_amp(void) {
+    if (random_u16()%2==0) {
+        struct Object * amp = spawn_object(o,MODEL_AMP,bhvHomingAmp);
+        amp->oPosY += 20.0f;
+    } else {
+        o->oNumLootCoins = 2;
+        obj_explode_and_spawn_coins(46.0f, COIN_TYPE_YELLOW);
+    }
+}
+
 void spawn_dungeon_woodroom_junk(void) {
     if (o->dungeonRoom[0]->variant == &sRoomWood) {
-        struct Object * nearestTreasure = cur_obj_nearest_object_with_behavior(bhvChest);
-        if (dist_between_objects(nearestTreasure,o) > 10.0f) {
+        struct Object * nearestTreasure;
+        int hasTreasure = FALSE;
+        nearestTreasure = cur_obj_nearest_object_with_behavior(bhvChest);
+        if (nearestTreasure && dist_between_objects(o,nearestTreasure) < 10.0f) {
+            hasTreasure = TRUE;
+        } else {
             nearestTreasure = cur_obj_nearest_object_with_behavior(bhvStar);
-            if (dist_between_objects(nearestTreasure,o) > 100.0f) {
-                if (random_u16()%2==0) {
-                    struct Object * amp = spawn_object(o,MODEL_AMP,bhvHomingAmp);
-                    amp->oPosY += 20.0f;
-                } else {
-                    o->oNumLootCoins = 2;
-                    obj_explode_and_spawn_coins(46.0f, COIN_TYPE_YELLOW);
-                }
+            if (nearestTreasure && dist_between_objects(o,nearestTreasure) < 100.0f) {
+                hasTreasure = TRUE;
             }
+        }
+        if (!hasTreasure) {
+            random_spawn_coins_or_amp();
         }
     }
 }

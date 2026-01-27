@@ -979,10 +979,10 @@ struct DungeonRoomVariantCellList sRoomFacade2CellList[] = {
 
     {.x = 0, .y = -1},
     {.x = 1, .y = -1},
-    {.x = 2, .y = -1, .doorFlags = DOOR_RIGHT},
+    {.x = 2, .y = -1, .doorFlags = DOOR_RIGHT, .worldY = 400},
 
     {.x = 0, .y = -2},
-    {.x = 1, .y = -2, .doorFlags = DOOR_DOWN, .worldY = 400},
+    {.x = 1, .y = -2, .doorFlags = DOOR_DOWN},
     {.x = 2, .y = -2},
 
     {.x = 3, .y = -2},

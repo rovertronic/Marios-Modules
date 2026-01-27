@@ -71,9 +71,6 @@ struct DungeonObject * gDungeonEnemies[3];
 #include "dungeon_room_data.inc.c"
 
 struct DungeonRoomVariant * sLv1RoomVariantList[] = {
-    // Freebie Stars
-    &sRoomPush,
-
     // Transition Rooms
     &sRoomMiniJunc1,
     &sRoomMiniJunc2,
@@ -437,12 +434,6 @@ void dungeon_generate_rooms_at_doors(struct DungeonRoomVariant ** variantList, i
                     if (selectedVariant->rarity > 0 &&
                         (tinymt32_generate_u32(&gGlobalRandomState) % selectedVariant->rarity != 0)) {
                         // Roll for room rarity
-                        trycount++;
-                        continue;
-                    }
-
-                    // Jump mod removes integrity of freebie challenges
-                    if (selectedVariant == &sRoomPush && sDungeonInventory[MOD_JUMP] > 0) {
                         trycount++;
                         continue;
                     }
