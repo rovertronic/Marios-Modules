@@ -1,0 +1,9 @@
+extern Vtx rmap_lobby2_rmap_lobby2_mesh_vtx_0[22];
+extern Gfx rmap_lobby2_rmap_lobby2_mesh_tri_0[];
+extern Vtx rmap_lobby2_rmap_lobby2_mesh_vtx_1[48];
+extern Gfx rmap_lobby2_rmap_lobby2_mesh_tri_1[];
+extern Gfx mat_rmap_lobby2_map_mat_1_layer1[];
+extern Gfx mat_revert_rmap_lobby2_map_mat_1_layer1[];
+extern Gfx mat_rmap_lobby2_map_mat_3_layer1[];
+extern Gfx mat_revert_rmap_lobby2_map_mat_3_layer1[];
+extern Gfx rmap_lobby2_rmap_lobby2_mesh[];

@@ -1037,7 +1037,7 @@ struct DungeonRoomVariantCellList sRoomLobby2CellList[] = {
 };
 
 struct DungeonRoomVariant sRoomLobby2 = {
-    .minimapDL = NULL,
+    .minimapDL = &rmap_lobby2_rmap_lobby2_mesh,
 
     .cellList = &sRoomLobby2CellList,
     .model = MODEL_ROOM_LOBBY2,
