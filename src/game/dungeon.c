@@ -385,98 +385,104 @@ int dungeon_check_room_viability(struct DungeonRoomVariant * variant, int dir, i
 }
 
 void dungeon_generate_rooms_at_doors(struct DungeonRoomVariant ** variantList, int size) {
-    sDungeonCurrentDepth++;
 
-    int iMax = sDungeonCellProcessCount;
-    for (int i = 0; i < iMax; i++) {
-        if (sDungeonCellProcessList[i]->resolved) {continue;}
-        sDungeonCellProcessList[i]->resolved = TRUE;
+    int needsResolution;
+    do {
+        needsResolution = FALSE;
+        sDungeonCurrentDepth++;
 
-        struct DungeonRoom * originRoom = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
+        int iMax = sDungeonCellProcessCount;
+        for (int i = 0; i < iMax; i++) {
+            if (sDungeonCellProcessList[i]->resolved) {continue;}
+            sDungeonCellProcessList[i]->resolved = TRUE;
+            needsResolution = TRUE;
 
-        for (int j = 0; j < 4; j++) {
-            // j = dir
-            if (sDungeonCellProcessList[i]->doorFlags & (1 << j)) {
-                int x = sDungeonCellProcessList[i]->x + (sDirectionList[j][0]);
-                int y = sDungeonCellProcessList[i]->y - (sDirectionList[j][1]);
-                
-                int success = FALSE;
-                int trycount = 0;
-                while(!success && trycount < 30) {
-                    u32 selectedVariantIndex = tinymt32_generate_u32(&gGlobalRandomState) % (size/4);
-                    struct DungeonRoomVariant * selectedVariant = variantList[selectedVariantIndex];
+            struct DungeonRoom * originRoom = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
 
-                    if (sDungeonRoomCount >= sDungeonTargetRoomCount) {
-                        success = TRUE;
-                        continue;
-                    }
+            for (int j = 0; j < 4; j++) {
+                // j = dir
+                if (sDungeonCellProcessList[i]->doorFlags & (1 << j)) {
+                    int x = sDungeonCellProcessList[i]->x + (sDirectionList[j][0]);
+                    int y = sDungeonCellProcessList[i]->y - (sDirectionList[j][1]);
+                    
+                    int success = FALSE;
+                    int trycount = 0;
+                    while(!success && trycount < 30) {
+                        u32 selectedVariantIndex = tinymt32_generate_u32(&gGlobalRandomState) % (size/4);
+                        struct DungeonRoomVariant * selectedVariant = variantList[selectedVariantIndex];
 
-                    if (selectedVariant->generateOnce &&
-                        sDungeonUniqueVariantGeneratedFlags & (1<<selectedVariantIndex)) {
-                        trycount++;
-                        continue;
-                    }
-
-                    if (dungeon_requirement_list_length(selectedVariant->requiredLoot) > sDungeonLootSlotsAvailible) {
-                        // if not enough treasure slots, don't make this room
-                        trycount++;
-                        continue;
-                    }
-
-                    if ((selectedVariant->easterEgg || selectedVariant == &sRoomRedCoin) && sDungeonCurrentDepth < 6) {
-                        trycount++;
-                        continue;
-                    } 
-
-                    if (sDungeonEasterEggGenerated && selectedVariant->easterEgg) {
-                        // only generate 1 easter egg per level, and farther in
-                        trycount++;
-                        continue;
-                    }
-
-                    if (selectedVariant->rarity > 0 &&
-                        (tinymt32_generate_u32(&gGlobalRandomState) % selectedVariant->rarity != 0)) {
-                        // Roll for room rarity
-                        trycount++;
-                        continue;
-                    }
-
-                    if (dungeon_check_room_viability(selectedVariant,j,x,y)) {
-                        int isUnique = FALSE;
-                        if (!(sDungeonUniqueVariantGeneratedFlags & (1<<selectedVariantIndex))) {
-                            sDungeonUniqueVariantGeneratedFlags |= (1<<selectedVariantIndex);
-                            isUnique = TRUE;
+                        if (sDungeonRoomCount >= sDungeonTargetRoomCount) {
+                            success = TRUE;
+                            continue;
                         }
 
-                        if (selectedVariant->easterEgg) {
-                            sDungeonEasterEggGenerated = TRUE;
+                        if (selectedVariant->generateOnce &&
+                            sDungeonUniqueVariantGeneratedFlags & (1<<selectedVariantIndex)) {
+                            trycount++;
+                            continue;
                         }
 
-                        dungeon_propegate_loot_with_requirement_list(selectedVariant->requiredLoot);
-
-                        if (selectedVariant->needKey) {
-                            dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
+                        if (dungeon_requirement_list_length(selectedVariant->requiredLoot) > sDungeonLootSlotsAvailible) {
+                            // if not enough treasure slots, don't make this room
+                            trycount++;
+                            continue;
                         }
 
-                        struct DungeonRoom * createdRoom = dungeon_create_room(selectedVariant,j,x,y,sDungeonCellProcessList[i]->worldY);
+                        if ((selectedVariant->easterEgg || selectedVariant == &sRoomRedCoin) && sDungeonCurrentDepth < 6) {
+                            trycount++;
+                            continue;
+                        } 
 
-                        int challengeLv = originRoom->challengeLv;
-                        if (selectedVariant->requiredLoot && isUnique) {
-                            challengeLv++;
+                        if (sDungeonEasterEggGenerated && selectedVariant->easterEgg) {
+                            // only generate 1 easter egg per level, and farther in
+                            trycount++;
+                            continue;
                         }
-                        createdRoom->challengeLv = challengeLv;
 
-                        if (selectedVariant == &sRoomRedCoin) {
-                            sDungeonRedCoinRoomMax = sDungeonRoomCount;
+                        if (selectedVariant->rarity > 0 &&
+                            (tinymt32_generate_u32(&gGlobalRandomState) % selectedVariant->rarity != 0)) {
+                            // Roll for room rarity
+                            trycount++;
+                            continue;
                         }
 
-                        success = TRUE;
+                        if (dungeon_check_room_viability(selectedVariant,j,x,y)) {
+                            int isUnique = FALSE;
+                            if (!(sDungeonUniqueVariantGeneratedFlags & (1<<selectedVariantIndex))) {
+                                sDungeonUniqueVariantGeneratedFlags |= (1<<selectedVariantIndex);
+                                isUnique = TRUE;
+                            }
+
+                            if (selectedVariant->easterEgg) {
+                                sDungeonEasterEggGenerated = TRUE;
+                            }
+
+                            dungeon_propegate_loot_with_requirement_list(selectedVariant->requiredLoot);
+
+                            if (selectedVariant->needKey) {
+                                dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
+                            }
+
+                            struct DungeonRoom * createdRoom = dungeon_create_room(selectedVariant,j,x,y,sDungeonCellProcessList[i]->worldY);
+
+                            int challengeLv = originRoom->challengeLv;
+                            if (selectedVariant->requiredLoot && isUnique) {
+                                challengeLv++;
+                            }
+                            createdRoom->challengeLv = challengeLv;
+
+                            if (selectedVariant == &sRoomRedCoin) {
+                                sDungeonRedCoinRoomMax = sDungeonRoomCount;
+                            }
+
+                            success = TRUE;
+                        }
+                        trycount++;
                     }
-                    trycount++;
                 }
             }
         }
-    }
+    } while (needsResolution);
 }
 
 s32 dungeon_generate_boss_room(struct DungeonRoomVariant * selectedVariant) {
@@ -833,9 +839,7 @@ void dungeon_generate_lv1(void) {
 
     // Generate dungeon rooms
     sDungeonTargetRoomCount = 20;
-    for (int i = 0; i < 50; i++) {
-        dungeon_generate_rooms_at_doors(sLv1RoomVariantList,sizeof(sLv1RoomVariantList));
-    }
+    dungeon_generate_rooms_at_doors(sLv1RoomVariantList,sizeof(sLv1RoomVariantList));
 
     // Place the boss key
     dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
@@ -871,9 +875,7 @@ void dungeon_generate_lv2(void) {
 
     // Generate dungeon rooms
     sDungeonTargetRoomCount = 63;
-    for (int i = 0; i < 50; i++) {
-        dungeon_generate_rooms_at_doors(sLv2RoomVariantList,sizeof(sLv2RoomVariantList));
-    }
+    dungeon_generate_rooms_at_doors(sLv2RoomVariantList,sizeof(sLv2RoomVariantList));
 
     // Place the boss room
     dungeon_generate_boss_room(&sRoomBoss);
