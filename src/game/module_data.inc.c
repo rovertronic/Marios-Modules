@@ -514,6 +514,20 @@ void module_clothes_color(struct module_execution_thread * met, u8 call_context)
     met->x++;
 }
 
+// Not ideal, somewhat messy...
+extern struct module_info module_infos[];
+
+void module_wildcolor(struct module_execution_thread * met, u8 call_context) {
+    vec3f_copy(colorBlendStack[colorBlendCount],
+        (f32 *)module_infos[MOD_WILDCOLOR+met->option].extra_data);
+    colorBlendCount++;
+
+    module_log_message(met,"Mixing color into pallete.",0);
+
+    gModuleUpdateVanity = TRUE;
+    met->x++;
+}
+
 void module_color(struct module_execution_thread * met, u8 call_context) {
     vec3f_copy(colorBlendStack[colorBlendCount],*((Vec3f *)met->extra_data));
     colorBlendCount++;
@@ -784,6 +798,7 @@ Vec3f moduleWhite = {1.0f,1.0f,1.0f};
 Vec3f moduleBlack = {0.02f,0.02f,0.02f};
 Vec3f moduleTan = {.996f,.756f,.474f};
 Vec3f moduleBrown = {.6f,.3f,.1f};
+Vec3f moduleWild = {1.f,1.f,1.f};
 
 Gfx * capLights[] = {
     &mat_mario_cap_v3,
@@ -862,6 +877,18 @@ char * sensorOptions[] = {
     "A lava wall.",
     "A lava floor.",
     NULL,
+};
+
+char * wildcolorOptions[] = {
+    "Rainbow",
+    "Red",
+    "Blue",
+    "Green",
+    "Yellow",
+    "White",
+    "Black",
+    "Tan",
+    NULL
 };
 
 struct module_info module_infos[] = {
@@ -1240,6 +1267,18 @@ struct module_info module_infos[] = {
         .func = module_color,
         .extra_data = &moduleBrown,
         .creative = FALSE,
+        .loot_tier = LOOT_VANITY,
+    },
+
+    [MOD_WILDCOLOR] = {
+        .name = "Wildcolor",
+        .type = MTYPE_VANITY,
+        .tex = micons_btngen_rgba16,
+        .desc = "Mixes any color of your choice into palette.",
+        .func = module_wildcolor,
+        .extra_data = &moduleWild,
+        .options = wildcolorOptions,
+        .creative = TRUE,
         .loot_tier = LOOT_VANITY,
     },
 

@@ -417,7 +417,14 @@ s32 handle_module_inputs(void) {
     return FALSE;
 }
 
+void animate_wildcolor_module(void) {
+    moduleWild[0] = sins(gGlobalTimer * 0x200 + 0x0000) * .5f + .5f;
+    moduleWild[1] = sins(gGlobalTimer * 0x200 + 0x5555) * .5f + .5f;
+    moduleWild[2] = sins(gGlobalTimer * 0x200 + 0xAAAA) * .5f + .5f;   
+}
+
 void update_vanity(void) {
+    animate_wildcolor_module();
     execute_module_in_inventory(&module_execution_threads[MODULE_EXEC_VANITY],0,0,44,FALSE);
 }
 
@@ -462,6 +469,8 @@ void joystick_to_dpad(void) {
 }
 
 void control_module_menu(void) {
+    animate_wildcolor_module();
+
     // Always turn off passive effects when in menu
     gMarioState->passiveFlag = 0;
 
@@ -682,7 +691,7 @@ void print_texture(void * tex, int size, int x, int y) {
 }
 
 u8 gPrintModuleDarken=1;
-void print_module(int id, int x, int y) {
+void print_module(int id, int x, int y, int param) {
     if (id == MOD_EMPTY) return;
     u8 r = module_type_infos[module_infos[id].type].color[0]/gPrintModuleDarken;
     u8 g = module_type_infos[module_infos[id].type].color[1]/gPrintModuleDarken;
@@ -692,8 +701,11 @@ void print_module(int id, int x, int y) {
         print_texture(micons_piece_rgba16,32,x,y);
     }
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
-    if (module_infos[id].func == module_color) {
+    if (module_infos[id].func == module_color || module_infos[id].func == module_wildcolor) {
         // Terry davis would have a select few words for this
+        if (module_infos[id].func == module_wildcolor) {
+            id = MOD_WILDCOLOR + param;
+        }
         gDPSetEnvColor(gDisplayListHead++,
             ((f32 *)module_infos[id].extra_data)[0]*255.0f,
             ((f32 *)module_infos[id].extra_data)[1]*255.0f,
@@ -846,7 +858,7 @@ void print_module_menu(void) {
             if (invalid) {
                 gPrintModuleDarken=2;
             }
-            print_module(inventory[true_y][x],inv_slot_printx(x,y), inv_slot_printy(x,y));
+            print_module(inventory[true_y][x],inv_slot_printx(x,y), inv_slot_printy(x,y),inventoryParam[true_y][x]);
             if (invalid) {
                 print_texture(micons_warn_rgba16,16,inv_slot_printx(x,y), inv_slot_printy(x,y));
                 gPrintModuleDarken=1;
@@ -862,16 +874,16 @@ void print_module_menu(void) {
             }
 
             if (inventory_row_info[true_y].type == ROW_SOCKET) {
-                print_module(inventory_row_info[true_y].icon,inv_slot_printx(-1,y), inv_slot_printy(-1,y));
+                print_module(inventory_row_info[true_y].icon,inv_slot_printx(-1,y), inv_slot_printy(-1,y),0);
                 if (inventory_row_info[true_y].wrap) {
-                    print_module(MOD_WRAP,inv_slot_printx(8,y), inv_slot_printy(-1,y));
+                    print_module(MOD_WRAP,inv_slot_printx(8,y), inv_slot_printy(-1,y),0);
                 }
             }
         }
     }
 
     //PRINT HAND and GRAB
-    print_module(module_in_hand,inventory_vis_x,inventory_vis_y);
+    print_module(module_in_hand,inventory_vis_x,inventory_vis_y,module_param_in_hand);
     void * hand_tex = micons_small_hand_1_rgba16;
     if (module_in_hand != MOD_EMPTY) {
         hand_tex = micons_small_hand_2_rgba16;
@@ -1079,7 +1091,7 @@ void print_execution_status(int x, int y, int execthread, int module) {
         dotShowCondition = (module_execution_threads[execthread].cooldown);
     }
 
-    print_module(module,x,y);
+    print_module(module,x,y,0);
     if (dotShowCondition) {
         print_texture(micons_executing_rgba16,16 ,x,y);
     }
@@ -1120,8 +1132,8 @@ void print_module_hud_status(void) {
         gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
         
         gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-        print_module(gMysteryModuleChoice[0],140-8,120-ntyoff);
-        print_module(gMysteryModuleChoice[1],180-8,120-ntyoff);
+        print_module(gMysteryModuleChoice[0],140-8,120-ntyoff,0);
+        print_module(gMysteryModuleChoice[1],180-8,120-ntyoff,0);
 
         s16 x = 160;
         switch(gMysteryModuleSelection) {
@@ -1185,8 +1197,8 @@ void print_module_hud_status(void) {
             gDPSetEnvColor(gDisplayListHead++, 255,255,255, 200);
             print_utf8(sDebugLogStringBuffer,64,23+y);
             gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-            print_module(sDebugLogModuleDisplays[index][0],20,200-y);
-            print_module(sDebugLogModuleDisplays[index][1],36,200-y);
+            print_module(sDebugLogModuleDisplays[index][0],20,200-y,0);
+            print_module(sDebugLogModuleDisplays[index][1],36,200-y,0);
             gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
         }
     }
