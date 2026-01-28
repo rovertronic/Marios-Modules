@@ -1488,4 +1488,16 @@ struct module_info module_infos[] = {
         .creative = TRUE,
         .loot_tier = LOOT_TIER_1,
     },
+
+    [MOD_LOW_GRAVITY] = {
+        .name = "Low Gravity",
+        .type = MTYPE_PASSIVE,
+        .tex = micons_hover_rgba16,
+        .desc = "Reduces gravity by 10*.",
+        .func = module_passive_effect,
+        .extra_data = PASSIVE_FLAG_GRAVITY,
+        .cooldown = .5f,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_2,
+    },
 };
