@@ -1,6 +1,6 @@
 // INVENTORY STRUCTURE DECLARATIONS
 s32 creativePanelCondition(void) {
-    return FALSE;
+    return TRUE;
 }
 
 s32 storagePanelCondition(void) {
@@ -960,7 +960,7 @@ struct module_info module_infos[] = {
         .tex = micons_script_rgba16,
         .desc = "Displays a verbose breakdown of the actions of all following modules. Press START to clear log.",
         .func = module_monitor,
-        .creative = FALSE,
+        .creative = TRUE,
     },
 
     [MOD_GRAPPLE] = {
@@ -1151,6 +1151,7 @@ struct module_info module_infos[] = {
         .tex = micons_skin_rgba16,
         .desc = "Mixes colors into skin tone.",
         .func = module_clothes_color,
+        .creative = TRUE,
         .extra_data = skinLights,
     },
 
@@ -1161,7 +1162,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @R@red@@ into palette.",
         .func = module_color,
         .extra_data = &moduleRed,
-        .creative = TRUE,
+        .creative = FALSE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1172,7 +1173,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @B@blue@@ into palette.",
         .func = module_color,
         .extra_data = &moduleBlue,
-        .creative = TRUE,
+        .creative = FALSE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1183,7 +1184,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @G@green@@ into palette.",
         .func = module_color,
         .extra_data = &moduleGreen,
-        .creative = TRUE,
+        .creative = FALSE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1194,7 +1195,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @Y@yellow@@ into palette.",
         .func = module_color,
         .extra_data = &moduleYellow,
-        .creative = TRUE,
+        .creative = FALSE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1205,7 +1206,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes white into palette.",
         .func = module_color,
         .extra_data = &moduleWhite,
-        .creative = TRUE,
+        .creative = FALSE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1216,7 +1217,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @0@black@@ into palette.",
         .func = module_color,
         .extra_data = &moduleBlack,
-        .creative = TRUE,
+        .creative = FALSE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1227,6 +1228,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes tan into palette.",
         .func = module_color,
         .extra_data = &moduleTan,
+        .creative = FALSE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1237,6 +1239,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes brown into palette.",
         .func = module_color,
         .extra_data = &moduleBrown,
+        .creative = FALSE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1245,6 +1248,7 @@ struct module_info module_infos[] = {
         .type = MTYPE_VANITY,
         .tex = micons_woman_rgba16,
         .desc = "Swaps to alternative hardware + voicebox.",
+        .creative = TRUE,
         .func = module_woman,
     },
 
@@ -1431,7 +1435,7 @@ struct module_info module_infos[] = {
         .func = module_passive_effect,
         .extra_data = PASSIVE_FLAG_MINIMAP,
         .cooldown = .0f,
-        .creative = FALSE,
+        .creative = TRUE,
         .loot_tier = LOOT_TIER_2,
     },
 
