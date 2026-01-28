@@ -888,6 +888,7 @@ char * wildcolorOptions[] = {
     "White",
     "Black",
     "Tan",
+    "Brown",
     NULL
 };
 
