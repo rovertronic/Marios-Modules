@@ -3,7 +3,8 @@
 #ifndef TEXGEN_H
 #define TEXGEN_H
 
-void texgen_generate(void);
+void texgen_generate_lv2(void);
+void texgen_generate_lv1(void);
 
 // From levels/rogue/leveldata.c
 extern u16 gDungeonTextureBrick[4096];

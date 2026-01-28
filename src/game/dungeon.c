@@ -901,6 +901,7 @@ void dungeon_generate(int level) {
     switch(level) {
         case 0: // Mini Dungeon, Oasis
             dungeon_generate_lv1();
+            texgen_generate_lv1();
             break;
         case 1: // Big Dungeon
             dungeon_generate_lv1();
@@ -919,6 +920,7 @@ void dungeon_generate(int level) {
 #endif
 
             dungeon_generate_lv2();
+            texgen_generate_lv2();
             break;
         case 2: // Bowser Level
             dungeon_generate_lv1();
@@ -933,7 +935,6 @@ void dungeon_generate(int level) {
     dungeon_calculate_all_neighbor_flags();
     dungeon_remove_pointless_rooms();
 
-    texgen_generate();
     dungeon_spawn_room_objects();
 }
 
