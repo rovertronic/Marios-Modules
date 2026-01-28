@@ -1085,6 +1085,15 @@ void print_module_generic_message(void) {
 }
 
 #define MODULE_HUD_STATUS_Y 205
+
+u8 sPassiveFlagModuleDisplayTable[] = {
+    MOD_SPD,
+    MOD_HOLD,
+    MOD_DEFENSE,
+    MOD_MINIMAP,
+    MOD_LOW_GRAVITY,
+};
+
 void print_execution_status(int x, int y, int execthread, int module) {
     u8 dotShowCondition = (module_execution_threads[execthread].executing);
     if (execthread == MODULE_EXEC_PASSIVE) {
@@ -1097,6 +1106,16 @@ void print_execution_status(int x, int y, int execthread, int module) {
     }
     if (module_execution_threads[execthread].input_notify) {
         print_texture(micons_inpnotif_rgba16,16 ,x,y);
+    }
+
+    if (execthread == MODULE_EXEC_PASSIVE) {
+        int activeFlagCt = 0;
+        for (int i = 0; i < 32; i++) {
+            if (gMarioState->passiveFlag & (1 << i)) {
+                activeFlagCt++;
+                print_module(sPassiveFlagModuleDisplayTable[i],x+activeFlagCt*16,y,0);
+            }
+        }
     }
 }
 
