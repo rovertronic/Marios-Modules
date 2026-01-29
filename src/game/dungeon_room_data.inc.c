@@ -1048,19 +1048,18 @@ struct DungeonRoomVariant sRoomLobby2 = {
 struct DungeonRoomVariantCellList sRoomPushCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
     {.x = 1, .y = 0},
-    {.x = 2, .y = 0},
 
+    {.x = 0, .y = -1},
     {.x = 1, .y = -1},
-    {.x = 2, .y = -1, .doorFlags = DOOR_DOWN, .worldY = 412},
 
     {.end = TRUE},
 };
 
 struct DungeonObject sRoomPushObjectList[] = {
     {.bhv = bhvPushableMetalBox, .model = MODEL_METAL_BOX, .param = 0,
-    .angle = 0, .pos = {-21.6136f,-2.55578f,-0.374972f}},
+    .angle = 0, .pos = {-0.308189f,-14.0973f,-0.375159f}},
     {.bhv = bhvPushableMetalBox, .model = MODEL_METAL_BOX, .param = 0,
-    .angle = 0, .pos = {-41.0017f,1.94423f,-0.375026f}},
+    .angle = 0, .pos = {-4.80819f,-14.0973f,-0.375159f}},
     {.bhv = bhvStar, .model = MODEL_NONE, .param = 0,
     .angle = 0x0, .pos = {-26.1232f,-2.55577f,5.12489f}},
     {.end = TRUE},

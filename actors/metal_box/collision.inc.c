@@ -13,7 +13,7 @@ const Collision metal_box_seg8_collision_08024C28[] = {
     COL_VERTEX(-153, 0, -153),
     COL_VERTEX(154, 0, -153),
 
-    COL_TRI_INIT(SURFACE_DEFAULT, 12),
+    COL_TRI_INIT(SURFACE_NO_CAM_COLLISION, 12),
     COL_TRI(0, 1, 2),
     COL_TRI(0, 2, 3),
     COL_TRI(4, 5, 6),

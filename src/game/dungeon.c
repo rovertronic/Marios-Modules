@@ -87,6 +87,7 @@ struct DungeonRoomVariant * sLv1RoomVariantList[] = {
     &sRoomTreasure,
 
     // Challenge Rooms
+    &sRoomPush,
     &sRoomGardenHall,
     &sRoomVanishHop,
     &sRoomWallJump,
