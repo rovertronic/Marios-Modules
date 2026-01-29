@@ -198,14 +198,8 @@ Vec4f sRoomWallJumpLootLocations[] = {
 };
 
 struct DungeonObject sRoomWallJumpObjectList[] = {
-    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 1,
-    .angle = 0, .pos = {-20.f+.4f,5.54237f,0.f}},
-    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 1,
-    .angle = 0, .pos = {-20.f-.4f,5.54237f,0.f}},
-    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 1,
-    .angle = 0, .pos = {-20.f,    5.54237f+.4f,0.f}},
-    {.bhv = bhvCoinFormation, .model = MODEL_NONE, .param = 1,
-    .angle = 0, .pos = {-20.f,    5.54237f-.4f,0.f}},
+    {.bhv = bhvExclamationBox, .model = MODEL_EXCLAMATION_BOX, .param = 6,
+    .angle = 0, .pos = {-20.f,5.54237f,3.f}},
 
 
     {.bhv = bhvFireSpitter, .model = MODEL_BOWLING_BALL, .param = 1,
@@ -1087,5 +1081,58 @@ struct DungeonRoomVariant sRoomPush = {
     .starCt = 1,
     .lootLocations = &sRoomPushLootLocations,
     .requiredLoot = NULL,
+    .generateOnce = TRUE,
+};
+
+// Thwomp Junction
+
+struct DungeonRoomVariantCellList sRoomThwompsCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0, .doorFlags = DOOR_RIGHT},
+
+    {.x = 0, .y = 1},
+    {.x = 1, .y = 1, .doorFlags = DOOR_UP},
+    {.x = 2, .y = 1},
+
+    {.x = 0, .y = -1, .doorFlags = DOOR_DOWN},
+    {.x = 1, .y = -1},
+    {.x = 2, .y = -1},
+
+    {.end = TRUE},
+};
+
+s8 sRoomThwompsRequiredLoot[] = {
+    MOD_JUMP, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonObject sRoomThwompsObjectList[] = {
+    {.bhv = bhvThwomp, .model = MODEL_THWOMP, .param = 0,
+    .angle = 0x4000, .pos = {-2.48417f,0.0f,0.0f}},
+    {.bhv = bhvThwomp, .model = MODEL_THWOMP, .param = 0,
+    .angle = 0xC000, .pos = {-37.5158f,0.0f,0.0f}},
+    {.bhv = bhvThwomp, .model = MODEL_THWOMP, .param = 0,
+    .angle = 0x0000, .pos = {-20.f,-17.5158f,0.0f}},
+    {.bhv = bhvThwomp, .model = MODEL_THWOMP, .param = 0,
+    .angle = 0x8000, .pos = {-20.f,17.5158f,0.0f}},
+    {.end = TRUE},
+};
+
+Vec4f sRoomThwompsLootLocations[] = {
+    {-35.5406f,7.49708f,10.7205f,90.0f},
+    {-41.3561f,-27.4415f,-0.000172f,90.0f},
+};
+
+struct DungeonRoomVariant sRoomThwomps = {
+    .minimapDL = &rmap_thwomps_rmap_thwomps_mesh,
+
+    .cellList = &sRoomThwompsCellList,
+    .model = MODEL_ROOM_THWOMPS,
+    .collision = rthwomps_collision,
+    .objectList = &sRoomThwompsObjectList,
+    .maxLootCt = 2,
+    .lootLocations = &sRoomThwompsLootLocations,
+    .requiredLoot = &sRoomThwompsRequiredLoot,
     .generateOnce = TRUE,
 };

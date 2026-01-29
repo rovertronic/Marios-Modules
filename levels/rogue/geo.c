@@ -51,3 +51,4 @@
 #include "rfacade2/geo.inc.c"
 #include "rlobby2/geo.inc.c"
 #include "rpush/geo.inc.c"
+#include "rthwomps/geo.inc.c"

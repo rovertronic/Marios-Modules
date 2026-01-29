@@ -639,6 +639,7 @@ enum new_models {
     MODEL_ROOM_FACADE2,
     MODEL_ROOM_LOBBY2,
     MODEL_ROOM_PUSH,
+    MODEL_ROOM_THWOMPS,
 };
 
 #endif // MODEL_IDS_H

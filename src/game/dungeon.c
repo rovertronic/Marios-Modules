@@ -24,6 +24,7 @@ int sDungeonCoinBalance = 0;
 int sDungeonRedCoinRoomMax = 0;
 int sDungeonTargetRoomCount = 0;
 int sDungeonRemovedPointlessRooms = 0;
+int sDungeonGeneratingLevelId = 0;
 u32 sDungeonUniqueVariantGeneratedFlags;
 
 u16 gDungeonTreeModel = 0;
@@ -79,7 +80,7 @@ struct DungeonRoomVariant * sLv1RoomVariantList[] = {
     &sRoomMiniJunc2,
     &sRoomHall,
     &sRoomLobby,
-    &sRoomLobby2,
+    &sRoomThwomps,
     &sRoomSplitHall,
 
     // Special Rooms
@@ -184,6 +185,10 @@ s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
     if (loot == MOD_NONMOD_KEY) {
         // Make sure keys are actually challenging to get
         minLv = 2;
+        if (sDungeonGeneratingLevelId == 0) {
+            // Level 1 only has one key, make it a challenge to get.
+            minLv = 3;
+        }
     }
 
     int chosen_room_index = tinymt32_generate_u32(&gGlobalRandomState)%sDungeonRoomCount;
@@ -413,6 +418,18 @@ void dungeon_generate_rooms_at_doors(struct DungeonRoomVariant ** variantList, i
 
                         if (sDungeonRoomCount >= sDungeonTargetRoomCount) {
                             success = TRUE;
+                            continue;
+                        }
+
+                        // Treasure rooms spawning at the entrance can fuck right off into hell
+                        if (selectedVariant == &sRoomTreasure && sDungeonCurrentDepth == 1) {
+                            trycount++;
+                            continue;
+                        }
+
+                        // Prevent chaining of hallways. Walking simulator not fun!
+                        if (selectedVariant == originRoom->variant) {
+                            trycount++;
                             continue;
                         }
 
@@ -669,7 +686,8 @@ void dungeon_spawn_room_objects(void) {
                 obj->oPosZ += (details->pos[0] * 100.f * coss(angle + 0x4000))
                     + (details->pos[1] * 100.f * coss(angle + 0x8000));
                 obj->oPosY += details->pos[2] * 100.f;
-                obj->oFaceAngleYaw = angle + details->angle;;
+                obj->oFaceAngleYaw = angle + details->angle;
+                obj->oMoveAngleYaw = angle + details->angle;
                 obj->oBehParams2ndByte = details->param;
                 SET_BPARAM3(obj->oBehParams,details->param3);
                 SET_BPARAM4(obj->oBehParams,details->param4);
@@ -844,7 +862,7 @@ void dungeon_generate_lv1(void) {
     // Place the boss key
     dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
 
-    if (sDungeonForceRegen || sDungeonRoomCount < 9 || sDungeonInventory[MOD_NONMOD_STAR] < 1) {
+    if (sDungeonForceRegen || sDungeonRoomCount < 9 || sDungeonInventory[MOD_NONMOD_STAR] < 2) {
         goto redo_generate;
     }
 }
@@ -894,6 +912,8 @@ void dungeon_generate_lv3(void) {
 }
 
 void dungeon_generate(int level) {
+    sDungeonGeneratingLevelId = level;
+
     // Randomize Seed
     tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
 

@@ -1,0 +1,9 @@
+extern Vtx rmap_thwomps_rmap_thwomps_mesh_vtx_0[8];
+extern Gfx rmap_thwomps_rmap_thwomps_mesh_tri_0[];
+extern Vtx rmap_thwomps_rmap_thwomps_mesh_vtx_1[16];
+extern Gfx rmap_thwomps_rmap_thwomps_mesh_tri_1[];
+extern Gfx mat_rmap_thwomps_map_mat_1_layer1[];
+extern Gfx mat_revert_rmap_thwomps_map_mat_1_layer1[];
+extern Gfx mat_rmap_thwomps_map_mat_3_layer1[];
+extern Gfx mat_revert_rmap_thwomps_map_mat_3_layer1[];
+extern Gfx rmap_thwomps_rmap_thwomps_mesh[];

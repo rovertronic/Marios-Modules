@@ -98,4 +98,7 @@ extern const LevelScript level_rogue_entry[];
 #include "rpush/collision_header.h"
 #include "rpush/geo_header.h"
 #include "rmap_lobby2/header.h"
+#include "rthwomps/collision_header.h"
+#include "rthwomps/geo_header.h"
+#include "rmap_thwomps/header.h"
 #endif

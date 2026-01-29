@@ -110,3 +110,6 @@ u16 gDungeonTextureCloudBrick2[4096] = {0};
 #include "rpush/collision.inc.c"
 #include "rpush/model.inc.c"
 #include "rmap_lobby2/model.inc.c"
+#include "rthwomps/collision.inc.c"
+#include "rthwomps/model.inc.c"
+#include "rmap_thwomps/model.inc.c"
