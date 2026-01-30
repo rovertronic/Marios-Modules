@@ -1076,7 +1076,7 @@ Vec4f sRoomPushLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomPush = {
-    .minimapDL = NULL,
+    .minimapDL = &rmappush_rmappush_mesh,
 
     .cellList = &sRoomPushCellList,
     .model = MODEL_ROOM_PUSH,
@@ -1125,7 +1125,7 @@ struct DungeonObject sRoomThwompsObjectList[] = {
 };
 
 Vec4f sRoomThwompsLootLocations[] = {
-    {-35.5406f,7.49708f,10.7205f,90.0f},
+    {-35.5406f,7.49708f,10.7205f,0.0f},
     {-41.3561f,-27.4415f,-0.000172f,90.0f},
 };
 

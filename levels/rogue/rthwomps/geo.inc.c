@@ -5,6 +5,7 @@ const GeoLayout rthwomps_geo[] = {
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, rthwomps_rthwomps_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_ALPHA, rthwomps_rthwomps_mesh_layer_4),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT_DECAL, rthwomps_rthwomps_mesh_layer_6),
 	GEO_CLOSE_NODE(),
 	GEO_END(),
 };
