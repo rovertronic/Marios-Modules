@@ -32,19 +32,6 @@ s32 check_if_moving_over_floor_h(f32 maxDist, f32 offset, f32 hoffset) {
     return (absf(floorHeight - o->oPosY) < maxDist);
 }
 
-s32 check_if_moving_over_floor_h_noobj(f32 maxDist, f32 offset, f32 hoffset) {
-    struct Surface *floor;
-    f32 xPos = o->oPosX + (sins(o->oMoveAngleYaw) * offset) + (sins(o->oMoveAngleYaw + 0x4000) * hoffset);
-    f32 zPos = o->oPosZ + (coss(o->oMoveAngleYaw) * offset) + (coss(o->oMoveAngleYaw + 0x4000) * hoffset);
-
-    f32 floorHeight = find_floor(xPos, o->oPosY + 610.f, zPos, &floor);
-
-    if (floor && floor->object && floor->object != o && obj_has_behavior(floor->object,bhvPushableMetalBox)) {
-        return FALSE;
-    }
-    return TRUE;
-}
-
 void bhv_pushable_loop(void) {
     o->oCollisionDistance = 1200.0f;
     obj_set_hitbox(o, &sMetalBoxHitbox);
@@ -54,8 +41,21 @@ void bhv_pushable_loop(void) {
         s16 angleToMario = obj_angle_to_object(o, gMarioObject);
         if (abs_angle_diff(angleToMario, gMarioObject->oMoveAngleYaw) > 0x4000) {
             o->oMoveAngleYaw = (s16)((gMarioObject->oMoveAngleYaw + 0x2000) & 0xc000);
-            if (check_if_moving_over_floor_h(8.0f, 225.0f,200.0f)&&check_if_moving_over_floor_h(8.0f, 225.0f,-200.0f)&&
-                check_if_moving_over_floor_h_noobj(8.0f, 225.0f,200.0f)&&check_if_moving_over_floor_h_noobj(8.0f, 225.0f,-200.0f)) {
+
+            f32 oldPosX = o->oPosX;
+            f32 oldPosZ = o->oPosZ;
+            o->oPosX += (sins(o->oMoveAngleYaw) * 12.0f);
+            o->oPosZ += (coss(o->oMoveAngleYaw) * 12.0f);
+
+            struct Object * nearestBox = cur_obj_nearest_object_with_behavior(bhvPushableMetalBox);
+            int otherBoxCollision = FALSE;
+            if (nearestBox && lateral_dist_between_objects(o,nearestBox) < 450.0f * 1.2f) {
+                otherBoxCollision = TRUE;
+            }
+            o->oPosX = oldPosX;
+            o->oPosZ = oldPosZ;
+
+            if (check_if_moving_over_floor_h(8.0f, 225.0f * 1.2f,200.0f)&&check_if_moving_over_floor_h(8.0f, 225.0f * 1.2f,-200.0f)&& !otherBoxCollision) {
                 o->oForwardVel = 12.0f;
                 cur_obj_play_sound_1(SOUND_ENV_METAL_BOX_PUSH);
                 gMarioState->pos[0] += sins(o->oMoveAngleYaw) * o->oForwardVel;

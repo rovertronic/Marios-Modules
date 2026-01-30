@@ -1048,25 +1048,31 @@ struct DungeonRoomVariant sRoomLobby2 = {
 struct DungeonRoomVariantCellList sRoomPushCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
     {.x = 1, .y = 0},
+    {.x = 2, .y = 0},
 
     {.x = 0, .y = -1},
     {.x = 1, .y = -1},
+    {.x = 2, .y = -1},
+
+    {.x = 0, .y = -2},
+    {.x = 1, .y = -2},
+    {.x = 2, .y = -2},
 
     {.end = TRUE},
 };
 
 struct DungeonObject sRoomPushObjectList[] = {
     {.bhv = bhvPushableMetalBox, .model = MODEL_METAL_BOX, .param = 0,
-    .angle = 0, .pos = {-0.308189f,-14.0973f,-0.375159f}},
+    .angle = 0, .pos = {-2.81838f,-20.03f,-0.469083f}},
     {.bhv = bhvPushableMetalBox, .model = MODEL_METAL_BOX, .param = 0,
-    .angle = 0, .pos = {-4.80819f,-14.0973f,-0.375159f}},
+    .angle = 0, .pos = {-8.44341f,-20.03f,-0.469083f}},
     {.bhv = bhvStar, .model = MODEL_NONE, .param = 0,
-    .angle = 0x0, .pos = {-26.1232f,-2.55577f,5.12489f}},
+    .angle = 0x0, .pos = {-27.4333f,8.49111f,7.34387f}},
     {.end = TRUE},
 };
 
 Vec4f sRoomPushLootLocations[] = {
-    {-18.1967f,-11.5693f,4.12489f,  90.f},
+    {-12.4375f,1.56714f,5.15592f,  90.f},
 };
 
 struct DungeonRoomVariant sRoomPush = {
