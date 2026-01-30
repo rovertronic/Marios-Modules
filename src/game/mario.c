@@ -563,6 +563,9 @@ u32 mario_get_terrain_sound_addend(struct MarioState *m) {
         if (floorType == SURFACE_WOOD) {
             ret = SOUND_TERRAIN_SPOOKY << 16;
         }
+        if (floorType == SURFACE_SAND_SFX) {
+            ret = SOUND_TERRAIN_SAND << 16;
+        }
     }
 
     return ret;

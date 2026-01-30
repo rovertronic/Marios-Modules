@@ -577,5 +577,6 @@ extern const BehaviorScript bhvDungeonElite[];
 extern const BehaviorScript bhvDungeonDoorLocked[];
 extern const BehaviorScript bhvDungeonClockHand[];
 extern const BehaviorScript bhvDungeonSpawn[];
+extern const BehaviorScript bhvAboomboomination[];
 
 #endif // BEHAVIOR_DATA_H

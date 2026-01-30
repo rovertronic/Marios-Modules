@@ -1764,6 +1764,10 @@ void bhv_dungeon_elite(void) {
     obj_ride_obj(goomba2,goomba1);
 }
 
+void bhv_aboomboomination(void) {
+    
+}
+
 int sSilverStarCt = 0;
 void bhv_silver_star(void) {
     struct Object * mySwitch = cur_obj_nearest_object_with_behavior(bhvFloorSwitchHiddenObjects);

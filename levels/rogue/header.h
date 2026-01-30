@@ -102,4 +102,5 @@ extern const LevelScript level_rogue_entry[];
 #include "rthwomps/geo_header.h"
 #include "rmap_thwomps/header.h"
 #include "rmappush/header.h"
+#include "rmapfacade2/header.h"
 #endif

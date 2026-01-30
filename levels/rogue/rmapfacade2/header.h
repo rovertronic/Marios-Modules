@@ -1,0 +1,9 @@
+extern Vtx rmapfacade2_rmapfacade2_mesh_vtx_0[31];
+extern Gfx rmapfacade2_rmapfacade2_mesh_tri_0[];
+extern Vtx rmapfacade2_rmapfacade2_mesh_vtx_1[68];
+extern Gfx rmapfacade2_rmapfacade2_mesh_tri_1[];
+extern Gfx mat_rmapfacade2_map_mat_1_layer1[];
+extern Gfx mat_revert_rmapfacade2_map_mat_1_layer1[];
+extern Gfx mat_rmapfacade2_map_mat_3_layer1[];
+extern Gfx mat_revert_rmapfacade2_map_mat_3_layer1[];
+extern Gfx rmapfacade2_rmapfacade2_mesh[];

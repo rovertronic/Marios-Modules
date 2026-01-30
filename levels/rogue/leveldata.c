@@ -114,3 +114,4 @@ u16 gDungeonTextureCloudBrick2[4096] = {0};
 #include "rthwomps/model.inc.c"
 #include "rmap_thwomps/model.inc.c"
 #include "rmappush/model.inc.c"
+#include "rmapfacade2/model.inc.c"

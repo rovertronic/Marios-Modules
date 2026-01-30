@@ -163,10 +163,8 @@ void texgen_generate_lv1(void) {
     texgen_colorize_rgba16( segmented_to_virtual(texgensamples_texgensandTile_rgba16), segmented_to_virtual(&gDungeonTextureTile), 2048, 0xFFFFFFFF  );
     texgen_colorize_rgba16( segmented_to_virtual(texgensamples_texgensandRoof_rgba16), segmented_to_virtual(&gDungeonTextureShingles), 2048, 0xFFFFFFFF  );
 
-    int altWallTextureIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sAltWallTextures)/4);
-    texture = segmented_to_virtual(sAltWallTextures[altWallTextureIndex]);
-    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureAltWall), 4096, 0xFFFFFF  );
+    texgen_colorize_rgba16( segmented_to_virtual(texgensamples_desertAltWall_rgba16), segmented_to_virtual(&gDungeonTextureAltWall), 4096, 0xFFFFFF  );
 
     texture = segmented_to_virtual(&texgensamples_CarpetGrayscale_rgba16);
-    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureCarpet), 2048, sColorPalletepixelFloats[colorPalletIndex][0]  );
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureCarpet), 2048, 0xDC65FF  );
 }

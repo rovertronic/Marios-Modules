@@ -1,7 +1,7 @@
 #include "src/game/envfx_snow.h"
 
 const GeoLayout rfacade2_geo[] = {
-	GEO_CULLING_RADIUS(10000),
+	GEO_CULLING_RADIUS(20000),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, rfacade2_rfacade2_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, rfacade2_rfacade2_mesh_layer_5),

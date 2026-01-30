@@ -982,9 +982,12 @@ struct DungeonRoomVariantCellList sRoomFacade2CellList[] = {
     {.x = 2, .y = -2},
 
     {.x = 3, .y = -2},
-
     {.x = 2, .y = -3},
     {.x = 3, .y = -3},
+
+    {.x = 4, .y = -3},
+    {.x = 3, .y = -4},
+    {.x = 4, .y = -4},
 };
 
 struct DungeonObject sRoomFacade2ObjectList[] = {
@@ -998,11 +1001,13 @@ struct DungeonObject sRoomFacade2ObjectList[] = {
     .angle = 0, .pos = {-8.9286f,-30.9459f,3.0471f}},
     {.bhv = bhvDungeonSpawn, .model = MODEL_NONE, .param = 0,
     .angle = 0, .pos = {-1.57651f,0.551928f,5.13467f}},
+    {.bhv = bhvAboomboomination, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-75.7161f,-75.716f,5.32964f}},
     {.end = TRUE},
 };
 
 struct DungeonRoomVariant sRoomFacade2 = {
-    .minimapDL = NULL,//&rmapfacade1_rmapfacade1_mesh,
+    .minimapDL = &rmapfacade2_rmapfacade2_mesh,
 
     .cellList = &sRoomFacade2CellList,
     .model = MODEL_ROOM_FACADE2,

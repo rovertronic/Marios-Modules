@@ -6502,3 +6502,10 @@ const BehaviorScript bhvDungeonSpawn[] = {
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     BREAK(),
 };
+
+extern void bhv_aboomboomination(void);
+const BehaviorScript bhvAboomboomination[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    CALL_NATIVE(bhv_aboomboomination),
+    DEACTIVATE(),
+};
