@@ -988,6 +988,8 @@ struct DungeonRoomVariantCellList sRoomFacade2CellList[] = {
     {.x = 4, .y = -3},
     {.x = 3, .y = -4},
     {.x = 4, .y = -4},
+
+    {.end = TRUE},
 };
 
 struct DungeonObject sRoomFacade2ObjectList[] = {
