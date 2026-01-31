@@ -1,0 +1,15 @@
+extern const GeoLayout utilityMace_geo[];
+extern Lights1 utilityMace_shinymetal_lights;
+extern u8 utilityMace_silver_ci8[];
+extern u8 utilityMace_silver_pal_rgba16[];
+extern u8 utilityMace_darkChain_ia8[];
+extern Vtx utilityMace_utilityMace_mesh_layer_1_vtx_0[207];
+extern Gfx utilityMace_utilityMace_mesh_layer_1_tri_0[];
+extern Vtx utilityMace_utilityMace_mesh_layer_4_vtx_0[4];
+extern Gfx utilityMace_utilityMace_mesh_layer_4_tri_0[];
+extern Gfx mat_utilityMace_shinymetal[];
+extern Gfx mat_revert_utilityMace_shinymetal[];
+extern Gfx mat_utilityMace_f3dlite_material_003[];
+extern Gfx mat_revert_utilityMace_f3dlite_material_003[];
+extern Gfx utilityMace_utilityMace_mesh_layer_1[];
+extern Gfx utilityMace_utilityMace_mesh_layer_4[];

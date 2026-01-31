@@ -81,12 +81,22 @@ void bhv_flamethrower_loop(void) {
 
         o->oFlameThowerTimeRemaining = flameTimeRemaining;
 
-        struct Object *flame = spawn_object_relative(o->oBehParams2ndByte, 0, 0, 0, o, model, bhvFlamethrowerFlame);
+        struct Object *flame = spawn_object_relative(o->oBehParams2ndByte, 0, 90, 0, o, model, bhvFlamethrowerFlame);
         flame->oForwardVel = flameVel;
 
         cur_obj_play_sound_1(SOUND_AIR_BLOW_FIRE);
+
     } else if (o->oTimer > 60) {
         o->oAction = FLAMETHROWER_ACT_IDLE;
+    }
+
+    Vec3f saddlePos = {o->oPosX,o->oPosY+180.0f,o->oPosZ};
+    vec3f_copy(o->saddlePos,saddlePos);
+    if (o->objRiding) {
+        o->oMoveAngleYaw = o->objRiding->oMoveAngleYaw;
+        o->oFaceAngleYaw = o->oMoveAngleYaw;
+    } else {
+        obj_mark_for_deletion(o);
     }
 }
 

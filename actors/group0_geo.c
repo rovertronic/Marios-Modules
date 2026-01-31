@@ -30,3 +30,5 @@
 #include "mchest/geo.inc.c"
 #include "key/geo.inc.c"
 #include "silver_star/geo.inc.c"
+#include "utilityMace/geo.inc.c"
+#include "utilityFlame/geo.inc.c"

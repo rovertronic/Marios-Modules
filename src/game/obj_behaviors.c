@@ -1765,7 +1765,25 @@ void bhv_dungeon_elite(void) {
 }
 
 void bhv_aboomboomination(void) {
-    
+    struct Object * stackedEnemy[7];
+
+    switch(o->oAction) {
+        case 0:
+            if (o->oDistanceToMario < 1000.0f) {
+                o->oAction++;
+            }
+            break;
+        case 1:
+            for (int i = 0; i < 5; i++) {
+                stackedEnemy[i] = spawn_object(o,gDungeonAboomboomination[i]->model,gDungeonAboomboomination[i]->bhv);
+                if (i > 0) {
+                    obj_ride_obj(stackedEnemy[i],stackedEnemy[i-1]);
+                }
+                stackedEnemy[i]->oPosY += 1500.0f;
+            }
+            o->oAction++;
+        break;
+    }
 }
 
 int sSilverStarCt = 0;
@@ -1803,4 +1821,41 @@ void bhv_silver_star(void) {
             }
             break;
     }    
+}
+
+void bhv_utility_mace(void) {
+    vec3f_copy(o->saddlePos,&o->oPosVec);
+
+    switch(o->oAction) {
+        case 0:
+            o->prevObj = spawn_object(o,MODEL_UTILITY_MACE,bhvStaticObject);
+            o->oMoveAngleYaw = random_u16();
+            o->oAction++;
+            break;
+        case 1:
+            o->prevObj->oPosX = o->oPosX + sins(o->oMoveAngleYaw) * 500.0f;
+            o->prevObj->oPosZ = o->oPosZ + coss(o->oMoveAngleYaw) * 500.0f;
+            o->prevObj->oPosY = o->oPosY;
+            o->prevObj->oFaceAngleYaw = o->oMoveAngleYaw;
+
+            o->oMoveAngleYaw += 0x200;
+
+            if (o->objRiding == NULL) {
+                if (o->objRider) {
+                    o->objRider->objRiding = NULL;
+                }
+                o->oAction++;
+                o->oVelY = 0.0f;
+            }
+            break;
+        case 2:
+            o->oVelY --;
+            o->prevObj->oPosY += o->oVelY;
+
+            if (o->oTimer > 30) {
+                obj_mark_for_deletion(o->prevObj);
+                obj_mark_for_deletion(o);
+            }
+            break;
+    }
 }

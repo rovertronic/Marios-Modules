@@ -66,3 +66,5 @@
 #include "key/model.inc.c"
 #include "hover/collision.inc.c"
 #include "silver_star/model.inc.c"
+#include "utilityMace/model.inc.c"
+#include "utilityFlame/model.inc.c"

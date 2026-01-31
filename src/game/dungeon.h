@@ -8,7 +8,7 @@
 
 extern struct DungeonRoom * gDungeonMarioRoom;
 extern struct DungeonObject * gDungeonEnemies[3];
-extern struct DungeonObject * gDungeonAboomboomination[5];
+extern struct DungeonObject * gDungeonAboomboomination[7];
 extern u16 gDungeonTreeModel;
 extern Vec3f gDungeonSpawnLocation;
 

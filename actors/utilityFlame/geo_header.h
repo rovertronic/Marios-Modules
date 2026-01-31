@@ -1,0 +1,17 @@
+extern const GeoLayout utilityFlame_geo[];
+extern Lights1 utilityFlame_flamethrower_base_lights;
+extern Lights1 utilityFlame_flamethrower_hole_lights;
+extern u8 utilityFlame_Flamethrower_Rock_ci8[];
+extern u8 utilityFlame_Flamethrower_Rock_pal_rgba16[];
+extern u8 utilityFlame_Flamethrower_Hole_ci8[];
+extern u8 utilityFlame_Flamethrower_Hole_pal_rgba16[];
+extern Vtx utilityFlame_utilityFlame_mesh_layer_1_vtx_0[40];
+extern Gfx utilityFlame_utilityFlame_mesh_layer_1_tri_0[];
+extern Vtx utilityFlame_utilityFlame_mesh_layer_4_vtx_0[16];
+extern Gfx utilityFlame_utilityFlame_mesh_layer_4_tri_0[];
+extern Gfx mat_utilityFlame_flamethrower_base[];
+extern Gfx mat_revert_utilityFlame_flamethrower_base[];
+extern Gfx mat_utilityFlame_flamethrower_hole[];
+extern Gfx mat_revert_utilityFlame_flamethrower_hole[];
+extern Gfx utilityFlame_utilityFlame_mesh_layer_1[];
+extern Gfx utilityFlame_utilityFlame_mesh_layer_4[];

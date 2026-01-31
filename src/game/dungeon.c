@@ -67,10 +67,14 @@ struct DungeonObject sTopEnemyList[] = {
     .angle = 0, .pos = {0.f,0.f,0.f}},
     {.bhv = bhvSnufit, .model = MODEL_SNUFIT, .param = 0,
     .angle = 0, .pos = {0.f,0.f,0.f}},
+    {.bhv = bhvUtilityMace, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+    {.bhv = bhvFlamethrower, .model = MODEL_UTILITY_FLAME, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
 };
 
 struct DungeonObject * gDungeonEnemies[3];
-struct DungeonObject * gDungeonAboomboomination[5];
+struct DungeonObject * gDungeonAboomboomination[7];
 
 #include "dungeon_room_data.inc.c"
 
@@ -841,7 +845,7 @@ void dungeon_generate_lv1(void) {
 
     // The dungeon boss is just enemey spam, lol
     gDungeonAboomboomination[0] = &sBottomEnemyList[tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBottomEnemyList)/s)];
-    for (int i = 1; i < 5; i++) {
+    for (int i = 1; i < 7; i++) {
         gDungeonAboomboomination[i] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
     }
 
