@@ -1,3 +1,4 @@
+#include "levels/rogue/rmemorize/texscroll.inc.h"
 #include "levels/rogue/rthwomps/texscroll.inc.h"
 #include "levels/rogue/rfacade2/texscroll.inc.h"
 #include "levels/rogue/rboss/texscroll.inc.h"

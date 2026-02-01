@@ -1,0 +1,12 @@
+extern const GeoLayout rmemorizepanel1_geo[];
+extern u8 rmemorizepanel1_smb3corner_i8[];
+extern u8 rmemorizepanel1_desertTrim_rgba16[];
+extern Vtx rmemorizepanel1_rmemorizepanel1_mesh_layer_1_vtx_0[84];
+extern Gfx rmemorizepanel1_rmemorizepanel1_mesh_layer_1_tri_0[];
+extern Vtx rmemorizepanel1_rmemorizepanel1_mesh_layer_1_vtx_1[30];
+extern Gfx rmemorizepanel1_rmemorizepanel1_mesh_layer_1_tri_1[];
+extern Gfx mat_rmemorizepanel1_smb3corner[];
+extern Gfx mat_revert_rmemorizepanel1_smb3corner[];
+extern Gfx mat_rmemorizepanel1_desertTrim[];
+extern Gfx mat_revert_rmemorizepanel1_desertTrim[];
+extern Gfx rmemorizepanel1_rmemorizepanel1_mesh_layer_1[];

@@ -1148,3 +1148,40 @@ struct DungeonRoomVariant sRoomThwomps = {
     .requiredLoot = &sRoomThwompsRequiredLoot,
     .generateOnce = TRUE,
 };
+
+// Garden Hallway Room
+
+struct DungeonRoomVariantCellList sRoomMemorizeCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0},
+
+    {.x = 0, .y = -1},
+    {.end = TRUE},
+};
+
+struct DungeonObject sRoomMemorizeObjectList[] = {
+    {.bhv = bhvStaticObject, .model = MODEL_NONE, .param = 0,
+    .angle = 0x0, .pos = {0.f,0.f,0.f}},
+    {.bhv = bhvStar, .model = MODEL_STAR, .param = 0,
+    .angle = 0x0, .pos = {-39.099f,0.f,2.f}},
+    {.end = TRUE},
+};
+
+Vec4f sRoomMemorizeLootLocations[] = {
+    {-35.9208f,-5.39018f,-3.69411f,90.0f},
+};
+
+struct DungeonRoomVariant sRoomMemorize = {
+    .minimapDL = &rmapgarden_rmapgarden_mesh,
+
+    .cellList = &sRoomMemorizeCellList,
+    .model = MODEL_ROOM_MEMORIZE,
+    .collision = rmemorize_1_collision,
+    .objectList = &sRoomMemorizeObjectList,
+    .maxLootCt = 0,
+    .starCt = 1,
+    .lootLocations = &sRoomMemorizeLootLocations,
+    .requiredLoot = NULL,
+    .generateOnce = TRUE,
+};

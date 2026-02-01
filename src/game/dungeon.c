@@ -79,6 +79,9 @@ struct DungeonObject * gDungeonAboomboomination[7];
 #include "dungeon_room_data.inc.c"
 
 struct DungeonRoomVariant * sLv1RoomVariantList[] = {
+    // Freebie Star Room (Determined upon LV gen)
+    NULL,
+
     // Transition Rooms
     &sRoomMiniJunc1,
     &sRoomMiniJunc2,
@@ -91,7 +94,6 @@ struct DungeonRoomVariant * sLv1RoomVariantList[] = {
     &sRoomTreasure,
 
     // Challenge Rooms
-    &sRoomPush,
     &sRoomGardenHall,
     &sRoomVanishHop,
     &sRoomWallJump,
@@ -209,6 +211,11 @@ s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
                 continue;
             }
 
+            // Do not put stars in star rooms. Very lame!
+            if (loot == MOD_NONMOD_STAR && sDungeonRoomList[chosen_room_index].variant->starCt > 0) {
+                continue;
+            }
+
             sDungeonRoomList[chosen_room_index].loot[sDungeonRoomList[chosen_room_index].lootCount] = loot;
             sDungeonRoomList[chosen_room_index].lootCount++;
             sDungeonLootSlotsAvailible --;
@@ -223,6 +230,11 @@ s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
 
             // Do not put stars in treasure rooms. Lame.
             if (loot == MOD_NONMOD_STAR && sDungeonRoomList[i].variant == &sRoomTreasure) {
+                continue;
+            }
+
+            // Do not put stars in star rooms. Very lame!
+            if (loot == MOD_NONMOD_STAR && sDungeonRoomList[chosen_room_index].variant->starCt > 0) {
                 continue;
             }
 
@@ -834,6 +846,24 @@ void dungeon_shuffle_wood_room_treasure(void) {
 }
 
 void dungeon_generate_lv1(void) {
+    // Determine freebie star
+    if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
+        // Push block puzzle
+        sLv1RoomVariantList[0] = &sRoomPush;
+    } else {
+        // Memorize Puzzle
+        sLv1RoomVariantList[0] = &sRoomMemorize;
+
+        // Variant 1 or 2
+        if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
+            sRoomMemorize.collision = rmemorize_1_collision;
+            sRoomMemorize.objectList[0].model = MODEL_ROOM_MEMORIZE_PANEL_1;
+        } else {
+            sRoomMemorize.collision = rmemorize_2_collision;
+            sRoomMemorize.objectList[0].model = MODEL_ROOM_MEMORIZE_PANEL_2;
+        }
+    }
+
     // Level 1 use a fixed tree type
     gDungeonTreeModel = MODEL_DUNGEON_TREE_3;
 
@@ -867,7 +897,7 @@ void dungeon_generate_lv1(void) {
     // Place the boss key
     dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
 
-    if (sDungeonForceRegen || sDungeonRoomCount < 9 || sDungeonInventory[MOD_NONMOD_STAR] < 2) {
+    if (sDungeonForceRegen || sDungeonRoomCount < 9 || sDungeonInventory[MOD_NONMOD_STAR] < 3) {
         goto redo_generate;
     }
 }

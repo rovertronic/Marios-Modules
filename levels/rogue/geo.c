@@ -52,3 +52,6 @@
 #include "rlobby2/geo.inc.c"
 #include "rpush/geo.inc.c"
 #include "rthwomps/geo.inc.c"
+#include "rmemorize/geo.inc.c"
+#include "rmemorizepanel1/geo.inc.c"
+#include "rmemorizepanel2/geo.inc.c"

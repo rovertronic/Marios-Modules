@@ -612,6 +612,7 @@ Gfx mat_revert_utilityMace_shinymetal[] = {
 };
 
 Gfx mat_utilityMace_f3dlite_material_003[] = {
+	gsSPClearGeometryMode(G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(0, 0, 0, TEXEL0, 0, 0, 0, TEXEL0, 0, 0, 0, TEXEL0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -625,6 +626,7 @@ Gfx mat_utilityMace_f3dlite_material_003[] = {
 };
 
 Gfx mat_revert_utilityMace_f3dlite_material_003[] = {
+	gsSPSetGeometryMode(G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsSPEndDisplayList(),
