@@ -10,8 +10,8 @@
 #include "game/level_update.h"
 
 #include "levels/scripts.h"
-#include "actors/common1.h"
 
+#include "actors/common1.h"
 #include "make_const_nonconst.h"
 #include "levels/rogue/header.h"
 
@@ -32,15 +32,13 @@ const LevelScript level_rogue_entry[] = {
 	JUMP_LINK(script_func_global_1), 
 	JUMP_LINK(script_func_global_2), 
 	JUMP_LINK(script_func_global_18), 
-
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_DOORHOLE, doorhole_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_DOORHOLE_COVERED, doorhole_covered_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_CARPET_POINT, carpetPoint_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_BALDI_DOOR, baldidoor_geo), 
-	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_DOOR, dungeondoor_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_DOOR_LOCKED, dungeondoorlocked_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_CLOCKHAND, dungeonclockhand_geo),
-
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_DOOR, dungeondoor_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_DOOR_LOCKED, dungeondoorlocked_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_CLOCKHAND, dungeonclockhand_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_MINIJUNC, minijunc_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SHORT_HALL, smallhall_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_LOBBY, rlobby_geo), 
@@ -52,41 +50,40 @@ const LevelScript level_rogue_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BTCM, rbtcm_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BALDI, baldi_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_WOOD, rboxes_geo), 
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SPACEWORLD, spaceworld_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_FACADE1, facade1_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_GARDENHALL, rgardenhall_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_FURNACE, rfurnace_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_GRINDR, rgrindr_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_CAVEJUMP, rcavejump_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SPLITHALL, rsplithall_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_AUTOMAZE, rmaze_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SUPER_TREASURE, rsupertreasure_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SILVER_PILLAR, rsilverpillar_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BNS, rbns_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_CLOCK, rclock_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RED_COIN, rredcoin_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BOSS, rboss_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_FACADE2, rfacade2_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_LOBBY2, rlobby2_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_PUSH, rpush_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_THWOMPS, rthwomps_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_MEMORIZE, rmemorize_geo),
-
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_MEMORIZE_PANEL_1, rmemorizepanel1_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_MEMORIZE_PANEL_2, rmemorizepanel2_geo),
-
-	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_JUNCBLOCK, juncblock_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_CLOCKBLOCK, clockblock_geo),
-
-	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_1, bubbly_tree_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_2, spiky_tree_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_3, palm_tree_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SPACEWORLD, spaceworld_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_FACADE1, facade1_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_GARDENHALL, rgardenhall_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_FURNACE, rfurnace_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_GRINDR, rgrindr_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_CAVEJUMP, rcavejump_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SPLITHALL, rsplithall_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_AUTOMAZE, rmaze_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SUPER_TREASURE, rsupertreasure_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_SILVER_PILLAR, rsilverpillar_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BNS, rbns_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_CLOCK, rclock_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RED_COIN, rredcoin_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_BOSS, rboss_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_FACADE2, rfacade2_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_LOBBY2, rlobby2_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_PUSH, rpush_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_THWOMPS, rthwomps_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_MEMORIZE, rmemorize_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_MEMORIZE_PANEL_1, rmemorizepanel1_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_MEMORIZE_PANEL_2, rmemorizepanel2_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_JUNCBLOCK, juncblock_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_CLOCKBLOCK, clockblock_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_1, bubbly_tree_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_2, spiky_tree_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_3, palm_tree_geo), 
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 
 	AREA(1, rogue_area_1),
 		WARP_NODE(0x0A, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
+		WARP_NODE(0x0B, LEVEL_ROGUE, 0x01, 0x0B, WARP_NO_CHECKPOINT),
 		MARIO_POS(0x01, 0, 0, 0, 0),
+		OBJECT(MODEL_NONE, 0, 6581, 0, 0, 0, 0, (0x0B << 16), bhvFadingWarp),
 		OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, (0x0A << 16), bhvAirborneWarp),
 		TERRAIN(rogue_area_1_collision),
 		ROOMS(rogue_area_1_collision_rooms),

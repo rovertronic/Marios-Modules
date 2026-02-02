@@ -42,6 +42,8 @@ u8 sDungeonTotalInventory[MOD_COUNT]; // Tally of previous levels
 u8 sDungeonForceRegen = FALSE;
 u8 sDungeonEasterEggGenerated = FALSE;
 
+u8 gDungeonNeedsToGenerate = FALSE;
+
 s8 sDirectionList[4][2] = {
     { 1, 0}, // Right
     { 0, 1}, // Down
@@ -617,6 +619,8 @@ void dungeon_spawn_room_objects(void) {
         roomObj->dungeonRoom[0] = &sDungeonRoomList[i];
         roomObj->dungeonRoom[1] = &sDungeonRoomList[i];
 
+        sDungeonRoomList[i].obj = roomObj;
+
         if (sDungeonRoomList[i].variant->model == MODEL_ROOM_MINIJUNC) {
             for (int j = 0; j < 4; j ++) {
                 if (dungeon_door_on_other_side(sDungeonRoomList[i].xorigin,sDungeonRoomList[i].yorigin,j)) {
@@ -1122,4 +1126,8 @@ void dungeon_print_minimap(f32 mapZoom) {
     }
 
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+}
+
+s32 is_level_dungeon(void) {
+    return (gCurrLevelNum == LEVEL_ROGUE);
 }

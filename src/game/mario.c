@@ -79,6 +79,8 @@ u32 get_mario_sound_id(int marioSoundEnum) {
     return sMarioCharacterSoundTable[marioSoundEnum][characterId];
 }
 
+int gWarpDamage = 0;
+
 /**************************************************
  *                    ANIMATIONS                  *
  **************************************************/
@@ -1844,6 +1846,16 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
     vec3f_get_lateral_dist(gMarioState->prevPos, gMarioState->pos, &gMarioState->lateralSpeed);
     vec3f_copy(gMarioState->prevPos, gMarioState->pos);
 
+    if (gDungeonMarioRoom && gDungeonMarioRoom->variant->safe) {
+        struct Object * safeWarp = cur_obj_nearest_object_with_behavior(bhvFadingWarp);
+        safeWarp->oPosX = gDungeonMarioRoom->obj->oPosX;
+        safeWarp->oPosZ = gDungeonMarioRoom->obj->oPosZ;
+        safeWarp->oPosY = gDungeonMarioRoom->obj->oPosY + 400.0f;
+        vec3f_copy(&safeWarp->oHomeVec, &safeWarp->oPosVec);
+
+        safeWarp->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
+    }
+
     if (gMarioState->action) {
 #ifdef ENABLE_DEBUG_FREE_MOVE
         if (
@@ -1945,7 +1957,8 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
  **************************************************/
 
 void init_mario(void) {
-    if (gCurrLevelNum == LEVEL_ROGUE) {
+    if (gDungeonNeedsToGenerate) {
+        // Sets false later in this function
         dungeon_generate(0);
     }
 
@@ -1971,6 +1984,12 @@ void init_mario(void) {
     gMarioState->hurtCounter = 0;
     gMarioState->healCounter = 0;
 
+    if (gWarpDamage > 0) {
+        // Respawn from fall, take damage
+        gMarioState->hurtCounter = 8;
+        gWarpDamage = 0;
+    }
+
     gMarioState->capTimer = 0;
     gMarioState->quicksandDepth = 0.0f;
 
@@ -1994,8 +2013,9 @@ void init_mario(void) {
         gMainMenuState = MAIN_MENU_CLOSED;
     }
 
-    if (gCurrLevelNum == LEVEL_ROGUE) {
+    if (gDungeonNeedsToGenerate) {
         vec3f_copy(gMarioState->pos,gDungeonSpawnLocation);
+        gDungeonNeedsToGenerate = FALSE;
     }
 
     vec3f_copy(gMarioState->prevPos, gMarioState->pos);

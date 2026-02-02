@@ -1867,7 +1867,7 @@ s32 is_item_in_array(s8 item, s8 *array) {
 }
 
 void bhv_init_room(void) {
-    if (gCurrLevelNum == LEVEL_ROGUE) {return;}
+    if (is_level_dungeon()) {return;}
     o->oRoom = get_room_at_pos(o->oPosX, o->oPosY, o->oPosZ);
 }
 

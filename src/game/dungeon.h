@@ -11,6 +11,7 @@ extern struct DungeonObject * gDungeonEnemies[3];
 extern struct DungeonObject * gDungeonAboomboomination[7];
 extern u16 gDungeonTreeModel;
 extern Vec3f gDungeonSpawnLocation;
+extern u8 gDungeonNeedsToGenerate;
 
 #define DOOR_RIGHT (1<<0)
 #define DOOR_DOWN  (1<<1)
@@ -52,6 +53,7 @@ struct DungeonRoomVariant {
     u8 generateOnce:1;
     u8 easterEgg:1;
     u8 needKey:1;
+    u8 safe:1;
     u8 rarity;
 };
 
@@ -84,5 +86,7 @@ void dungeon_set_mario_room(void);
 s32 dungeon_room_is_visible(struct DungeonRoom * room);
 void dungeon_print_minimap(f32 mapZoom);
 void dungeon_spawn_room_red_coins(void);
+
+s32 is_level_dungeon(void);
 
 #endif

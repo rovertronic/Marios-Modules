@@ -1201,7 +1201,7 @@ void bhv_dungeon_manager(void) {
 
 void bhv_volume(void) {
     f32 scale = (GET_BPARAM4(o->oBehParams)+1)*400.0f;
-    if (gCurrLevelNum == LEVEL_ROGUE) {
+    if (is_level_dungeon()) {
         scale*=.5f;
     }
 
@@ -1424,7 +1424,7 @@ void bhv_module_collect(void) {
 
 void bhv_key_open(void) {
     struct Object * keyDoor = cur_obj_nearest_object_with_behavior(bhvBdoor);
-    if (gCurrLevelNum == LEVEL_ROGUE) {
+    if (is_level_dungeon()) {
         keyDoor = cur_obj_nearest_object_with_behavior(bhvDungeonDoorLocked);
     }
 

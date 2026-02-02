@@ -26,6 +26,7 @@ struct DungeonRoomVariant sRoomHall = {
     .maxLootCt = 0,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
+    .safe = TRUE,
 
     .rarity = 2,
 };
@@ -77,6 +78,7 @@ struct DungeonRoomVariant sRoomMiniJunc2 = {
     .maxLootCt = 0,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
+    .safe = TRUE,
 
     .rarity = 4,
 };
@@ -109,6 +111,7 @@ struct DungeonRoomVariant sRoomLobby = {
     .lootLocations = &sRoomLobbyLootLocations,
     .requiredLoot = NULL,
     .generateOnce = TRUE,
+    .safe = TRUE,
 
     .rarity = 2,
 };
@@ -136,6 +139,7 @@ struct DungeonRoomVariant sRoomTreasure = {
     .lootLocations = &sRoomTreasureLootLocations,
     .requiredLoot = NULL,
     .generateOnce = FALSE,
+    .safe = TRUE,
 };
 
 Vec4f sRoomSuperTreasureLootLocations[] = {
@@ -700,6 +704,7 @@ struct DungeonRoomVariant sRoomSplitHall = {
     .lootLocations = NULL,
     .requiredLoot = NULL,
     .generateOnce = TRUE,
+    .safe = TRUE,
 
     .rarity = 2,
 };
@@ -1048,6 +1053,7 @@ struct DungeonRoomVariant sRoomLobby2 = {
     .lootLocations = NULL,
     .requiredLoot = NULL,
     .generateOnce = TRUE,
+    .safe = TRUE,
 };
 
 // Box Push Freebie Star Room

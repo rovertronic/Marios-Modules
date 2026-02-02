@@ -27,6 +27,7 @@
 #include "seq_ids.h"
 #include "sound_init.h"
 #include "rumble_init.h"
+#include "dungeon.h"
 
 static struct Object *sIntroWarpPipeObj;
 static struct Object *sEndPeachObj;
@@ -755,7 +756,7 @@ s32 act_quicksand_death(struct MarioState *m) {
             play_sound_if_no_flag(m, SOUND_MARIO_WAAAOOOW, MARIO_ACTION_SOUND_PLAYED);
         }
         if ((m->quicksandDepth += 5.0f) >= 180.0f) {
-            level_trigger_warp(m, WARP_OP_DEATH);
+            level_trigger_warp(m, WARP_OP_WARP_FLOOR);
             m->actionState = ACT_STATE_QUICKSAND_DEATH_DEAD;
         }
     }
@@ -768,12 +769,14 @@ s32 act_eaten_by_bubba(struct MarioState *m) {
     play_sound_if_no_flag(m, SOUND_MARIO_DYING, MARIO_ACTION_SOUND_PLAYED);
     set_mario_animation(m, MARIO_ANIM_A_POSE);
     m->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
-#ifdef BREATH_METER
-    m->breath = 0xFF;
-#endif
-    m->health = 0xFF;
+
     if (m->actionTimer++ == 60) {
-        level_trigger_warp(m, WARP_OP_DEATH);
+        if (is_level_dungeon()) {
+            level_trigger_warp(m, WARP_OP_WARP_FLOOR);
+        } else {
+            level_trigger_warp(m, WARP_OP_DEATH);
+            m->health = 0xFF;
+        }
     }
     return FALSE;
 }

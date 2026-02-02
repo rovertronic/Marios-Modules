@@ -35,6 +35,7 @@
 #include "debug.h"
 #include "module.h"
 #include "behavior_data.h"
+#include "dungeon.h"
 
 #include "config.h"
 
@@ -780,6 +781,13 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 break;
 
             case WARP_OP_WARP_FLOOR:
+                if (is_level_dungeon()) {
+                    gWarpDamage = 4;
+                    sSourceWarpNodeId = 0x0B;
+                    sDelayedWarpTimer = 20;
+                    play_transition(WARP_TRANSITION_FADE_INTO_CIRCLE, sDelayedWarpTimer, 0x00, 0x00, 0x00);
+                    break;
+                }
                 if ((m->floor) && (m->floor->force & 0xFF)) {
                     sSourceWarpNodeId = m->floor->force & 0xFF;
                 } else {
@@ -1086,7 +1094,6 @@ s32 play_mode_normal(void) {
                     gModuleTutorialState = TUTORIAL_DONE;
                     spawn_object(gMarioObject,MODEL_EXPLOSION,bhvExplosion);
                     set_mario_action(gMarioState, ACT_EATEN_BY_BUBBA, 0);
-                    gMarioState->health = 0;
                     return FALSE;
                 }
 
@@ -1270,6 +1277,10 @@ s32 init_level(void) {
 #ifdef PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
+
+    if (is_level_dungeon()) {
+        gDungeonNeedsToGenerate = TRUE;
+    }
 
     set_play_mode(PLAY_MODE_NORMAL);
     init_module_inventory();

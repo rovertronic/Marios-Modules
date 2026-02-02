@@ -7,6 +7,7 @@
 #include "types.h"
 
 extern s16 gNearestRedCoinDist;
+extern int gWarpDamage;
 
 enum marioSounds {
     MARIO_SND_YAH_WAH_HOO,
