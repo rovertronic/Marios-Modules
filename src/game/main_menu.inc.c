@@ -41,7 +41,9 @@ void load_marios_modules(void) {
         gMarioState->numKeys = gMariosModulesSave.file[gMariosModulesSaveIndex].keys;
         gMarioState->numCoins = gMariosModulesSave.file[gMariosModulesSaveIndex].coins;
 
-        tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
+        if (gCurrLevelNum != LEVEL_ROGUE) {
+            tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
+        }
     }
 }
 

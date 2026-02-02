@@ -234,7 +234,7 @@ s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
             }
 
             // Do not put stars in star rooms. Very lame!
-            if (loot == MOD_NONMOD_STAR && sDungeonRoomList[chosen_room_index].variant->starCt > 0) {
+            if (loot == MOD_NONMOD_STAR && sDungeonRoomList[i].variant->starCt > 0) {
                 continue;
             }
 
