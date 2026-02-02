@@ -472,12 +472,14 @@ void logic_main_menu(void) {
                         gMainMenuState = MAIN_MENU_OPENING_CUTSCENE;
                         gMariosModulesSave.file[gMariosModulesSaveIndex].seed = (sMainMenuSeedShaker[0] | (sMainMenuSeedShaker[1] << 16));
                         tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
+                        gMariosModulesSave.file[gMariosModulesSaveIndex].level = -1;
                         saveBinTotal[SAVE_BIN_CHESTS] = 0;
                         play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
                         break;
                     case 2:
                         gMainMenuWarpLocation = 4;
                         gMariosModulesSave.file[gMariosModulesSaveIndex].seed = (sMainMenuSeedShaker[0] | (sMainMenuSeedShaker[1] << 16));
+                        gMariosModulesSave.file[gMariosModulesSaveIndex].level = 0;
                         level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
                         gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;
                         gModuleTutorialState = TUTORIAL_DONE;

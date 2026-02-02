@@ -1780,9 +1780,27 @@ void bhv_aboomboomination(void) {
                     obj_ride_obj(stackedEnemy[i],stackedEnemy[i-1]);
                 }
                 stackedEnemy[i]->oPosY += 1500.0f;
+                SET_BPARAM4(stackedEnemy[i]->oBehParams,1);
             }
             o->oAction++;
-        break;
+            break;
+        case 2:;
+            int kild = TRUE;
+            for (int i = 0; i < 5; i++) {
+                struct Object * isAlive = cur_obj_nearest_object_with_behavior(gDungeonAboomboomination[i]->bhv);
+                if (isAlive && GET_BPARAM4(isAlive->oBehParams) != 0) {
+                    kild = FALSE;
+                }
+            }
+            if (kild) {
+                o->oAction++;
+                struct Object * dungeonExitItem = spawn_default_star(o->oPosX,o->oPosY,o->oPosZ);
+                SET_BPARAM4(dungeonExitItem->oBehParams,1);
+            }
+            break;
+        case 3:
+
+            break;
     }
 }
 

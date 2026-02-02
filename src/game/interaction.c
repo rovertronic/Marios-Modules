@@ -805,6 +805,10 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
             }
         }
 
+        if (GET_BPARAM4(obj->oBehParams) == 1) {
+            noExit = FALSE;
+        }
+
         if (noExit) {
             starGrabAction = ACT_STAR_DANCE_NO_EXIT;
         }
@@ -829,8 +833,14 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
 
         gStarModelLastCollected = obj_get_model_id(obj);
 
-        obj_save_bin_write(obj);
-        m->numStars = save_bin_get_flag_total(SAVE_BIN_STARS);
+        if (GET_BPARAM4(obj->oBehParams) == 1) {
+            gMariosModulesSave.file[gMariosModulesSaveIndex].level++;
+            bzero(&gMariosModulesSave.file[gMariosModulesSaveIndex].bin[0],4*SAVE_BIN_COUNT);
+            save_marios_modules(gVec3fZero);
+        } else {
+            obj_save_bin_write(obj);
+            m->numStars = save_bin_get_flag_total(SAVE_BIN_STARS);
+        }
 
         if (!noExit) {
             drop_queued_background_music();

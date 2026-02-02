@@ -1852,8 +1852,6 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
         safeWarp->oPosZ = gDungeonMarioRoom->obj->oPosZ;
         safeWarp->oPosY = gDungeonMarioRoom->obj->oPosY + 400.0f;
         vec3f_copy(&safeWarp->oHomeVec, &safeWarp->oPosVec);
-
-        safeWarp->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
     }
 
     if (gMarioState->action) {
@@ -1957,9 +1955,15 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
  **************************************************/
 
 void init_mario(void) {
+    if (gMainMenuState == MAIN_MENU_LEVEL_WARP_CONTINUE) {
+        //mainmenustate set to none later in this function
+        load_marios_modules();
+        update_settings();
+    }
+
     if (gDungeonNeedsToGenerate) {
         // Sets false later in this function
-        dungeon_generate(0);
+        dungeon_generate(gMariosModulesSave.file[gMariosModulesSaveIndex].level);
     }
 
     gMarioState->bonkSignal = FALSE;
@@ -2007,8 +2011,6 @@ void init_mario(void) {
     vec3s_to_vec3f(gMarioState->pos, gMarioSpawnInfo->startPos);
 
     if (gMainMenuState == MAIN_MENU_LEVEL_WARP_CONTINUE) {
-        load_marios_modules();
-        update_settings();
         marios_modules_savefile_load_position();
         gMainMenuState = MAIN_MENU_CLOSED;
     }
