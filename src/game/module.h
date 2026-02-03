@@ -375,6 +375,7 @@ s32 save_bin_get_flag_total(int type);
 s32 save_bin_get_max_total(int type);
 
 void save_marios_modules(Vec3f pos);
+void save_marios_modules_coins_lives(void);
 void load_marios_modules(void);
 void marios_modules_savefile_load_position(void);
 

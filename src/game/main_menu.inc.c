@@ -6,6 +6,13 @@ int gMainMenuTitleAnimationIndex = -1;
 u8 sMainMenuShowTitle = FALSE;
 int sMainMenuModuleTimer = 0;
 
+void save_marios_modules_coins_lives(void) {
+    int size = sizeof(struct mariosModulesSaveGame);
+    gMariosModulesSave.file[gMariosModulesSaveIndex].coins = gMarioState->numCoins;
+    gMariosModulesSave.save_magic = SAVE_MAGIC;
+    nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
+}
+
 void save_marios_modules(Vec3f pos) {
     int size = sizeof(struct mariosModulesSaveGame);
 

@@ -769,6 +769,9 @@ void geo_process_generated_list(struct GraphNodeGenerated *node) {
 void geo_process_background(struct GraphNodeBackground *node) {
     Gfx *list = NULL;
 
+    if (gRenderPass == 1) {
+        return NULL;
+    }
     if (node->fnNode.func != NULL) {
         list = node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node,
                                  (struct AllocOnlyPool *) gMatStack[gMatStackIndex]);

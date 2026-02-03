@@ -864,7 +864,7 @@ s8 lootTableTier1[] = {MOD_JUMP, MOD_JUMP, MOD_POW, MOD_GROUND_UPG, MOD_ATTACK, 
 //1x hover module, 1x repeat, 1x cap module, 1x tornado, 1x crouchact, 1x upg+2, 1x grav flip, 1x defense, 1x lowgrav
 s8 lootTableTier2[] = {MOD_PLATFORM, MOD_REPEAT, MOD_CAP, MOD_TORNADO, MOD_ZACTION, MOD_POW2, MOD_FLIP_VEL, MOD_DEFENSE, MOD_LOW_GRAVITY};
 
-s8 sModuleChestLabelBuffer[10];
+s8 sModuleChestLabelBuffer[20];
 void bhv_moduleLabel(void) {
     if (GET_BPARAM4(o->oBehParams) > 0) {
         o->oBehParams2ndByte = sModuleChestLabelBuffer[GET_BPARAM4(o->oBehParams)];
@@ -898,6 +898,11 @@ void bhv_chest(void) {
 
                 s8 * lootTable = lootTableTier1;
                 u8 lootCount = sizeof(lootTableTier1);
+
+                if (GET_BPARAM3(o->oBehParams) == 2) {
+                    lootTable = lootTableTier2;
+                    lootCount = sizeof(lootTableTier2);
+                }
 
                 randomModule = lootTable[tinymt32_generate_u32(&gGlobalRandomState)%lootCount];
 

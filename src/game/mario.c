@@ -1957,7 +1957,6 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 void init_mario(void) {
     if (gMainMenuState == MAIN_MENU_LEVEL_WARP_CONTINUE) {
         //mainmenustate set to none later in this function
-        load_marios_modules();
         update_settings();
     }
 
@@ -2055,6 +2054,11 @@ void init_mario(void) {
 
     gMarioState->marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
     obj_element_init(gMarioState->marioObj,ELEMENT_NORMAL,50.0f);
+
+    // Baron's Bounty should ALWAYS be random, not deterministic
+    if (gCurrLevelNum == LEVEL_PITSTOP) {
+        tinymt32_init(&gGlobalRandomState,random_u16());
+    }
 }
 
 void init_mario_from_save_file(void) {

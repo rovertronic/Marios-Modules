@@ -778,6 +778,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
 #ifdef PREVENT_DEATH_LOOP
                 m->isDead = TRUE;
 #endif
+                save_marios_modules_coins_lives();
                 break;
 
             case WARP_OP_WARP_FLOOR:
@@ -1285,6 +1286,7 @@ s32 init_level(void) {
     set_play_mode(PLAY_MODE_NORMAL);
     init_module_inventory();
     save_bin_reset();
+    load_marios_modules();
 
     sDelayedWarpOp = WARP_OP_NONE;
     sTransitionTimer = 0;
@@ -1454,6 +1456,7 @@ s32 lvl_set_current_level(UNUSED s16 initOrUpdate, s32 levelNum) {
     if (gCurrCourseNum > COURSE_STAGES_MAX || warpCheckpointActive) {
         return FALSE;
     }
+	if (gCurrLevelNum == LEVEL_PITSTOP) return 0;
 
     return !gDebugLevelSelect;
 }

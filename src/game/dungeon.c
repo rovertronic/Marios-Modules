@@ -141,6 +141,7 @@ struct DungeonRoomVariant * sLv2RoomVariantList[] = {
 };
 
 struct DungeonRoom * dungeon_get_mario_room(void) {
+    if (!is_level_dungeon()) {return NULL;}
     u32 x = (((-gMarioState->pos[0])+32000.f + 1000.f)/2000.f);
     u32 y = (((-gMarioState->pos[2])+32000.f + 1000.f)/2000.f);
     if (sDungeonCellGrid[y][x].id == 0) {return NULL;}
@@ -668,11 +669,13 @@ void dungeon_spawn_room_objects(void) {
                 }
             }
 
+            /*
             if ((tinymt32_generate_u32(&gGlobalRandomState)%2==0)&&sDungeonCoinBalance>=10) {
                 //randomly make chests cost money
                 SET_BPARAM1(chest->oBehParams,10);
                 sDungeonCoinBalance-=10;
             }
+            */
 
             // Raise the star a bit
             if (sDungeonRoomList[i].loot[j] == MOD_NONMOD_STAR) {
