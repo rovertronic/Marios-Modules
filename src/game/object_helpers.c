@@ -1699,7 +1699,7 @@ void obj_set_hitbox(struct Object *obj, struct ObjectHitbox *hitbox) {
         obj->oHealth = hitbox->health;
         obj->oNumLootCoins = hitbox->numLootCoins;
 
-        cur_obj_become_tangible();
+        obj_become_tangible(obj);
     }
 
     obj->hitboxRadius = obj->header.gfx.scale[0] * hitbox->radius;

@@ -1851,8 +1851,9 @@ void bhv_utility_mace(void) {
 
     switch(o->oAction) {
         case 0:
-            o->prevObj = spawn_object(o,MODEL_UTILITY_MACE,bhvStaticObject);
-            o->oMoveAngleYaw = random_u16();
+            o->prevObj = spawn_object(o,MODEL_UTILITY_MACE,bhvMace);
+            o->prevObj->oMoveAngleYaw = random_u16();
+
             o->oAction++;
             break;
         case 1:
@@ -1861,7 +1862,7 @@ void bhv_utility_mace(void) {
             o->prevObj->oPosY = o->oPosY;
             o->prevObj->oFaceAngleYaw = o->oMoveAngleYaw;
 
-            o->oMoveAngleYaw += 0x200;
+            o->oMoveAngleYaw += 0x400;
 
             if (o->objRiding == NULL) {
                 if (o->objRider) {

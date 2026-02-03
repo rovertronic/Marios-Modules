@@ -579,5 +579,6 @@ extern const BehaviorScript bhvDungeonClockHand[];
 extern const BehaviorScript bhvDungeonSpawn[];
 extern const BehaviorScript bhvAboomboomination[];
 extern const BehaviorScript bhvUtilityMace[];
+extern const BehaviorScript bhvMace[];
 
 #endif // BEHAVIOR_DATA_H
