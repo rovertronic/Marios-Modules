@@ -6,10 +6,26 @@ int gMainMenuTitleAnimationIndex = -1;
 u8 sMainMenuShowTitle = FALSE;
 int sMainMenuModuleTimer = 0;
 
+void save_marios_modules_new_game(u32 seed, s8 level) {
+    int size = sizeof(struct mariosModulesSaveGame);
+    int sizeFile = sizeof(struct mariosModulesSaveFile);
+
+    bzero(&gMariosModulesSave.file[gMariosModulesSaveIndex],sizeFile);
+    init_module_inventory();
+    bcopy(&inventory,&gMariosModulesSave.file[gMariosModulesSaveIndex].inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+    bcopy(&inventoryParam,&gMariosModulesSave.file[gMariosModulesSaveIndex].inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
+
+    gMariosModulesSave.save_magic = SAVE_MAGIC;
+    gMariosModulesSave.file[gMariosModulesSaveIndex].seed = seed;
+    gMariosModulesSave.file[gMariosModulesSaveIndex].level = level;
+
+    gMariosModulesSave.file[gMariosModulesSaveIndex].flags = SAVE_FLAG_EXIST;
+    nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
+}
+
 void save_marios_modules_coins_lives(void) {
     int size = sizeof(struct mariosModulesSaveGame);
     gMariosModulesSave.file[gMariosModulesSaveIndex].coins = gMarioState->numCoins;
-    gMariosModulesSave.save_magic = SAVE_MAGIC;
     nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
 }
 
@@ -34,16 +50,25 @@ void save_marios_modules(Vec3f pos) {
     }
 }
 
+void load_marios_modules_data_only(void) {
+    int size = sizeof(struct mariosModulesSaveGame);
+    
+    if (gSramProbe != 0) {
+        nuPiReadSram(0, &gMariosModulesSave, ALIGN8(size));
+    }
+}
+
 void load_marios_modules(void) {
     int size = sizeof(struct mariosModulesSaveGame);
+    int sizeFile = sizeof(struct mariosModulesSaveFile);
 
     if (gSramProbe != 0) {
         nuPiReadSram(0, &gMariosModulesSave, ALIGN8(size));
-        if (gMariosModulesSave.save_magic == SAVE_MAGIC) {
+        if (gMariosModulesSave.file[gMariosModulesSaveIndex].flags & SAVE_FLAG_EXIST) {
             bcopy(&gMariosModulesSave.file[gMariosModulesSaveIndex].inventory,&inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
             bcopy(&gMariosModulesSave.file[gMariosModulesSaveIndex].inventoryParam,&inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
         } else {
-            bzero(&gMariosModulesSave,size);
+            bzero(&gMariosModulesSave.file[gMariosModulesSaveIndex],sizeFile);
         }
         gMarioState->numKeys = gMariosModulesSave.file[gMariosModulesSaveIndex].keys;
         gMarioState->numCoins = gMariosModulesSave.file[gMariosModulesSaveIndex].coins;
@@ -63,6 +88,7 @@ void save_bin_reset(void) {
 }
 
 void obj_save_bin_count(int type) {
+    if (gCurrLevelNum == LEVEL_PITSTOP) {return;}
     s32 id = saveBinTotal[type];
 
     o->saveBinId = id%32;
@@ -72,10 +98,12 @@ void obj_save_bin_count(int type) {
 }
 
 u32 obj_save_bin_read(void) {
+    if (gCurrLevelNum == LEVEL_PITSTOP) {return 0;}
     return (gMariosModulesSave.file[gMariosModulesSaveIndex].bin[o->saveBinType] & (1 << o->saveBinId));
 }
 
 void obj_save_bin_write(struct Object * obj) {
+    if (gCurrLevelNum == LEVEL_PITSTOP) {return;}
     gMariosModulesSave.file[gMariosModulesSaveIndex].bin[obj->saveBinType] |= (1 << obj->saveBinId);
 }
 
@@ -223,22 +251,26 @@ Mario Jams 7: Element.";
 char * sButtonsMain[] = {
     "@G@Play",
     "Credits",
-    "Changelog",
-    NULL,
+    NULL
 };
 
 char * sButtonsFile[] = {
-    "Continue",
-    "New Game",
-    "@P@Rogue-Like",
-    NULL,
+    "File A",
+    "File B",
+    "File C",
+    NULL
 };
 
 char * sButtonsMode[] = {
-    "Standard Game",
-    "@O@Last Stand",
-    "@G@Creative",
-    NULL,
+    "@B@Campaign@@",
+    "@P@Crystal Quest@@",
+    NULL
+};
+
+char * sButtonsFileAction[] = {
+    "Continue",
+    "Erase",
+    NULL
 };
 
 char * sModeDescriptions[] = {
@@ -326,11 +358,11 @@ void render_menu_button_list(char * btns[]) {
     int i = 0;
     char * curStr = btns[0];
     while(curStr != NULL) {
-        print_utf8_boxed(curStr,160,120-(i*22),sMainMenuTransition,TRUE);
+        print_utf8_boxed(curStr,160,140-(i*22),sMainMenuTransition,TRUE);
         if (i == sMainMenuIndex) {
             int sx; int sy; utf8_size(curStr, &sx, &sy);
             sMainMenuHandTargetPos[0] = 165 + (sx/2);
-            sMainMenuHandTargetPos[1] = 105 + (i*22);
+            sMainMenuHandTargetPos[1] = 85 + (i*22);
         }
 
         i++;
@@ -370,6 +402,67 @@ void render_main_menu_big_text(char * str) {
     }
 }
 
+void render_mode_info(int mode) {
+    gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, sMainMenuTransition*160.0f);
+    render_4slice(25,82,33+260,25);
+
+    utf8_print_reset();
+    gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
+    char * str;
+    switch(mode) {
+        case 0:
+            str = "A large introductory hand-crafted level. "
+            "Recommended for starting players! Chapter 1 of the MM2 story.";
+            break;
+        case 1:
+            str = "Mario's Modules roguelite mode. Progress through 3 randomly generated levels."
+            " Only 3 lives, then permadeath. Chapter 2 of the MM2 story.";
+            break;
+    }
+    print_utf8(utf8_autonewline(str,260), 30, 64);
+    gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
+}
+
+void render_menu_fileinfo(void) {
+    char printBuffer[200];
+
+    gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, sMainMenuTransition*160.0f);
+    render_4slice(25,82,33+260,25);
+
+    utf8_print_reset();
+    gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
+    char * str;
+    if (gMariosModulesSave.file[sMainMenuIndex].flags & SAVE_FLAG_EXIST) {
+        char * modeStr = "@B@Campaign@@";
+        char * lvStr = "";
+        if (gMariosModulesSave.file[sMainMenuIndex].level != -1) {
+            modeStr = "@P@Crystal Quest@@";
+            switch(gMariosModulesSave.file[sMainMenuIndex].level) {
+                case 0:
+                    lvStr = "Level: Oasis Outpost (1)\n";
+                    break;
+                case 1:
+                    lvStr = "Level: Warped Castle (2)\n";
+                    break;
+                case 2:
+                    lvStr = "Level: Shattered Planet's Edge (3)\n";
+                    break;
+            }
+        }
+        sprintf(printBuffer,"Mode: %s\n%sSeed: %d",
+        modeStr,
+        lvStr,
+        gMariosModulesSave.file[sMainMenuIndex].seed);
+        str = &printBuffer;
+    } else {
+        str = "@O@New File";
+    }
+    print_utf8(str, 30, 64);
+    gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
+}
+
 void render_main_menu(void) {
     switch(gMainMenuState) {
         case MAIN_MENU_TITLE:
@@ -381,14 +474,28 @@ void render_main_menu(void) {
             render_menu_button_list(&sButtonsMain);
             break;
         case MAIN_MENU_FILE:
+            print_utf8_boxed("Select a file.",160,180,sMainMenuTransition,TRUE);
             render_main_menu_hand();
             render_menu_button_list(&sButtonsFile);
+
+            render_menu_fileinfo();
+            break;
+        case MAIN_MENU_MODE:
+            print_utf8_boxed("Select a mode.",160,180,sMainMenuTransition,TRUE);
+            render_main_menu_hand();
+            render_menu_button_list(&sButtonsMode);
+
+            render_mode_info(sMainMenuIndex);
             break;
         case MAIN_MENU_CHANGELOG:
             render_main_menu_big_text(sChangelogStr);
             break;
         case MAIN_MENU_CREDITS:
             render_main_menu_big_text(sCreditsStr);
+            break;
+        case MAIN_MENU_FILE_ACTION:
+            render_main_menu_hand();
+            render_menu_button_list(&sButtonsFileAction);
             break;
     }
 }
@@ -413,6 +520,7 @@ void logic_main_menu(void) {
     if (gMainMenuState != gMainMenuTargetState) {
         sMainMenuTransition -= .1f;
         if (sMainMenuTransition <= 0.0f) {
+            sMainMenuIndex = 0;
             sMainMenuTransition = 0.0f;
             gMainMenuState = gMainMenuTargetState;
         }
@@ -446,10 +554,11 @@ void logic_main_menu(void) {
             if (sMainMenuModuleTimer++ >= 10) {
                 gMainMenuTargetState = MAIN_MENU_MAIN;
                 sMainMenuModuleTimer = 0;
+                load_marios_modules_data_only();
             }
             break;
         case MAIN_MENU_MAIN:
-            main_menu_handle_scroll(3);
+            main_menu_handle_scroll(2);
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
                 switch (sMainMenuIndex) {
                     case 0:
@@ -464,33 +573,68 @@ void logic_main_menu(void) {
                 }
             }
             break;
-        case MAIN_MENU_FILE:
+        case MAIN_MENU_FILE:;
             main_menu_handle_scroll(3);
+            if (gPlayer1Controller->buttonPressed & (B_BUTTON)) {
+                gMainMenuTargetState = MAIN_MENU_MAIN;
+            }
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                gMariosModulesSaveIndex = sMainMenuIndex;
+                if (gMariosModulesSave.file[sMainMenuIndex].flags & SAVE_FLAG_EXIST) {
+                    gMainMenuTargetState = MAIN_MENU_FILE_ACTION;
+                } else {
+                    gMainMenuTargetState = MAIN_MENU_MODE;
+                }
+            }
+            break;
+        case MAIN_MENU_MODE:;
+            u32 seed = sMainMenuSeedShaker[0] | (sMainMenuSeedShaker[1] << 16);
+            main_menu_handle_scroll(2);
+            if (gPlayer1Controller->buttonPressed & (B_BUTTON)) {
+                gMainMenuTargetState = MAIN_MENU_FILE;
+                break;
+            }
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
                 switch (sMainMenuIndex) {
                     case 0:
-                        gMainMenuWarpLocation = 2;
-                        level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
-                        gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;
-                        gModuleTutorialState = TUTORIAL_DONE;
-                        break;
-                    case 1:
                         gMainMenuTargetState = MAIN_MENU_OPENING_CUTSCENE;
                         gMainMenuState = MAIN_MENU_OPENING_CUTSCENE;
-                        gMariosModulesSave.file[gMariosModulesSaveIndex].seed = (sMainMenuSeedShaker[0] | (sMainMenuSeedShaker[1] << 16));
-                        tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
-                        gMariosModulesSave.file[gMariosModulesSaveIndex].level = -1;
                         saveBinTotal[SAVE_BIN_CHESTS] = 0;
                         play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
+                        save_marios_modules_new_game(seed,-1);
+                        tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
                         break;
-                    case 2:
+                    case 1:
                         gMainMenuWarpLocation = 4;
-                        gMariosModulesSave.file[gMariosModulesSaveIndex].seed = (sMainMenuSeedShaker[0] | (sMainMenuSeedShaker[1] << 16));
-                        gMariosModulesSave.file[gMariosModulesSaveIndex].level = 0;
+                        level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
+                        gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;
+                        gModuleTutorialState = TUTORIAL_DONE;
+                        save_marios_modules_new_game(seed,0);
+                        break;
+                }
+            }
+            break;
+        case MAIN_MENU_FILE_ACTION:
+            main_menu_handle_scroll(2);
+            if (gPlayer1Controller->buttonPressed & (B_BUTTON)) {
+                gMainMenuTargetState = MAIN_MENU_FILE;
+                break;
+            }
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                switch (sMainMenuIndex) {
+                    case 0:
+                        if (gMariosModulesSave.file[gMariosModulesSaveIndex].level != -1) {
+                            // Roguelite
+                            gMainMenuWarpLocation = 4;
+                        } else {
+                            // Campaign
+                            gMainMenuWarpLocation = 2;
+                        }
                         level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
                         gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;
                         gModuleTutorialState = TUTORIAL_DONE;
                         break;
+                    break;
                 }
             }
             break;

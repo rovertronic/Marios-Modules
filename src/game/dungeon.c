@@ -1134,3 +1134,8 @@ void dungeon_print_minimap(f32 mapZoom) {
 s32 is_level_dungeon(void) {
     return (gCurrLevelNum == LEVEL_ROGUE);
 }
+
+void dungeon_clear_exploration_flags(void) {
+    sDungeonDiscoveredFlags[0] = 0;
+    sDungeonDiscoveredFlags[1] = 0;
+}

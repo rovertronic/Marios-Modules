@@ -266,7 +266,8 @@ struct mariosModulesSaveFile {
     u32 seed;
 };
 
-#define SAVE_FLAG_PASSIVE (1 << 0)
+#define SAVE_FLAG_EXIST   (1 << 0)
+#define SAVE_FLAG_PASSIVE (1 << 1)
 
 struct mariosModulesSaveGame {
     struct mariosModulesSaveFile file[3];
@@ -290,10 +291,12 @@ enum {
     MAIN_MENU_TITLE_TRANSITION_2,
     MAIN_MENU_MAIN,
     MAIN_MENU_FILE,
+    MAIN_MENU_MODE,
     MAIN_MENU_CREDITS,
     MAIN_MENU_CHANGELOG,
     MAIN_MENU_OPENING_CUTSCENE,
     MAIN_MENU_LEVEL_WARP_CONTINUE,
+    MAIN_MENU_FILE_ACTION,
     MAIN_MENU_CLOSED,
 };
 
