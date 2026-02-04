@@ -261,6 +261,7 @@ struct mariosModulesSaveFile {
     u16 coins;
     u8 keys;
     u8 lives;
+    u8 accumulatedStars; // Stars = save bin stars + accum stars from prev levels
     s8 level;
     u32 flags;
     u32 room_discover_flags;
@@ -377,6 +378,7 @@ void obj_save_bin_write(struct Object * obj);
 void obj_save_bin_count(int type);
 s32 save_bin_get_flag_total(int type);
 s32 save_bin_get_max_total(int type);
+s32 save_bin_get_star_all_levels(void);
 
 void save_marios_modules(Vec3f pos);
 void save_marios_modules_coins_lives(void);

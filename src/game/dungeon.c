@@ -938,7 +938,7 @@ void dungeon_generate_lv2(void) {
     dungeon_create_room(&sRoomFacade1, 0, 2, 16, 0);
 
     // Generate dungeon rooms
-    sDungeonTargetRoomCount = 63;
+    sDungeonTargetRoomCount = 45;
     dungeon_generate_rooms_at_doors(sLv2RoomVariantList,sizeof(sLv2RoomVariantList));
 
     // Place the boss room

@@ -19,7 +19,7 @@ void bhv_collect_star_init(void) {
         }
         if (obj_save_bin_read()) {
             o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
-            gMarioState->numStars = save_bin_get_flag_total(SAVE_BIN_STARS);
+            gMarioState->numStars = save_bin_get_star_all_levels();
         } else {
             o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
         }

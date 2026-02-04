@@ -123,6 +123,13 @@ s32 save_bin_get_flag_total(int type) {
     return count;
 }
 
+s32 save_bin_get_star_all_levels(void) {
+    int count = 0;
+    count += save_bin_get_flag_total(SAVE_BIN_STARS);
+    count += gMariosModulesSave.file[gMariosModulesSaveIndex].accumulatedStars;
+    return count;
+}
+
 s32 save_bin_get_max_total(int type) {
     return saveBinTotal[type];
 }

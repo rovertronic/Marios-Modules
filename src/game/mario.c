@@ -2056,6 +2056,8 @@ void init_mario(void) {
     gMarioState->marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
     obj_element_init(gMarioState->marioObj,ELEMENT_NORMAL,50.0f);
 
+    gMarioState->numStars = save_bin_get_star_all_levels();
+
     // Baron's Bounty should ALWAYS be random, not deterministic
     if (gCurrLevelNum == LEVEL_PITSTOP) {
         tinymt32_init(&gGlobalRandomState,random_u16());
@@ -2075,7 +2077,7 @@ void init_mario_from_save_file(void) {
     gMarioState->animList[ANIM_LIST_LOGIC] = &gMarioAnimsBuf[ANIM_LIST_LOGIC];
 
     gMarioState->numCoins = 0;
-    gMarioState->numStars = save_bin_get_flag_total(SAVE_BIN_STARS);
+    gMarioState->numStars = save_bin_get_star_all_levels();
     gMarioState->numKeys = 0;
 #ifdef ENABLE_LIVES
     gMarioState->numLives = ENABLE_LIVES;
