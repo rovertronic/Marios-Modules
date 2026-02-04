@@ -853,6 +853,8 @@ void dungeon_shuffle_wood_room_treasure(void) {
 }
 
 void dungeon_generate_lv1(void) {
+    sDungeonGeneratingLevelId = 0;
+    
     // Determine freebie star
     if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
         // Push block puzzle
@@ -910,6 +912,8 @@ void dungeon_generate_lv1(void) {
 }
 
 void dungeon_generate_lv2(void) {
+    sDungeonGeneratingLevelId = 1;
+
     // Pick a random tree type
     gDungeonTreeModel = MODEL_DUNGEON_TREE_1;
     if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
@@ -954,8 +958,6 @@ void dungeon_generate_lv3(void) {
 }
 
 void dungeon_generate(int level) {
-    sDungeonGeneratingLevelId = level;
-
     // Randomize Seed
     tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
 
