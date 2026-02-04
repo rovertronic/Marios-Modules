@@ -35,7 +35,7 @@ void save_marios_modules_coins_lives(void) {
     nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
 }
 
-void save_marios_modules(Vec3f pos) {
+void save_marios_modules_silent(Vec3f pos) {
     int size = sizeof(struct mariosModulesSaveGame);
 
     if (gSramProbe != 0) {
@@ -49,9 +49,13 @@ void save_marios_modules(Vec3f pos) {
         bcopy(&inventory,&gMariosModulesSave.file[gMariosModulesSaveIndex].inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
         bcopy(&inventoryParam,&gMariosModulesSave.file[gMariosModulesSaveIndex].inventoryParam,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
         nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
+    }
+}
 
+void save_marios_modules(Vec3f pos) {
+    if (gSramProbe != 0) {
+        save_marios_modules_silent(pos);
         display_generic_message("@G@Game successfully saved.");
-
         play_sound(SOUND_GENERAL_HEART_SPIN, gGlobalSoundSource);
     }
 }

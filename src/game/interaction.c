@@ -841,7 +841,7 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
 
             bzero(&gMariosModulesSave.file[gMariosModulesSaveIndex].bin[0],4*SAVE_BIN_COUNT);
             dungeon_clear_exploration_flags();
-            save_marios_modules(gVec3fZero);
+            save_marios_modules_silent(gVec3fZero);
         } else {
             obj_save_bin_write(obj);
             m->numStars = save_bin_get_star_all_levels();
