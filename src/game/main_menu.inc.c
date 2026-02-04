@@ -6,6 +6,12 @@ int gMainMenuTitleAnimationIndex = -1;
 u8 sMainMenuShowTitle = FALSE;
 int sMainMenuModuleTimer = 0;
 
+void save_delete_file(int fileIndex) {
+    int size = sizeof(struct mariosModulesSaveGame);
+    gMariosModulesSave.file[gMariosModulesSaveIndex].flags = 0;
+    nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
+}
+
 void save_marios_modules_new_game(u32 seed, s8 level) {
     int size = sizeof(struct mariosModulesSaveGame);
     int sizeFile = sizeof(struct mariosModulesSaveFile);

@@ -260,7 +260,7 @@ struct mariosModulesSaveFile {
     u32 bin[SAVE_BIN_COUNT];
     u16 coins;
     u8 keys;
-    u8 lives;
+    s8 lives;
     u8 accumulatedStars; // Stars = save bin stars + accum stars from prev levels
     s8 level;
     u32 flags;
@@ -385,5 +385,6 @@ void save_marios_modules_silent(Vec3f pos);
 void save_marios_modules_coins_lives(void);
 void load_marios_modules(void);
 void marios_modules_savefile_load_position(void);
+void save_delete_file(int fileIndex);
 
 #endif

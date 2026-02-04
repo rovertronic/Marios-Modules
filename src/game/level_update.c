@@ -766,11 +766,13 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 break;
 
             case WARP_OP_DEATH:
-#ifdef ENABLE_LIVES
-                if (m->numLives == 0) {
+                save_marios_modules_coins_lives();
+
+                if (gMariosModulesSave.file[gMariosModulesSaveIndex].lives <= 0) {
+                    save_delete_file(gMariosModulesSaveIndex);
                     sDelayedWarpOp = WARP_OP_GAME_OVER;
                 }
-#endif
+
                 sDelayedWarpTimer = 48;
                 sSourceWarpNodeId = WARP_NODE_DEATH;
                 play_transition(WARP_TRANSITION_FADE_INTO_BOWSER, sDelayedWarpTimer, 0x00, 0x00, 0x00);
@@ -778,7 +780,6 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
 #ifdef PREVENT_DEATH_LOOP
                 m->isDead = TRUE;
 #endif
-                save_marios_modules_coins_lives();
                 break;
 
             case WARP_OP_WARP_FLOOR:
