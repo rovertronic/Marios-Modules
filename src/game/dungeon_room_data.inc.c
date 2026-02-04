@@ -226,6 +226,7 @@ struct DungeonRoomVariant sRoomWallJump = {
     .lootLocations = &sRoomWallJumpLootLocations,
     .requiredLoot = &sRoomWallJumpRequiredLoot,
     .generateOnce = TRUE,
+    .safe = TRUE,
 };
 
 // Long Jump Rotate Challenge Room
@@ -616,6 +617,7 @@ struct DungeonRoomVariant sRoomFurnace = {
     .lootLocations = &sRoomFurnceLootLocations,
     .requiredLoot = &sRoomFurnaceRequiredLoot,
     .generateOnce = TRUE,
+    .safe = TRUE,
 };
 
 // Grindr Room
@@ -677,6 +679,7 @@ struct DungeonRoomVariant sRoomCaveJump = {
     .lootLocations = NULL,
     .requiredLoot = &sRoomCaveJumpRequiredLoot,
     .generateOnce = TRUE,
+    .safe = TRUE,
 };
 
 // Split Hall Room
@@ -791,6 +794,7 @@ struct DungeonRoomVariant sRoomAutoMaze = {
     .lootLocations = &sRoomAutoMazeLootLocations,
     .requiredLoot = &sRoomAutoMazeRequiredLoot,
     .generateOnce = TRUE,
+    .safe = TRUE,
 };
 
 // Silver Pillar Room
@@ -968,6 +972,7 @@ struct DungeonRoomVariant sRoomBoss = {
     .lootLocations = NULL,
     .requiredLoot = NULL,
     .generateOnce = TRUE,
+    .safe = TRUE,
     .needKey = TRUE,
 };
 
