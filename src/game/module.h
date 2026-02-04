@@ -260,6 +260,7 @@ struct mariosModulesSaveFile {
     u32 bin[SAVE_BIN_COUNT];
     u16 coins;
     u8 keys;
+    u8 lives;
     s8 level;
     u32 flags;
     u32 room_discover_flags;

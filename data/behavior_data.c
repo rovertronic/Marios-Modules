@@ -6509,10 +6509,15 @@ const BehaviorScript bhvDungeonClockHand[] = {
     END_LOOP(),
 };
 
+extern void bhv_car(void);
 const BehaviorScript bhvDungeonSpawn[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    BREAK(),
+    BEGIN(OBJ_LIST_SURFACE),
+    LOAD_COLLISION_DATA(car_collision),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_COMPUTE_DIST_TO_MARIO)),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_car),
+        CALL_NATIVE(load_object_collision_model),
+    END_LOOP(),
 };
 
 extern void bhv_aboomboomination(void);
@@ -6530,5 +6535,13 @@ const BehaviorScript bhvUtilityMace[] = {
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_utility_mace),
+    END_LOOP(),
+};
+
+const BehaviorScript bhvLive[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    BILLBOARD(),
+    BEGIN_LOOP(),
     END_LOOP(),
 };

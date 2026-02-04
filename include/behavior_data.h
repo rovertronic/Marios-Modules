@@ -580,5 +580,6 @@ extern const BehaviorScript bhvDungeonSpawn[];
 extern const BehaviorScript bhvAboomboomination[];
 extern const BehaviorScript bhvUtilityMace[];
 extern const BehaviorScript bhvMace[];
+extern const BehaviorScript bhvLive[];
 
 #endif // BEHAVIOR_DATA_H

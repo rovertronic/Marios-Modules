@@ -1852,7 +1852,7 @@ void bhv_utility_mace(void) {
     switch(o->oAction) {
         case 0:
             o->prevObj = spawn_object(o,MODEL_UTILITY_MACE,bhvMace);
-            o->prevObj->oMoveAngleYaw = random_u16();
+            o->oMoveAngleYaw = random_u16();
 
             o->oAction++;
             break;
@@ -1883,3 +1883,32 @@ void bhv_utility_mace(void) {
             break;
     }
 }
+
+void bhv_car(void) {
+    switch(o->oAction) {
+        case 0:
+            cur_obj_set_model(MODEL_CAR);
+            int count = gMariosModulesSave.file[gMariosModulesSaveIndex].lives - 1;
+            for (int i = 0; i < count; i++) {
+                struct Object * live = spawn_object_relative(0, 400,400, -100 + (200*i),
+                    o,MODEL_LIVE,bhvLive);
+            }
+            o->oAction++;
+        break;
+        case 1:
+            if (o->oDistanceToMario > 1000.0f) {
+                o->oAction++;
+            }
+            break;
+        case 2:
+            if (gCurrLevelNum == LEVEL_PITSTOP && gMarioObject->platform == o) {
+                gMainMenuWarpLocation = 1;
+                level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
+                o->oAction++;
+            }
+            break;
+    }
+}
+
+struct Object *spawn_object_relative(s16 behaviorParam, s16 relativePosX, s16 relativePosY, s16 relativePosZ,
+                                     struct Object *parent, ModelID32 model, const BehaviorScript *behavior);

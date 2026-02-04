@@ -2016,6 +2016,7 @@ void init_mario(void) {
 
     if (gDungeonNeedsToGenerate) {
         vec3f_copy(gMarioState->pos,gDungeonSpawnLocation);
+        gMarioState->pos[1] += 300.0f;
         gDungeonNeedsToGenerate = FALSE;
     }
 

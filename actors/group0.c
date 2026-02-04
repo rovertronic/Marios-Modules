@@ -68,3 +68,6 @@
 #include "silver_star/model.inc.c"
 #include "utilityMace/model.inc.c"
 #include "utilityFlame/model.inc.c"
+#include "car/collision.inc.c"
+#include "car/model.inc.c"
+#include "live/model.inc.c"

@@ -1007,7 +1007,7 @@ struct DungeonObject sRoomFacade2ObjectList[] = {
     {.bhv = bhvTreeDungeon, .model = MODEL_NONE, .param = 0,
     .angle = 0, .pos = {-8.9286f,-30.9459f,3.0471f}},
     {.bhv = bhvDungeonSpawn, .model = MODEL_NONE, .param = 0,
-    .angle = 0, .pos = {-1.57651f,0.551928f,5.13467f}},
+    .angle = 0x8000, .pos = {-1.57651f,0.551928f,5.13467f}},
     {.bhv = bhvAboomboomination, .model = MODEL_NONE, .param = 0,
     .angle = 0, .pos = {-75.7161f,-75.716f,5.32964f}},
     {.end = TRUE},

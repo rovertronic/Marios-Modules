@@ -18,14 +18,20 @@ void save_marios_modules_new_game(u32 seed, s8 level) {
     gMariosModulesSave.save_magic = SAVE_MAGIC;
     gMariosModulesSave.file[gMariosModulesSaveIndex].seed = seed;
     gMariosModulesSave.file[gMariosModulesSaveIndex].level = level;
+    gMariosModulesSave.file[gMariosModulesSaveIndex].lives = 3;
 
     gMariosModulesSave.file[gMariosModulesSaveIndex].flags = SAVE_FLAG_EXIST;
     nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
 }
 
 void save_marios_modules_coins_lives(void) {
+    // Run this function when fail
     int size = sizeof(struct mariosModulesSaveGame);
     gMariosModulesSave.file[gMariosModulesSaveIndex].coins = gMarioState->numCoins;
+    gMariosModulesSave.file[gMariosModulesSaveIndex].lives --;
+
+    bzero(&gMariosModulesSave.file[gMariosModulesSaveIndex].bin[0],4*SAVE_BIN_COUNT);
+
     nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
 }
 
