@@ -766,7 +766,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 break;
 
             case WARP_OP_DEATH:
-                if (is_level_dungeon()) {
+                if (!m->isDead && is_level_dungeon()) {
                     save_marios_modules_coins_lives();
                 }
 
