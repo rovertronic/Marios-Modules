@@ -70,6 +70,11 @@ void load_marios_modules_data_only(void) {
     int size = sizeof(struct mariosModulesSaveGame);
     
     if (gSramProbe != 0) {
+        if (gMariosModulesSave.save_magic != SAVE_MAGIC) {
+            bzero(&gMariosModulesSave, size);
+            gMariosModulesSave.save_magic = SAVE_MAGIC;
+        }
+
         nuPiReadSram(0, &gMariosModulesSave, ALIGN8(size));
     }
 }
@@ -79,6 +84,11 @@ void load_marios_modules(void) {
     int sizeFile = sizeof(struct mariosModulesSaveFile);
 
     if (gSramProbe != 0) {
+        if (gMariosModulesSave.save_magic != SAVE_MAGIC) {
+            bzero(&gMariosModulesSave, size);
+            gMariosModulesSave.save_magic = SAVE_MAGIC;
+        }
+
         nuPiReadSram(0, &gMariosModulesSave, ALIGN8(size));
         if (gMariosModulesSave.file[gMariosModulesSaveIndex].flags & SAVE_FLAG_EXIST) {
             bcopy(&gMariosModulesSave.file[gMariosModulesSaveIndex].inventory,&inventory,INVENTORY_SLOTS_X*INVENTORY_SLOTS_Y);
@@ -271,9 +281,22 @@ This hack was made for\n\
 a competition,\n\
 Mario Jams 7: Element.";
 
+char * sBetaInfo = "\
+Mario's Modules 2 roguelite beta test\n\
+N64 Save Type - SRAM 128\n\
+Use this or roguelite will break, loads file every level init\n\
+\n\
+Notes / Known issues:\n\
+1) Game over screen is scuffed, just reset\n\
+2) Baron's Bounty visuals are WIP\n\
+3) Only 2 levels\n\
+4) False coin counter when reloading game\n\
+5) N64 Only - Scuffed Minimap transform visuals";
+
 char * sButtonsMain[] = {
     "@G@Play",
     "Credits",
+    "Beta Test Info",
     NULL
 };
 
@@ -511,7 +534,7 @@ void render_main_menu(void) {
             render_mode_info(sMainMenuIndex);
             break;
         case MAIN_MENU_CHANGELOG:
-            render_main_menu_big_text(sChangelogStr);
+            render_main_menu_big_text(sBetaInfo);
             break;
         case MAIN_MENU_CREDITS:
             render_main_menu_big_text(sCreditsStr);
@@ -581,7 +604,7 @@ void logic_main_menu(void) {
             }
             break;
         case MAIN_MENU_MAIN:
-            main_menu_handle_scroll(2);
+            main_menu_handle_scroll(3);
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
                 switch (sMainMenuIndex) {
                     case 0:
@@ -658,6 +681,10 @@ void logic_main_menu(void) {
                         gModuleTutorialState = TUTORIAL_DONE;
                         break;
                     break;
+                    case 1:
+                        save_delete_file(gMariosModulesSaveIndex);
+                        gMainMenuTargetState = MAIN_MENU_FILE;
+                        break;
                 }
             }
             break;
