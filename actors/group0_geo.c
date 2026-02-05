@@ -34,3 +34,4 @@
 #include "utilityFlame/geo.inc.c"
 #include "car/geo.inc.c"
 #include "live/geo.inc.c"
+#include "gshredder/geo.inc.c"

@@ -441,4 +441,5 @@ extern const struct Animation *const wiggler_seg5_anims_0500EC8C[];
 #include "car/collision_header.h"
 #include "car/geo_header.h"
 #include "live/geo_header.h"
+#include "gshredder/geo_header.h"
 #endif

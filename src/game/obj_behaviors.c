@@ -1507,6 +1507,9 @@ void bhv_recycle_interface(void) {
 }
 
 void bhv_shredder(void) {
+    if (gCurrLevelNum == LEVEL_PITSTOP) {
+        cur_obj_scale(.5f);
+    }
     if (sShredding) {
         o->oFaceAngleRoll += 0x200;
     }
@@ -1514,6 +1517,10 @@ void bhv_shredder(void) {
 
 void bhv_module_shred(void) {
     o->oFaceAngleYaw = 0x4000;
+    if (gCurrLevelNum == LEVEL_PITSTOP) {
+        o->oFaceAngleYaw = 0;
+    }
+
     switch(o->oAction) {
         case 0:;
             struct Object * recyclehole = cur_obj_nearest_object_with_behavior(bhvRecycleHole);

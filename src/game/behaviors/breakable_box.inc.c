@@ -143,7 +143,7 @@ void random_spawn_coins_or_amp(void) {
 }
 
 void spawn_dungeon_woodroom_junk(void) {
-    if (o->dungeonRoom[0]->variant == &sRoomWood) {
+    if (o->dungeonRoom[0] && o->dungeonRoom[0]->variant == &sRoomWood) {
         struct Object * nearestTreasure;
         int hasTreasure = FALSE;
         nearestTreasure = cur_obj_nearest_object_with_behavior(bhvChest);
