@@ -6,6 +6,7 @@ const GeoLayout pitstop_area_1_geo[] = {
 		GEO_ASM(0, geo_render_preview_mario),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, pitstop_dl_Plane_mesh_layer_1),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, pitstop_dl_Plane_mesh_layer_5),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT_DECAL, pitstop_dl_Plane_mesh_layer_6),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
