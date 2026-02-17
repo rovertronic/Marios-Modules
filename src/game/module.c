@@ -30,6 +30,8 @@ s8 sScreenMessageIndex = -1;
 
 u8 gModuleMenuOpen = FALSE;
 f32 sMiniMapZoom = 1.0f;
+f32 gMiniMapOffsetX = 0.0f;
+f32 gMiniMapOffsetZ = 0.0f;
 u8 gModuleMenuMode = MODULE_MENU_MODE_NORMAL;
 s8 gRecycleChestContent = MOD_EMPTY;
 s8 gRecycledModule = MOD_EMPTY;
@@ -785,13 +787,26 @@ Gfx * sMinimapRoomDls[32] = {
 
 extern void shade_screen(void);
 void print_mini_map(void) {
+    if (gPlayer1Controller->buttonDown & D_CBUTTONS) {
+        gMiniMapOffsetZ += 500.0f * gFrameLerpDeltaTime;
+    }
+    if (gPlayer1Controller->buttonDown & U_CBUTTONS) {
+        gMiniMapOffsetZ -= 500.0f * gFrameLerpDeltaTime;
+    }
+    if (gPlayer1Controller->buttonDown & R_CBUTTONS) {
+        gMiniMapOffsetX -= 500.0f * gFrameLerpDeltaTime;
+    }
+    if (gPlayer1Controller->buttonDown & L_CBUTTONS) {
+        gMiniMapOffsetX += 500.0f * gFrameLerpDeltaTime;
+    }
+
     sMiniMapZoom += (gPlayer1Controller->rawStickY/400.0f) * gFrameLerpDeltaTime;
     sMiniMapZoom = CLAMP(sMiniMapZoom,0.333f,1.0f);
 
-    sMiniMapZoom = .333f;
+    sMiniMapZoom = .777f;
 
-    f32 mario_x_to_map_x = (gMarioState->pos[0]/-50.f) * sMiniMapZoom;
-    f32 mario_z_to_map_y = (gMarioState->pos[2]/50.f) * sMiniMapZoom;
+    f32 mario_x_to_map_x = ((gMarioState->pos[0] - gMiniMapOffsetX)/-50.f) * sMiniMapZoom;
+    f32 mario_z_to_map_y = ((gMarioState->pos[2] + gMiniMapOffsetZ)/50.f) * sMiniMapZoom;
 
     shade_screen();
 
@@ -817,8 +832,10 @@ void print_mini_map(void) {
         dungeon_print_minimap(sMiniMapZoom);
     }
 
+    f32 icon_x_offset = (gMiniMapOffsetX/50.0f) * sMiniMapZoom;
+    f32 icon_z_offset = (gMiniMapOffsetZ/50.0f) * -sMiniMapZoom;
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-    print_texture(micons_cap_rgba16, 16, 160-8, 120-8);
+    print_texture(micons_cap_rgba16, 16, 160-8 + icon_x_offset, 120-8 + icon_z_offset);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
 

@@ -1129,7 +1129,9 @@ void mode_8_directions_camera(struct Camera *c) {
     Vec3f pos;
     s16 oldAreaYaw = sAreaYaw;
 
-    if (!gModuleMenuOpen) {
+    u8 minimapUp = (gMarioState->passiveFlag & (1 << PASSIVE_FLAG_MINIMAP)) != FALSE;
+
+    if (!gModuleMenuOpen && !minimapUp) {
         radial_camera_input(c);
 
         if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {

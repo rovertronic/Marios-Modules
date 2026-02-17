@@ -582,6 +582,9 @@ void render_hud(void) {
 
         if (gMarioState->passiveFlag & (1 << PASSIVE_FLAG_MINIMAP)) {
             print_mini_map();
+        } else {
+            gMiniMapOffsetX = 0.0f;
+            gMiniMapOffsetZ = 0.0f;
         }
 
         if (gCurrentArea != NULL && gCurrentArea->camera->mode == CAMERA_MODE_INSIDE_CANNON) {

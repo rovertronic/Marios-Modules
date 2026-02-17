@@ -21,6 +21,9 @@ extern s8 gMysteryModuleState;
 extern s8 gMysteryModuleSelection;
 extern s8 gMysteryModuleChoice[2];
 
+extern f32 gMiniMapOffsetX;
+extern f32 gMiniMapOffsetZ;
+
 struct module_panel {
     char * name;
     u8 offset;
