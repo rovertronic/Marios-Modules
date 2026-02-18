@@ -1,8 +1,8 @@
-extern void scroll_temple_dl_vis_room1_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room1_midsection_2_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room2_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room3_003_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room5_001_mesh_layer_5_vtx_0();
+extern void scroll_temple_dl_vis_room5_002_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room5_midsection_2_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room9_mesh_layer_5_vtx_0();
 extern void scroll_temple_dl_vis_room_94_mesh_layer_5_vtx_1();

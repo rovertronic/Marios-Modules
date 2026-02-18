@@ -1,24 +1,3 @@
-void scroll_temple_dl_vis_room1_mesh_layer_5_vtx_0() {
-	int i = 0;
-	int count = 16;
-	int width = 128 * 0x20;
-
-	static int currentX = 0;
-	int deltaX;
-	Vtx *vertices = segmented_to_virtual(temple_dl_vis_room1_mesh_layer_5_vtx_0);
-
-	deltaX = (int)(3.0 * 0x20) % width;
-
-	if (absi(currentX) > width) {
-		deltaX -= (int)(absi(currentX) / width) * width * signum_positive(deltaX);
-	}
-
-	for (i = 0; i < count; i++) {
-		vertices[i].n.tc[0] += deltaX;
-	}
-	currentX += deltaX;
-}
-
 void scroll_temple_dl_vis_room1_midsection_2_mesh_layer_5_vtx_0() {
 	int i = 0;
 	int count = 39;
@@ -92,6 +71,27 @@ void scroll_temple_dl_vis_room5_001_mesh_layer_5_vtx_0() {
 	Vtx *vertices = segmented_to_virtual(temple_dl_vis_room5_001_mesh_layer_5_vtx_0);
 
 	deltaX = (int)(0.20000000298023224 * 0x20) % width;
+
+	if (absi(currentX) > width) {
+		deltaX -= (int)(absi(currentX) / width) * width * signum_positive(deltaX);
+	}
+
+	for (i = 0; i < count; i++) {
+		vertices[i].n.tc[0] += deltaX;
+	}
+	currentX += deltaX;
+}
+
+void scroll_temple_dl_vis_room5_002_mesh_layer_5_vtx_0() {
+	int i = 0;
+	int count = 16;
+	int width = 128 * 0x20;
+
+	static int currentX = 0;
+	int deltaX;
+	Vtx *vertices = segmented_to_virtual(temple_dl_vis_room5_002_mesh_layer_5_vtx_0);
+
+	deltaX = (int)(3.0 * 0x20) % width;
 
 	if (absi(currentX) > width) {
 		deltaX -= (int)(absi(currentX) / width) * width * signum_positive(deltaX);
@@ -234,11 +234,11 @@ void scroll_gfx_mat_temple_dl_lavafade_layer1() {
 };
 
 void scroll_temple() {
-	scroll_temple_dl_vis_room1_mesh_layer_5_vtx_0();
 	scroll_temple_dl_vis_room1_midsection_2_mesh_layer_5_vtx_0();
 	scroll_temple_dl_vis_room2_mesh_layer_5_vtx_0();
 	scroll_temple_dl_vis_room3_003_mesh_layer_5_vtx_0();
 	scroll_temple_dl_vis_room5_001_mesh_layer_5_vtx_0();
+	scroll_temple_dl_vis_room5_002_mesh_layer_5_vtx_0();
 	scroll_temple_dl_vis_room5_midsection_2_mesh_layer_5_vtx_0();
 	scroll_temple_dl_vis_room9_mesh_layer_5_vtx_0();
 	scroll_temple_dl_vis_room_94_mesh_layer_5_vtx_1();
