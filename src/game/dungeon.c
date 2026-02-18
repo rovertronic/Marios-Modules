@@ -1089,8 +1089,8 @@ void dungeon_print_minimap(f32 mapZoom) {
         int flag = id%32;
         
         if (sDungeonDiscoveredFlags[index] & (1 << flag)) {
-            f32 dungeon_room_x = (32000.0f - (sDungeonRoomList[i].xorigin * 2000.0f)) - gMarioState->pos[0];
-            f32 dungeon_room_y = (32000.0f - (sDungeonRoomList[i].yorigin * 2000.0f)) - gMarioState->pos[2];
+            f32 dungeon_room_x = (32000.0f - (sDungeonRoomList[i].xorigin * 2000.0f)) - gMarioState->pos[0] + gMiniMapOffsetX;
+            f32 dungeon_room_y = (32000.0f - (sDungeonRoomList[i].yorigin * 2000.0f)) - gMarioState->pos[2] + gMiniMapOffsetZ;
 
             Gfx * minimapDL = sDungeonRoomList[i].variant->minimapDL;
             if (minimapDL != NULL) {
@@ -1118,8 +1118,8 @@ void dungeon_print_minimap(f32 mapZoom) {
                 int flag2 = id2%32;
 
                 if ((sDungeonDiscoveredFlags[index] & (1 << flag)) || (sDungeonDiscoveredFlags[index2] & (1 << flag2))) {
-                    f32 dungeon_door_x = ((32000.0f - (sDungeonCellProcessList[i]->x * 2000.0f)) - (1000.f * sDirectionList[j][0])) - gMarioState->pos[0];
-                    f32 dungeon_door_y = ((32000.0f - (sDungeonCellProcessList[i]->y * 2000.0f)) + (1000.f * sDirectionList[j][1])) - gMarioState->pos[2];
+                    f32 dungeon_door_x = ((32000.0f - (sDungeonCellProcessList[i]->x * 2000.0f)) - (1000.f * sDirectionList[j][0])) - gMarioState->pos[0] + gMiniMapOffsetX;
+                    f32 dungeon_door_y = ((32000.0f - (sDungeonCellProcessList[i]->y * 2000.0f)) + (1000.f * sDirectionList[j][1])) - gMarioState->pos[2] + gMiniMapOffsetZ;
 
                     create_dl_translation_matrix(MENU_MTX_PUSH, dungeon_door_x, dungeon_door_y, 0);
                     create_dl_rotation_matrix(MENU_MTX_NOPUSH, j*-90.0f, 0, 0, 1.0f);

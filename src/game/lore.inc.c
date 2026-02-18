@@ -12,7 +12,7 @@ Entry 0x5F\n\
 Dr.Westein\n\
 \n\
 After days of banging my head and getting nowhere, I finally got... something. I have \
-find a repeatable process... for one structure. It's not very useful either. At first, \
+found a repeatable process... for one structure. It's not very useful either. At first, \
 I had thought it was a completely useless structure. I applied an electric impulse, and \
 nothing happened. However, half an hour later, my instruments registered an exact reading \
 of the initial impulse. So, there's that.";
@@ -98,7 +98,7 @@ Dr.Westein\n\
 \n\
 We have about a month left of funds before we close down the labs. I haven't really had the motivation \
 to work on anything, so I've just been reading through Beyond the Cursed Mirror. The narrative has \
-be captivated, and my eyes glued to the pages. It's a good getaway from my present situation.";
+me captivated, and my eyes glued to the pages. It's a good getaway from my present situation.";
 
 char gLoreEntry13[] = "5-3-2257\n\
 Entry 0x69\n\
@@ -145,5 +145,5 @@ Dr.Westein\n\
 I was reading the news paper today, and stumbled across an interesting article. Allegedly, there's a \
 cult forming around the BtCM book. No, not like a fandom- a literal cult. The article refers to them as \
 the 'Lunatic Imitators.' They believe that BtCM was written, not as fiction, but rather as a prophecy for \
-what is to come. Of course, they're attempts at replicating events in the book have been rather feeble so far, \
+what is to come. Of course, their attempts at replicating events in the book have been rather feeble so far, \
 so it's a silly thing to put any amount of thought towards.";
