@@ -891,6 +891,10 @@ static void level_cmd_set_echo(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
+void level_cmd_shitcull(void) {
+    sCurrentCmd = CMD_NEXT;
+}
+
 static void (*LevelScriptJumpTable[])(void) = {
     /*LEVEL_CMD_LOAD_AND_EXECUTE            */ level_cmd_load_and_execute,
     /*LEVEL_CMD_EXIT_AND_EXECUTE            */ level_cmd_exit_and_execute,
@@ -956,6 +960,7 @@ static void (*LevelScriptJumpTable[])(void) = {
     /*LEVEL_CMD_PUPPYVOLUME                 */ level_cmd_puppyvolume,
     /*LEVEL_CMD_CHANGE_AREA_SKYBOX          */ level_cmd_change_area_skybox,
     /*LEVEL_CMD_SET_ECHO                    */ level_cmd_set_echo,
+                                               level_cmd_shitcull,
 };
 
 struct LevelCommand *level_script_execute(struct LevelCommand *cmd) {

@@ -73,6 +73,7 @@ enum LevelCommands {
     /*0x3D*/ LEVEL_CMD_PUPPYVOLUME,
     /*0x3E*/ LEVEL_CMD_CHANGE_AREA_SKYBOX,
     /*0x3F*/ LEVEL_CMD_SET_ECHO,
+             LEVEL_CMD_SHITCULL,
 };
 
 enum LevelActs {
@@ -469,6 +470,15 @@ enum GoddardScene {
 #define GET_OR_SET(op, var) \
     CMD_BBBB(LEVEL_CMD_GET_OR_SET_VAR, 0x04, op, var)
 
+#define SHITCULL_CMD(flag, x, y, z, sx, sy, sz) \
+    CMD_BBBB(LEVEL_CMD_SHITCULL, 7*0x04 , flag, 0), \
+    CMD_W(x), \
+    CMD_W(y), \
+    CMD_W(z), \
+    CMD_W((int)sx+1), \
+    CMD_W((int)sy+1), \
+    CMD_W((int)sz+1)
+
 // Presets
 
 #define LOAD_LEVEL_DATA(level) \
@@ -503,6 +513,7 @@ enum GoddardScene {
 
 #define LOAD_TITLE_SCREEN_BG() \
     LOAD_YAY0_TEXTURE(/*seg*/ SEGMENT_SKYBOX, /*romStart*/ _title_screen_bg_yay0SegmentRomStart, /*romEnd*/ _title_screen_bg_yay0SegmentRomEnd)
+
 
 // behParams
 
