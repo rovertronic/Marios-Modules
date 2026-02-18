@@ -35,6 +35,7 @@
 #include "module.h"
 #include "levels/temple/header.h"
 #include "dungeon.h"
+#include "shitcull.h"
 
 /**
  * @file obj_behaviors.c
@@ -1326,6 +1327,7 @@ void bhv_bdoor(void) {
             }
             break;
         case 1:
+            gShitCullDoorIsOpenSignal = TRUE;
             o->oPosY += 25.0f;
             if (o->oPosY > o->oHomeY + 500.0f) {
                 o->oAction = 2;
@@ -1333,12 +1335,14 @@ void bhv_bdoor(void) {
             }
             break;
         case 2:
+            gShitCullDoorIsOpenSignal = TRUE;
             if (!open) {
                 o->oAction = 3;
                 cur_obj_play_sound_2(SOUND_GENERAL_STAR_DOOR_CLOSE);
             }
             break;
         case 3:
+            gShitCullDoorIsOpenSignal = TRUE;
             o->oPosY -= 25.0f;
             if (o->oPosY < o->oHomeY) {
                 o->oAction = 0;

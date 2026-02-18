@@ -32,6 +32,7 @@
 #include "game/emutest.h"
 #include "game/main.h"
 #include <PR/os_internal_reg.h>
+#include "game/shitcull.h"
 
 #include "config.h"
 
@@ -331,6 +332,7 @@ static void level_cmd_init_level(void) {
         }
     }
 
+    shit_cull_init();
     init_graph_node_start(NULL, (struct GraphNodeStart *) &gObjParentGraphNode);
     clear_objects();
     clear_areas();
@@ -892,6 +894,9 @@ static void level_cmd_set_echo(void) {
 }
 
 void level_cmd_shitcull(void) {
+    Vec3f pos = {CMD_GET(s32, 4),CMD_GET(s32, 4*2),CMD_GET(s32, 4*3)};
+    Vec3f scale = {CMD_GET(s32, 4*4),CMD_GET(s32, 4*5),CMD_GET(s32, 4*6)};
+    shit_cull_add_volume(pos,scale,CMD_GET(u8, 2));
     sCurrentCmd = CMD_NEXT;
 }
 

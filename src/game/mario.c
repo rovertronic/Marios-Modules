@@ -1839,6 +1839,8 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
     int room = gMarioCurrentRoom;
     gMariosModulesSave.file[gMariosModulesSaveIndex].room_discover_flags |= (1 << room);
 
+    shit_cull_update();
+
     // Updates once per frame:
     mario_title_logic();
     dungeon_set_mario_room();
