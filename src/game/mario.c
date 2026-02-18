@@ -1839,6 +1839,7 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
     int room = gMarioCurrentRoom;
     gMariosModulesSave.file[gMariosModulesSaveIndex].room_discover_flags |= (1 << room);
 
+    gMarioState->marioObj->shitCullFlags = 0xFFFFFFFF;
     shit_cull_update();
 
     // Updates once per frame:

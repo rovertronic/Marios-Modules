@@ -206,6 +206,8 @@ struct Object *allocate_object(struct ObjectNode *objList) {
     obj->dungeonRoom[0] = NULL;
     obj->dungeonRoom[1] = NULL;
 
+    obj->shitCullFlags = 0;
+
     return obj;
 }
 

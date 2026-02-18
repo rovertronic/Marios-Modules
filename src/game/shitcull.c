@@ -46,10 +46,24 @@ void shit_cull_update(void) {
         }
         if (inside) {
             sShitCullVisibleFlags |= (1 << sShitCullVolumeList[i].flag);
-            print_text_fmt_int(20, 72, "%d", sShitCullVolumeList[i].flag);
         }
     }
     
+}
+
+void shit_cull_init_object(struct Object * obj) {
+    for (int i = 0; i < sShitCullVolumeCount; i++) {
+        int inside = TRUE;
+        for (int j = 0; j < 3; j++) {
+            if (ABS(sShitCullVolumeList[i].pos[j] - ((f32 *)(&obj->oPosX))[j]) > 100.0f * sShitCullVolumeList[i].scale[j] + 200.0f) {
+                // Outside box
+                inside = FALSE;
+            }
+        }
+        if (inside) {
+            obj->shitCullFlags |= (1 << sShitCullVolumeList[i].flag);
+        }
+    }
 }
 
 s32 shit_cull_visible(void) {
@@ -57,6 +71,13 @@ s32 shit_cull_visible(void) {
         return TRUE;
     }
     if ((1<<gShitCullCurrentRenderId) & sShitCullVisibleFlags) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+s32 shit_cull_object_visible(struct Object * obj) {
+    if (obj->shitCullFlags & sShitCullVisibleFlags) {
         return TRUE;
     }
     return FALSE;

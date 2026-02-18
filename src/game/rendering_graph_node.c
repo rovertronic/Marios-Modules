@@ -1168,6 +1168,7 @@ void visualise_object_hitbox(struct Object *node) {
  */
 void geo_process_object(struct Object *node) {
     if (gRenderPass > 0 && node != (struct Object *)&gPreviewMario && node != (struct Object *)&gGameTitle) {return;}
+    if (!shit_cull_object_visible(node)) {return;}
 
     if (node->header.gfx.areaIndex == gCurGraphNodeRoot->areaIndex) {
         s32 isInvisible = (node->header.gfx.node.flags & GRAPH_RENDER_INVISIBLE);

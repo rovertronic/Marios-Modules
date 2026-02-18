@@ -337,6 +337,7 @@ struct Object {
               struct DungeonRoom * dungeonRoom[2];
 
               struct ElementHitbox * element;
+              u32 shitCullFlags;
 };
 
 struct ObjectHitbox {

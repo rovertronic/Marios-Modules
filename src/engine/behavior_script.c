@@ -15,6 +15,7 @@
 #include "graph_node.h"
 #include "surface_collision.h"
 #include "game/frame_lerp.h"
+#include "game/shitcull.h"
 
 // Macros for retrieving arguments from behavior scripts.
 #define BHV_CMD_GET_1ST_U8(index)     (u8)((gCurBhvCommand[index] >> 24) & 0xFF) // unused
@@ -619,6 +620,7 @@ static s32 bhv_cmd_nop_4(void) {
 // Usage: BEGIN(objList)
 static s32 bhv_cmd_begin(void) {
     gCurBhvCommand++;
+    shit_cull_init_object(gCurrentObject);
     return BHV_PROC_CONTINUE;
 }
 
