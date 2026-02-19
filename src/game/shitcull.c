@@ -77,6 +77,7 @@ s32 shit_cull_visible(void) {
 }
 
 s32 shit_cull_object_visible(struct Object * obj) {
+    if (sShitCullVolumeCount == 0) {return TRUE;}
     if (obj->shitCullFlags & sShitCullVisibleFlags) {
         return TRUE;
     }
