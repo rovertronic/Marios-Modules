@@ -22,6 +22,7 @@
 #include "mario.h"
 #include "module.h"
 #include "dungeon.h"
+#include "ingame_menu.h"
 
 #include "config.h"
 #include "config/config_world.h"
@@ -946,8 +947,9 @@ void geo_set_animation_globals(struct AnimInfo *node, s32 hasAnimation, struct O
     }
 
     if (hasAnimation) {
-        node->animFrame = geo_update_animation_frame(node, &node->animFrameAccelAssist);
-        node->animFrameF = geo_update_animation_frame_float(node);
+        if (gMenuMode != MENU_MODE_RENDER_PAUSE_SCREEN) {
+            node->animFrameF = geo_update_animation_frame_float(node);
+        }
     }
     node->animTimer = gAreaUpdateCounter;
     if (anim->flags & ANIM_FLAG_HOR_TRANS) {
