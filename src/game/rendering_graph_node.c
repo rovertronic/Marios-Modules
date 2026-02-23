@@ -22,6 +22,7 @@
 #include "mario.h"
 #include "module.h"
 #include "dungeon.h"
+#include "ingame_menu.h"
 
 #include "config.h"
 #include "config/config_world.h"
@@ -810,7 +811,7 @@ void geo_process_background(struct GraphNodeBackground *node) {
 void retrieve_anim_quat(Quat dest, f32 frame) {
     s32 f = (s32)frame;
     f32 r = frame-(s32)f;
-
+    
     Vec3s euler_start;
     Vec3s euler_end;
 
@@ -924,30 +925,13 @@ void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
  * Initialize the animation-related global variables for the currently drawn
  * object's animation.
  */
-void geo_set_animation_globals(struct AnimInfo *node, s32 hasAnimation, struct Object * obj) {
+void geo_set_animation_globals(struct AnimInfo *node, s32 hasAnimation, UNUSED struct Object * obj) {
     struct Animation *anim = node->curAnim;
 
-    if (obj == gMarioState->marioObj) {
-        if (gMarioState->queueTargetAnim != NULL) {
-            struct Animation * targetAnim = gMarioState->queueTargetAnim;
-            s32 targetAnimID = gMarioState->queueTargetAnimID;
-            if (load_patchable_table(gMarioState->animList[ANIM_LIST_GFX], targetAnimID)) {
-                targetAnim->values = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->values);
-                targetAnim->index  = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->index);
-            }
-
-            gMarioState->queueTargetAnim = NULL;
-        }
-        anim = gMarioState->animList[ANIM_LIST_GFX]->bufTarget;
-    }
-
-    if (gRenderPass == 0 && obj->element && (obj->element->afflict & ELEMENT_ICE)) {
-        hasAnimation = FALSE;
-    }
-
     if (hasAnimation) {
-        node->animFrame = geo_update_animation_frame(node, &node->animFrameAccelAssist);
-        node->animFrameF = geo_update_animation_frame_float(node);
+        if (gMenuMode != MENU_MODE_RENDER_PAUSE_SCREEN) {
+            node->animFrameF = geo_update_animation_frame_float(node);
+        }
     }
     node->animTimer = gAreaUpdateCounter;
     if (anim->flags & ANIM_FLAG_HOR_TRANS) {
@@ -1010,10 +994,10 @@ void geo_process_shadow(struct GraphNodeShadow *node) {
 
                 f32 animScale = gCurrAnimTranslationMultiplier * objScale;
                 Vec3f animOffset;
-                animOffset[0] = gCurrAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * animScale;
+                animOffset[0] = gCurrAnimData[retrieve_animation_index(gCurrAnimFrameF, &gCurrAnimAttribute)] * animScale;
                 animOffset[1] = 0.0f;
                 gCurrAnimAttribute += 2;
-                animOffset[2] = gCurrAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * animScale;
+                animOffset[2] = gCurrAnimData[retrieve_animation_index(gCurrAnimFrameF, &gCurrAnimAttribute)] * animScale;
                 gCurrAnimAttribute -= 6;
 
                 // simple matrix rotation so the shadow offset rotates along with the object

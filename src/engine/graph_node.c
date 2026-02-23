@@ -320,6 +320,7 @@ struct GraphNodeObject *init_graph_node_object(struct AllocOnlyPool *pool,
 
         graphNode->animInfo.animID = 0;
         graphNode->animInfo.curAnim = NULL;
+        graphNode->animInfo.curAnimLogic = NULL;
         graphNode->animInfo.animFrame = 0;
         graphNode->animInfo.animFrameAccelAssist = 0;
         graphNode->animInfo.animAccel = 0x10000;
@@ -724,6 +725,7 @@ void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f po
     graphNode->sharedChild = sharedChild;
     graphNode->spawnInfo = 0;
     graphNode->animInfo.curAnim = NULL;
+    graphNode->animInfo.curAnimLogic = NULL;
 
     graphNode->node.flags |=  GRAPH_RENDER_ACTIVE;
     graphNode->node.flags &= ~GRAPH_RENDER_INVISIBLE;
@@ -745,6 +747,7 @@ void geo_obj_init_spawninfo(struct GraphNodeObject *graphNode, struct SpawnInfo 
     graphNode->sharedChild = spawn->model;
     graphNode->spawnInfo = spawn;
     graphNode->animInfo.curAnim = 0;
+    graphNode->animInfo.curAnimLogic = NULL;
 
     graphNode->node.flags |= GRAPH_RENDER_ACTIVE;
     graphNode->node.flags &= ~GRAPH_RENDER_INVISIBLE;
@@ -761,6 +764,7 @@ void geo_obj_init_animation(struct GraphNodeObject *graphNode, struct Animation 
 
     if (graphNode->animInfo.curAnim != anim) {
         graphNode->animInfo.curAnim = anim;
+        graphNode->animInfo.curAnimLogic = NULL;
         graphNode->animInfo.animFrame = anim->startFrame + ((anim->flags & ANIM_FLAG_FORWARD) ? 1 : -1);
         graphNode->animInfo.animAccel = 0;
         graphNode->animInfo.animYTrans = 0;
@@ -779,6 +783,7 @@ void geo_obj_init_animation_accel(struct GraphNodeObject *graphNode, struct Anim
 
     if (graphNode->animInfo.curAnim != anim) {
         graphNode->animInfo.curAnim = anim;
+        graphNode->animInfo.curAnimLogic = NULL;
         graphNode->animInfo.animYTrans = 0;
         graphNode->animInfo.animFrameAccelAssist =
             (anim->startFrame << 16) + ((anim->flags & ANIM_FLAG_FORWARD) ? animAccel : -animAccel);
@@ -818,6 +823,9 @@ s32 retrieve_animation_index(s32 frame, u16 **attributes) {
 s32 geo_update_animation_frame(struct AnimInfo *obj, s32 *accelAssist) {
     s32 result;
     struct Animation *anim = obj->curAnim;
+    if (obj->curAnimLogic != NULL) {
+        anim = obj->curAnimLogic;
+    }
 
     if (obj->animTimer == gAreaUpdateCounter || anim->flags & ANIM_FLAG_NO_ACCEL) {
         if (accelAssist != NULL) {
