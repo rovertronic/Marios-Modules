@@ -1160,7 +1160,7 @@ struct DungeonRoomVariant sRoomThwomps = {
     .generateOnce = TRUE,
 };
 
-// Garden Hallway Room
+// Memorize Room
 
 struct DungeonRoomVariantCellList sRoomMemorizeCellList[] = {
     {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
@@ -1195,4 +1195,69 @@ struct DungeonRoomVariant sRoomMemorize = {
     .lootLocations = &sRoomMemorizeLootLocations,
     .requiredLoot = NULL,
     .generateOnce = TRUE,
+};
+
+// Rogue Final: Paths
+
+struct DungeonRoomVariantCellList sRoomRfStraightCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT | DOOR_RIGHT)},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfStraight = {
+    .cellList = &sRoomRfStraightCellList,
+    .model = MODEL_ROOM_RF_STRAIGHT,
+    .collision = rf_straight_collision,
+
+    .maxLootCt = 0,
+    .objectList = NULL,
+    .requiredLoot = NULL,
+};
+
+struct DungeonRoomVariantCellList sRoomRfRightCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT | DOOR_UP)},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfRight = {
+    .cellList = &sRoomRfRightCellList,
+    .model = MODEL_ROOM_RF_RIGHT,
+    .collision = rf_right_collision,
+
+    .maxLootCt = 0,
+    .objectList = NULL,
+    .requiredLoot = NULL,
+};
+
+struct DungeonRoomVariantCellList sRoomRfLeftCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT | DOOR_DOWN)},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfLeft = {
+    .cellList = &sRoomRfLeftCellList,
+    .model = MODEL_ROOM_RF_LEFT,
+    .collision = rf_left_collision,
+
+    .maxLootCt = 0,
+    .objectList = NULL,
+    .requiredLoot = NULL,
+};
+
+// Room Facade 3
+
+struct DungeonObject sRoomFacade3ObjectList[] = {
+    {.bhv = bhvDungeonSpawn, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfFacade3 = {
+    .cellList = &sRoomRfStraightCellList,
+    .model = MODEL_ROOM_RF_STRAIGHT,
+    .collision = rf_straight_collision,
+
+    .maxLootCt = 0,
+    .objectList = &sRoomFacade3ObjectList,
+    .requiredLoot = NULL,
 };

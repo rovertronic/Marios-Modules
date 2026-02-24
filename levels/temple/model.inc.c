@@ -54920,7 +54920,7 @@ Gfx temple_dl_vis_room5_001_mesh_layer_5[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx temple_dl_vis_room5_001_mesh_layer_2_with_revert[] = {
+Gfx temple_dl_vis_room5_001_mesh_layer_2[] = {
 	gsSPDisplayList(mat_temple_dl_pipeOpaqueDecal),
 	gsSPDisplayList(temple_dl_vis_room5_001_mesh_layer_2_tri_0),
 	gsSPDisplayList(mat_revert_temple_dl_pipeOpaqueDecal),
@@ -55327,7 +55327,7 @@ Gfx temple_dl_vis_room9_002_mesh_layer_1[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx temple_dl_vis_room9_002_mesh_layer_6_with_revert[] = {
+Gfx temple_dl_vis_room9_002_mesh_layer_6[] = {
 	gsSPDisplayList(mat_temple_dl_rockSiding),
 	gsSPDisplayList(temple_dl_vis_room9_002_mesh_layer_6_tri_0),
 	gsSPDisplayList(mat_revert_temple_dl_rockSiding),
@@ -55607,7 +55607,7 @@ Gfx temple_dl_vis_room_99_mesh_layer_1[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx temple_dl_vis_room_99_mesh_layer_5_with_revert[] = {
+Gfx temple_dl_vis_room_99_mesh_layer_5[] = {
 	gsSPDisplayList(mat_temple_dl_rays_layer5),
 	gsSPDisplayList(temple_dl_vis_room_99_mesh_layer_5_tri_0),
 	gsSPDisplayList(mat_revert_temple_dl_rays_layer5),

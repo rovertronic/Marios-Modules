@@ -12,6 +12,7 @@
 #include "engine/surface_collision.h"
 
 #include "levels/rogue/header.h"
+#include "levels/rf/header.h"
 
 struct DungeonRoom * gDungeonMarioRoom = NULL;
 u32 sDungeonDiscoveredFlags[2];
@@ -138,6 +139,12 @@ struct DungeonRoomVariant * sLv2RoomVariantList[] = {
     &sRoomBtcm,
     &sRoomBaldi,
     &sRoomBns,
+};
+
+struct DungeonRoomVariant * sLv3RoomVariantList[] = {
+    &sRoomRfStraight,
+    &sRoomRfRight,
+    &sRoomRfLeft,
 };
 
 struct DungeonRoom * dungeon_get_mario_room(void) {
@@ -292,6 +299,7 @@ void dungeon_room_set_neighbor_flag(struct DungeonRoom * room, int id) {
 s32 dungeon_room_is_visible(struct DungeonRoom * room) {
     if (room == NULL) {return TRUE;}
     if (gDungeonMarioRoom == NULL) {return TRUE;}
+    if (gCurrLevelNum == LEVEL_RF) {return TRUE;}
 
     int id = room->id;
     int index = id/32;
@@ -569,6 +577,8 @@ void dungeon_calculate_all_neighbor_flags(void) {
 }
 
 void dungeon_remove_pointless_rooms(void) {
+    if (sDungeonGeneratingLevelId == 2) {return;}
+
     int pointlessRoomsThisPass;
     do {
         pointlessRoomsThisPass = 0;
@@ -604,7 +614,6 @@ void dungeon_remove_pointless_rooms(void) {
 }
 
 void dungeon_spawn_room_objects(void) {
-
     // Rooms
     for (int i = 0; i < sDungeonRoomCount; i++) {
         if (sDungeonRoomList[i].variant == NULL) {
@@ -633,7 +642,6 @@ void dungeon_spawn_room_objects(void) {
                 }
             }
         }
-
 
         // Spawn Loot (Chests, Stars, Keys)
         for (int j = 0; j < sDungeonRoomList[i].lootCount; j++) {
@@ -728,6 +736,8 @@ void dungeon_spawn_room_objects(void) {
             }
         }
     }
+
+    if (sDungeonGeneratingLevelId == 2) {return;}
 
     // Door holes
     for (int i = 0; i < sDungeonCellProcessCount; i++) {
@@ -954,10 +964,28 @@ void dungeon_generate_lv2(void) {
 }
 
 void dungeon_generate_lv3(void) {
+    sDungeonGeneratingLevelId = 2;
 
+    redo_generate:
+
+    // Clear dungeon data
+    dungeon_clear_data();
+
+    // Build First Room
+    dungeon_create_room(&sRoomRfFacade3, 0, 16, 16, 0);
+
+    // Generate dungeon rooms
+    sDungeonTargetRoomCount = 45;
+    dungeon_generate_rooms_at_doors(sLv3RoomVariantList,sizeof(sLv3RoomVariantList));
+
+    if (sDungeonForceRegen) {
+        goto redo_generate;
+    }
 }
 
 void dungeon_generate(int level) {
+    level = 2;
+
     // Randomize Seed
     tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
 
@@ -1134,7 +1162,7 @@ void dungeon_print_minimap(f32 mapZoom) {
 }
 
 s32 is_level_dungeon(void) {
-    return (gCurrLevelNum == LEVEL_ROGUE);
+    return (gCurrLevelNum == LEVEL_ROGUE) || (gCurrLevelNum == LEVEL_RF);
 }
 
 void dungeon_clear_exploration_flags(void) {

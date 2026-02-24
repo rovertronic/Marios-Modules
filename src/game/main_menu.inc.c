@@ -672,6 +672,10 @@ void logic_main_menu(void) {
                         if (gMariosModulesSave.file[gMariosModulesSaveIndex].level != -1) {
                             // Roguelite
                             gMainMenuWarpLocation = 4;
+                            gMariosModulesSave.file[gMariosModulesSaveIndex].level = 2;
+                            if (gMariosModulesSave.file[gMariosModulesSaveIndex].level == 2) {
+                                gMainMenuWarpLocation = 5;
+                            }
                         } else {
                             // Campaign
                             gMainMenuWarpLocation = 2;

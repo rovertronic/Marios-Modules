@@ -650,6 +650,11 @@ enum new_models {
     
     MODEL_ROOM_MEMORIZE_PANEL_1,
     MODEL_ROOM_MEMORIZE_PANEL_2,
+
+    // Rogue Final Models
+    MODEL_ROOM_RF_STRAIGHT,
+    MODEL_ROOM_RF_RIGHT,
+    MODEL_ROOM_RF_LEFT,
 };
 
 #endif // MODEL_IDS_H

@@ -1,0 +1,19 @@
+#include <ultra64.h>
+#include "sm64.h"
+#include "surface_terrains.h"
+#include "moving_texture_macros.h"
+#include "level_misc_macros.h"
+#include "macro_preset_names.h"
+#include "special_preset_names.h"
+#include "textures.h"
+#include "dialog_ids.h"
+
+#include "make_const_nonconst.h"
+
+#include "leveldata.inc.c"
+#include "rf_straight/collision.inc.c"
+#include "rf_straight/model.inc.c"
+#include "rf_right/collision.inc.c"
+#include "rf_right/model.inc.c"
+#include "rf_left/collision.inc.c"
+#include "rf_left/model.inc.c"
