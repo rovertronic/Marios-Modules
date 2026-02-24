@@ -581,5 +581,7 @@ extern const BehaviorScript bhvAboomboomination[];
 extern const BehaviorScript bhvUtilityMace[];
 extern const BehaviorScript bhvMace[];
 extern const BehaviorScript bhvLive[];
+extern const BehaviorScript bhvRfSpinner[];
+extern const BehaviorScript bhvRfSquarish[];
 
 #endif // BEHAVIOR_DATA_H

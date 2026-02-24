@@ -1244,6 +1244,110 @@ struct DungeonRoomVariant sRoomRfLeft = {
     .requiredLoot = NULL,
 };
 
+// Final Ramp
+
+struct DungeonRoomVariantCellList sRoomRfRampCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT | DOOR_RIGHT), .worldY = 2000},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfRamp = {
+    .cellList = &sRoomRfRampCellList,
+    .model = MODEL_ROOM_RF_RAMP,
+    .collision = rf_ramp_collision,
+
+    .maxLootCt = 0,
+    .objectList = NULL,
+    .requiredLoot = NULL,
+
+    .rarity = 5,
+    .generateOnce = TRUE,
+};
+
+// Final Spinning Platform
+
+struct DungeonObject sRoomRfSpinningObjectList[] = {
+    {.bhv = bhvRfSpinner, .model = MODEL_RF_SPINNER, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfSpinning = {
+    .cellList = &sRoomRfStraightCellList,
+    .model = MODEL_NONE,
+    .collision = NULL,
+
+    .maxLootCt = 0,
+    .objectList = &sRoomRfSpinningObjectList,
+    .requiredLoot = NULL,
+};
+
+// Final Tilting Wooden Platform
+struct DungeonRoomVariantCellList sRoomRfTiltingCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT|DOOR_RIGHT), .worldY = 500},
+    {.end = TRUE},
+};
+
+struct DungeonObject sRoomRfTiltingObjectList[] = {
+    {.bhv = bhvSeesawPlatform, .model = MODEL_RF_TILTING, .param = 8,
+    .angle = 0x4000, .pos = {0.f,0.f,1.5f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfTilting = {
+    .cellList = &sRoomRfTiltingCellList,
+    .model = MODEL_ROOM_RF_TILTING,
+    .collision = NULL,
+
+    .maxLootCt = 0,
+    .objectList = &sRoomRfTiltingObjectList,
+    .requiredLoot = NULL,
+};
+
+// Final Squarish Platforms
+
+struct DungeonObject sRoomRfSquarishObjectList[] = {
+    {.bhv = bhvRfSquarish, .model = MODEL_RF_SQUARISH, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+    {.bhv = bhvRfSquarish, .model = MODEL_RF_SQUARISH, .param = 1,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfSquarish = {
+    .cellList = &sRoomRfStraightCellList,
+    .model = MODEL_ROOM_RF_SQUARISH,
+    .collision = NULL,
+
+    .maxLootCt = 0,
+    .objectList = &sRoomRfSquarishObjectList,
+    .requiredLoot = NULL,
+};
+
+// Final Amp Path
+
+struct DungeonRoomVariantCellList sRoomRfAmplectedCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 1, .y = 1},
+    {.x = 2, .y = 1, .doorFlags = DOOR_UP, .worldY = 1000},
+    {.end = TRUE},
+};
+
+struct DungeonObject sRoomRfAmplectedObjectList[] = {
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfAmplected = {
+    .cellList = &sRoomRfAmplectedCellList,
+    .model = MODEL_ROOM_RF_AMPLECTED,
+    .collision = rf_amplected_collision,
+
+    .maxLootCt = 0,
+    .objectList = &sRoomRfAmplectedObjectList,
+    .requiredLoot = NULL,
+};
+
 // Room Facade 3
 
 struct DungeonObject sRoomFacade3ObjectList[] = {

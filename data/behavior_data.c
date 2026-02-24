@@ -55,6 +55,7 @@
 #include "levels/ttm/header.h"
 #include "levels/temple/header.h"
 #include "levels/rogue/header.h"
+#include "levels/rf/header.h"
 
 #include "make_const_nonconst.h"
 #include "behavior_data.h"
@@ -6543,5 +6544,27 @@ const BehaviorScript bhvLive[] = {
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     BILLBOARD(),
     BEGIN_LOOP(),
+    END_LOOP(),
+};
+
+const BehaviorScript bhvRfSpinner[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    LOAD_COLLISION_DATA(rf_spinner_collision),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    BEGIN_LOOP(),
+        ADD_INT(oFaceAngleYaw, 0x200),
+        CALL_NATIVE(load_object_collision_model),
+    END_LOOP(),
+};
+
+void bhv_rf_squarish(void);
+const BehaviorScript bhvRfSquarish[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    LOAD_COLLISION_DATA(rf_squarish_obj_collision),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_rf_squarish),
+        CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };

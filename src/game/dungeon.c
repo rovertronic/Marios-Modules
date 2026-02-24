@@ -145,6 +145,11 @@ struct DungeonRoomVariant * sLv3RoomVariantList[] = {
     &sRoomRfStraight,
     &sRoomRfRight,
     &sRoomRfLeft,
+    &sRoomRfRamp,
+    &sRoomRfSpinning,
+    &sRoomRfTilting,
+    &sRoomRfSquarish,
+    &sRoomRfAmplected,
 };
 
 struct DungeonRoom * dungeon_get_mario_room(void) {
@@ -456,7 +461,7 @@ void dungeon_generate_rooms_at_doors(struct DungeonRoomVariant ** variantList, i
                         }
 
                         // Prevent chaining of hallways. Walking simulator not fun!
-                        if (selectedVariant == originRoom->variant) {
+                        if (selectedVariant == originRoom->variant && sDungeonGeneratingLevelId != 2) {
                             trycount++;
                             continue;
                         }
@@ -625,7 +630,9 @@ void dungeon_spawn_room_objects(void) {
         roomObj->oPosZ = 32000.f - (sDungeonRoomList[i].yorigin * 2000.f);
         roomObj->oPosY = sDungeonRoomList[i].worldY;
         roomObj->oFaceAngleYaw = sDungeonRoomList[i].direction * 0x4000;
-        roomObj->collisionData = segmented_to_virtual(sDungeonRoomList[i].variant->collision);
+        if (sDungeonRoomList[i].variant->collision != NULL) {
+            roomObj->collisionData = segmented_to_virtual(sDungeonRoomList[i].variant->collision);
+        }
         roomObj->dungeonRoom[0] = &sDungeonRoomList[i];
         roomObj->dungeonRoom[1] = &sDungeonRoomList[i];
 
@@ -972,13 +979,13 @@ void dungeon_generate_lv3(void) {
     dungeon_clear_data();
 
     // Build First Room
-    dungeon_create_room(&sRoomRfFacade3, 0, 16, 16, 0);
+    dungeon_create_room(&sRoomRfFacade3, 0, 1, 16, 0);
 
     // Generate dungeon rooms
     sDungeonTargetRoomCount = 45;
     dungeon_generate_rooms_at_doors(sLv3RoomVariantList,sizeof(sLv3RoomVariantList));
 
-    if (sDungeonForceRegen) {
+    if (sDungeonForceRegen || sDungeonRoomCount < 40) {
         goto redo_generate;
     }
 }

@@ -742,6 +742,8 @@ void load_object_static_model(void) {
     TerrainData *collisionData = o->collisionData;
     u32 surfacePoolData;
 
+    if (o->collisionData == NULL) {return;}
+
     // Initialise a new surface pool for this block of surface data
     gCurrStaticSurfacePool = main_pool_alloc(main_pool_available() - 0x10, MEMORY_POOL_LEFT);
     gCurrStaticSurfacePoolEnd = gCurrStaticSurfacePool;

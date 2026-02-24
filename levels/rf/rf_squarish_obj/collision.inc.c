@@ -1,0 +1,21 @@
+const Collision rf_squarish_obj_collision[] = {
+	COL_INIT(),
+	COL_VERTEX_INIT(6),
+	COL_VERTEX(0, 178, 0),
+	COL_VERTEX(-500, 0, -500),
+	COL_VERTEX(-500, 0, 500),
+	COL_VERTEX(500, 0, 500),
+	COL_VERTEX(500, 0, -500),
+	COL_VERTEX(0, -264, 0),
+	COL_TRI_INIT(SURFACE_DEFAULT, 8),
+	COL_TRI(0, 1, 2),
+	COL_TRI(0, 2, 3),
+	COL_TRI(0, 3, 4),
+	COL_TRI(0, 4, 1),
+	COL_TRI(5, 2, 1),
+	COL_TRI(5, 3, 2),
+	COL_TRI(5, 4, 3),
+	COL_TRI(5, 1, 4),
+	COL_TRI_STOP(),
+	COL_END()
+};

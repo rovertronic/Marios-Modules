@@ -32,6 +32,7 @@
 #include "levels/thi/header.h"
 #include "levels/ttc/header.h"
 #include "levels/vcutm/header.h"
+#include "levels/rf/header.h"
 #include "mario.h"
 #include "mario_actions_cutscene.h"
 #include "memory.h"

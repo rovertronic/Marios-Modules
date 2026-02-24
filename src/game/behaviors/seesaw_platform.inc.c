@@ -15,6 +15,7 @@ static Collision const *sSeesawPlatformCollisionModels[] = {
     rr_seg7_collision_07029750,
     rr_seg7_collision_07029858,
     vcutm_seg7_collision_0700AC44,
+    rf_tilting_obj_collision,
 };
 
 /**

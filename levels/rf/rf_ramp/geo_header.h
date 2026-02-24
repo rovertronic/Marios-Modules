@@ -1,0 +1,10 @@
+extern const GeoLayout rf_ramp_geo[];
+extern Vtx rf_ramp_rf_ramp_mesh_layer_1_vtx_0[74];
+extern Gfx rf_ramp_rf_ramp_mesh_layer_1_tri_0[];
+extern Vtx rf_ramp_rf_ramp_mesh_layer_1_vtx_1[28];
+extern Gfx rf_ramp_rf_ramp_mesh_layer_1_tri_1[];
+extern Gfx mat_rf_ramp_collision_normal[];
+extern Gfx mat_revert_rf_ramp_collision_normal[];
+extern Gfx mat_rf_ramp_collision_noslip[];
+extern Gfx mat_revert_rf_ramp_collision_noslip[];
+extern Gfx rf_ramp_rf_ramp_mesh_layer_1_with_revert[];

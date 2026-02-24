@@ -1895,6 +1895,9 @@ void bhv_utility_mace(void) {
     }
 }
 
+struct Object *spawn_object_relative(s16 behaviorParam, s16 relativePosX, s16 relativePosY, s16 relativePosZ,
+                                     struct Object *parent, ModelID32 model, const BehaviorScript *behavior);
+
 void bhv_car(void) {
     switch(o->oAction) {
         case 0:
@@ -1922,5 +1925,24 @@ void bhv_car(void) {
     }
 }
 
-struct Object *spawn_object_relative(s16 behaviorParam, s16 relativePosX, s16 relativePosY, s16 relativePosZ,
-                                     struct Object *parent, ModelID32 model, const BehaviorScript *behavior);
+// Square-like motion instead of circular motion from sinewave
+f32 stupid_square_sine(f32 t) {
+    f32 r;
+    if (t >= 1.0f) {
+        t = t - (int)t;
+    }
+    if (t  <= .5f) {
+        r = -.5f + (t * 4.0f);
+    } else {
+        r = .5f - ((t-.5f) * 4.0f);
+    }
+    r = CLAMP(r,-.5f,.5f);
+    return r;
+}
+
+void bhv_rf_squarish(void) {
+    f32 cycle = o->oTimer/200.0f;
+    f32 co = o->oBehParams2ndByte * .5f;
+    o->oPosX = o->oHomeX + stupid_square_sine(cycle+.00f+co) * 1000.f;
+    o->oPosZ = o->oHomeZ + stupid_square_sine(cycle+.25f+co) * 1000.f;
+}

@@ -32,9 +32,17 @@ const LevelScript level_rf_entry[] = {
 	JUMP_LINK(script_func_global_1), 
 	JUMP_LINK(script_func_global_2), 
 	JUMP_LINK(script_func_global_18), 
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_STRAIGHT, rf_straight_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_RIGHT, rf_right_geo),
-	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_LEFT, rf_left_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_STRAIGHT, rf_straight_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_RIGHT, rf_right_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_LEFT, rf_left_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_RAMP, rf_ramp_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_TILTING, rf_tilting_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_SQUARISH, rf_squarish_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_AMPLECTED, rf_amplected_geo),
+
+	LOAD_MODEL_FROM_GEO(MODEL_RF_TILTING, rf_tilting_obj_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_RF_SPINNER, rf_spinner_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_RF_SQUARISH, rf_squarish_obj_geo),
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 
