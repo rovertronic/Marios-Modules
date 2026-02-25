@@ -54,7 +54,7 @@ struct module_panel module_panel_info[] = {
     [PANEL_CREATIVE] = {
         .name = "@G@Creative",
         .offset = 39,
-        .size = 5,
+        .size = 4,
         .unlock = creativePanelCondition,
     },
 };
@@ -202,6 +202,18 @@ void module_zaction(struct module_execution_thread * met, u8 call_context) {
             module_log_message(met,"In air, do ground pound.",0);
             set_mario_action(gMarioState,ACT_GROUND_POUND,0);
         }
+    }
+    met->x++;
+}
+
+void module_cancel(struct module_execution_thread * met, u8 call_context) {
+    met->doaircooldown = TRUE;
+    if (GROUNDED) {
+        module_log_message(met,"On ground, enter idle.",0);
+        set_mario_action(gMarioState,ACT_IDLE,0);
+    } else {
+        module_log_message(met,"In air, enter freefall.",0);
+        set_mario_action(gMarioState,ACT_FREEFALL,0);
     }
     met->x++;
 }
@@ -1190,7 +1202,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @R@red@@ into palette.",
         .func = module_color,
         .extra_data = &moduleRed,
-        .creative = FALSE,
+        .creative = TRUE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1201,7 +1213,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @B@blue@@ into palette.",
         .func = module_color,
         .extra_data = &moduleBlue,
-        .creative = FALSE,
+        .creative = TRUE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1212,7 +1224,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @G@green@@ into palette.",
         .func = module_color,
         .extra_data = &moduleGreen,
-        .creative = FALSE,
+        .creative = TRUE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1223,7 +1235,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @Y@yellow@@ into palette.",
         .func = module_color,
         .extra_data = &moduleYellow,
-        .creative = FALSE,
+        .creative = TRUE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1234,7 +1246,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes white into palette.",
         .func = module_color,
         .extra_data = &moduleWhite,
-        .creative = FALSE,
+        .creative = TRUE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1245,7 +1257,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes @0@black@@ into palette.",
         .func = module_color,
         .extra_data = &moduleBlack,
-        .creative = FALSE,
+        .creative = TRUE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1256,7 +1268,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes tan into palette.",
         .func = module_color,
         .extra_data = &moduleTan,
-        .creative = FALSE,
+        .creative = TRUE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1267,7 +1279,7 @@ struct module_info module_infos[] = {
         .desc = "Mixes brown into palette.",
         .func = module_color,
         .extra_data = &moduleBrown,
-        .creative = FALSE,
+        .creative = TRUE,
         .loot_tier = LOOT_VANITY,
     },
 
@@ -1301,6 +1313,7 @@ struct module_info module_infos[] = {
         .upg_desc = NULL,
         .func = module_settings,
         .extra_data = &gGameSettings[SETTING_60HZ],
+        .creative = TRUE,
     },
 
     [MOD_WIDESCREEN] = {
@@ -1311,6 +1324,7 @@ struct module_info module_infos[] = {
         .upg_desc = NULL,
         .func = module_settings,
         .extra_data = &gGameSettings[SETTING_WIDE],
+        .creative = TRUE,
     },
 
     [MOD_CAMERA_COLLISION] = {
@@ -1321,6 +1335,7 @@ struct module_info module_infos[] = {
         .upg_desc = NULL,
         .func = module_settings,
         .extra_data = &gGameSettings[SETTING_CAMERA_COLLISION],
+        .creative = TRUE,
     },
 
     [MOD_AA] = {
@@ -1341,6 +1356,7 @@ struct module_info module_infos[] = {
         .upg_desc = NULL,
         .func = module_settings,
         .extra_data = &gGameSettings[SETTING_NOMUSIC],
+        .creative = TRUE,
     },
 
     [MOD_ICE] = {
@@ -1500,5 +1516,17 @@ struct module_info module_infos[] = {
         .cooldown = .5f,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_2,
+    },
+
+    [MOD_CANCEL] = {
+        .name = "Cancel",
+        .type = MTYPE_MOVE,
+        .tex = micons_stop_rgba16,
+        .desc = "Cancels Mario's current action.",
+        .unchainable = TRUE,
+        .elementable = TRUE,
+        .func = module_cancel,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 };

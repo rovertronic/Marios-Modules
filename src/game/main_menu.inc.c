@@ -102,6 +102,8 @@ void load_marios_modules(void) {
         if (!is_level_dungeon()) {
             tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
         }
+
+        update_creative_inventory();
     }
 }
 

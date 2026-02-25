@@ -130,13 +130,15 @@ enum module_type {
     MTYPE_MOVE,
     MTYPE_COND,
     MTYPE_BUFF,
-    MTYPE_INPUT,
-    MTYPE_NONMOD,
-    MTYPE_SETTINGS,
     MTYPE_LOGIC,
-    MTYPE_ELEMENT,
     MTYPE_PASSIVE,
     MTYPE_VANITY,
+    MTYPE_SETTINGS,
+    MTYPE_MAX_USEABLE,
+    
+    MTYPE_INPUT,
+    MTYPE_ELEMENT,
+    MTYPE_NONMOD,
     MTYPE_COUNT,
 };
 
@@ -199,7 +201,6 @@ enum module_id {
     MOD_DEFENSE,
     MOD_NOMUSIC,
     MOD_ROTATE,
-    MOD_MONITOR,
     MOD_IF_WALL,
     MOD_TIME_EXTEND,
     MOD_NONMOD_STAR,
@@ -207,6 +208,9 @@ enum module_id {
     MOD_LOW_GRAVITY,
     MOD_MINIMAP,
     MOD_IF_SENSOR,
+    MOD_CANCEL,
+
+    MOD_MONITOR,
     MOD_COUNT,
 };
 

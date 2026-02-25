@@ -62,6 +62,7 @@ u8 module_param_in_hand = 0;
 
 struct module_panel * icp = &module_panel_info[PANEL_ACTIONS];
 int inventory_panel = PANEL_ACTIONS;
+s8 inventory_creative_category = 0;
 
 #define DEBUG_LOG_MAX 12
 char * sDebugLogStrs[DEBUG_LOG_MAX];
@@ -162,6 +163,23 @@ void drop_inventory(s8 module, u8 dropy) {
     }
 }
 
+void update_creative_inventory(void) {
+    // Populate creative inventory
+    for (int y = 39; y < 43; y++) {
+        for (int x = 0; x < 8; x++) {
+            inventory[y][x] = MOD_EMPTY;
+        }
+    }
+
+    int i2 = 0;
+    for (int i = 0; i < MOD_COUNT; i++) {
+        if (module_infos[i].creative && module_infos[i].type == inventory_creative_category) {
+            inventory[39+(i2/8)][i2%8] = i;
+            i2++;
+        }
+    }
+}
+
 void init_module_inventory(void) {
     for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
         for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
@@ -201,19 +219,9 @@ void init_module_inventory(void) {
     inventory[10][2] = MOD_MINIMAP;
     inventory[10][3] = MOD_ENDBLOCK;
 
+    update_creative_inventory();
 
     tinymt32_init(&gGlobalRandomState,0);
-
-    // Populate creative inventory
-    int i2 = 0;
-    for (int j = 0; j < MTYPE_COUNT; j++) {
-        for (int i = 0; i < MOD_COUNT; i++) {
-            if (module_infos[i].creative && module_infos[i].type == j) {
-                inventory[39+(i2/8)][i2%8] = i;
-                i2++;
-            }
-        }
-    }
 
     update_settings();
 }
@@ -673,6 +681,16 @@ void control_module_menu(void) {
             }
             modified_inventory = TRUE;
         }
+    } else {
+        // Creative menu controls
+        if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
+            inventory_creative_category++;
+        }
+        if (gPlayer1Controller->buttonPressed & L_CBUTTONS) {
+            inventory_creative_category--;
+        }
+        inventory_creative_category = (MTYPE_MAX_USEABLE + inventory_creative_category) % MTYPE_MAX_USEABLE;
+        update_creative_inventory();
     }
 
     if (modified_inventory) {
@@ -947,6 +965,27 @@ void print_module_menu(void) {
     print_utf8("@<@←@@𝐋", 32, 122-16);
     print_utf8("𝐑@>@→", 33+162-16, 122-16);
     gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
+
+    if (icp == &module_panel_info[PANEL_CREATIVE]) {
+        // PRINT PANEL INFO
+        gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+        gDPSetEnvColor(gDisplayListHead++, 0,0,0, 160);
+        render_4slice(25,122+16,33+162,122);
+
+        utf8_print_reset();
+        gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
+        int sx;
+        int sy;
+        char str[50];
+        sprintf(str,"@%s@%s",module_type_infos[inventory_creative_category].text_color,
+            module_type_infos[inventory_creative_category].name);
+        utf8_size(str,&sx,&sy);
+
+        print_utf8(str, 30+(81-(sx/2)), 122);
+        print_utf8("@<Y@←@Y@C", 32, 122);
+        print_utf8("@Y@C@Y>@→", 33+162-16, 122);
+        gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
+    }
 
     //PRINT MOD INFO
     s8 mod_inf_to_disp = MOD_EMPTY;
