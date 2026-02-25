@@ -1535,7 +1535,6 @@ struct module_info module_infos[] = {
         .extra_data = PASSIVE_FLAG_MINIMAP,
         .cooldown = .0f,
         .creative = TRUE,
-        .loot_tier = LOOT_TIER_2,
     },
 
     [MOD_IF_SENSOR] = {
@@ -1581,6 +1580,6 @@ struct module_info module_infos[] = {
         .unchainable = FALSE,
         .func = module_rewind_time,
         .creative = TRUE,
-        .loot_tier = LOOT_TIER_1,
+        .loot_tier = LOOT_TIER_2,
     },
 };

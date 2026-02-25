@@ -478,6 +478,9 @@ void joystick_to_dpad(void) {
     }
 }
 
+s8 sRerollHistory[10];
+u8 sRerollHistoryCount = 0;
+
 void control_module_menu(void) {
     animate_wildcolor_module();
 
@@ -554,11 +557,11 @@ void control_module_menu(void) {
         } else {
             s8 recycledModule = inventory[true_inventory_y][inventory_x];
 
-            int price = 4;
+            int price = 3;
             int canSimilarRoll = TRUE;
             switch(module_infos[recycledModule].loot_tier) {
                 case LOOT_TIER_2:
-                    price = 10;
+                    price = 8;
                     break;
                 case LOOT_VANITY:
                     price = 1;
@@ -575,23 +578,25 @@ void control_module_menu(void) {
                 gRecycledModule = inventory[true_inventory_y][inventory_x];
                 inventory[true_inventory_y][inventory_x] = MOD_EMPTY;
 
-                int checkSimilar = FALSE;
-                if (canSimilarRoll) {
-                    checkSimilar = random_u16()%2;
-                }
+                sRerollHistory[sRerollHistoryCount] = recycledModule;
+                sRerollHistoryCount++;
+                sRerollHistoryCount %= 10;
 
+                Bool8 foundSameInHistory = TRUE;
                 s8 rerolledModule = random_u16()%MOD_COUNT;
-                int i = 0;
                 while(
                     (module_infos[rerolledModule].loot_tier != module_infos[recycledModule].loot_tier)
                     || (module_infos[rerolledModule].func == module_infos[recycledModule].func)
                     || (rerolledModule == recycledModule)
-                    || (checkSimilar && module_infos[rerolledModule].type != module_infos[recycledModule].type) ) {
+                    || (foundSameInHistory) ) {
+
                     rerolledModule = random_u16()%MOD_COUNT;
-                    i++;
-                    if (i > 10) {
-                        //only 1 module of this type in the loot table
-                        checkSimilar = FALSE;
+
+                    foundSameInHistory = FALSE;
+                    for (int i = 0; i < 10; i++) {
+                        if (sRerollHistory[i] == rerolledModule) {
+                            foundSameInHistory = TRUE;
+                        }
                     }
                 }
 
@@ -1023,14 +1028,14 @@ void print_module_menu(void) {
         }
 
         if (gModuleMenuMode == MODULE_MENU_MODE_RECYCLE) {
-            int recyclePrice = 4;
+            int recyclePrice = 3;
             int canRecycle = TRUE;
             switch(module_infos[mod_inf_to_disp].loot_tier) {
                 case LOOT_NONE:
                     canRecycle = FALSE;
                     break;
                 case LOOT_TIER_2:
-                    recyclePrice = 10;
+                    recyclePrice = 8;
                     break;
                 case LOOT_VANITY:
                     recyclePrice = 1;
