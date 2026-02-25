@@ -257,6 +257,9 @@ void module_rewind_time(struct module_execution_thread * met, u8 call_context) {
             if (mult > 0) {
                 met->timer += mult-1;
             }
+
+            // Clamp to prevent overshoot
+            met->timer = MIN(met->timer, 29 + met->time_mod*30);
             break;
     }
 }
