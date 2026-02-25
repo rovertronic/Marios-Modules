@@ -6,6 +6,19 @@
 #include "macros.h"
 #include "types.h"
 
+#define MARIO_RECORD_MAX 300
+
+struct MarioRecordState {
+    Vec3f pos;
+    f32 yVel;
+    f32 fVel;
+    u32 action;
+    s16 angle;
+};
+
+extern int gMarioRecordIndex;
+extern struct MarioRecordState gMarioRecord[MARIO_RECORD_MAX];
+
 extern s16 gNearestRedCoinDist;
 extern int gWarpDamage;
 

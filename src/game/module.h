@@ -67,6 +67,7 @@ struct module_execution_thread {
     u8 condition_count;
 
     u8 landing_count;
+    u16 record_index;
 
     u16 used_flags;
     u16 timer;
@@ -135,7 +136,7 @@ enum module_type {
     MTYPE_VANITY,
     MTYPE_SETTINGS,
     MTYPE_MAX_USEABLE,
-    
+
     MTYPE_INPUT,
     MTYPE_ELEMENT,
     MTYPE_NONMOD,
@@ -209,6 +210,7 @@ enum module_id {
     MOD_MINIMAP,
     MOD_IF_SENSOR,
     MOD_CANCEL,
+    MOD_REWIND_TIME, // Chaezepin
 
     MOD_MONITOR,
     MOD_COUNT,

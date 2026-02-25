@@ -218,6 +218,49 @@ void module_cancel(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+void module_rewind_time(struct module_execution_thread * met, u8 call_context) {
+    met->doaircooldown = TRUE;
+    switch(call_context) {
+        case MCC_INVOKE:
+            if (met->time_mod > 8) {
+                met->time_mod = 8;
+            }
+            met->halted = TRUE;
+            met->record_index = gMarioRecordIndex;
+            met->timer = 1;
+            module_log_message(met,"Rewinding last two seconds.", 60);
+            if (met->time_mod > 0) {
+                module_log_message(met,"Extra time from time extend: %ds",met->time_mod);
+            }
+            break;
+        case MCC_HALTED:;
+            int mult = met->mod + 1;
+            int reversedIndex = (met->record_index-met->timer + MARIO_RECORD_MAX) % MARIO_RECORD_MAX;
+            vec3f_copy(gMarioState->pos,gMarioRecord[reversedIndex].pos);
+            gMarioState->faceAngle[1] = gMarioRecord[reversedIndex].angle;
+            if (gMarioState->action != gMarioRecord[reversedIndex].action) {
+                set_mario_action(gMarioState,gMarioRecord[reversedIndex].action,0);
+            }
+            gMarioState->vel[1] = -gMarioRecord[reversedIndex].yVel * mult;
+            gMarioState->forwardVel = -gMarioRecord[reversedIndex].fVel * mult;
+
+            if (met->timer >= 30 + met->time_mod*30) {
+                module_log_message(met,"Rewind finished.",0);
+
+                met->time_mod = 0;
+                met->mod = 0;
+                met->halted = FALSE;
+                met->x++;
+                break;
+            }
+
+            if (mult > 0) {
+                met->timer += mult-1;
+            }
+            break;
+    }
+}
+
 
 void module_pow(struct module_execution_thread * met, u8 call_context) {
     module_log_message(met,"UPG Increased by %d.",met->extra_data);
@@ -1524,8 +1567,19 @@ struct module_info module_infos[] = {
         .tex = micons_stop_rgba16,
         .desc = "Cancels Mario's current action.",
         .unchainable = TRUE,
-        .elementable = TRUE,
         .func = module_cancel,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
+    },
+
+    [MOD_REWIND_TIME] = {
+        .name = "Rewind Time",
+        .type = MTYPE_MOVE,
+        .tex = micons_clock_rgba16,
+        .desc = "Replays the last second in reverse. Momentum is preserved on exit.",
+        .upg_desc = "Rewind speed multiplied by @O@UPG@@.",
+        .unchainable = FALSE,
+        .func = module_rewind_time,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_1,
     },

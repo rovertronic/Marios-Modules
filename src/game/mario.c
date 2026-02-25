@@ -35,6 +35,9 @@
 #include "module.h"
 #include "dungeon.h"
 
+int gMarioRecordIndex = 0;
+struct MarioRecordState gMarioRecord[MARIO_RECORD_MAX];
+
 u32 sMarioCharacterSoundTable[][2] = {
     [MARIO_SND_YAH_WAH_HOO]          = { SOUND_MARIO_YAH_WAH_HOO,         SOUND_GIRL_JUMP },
     [MARIO_SND_HOOHOO]               = { SOUND_MARIO_HOOHOO,              SOUND_GIRL_DOUBLEJUMP },
@@ -1944,6 +1947,15 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 
         intro_eye_animation();
         bcopy(gMarioState->marioBodyState,gMarioState->marioGfxBodyState,sizeof(gBodyStates[0]));
+
+        vec3f_copy(gMarioRecord[gMarioRecordIndex].pos,gMarioState->pos);
+        gMarioRecord[gMarioRecordIndex].angle = gMarioState->faceAngle[1];
+        gMarioRecord[gMarioRecordIndex].fVel = gMarioState->forwardVel;
+        gMarioRecord[gMarioRecordIndex].yVel = gMarioState->vel[1];
+        gMarioRecord[gMarioRecordIndex].action = gMarioState->action;
+
+        gMarioRecordIndex++;
+        gMarioRecordIndex %= MARIO_RECORD_MAX;
 
         return gMarioState->particleFlags;
     }
