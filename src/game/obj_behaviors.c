@@ -1767,8 +1767,12 @@ void bhv_dungeon_elite(void) {
     struct Object * goomba1 = spawn_object(o,gDungeonEnemies[0]->model,gDungeonEnemies[0]->bhv);
     struct Object * goomba2 = spawn_object(o,gDungeonEnemies[1]->model,gDungeonEnemies[1]->bhv);
     struct Object * goomba3;
+    struct Object * goomba4;
     if (gDungeonEnemies[2] != NULL) {
         goomba3 = spawn_object(o,gDungeonEnemies[2]->model,gDungeonEnemies[2]->bhv);
+    }
+    if (gDungeonEnemies[3] != NULL) {
+        goomba4 = spawn_object(o,gDungeonEnemies[3]->model,gDungeonEnemies[3]->bhv);
     }
 
     goomba1->parentObj = goomba1->parentObj;
@@ -1776,6 +1780,10 @@ void bhv_dungeon_elite(void) {
     if (gDungeonEnemies[2] != NULL) {
         goomba3->parentObj = goomba3->parentObj;
         obj_ride_obj(goomba3,goomba2);
+    }
+    if (gDungeonEnemies[3] != NULL) {
+        goomba4->parentObj = goomba4->parentObj;
+        obj_ride_obj(goomba4,goomba3);
     }
     obj_ride_obj(goomba2,goomba1);
 }

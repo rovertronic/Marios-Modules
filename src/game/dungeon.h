@@ -7,7 +7,7 @@
 #define DUNGEON_DEBUG
 
 extern struct DungeonRoom * gDungeonMarioRoom;
-extern struct DungeonObject * gDungeonEnemies[3];
+extern struct DungeonObject * gDungeonEnemies[4];
 extern struct DungeonObject * gDungeonAboomboomination[7];
 extern u16 gDungeonTreeModel;
 extern Vec3f gDungeonSpawnLocation;

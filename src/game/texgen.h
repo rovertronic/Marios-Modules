@@ -3,6 +3,7 @@
 #ifndef TEXGEN_H
 #define TEXGEN_H
 
+void texgen_generate_lv3(void);
 void texgen_generate_lv2(void);
 void texgen_generate_lv1(void);
 

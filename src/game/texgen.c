@@ -1,6 +1,7 @@
 #include "texgen.h"
 #include "engine/math_util.h"
 #include "levels/rogue/header.h"
+#include "levels/rf/header.h"
 
 u32 sColorPalletepixelFloats[][3] = {
     {0xFFE74C,0xFF5964,0xFFFFFF},
@@ -23,6 +24,24 @@ u32 sColorPalletepixelFloats[][3] = {
     {0x93827F,0xF3F9D2,0xBDC4A7},
     {0xAFD2E9,0x9D96B8,0x9A7197},
     {0xB5D6B2,0x53131E,0x5A464C},
+};
+
+u32 sColorPalletepixelFloatsLv3[][3] = {
+    {0xCDF7F6,0x8FB8DE,0x6A605C},
+    {0x177E89,0xDB3A34,0xFFC857},
+    {0xD9DBF1,0xF9F9ED,0xDBF4A7},
+    {0xDBD053,0xC89933,0xA1C6EA},
+    {0xE54B4B,0xFFA987,0xF7EBE8},
+    {0xD7CEB2,0xA59E8C,0x66635B},
+    {0xFFD4D4,0xCBF3D2,0x7FD1B9},
+    {0xFF6700,0xEBEBEB,0xC0C0C0},
+    {0xFEFCFD,0x4EFFEF,0x251605},
+    {0xFFC857,0xE9724C,0xC5283D},
+    {0xFEFFFE,0xE9EBF8,0xA5A299},
+    {0xC2F9BB,0x9AD1D4,0x62C370},
+    {0xB7FDFE,0x5EF38C,0x2B9720},
+    {0xFB3640,0x605F5E,0xDDE8B9},
+    {0x5AB1BB,0xA5C882,0xF7DD72},
 };
 
 u16 * sBrickTextures[] = {
@@ -167,4 +186,30 @@ void texgen_generate_lv1(void) {
 
     texture = segmented_to_virtual(&texgensamples_CarpetGrayscale_rgba16);
     texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureCarpet), 2048, 0xDC65FF  );
+}
+
+void texgen_generate_lv3(void) {
+    int colorPalletIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sColorPalletepixelFloatsLv3)/12);
+    // Lazy: Plug textures into self instead of using a source memory location and dest memory location. Shady, but not dangerous.
+
+    // Tilting textures
+    texgen_colorize_rgba16( segmented_to_virtual(&rf_tilting_bowzerwood_rgba16),
+                            segmented_to_virtual(&rf_tilting_bowzerwood_rgba16),
+                            2048, sColorPalletepixelFloatsLv3[colorPalletIndex][0]  );
+    texgen_colorize_rgba16( segmented_to_virtual(&rf_tilting_obj_bowzerwood_rgba16),
+                            segmented_to_virtual(&rf_tilting_obj_bowzerwood_rgba16),
+                            2048, sColorPalletepixelFloatsLv3[colorPalletIndex][1]  );
+
+    // Squarish Textures
+    texgen_colorize_rgba16( segmented_to_virtual(&rf_squarish_grille_rgba16),
+                        segmented_to_virtual(&rf_squarish_grille_rgba16),
+                        4096, sColorPalletepixelFloatsLv3[colorPalletIndex][2]  );
+    texgen_colorize_rgba16( segmented_to_virtual(&rf_squarish_obj_plagform_rgba16),
+                        segmented_to_virtual(&rf_squarish_obj_plagform_rgba16),
+                        4096, sColorPalletepixelFloatsLv3[colorPalletIndex][1]  );
+
+    // Spinner Textures
+    texgen_colorize_rgba16( segmented_to_virtual(&rf_spinner_final_path_rgba16),
+                        segmented_to_virtual(&rf_spinner_final_path_rgba16),
+                        2048, sColorPalletepixelFloatsLv3[colorPalletIndex][2]  );
 }

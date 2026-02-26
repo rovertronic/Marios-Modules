@@ -3,7 +3,7 @@
 const GeoLayout rf_squarish_geo[] = {
 	GEO_CULLING_RADIUS(10000),
 	GEO_OPEN_NODE(),
-		GEO_DISPLAY_LIST(LAYER_OPAQUE, rf_squarish_rf_squarish_mesh_layer_1_with_revert),
+		GEO_DISPLAY_LIST(LAYER_ALPHA, rf_squarish_rf_squarish_mesh_layer_4),
 	GEO_CLOSE_NODE(),
 	GEO_END(),
 };

@@ -1166,7 +1166,7 @@ void mode_8_directions_camera(struct Camera *c) {
     set_camera_height(c, pos[1]);
 
     camera_override = FALSE;
-    if (gGameSettings[SETTING_CAMERA_COLLISION]) {
+    if (gGameSettings[SETTING_CAMERA_COLLISION] && gCurrLevelNum != LEVEL_RF) {
         struct Surface * surf;
         Vec3f camdir;
         Vec3f origin;

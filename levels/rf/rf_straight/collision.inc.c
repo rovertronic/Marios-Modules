@@ -1,6 +1,6 @@
 const Collision rf_straight_collision[] = {
 	COL_INIT(),
-	COL_VERTEX_INIT(24),
+	COL_VERTEX_INIT(28),
 	COL_VERTEX(1000, 0, 453),
 	COL_VERTEX(1000, 0, 388),
 	COL_VERTEX(1000, 100, 388),
@@ -25,7 +25,11 @@ const Collision rf_straight_collision[] = {
 	COL_VERTEX(-1000, 100, 453),
 	COL_VERTEX(1000, 100, -453),
 	COL_VERTEX(1000, 100, -388),
-	COL_TRI_INIT(SURFACE_DEFAULT, 44),
+	COL_VERTEX(-1025, 0, -388),
+	COL_VERTEX(-1025, 0, 388),
+	COL_VERTEX(1025, 0, 388),
+	COL_VERTEX(1025, 0, -388),
+	COL_TRI_INIT(SURFACE_DEFAULT, 48),
 	COL_TRI(0, 1, 2),
 	COL_TRI(0, 2, 3),
 	COL_TRI(4, 0, 5),
@@ -70,6 +74,10 @@ const Collision rf_straight_collision[] = {
 	COL_TRI(5, 3, 21),
 	COL_TRI(8, 15, 23),
 	COL_TRI(8, 23, 18),
+	COL_TRI(17, 8, 24),
+	COL_TRI(17, 24, 25),
+	COL_TRI(15, 1, 26),
+	COL_TRI(15, 26, 27),
 	COL_TRI_STOP(),
 	COL_END()
 };

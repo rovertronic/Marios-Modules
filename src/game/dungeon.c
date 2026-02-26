@@ -76,7 +76,7 @@ struct DungeonObject sTopEnemyList[] = {
     .angle = 0, .pos = {0.f,0.f,0.f}},
 };
 
-struct DungeonObject * gDungeonEnemies[3];
+struct DungeonObject * gDungeonEnemies[4];
 struct DungeonObject * gDungeonAboomboomination[7];
 
 #include "dungeon_room_data.inc.c"
@@ -898,6 +898,7 @@ void dungeon_generate_lv1(void) {
     gDungeonEnemies[0] = &sBottomEnemyList[tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBottomEnemyList)/s)];
     gDungeonEnemies[1] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
     gDungeonEnemies[2] = NULL;
+    gDungeonEnemies[3] = NULL;
 
     // The dungeon boss is just enemey spam, lol
     gDungeonAboomboomination[0] = &sBottomEnemyList[tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBottomEnemyList)/s)];
@@ -942,6 +943,7 @@ void dungeon_generate_lv2(void) {
     gDungeonEnemies[0] = &sBottomEnemyList[tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBottomEnemyList)/s)];
     gDungeonEnemies[1] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
     gDungeonEnemies[2] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
+    gDungeonEnemies[3] = NULL;
 
     // Shuffle location of chest in wood room
     dungeon_shuffle_wood_room_treasure();
@@ -972,6 +974,14 @@ void dungeon_generate_lv2(void) {
 
 void dungeon_generate_lv3(void) {
     sDungeonGeneratingLevelId = 2;
+
+    // Pick random enemies
+    int s = sizeof(sBottomEnemyList[0]);
+    gDungeonEnemies[0] = &sBottomEnemyList[tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBottomEnemyList)/s)];
+    gDungeonEnemies[1] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
+    gDungeonEnemies[2] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
+    gDungeonEnemies[3] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
+
 
     redo_generate:
 
@@ -1029,6 +1039,7 @@ void dungeon_generate(int level) {
             dungeon_generate_lv2();
             dungeon_sync_inventory();
             dungeon_generate_lv3();
+            texgen_generate_lv3();
             break;
     }
 

@@ -1199,6 +1199,12 @@ struct DungeonRoomVariant sRoomMemorize = {
 
 // Rogue Final: Paths
 
+struct DungeonObject sRoomRfStraight1ObjectList[] = {
+    {.bhv = bhvDungeonElite, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {0.f,0.f,0.f}},
+    {.end = TRUE},
+};
+
 struct DungeonRoomVariantCellList sRoomRfStraightCellList[] = {
     {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT | DOOR_RIGHT)},
     {.end = TRUE},
@@ -1210,7 +1216,7 @@ struct DungeonRoomVariant sRoomRfStraight = {
     .collision = rf_straight_collision,
 
     .maxLootCt = 0,
-    .objectList = NULL,
+    .objectList = &sRoomRfStraight1ObjectList,
     .requiredLoot = NULL,
 };
 
@@ -1335,6 +1341,12 @@ struct DungeonRoomVariantCellList sRoomRfAmplectedCellList[] = {
 };
 
 struct DungeonObject sRoomRfAmplectedObjectList[] = {
+    {.bhv = bhvCirclingAmp, .model = MODEL_AMP, .param = 0,
+    .angle = 0, .pos = {-9.10144f,-1.84873f,2.51063f}},
+    {.bhv = bhvCirclingAmp, .model = MODEL_AMP, .param = 0,
+    .angle = 0, .pos = {-18.9429f,16.3522f,5.23763f}},
+    {.bhv = bhvCirclingAmp, .model = MODEL_AMP, .param = 0,
+    .angle = 0, .pos = {-31.3328f,25.1212f,10.2415f}},
     {.end = TRUE},
 };
 
