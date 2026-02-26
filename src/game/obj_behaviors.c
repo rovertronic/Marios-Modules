@@ -1954,3 +1954,17 @@ void bhv_rf_squarish(void) {
     o->oPosX = o->oHomeX + stupid_square_sine(cycle+.00f+co) * 1000.f;
     o->oPosZ = o->oHomeZ + stupid_square_sine(cycle+.25f+co) * 1000.f;
 }
+
+#define RINO_PLAT_DIST 750
+
+void bhv_rf_rino(void) {
+    s16 angle = gGlobalTimer * 0x100 + (o->oBehParams2ndByte * 0x4000);
+    o->oFaceAnglePitch = angle;
+}
+
+void bhv_rf_rino_plat(void) {
+    s16 angle = gGlobalTimer * 0x100 + (o->oBehParams2ndByte * 0x4000);
+    o->oPosX = o->oHomeX + sins(o->oFaceAngleYaw) * sins(angle) * RINO_PLAT_DIST;
+    o->oPosZ = o->oHomeZ + coss(o->oFaceAngleYaw) * sins(angle) * RINO_PLAT_DIST;
+    o->oPosY = o->oHomeY + coss(angle) * RINO_PLAT_DIST;
+}

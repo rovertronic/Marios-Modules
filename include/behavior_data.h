@@ -583,5 +583,7 @@ extern const BehaviorScript bhvMace[];
 extern const BehaviorScript bhvLive[];
 extern const BehaviorScript bhvRfSpinner[];
 extern const BehaviorScript bhvRfSquarish[];
+extern const BehaviorScript bhvRfRinoX[];
+extern const BehaviorScript bhvRfRinoPlat[];
 
 #endif // BEHAVIOR_DATA_H

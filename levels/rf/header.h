@@ -27,4 +27,8 @@ extern const LevelScript level_rf_entry[];
 #include "rf_squarish_obj/geo_header.h"
 #include "rf_amplected/collision_header.h"
 #include "rf_amplected/geo_header.h"
+#include "rf_rino/geo_header.h"
+#include "rf_rino_obj/geo_header.h"
+#include "rf_rino_plat/collision_header.h"
+#include "rf_rino_plat/geo_header.h"
 #endif

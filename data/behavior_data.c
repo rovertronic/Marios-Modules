@@ -6568,3 +6568,24 @@ const BehaviorScript bhvRfSquarish[] = {
         CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };
+
+void bhv_rf_rino(void);
+const BehaviorScript bhvRfRinoX[] = {
+    BEGIN(OBJ_LIST_DEFAULT),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_rf_rino),
+    END_LOOP(),
+};
+
+void bhv_rf_rino_plat(void);
+const BehaviorScript bhvRfRinoPlat[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    LOAD_COLLISION_DATA(rf_rino_plat_collision),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_rf_rino_plat),
+        CALL_NATIVE(load_object_collision_model),
+    END_LOOP(),
+};

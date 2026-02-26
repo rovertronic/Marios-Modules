@@ -24,3 +24,6 @@
 #include "rf_squarish/geo.inc.c"
 #include "rf_squarish_obj/geo.inc.c"
 #include "rf_amplected/geo.inc.c"
+#include "rf_rino/geo.inc.c"
+#include "rf_rino_obj/geo.inc.c"
+#include "rf_rino_plat/geo.inc.c"

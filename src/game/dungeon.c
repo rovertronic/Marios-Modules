@@ -145,11 +145,13 @@ struct DungeonRoomVariant * sLv3RoomVariantList[] = {
     &sRoomRfStraight,
     &sRoomRfRight,
     &sRoomRfLeft,
+    
     &sRoomRfRamp,
     &sRoomRfSpinning,
     &sRoomRfTilting,
     &sRoomRfSquarish,
     &sRoomRfAmplected,
+    &sRoomRfRino,
 };
 
 struct DungeonRoom * dungeon_get_mario_room(void) {

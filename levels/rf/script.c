@@ -39,10 +39,13 @@ const LevelScript level_rf_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_TILTING, rf_tilting_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_SQUARISH, rf_squarish_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_AMPLECTED, rf_amplected_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_RINO, rf_rino_geo),
 
 	LOAD_MODEL_FROM_GEO(MODEL_RF_TILTING, rf_tilting_obj_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_RF_SPINNER, rf_spinner_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_RF_SQUARISH, rf_squarish_obj_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_RF_RINO, rf_rino_obj_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_RF_RINO_PLAT, rf_rino_plat_geo),
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 

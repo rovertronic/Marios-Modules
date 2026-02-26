@@ -31,3 +31,7 @@
 #include "rf_squarish_obj/model.inc.c"
 #include "rf_amplected/collision.inc.c"
 #include "rf_amplected/model.inc.c"
+#include "rf_rino/model.inc.c"
+#include "rf_rino_obj/model.inc.c"
+#include "rf_rino_plat/collision.inc.c"
+#include "rf_rino_plat/model.inc.c"

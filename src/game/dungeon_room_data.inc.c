@@ -1360,6 +1360,36 @@ struct DungeonRoomVariant sRoomRfAmplected = {
     .requiredLoot = NULL,
 };
 
+// Final Rino
+struct DungeonRoomVariantCellList sRoomRfRinoCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = (DOOR_LEFT|DOOR_RIGHT), .worldY = 1000},
+    {.end = TRUE},
+};
+
+struct DungeonObject sRoomRfRinoObjectList[] = {
+    {.bhv = bhvRfRinoX, .model = MODEL_RF_RINO, .param = 0,
+    .angle = -0x4000, .pos = {0.f,0.f,5.f}},
+    {.bhv = bhvRfRinoPlat, .model = MODEL_RF_RINO_PLAT, .param = 0,
+    .angle = -0x4000, .pos = {0.f,0.f,5.f}},
+    {.bhv = bhvRfRinoPlat, .model = MODEL_RF_RINO_PLAT, .param = 1,
+    .angle = -0x4000, .pos = {0.f,0.f,5.f}},
+    {.bhv = bhvRfRinoPlat, .model = MODEL_RF_RINO_PLAT, .param = 2,
+    .angle = -0x4000, .pos = {0.f,0.f,5.f}},
+    {.bhv = bhvRfRinoPlat, .model = MODEL_RF_RINO_PLAT, .param = 3,
+    .angle = -0x4000, .pos = {0.f,0.f,5.f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfRino = {
+    .cellList = &sRoomRfRinoCellList,
+    .model = MODEL_ROOM_RF_RINO,
+    .collision = NULL,
+
+    .maxLootCt = 0,
+    .objectList = &sRoomRfRinoObjectList,
+    .requiredLoot = NULL,
+};
+
 // Room Facade 3
 
 struct DungeonObject sRoomFacade3ObjectList[] = {

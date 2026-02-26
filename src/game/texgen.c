@@ -235,4 +235,12 @@ void texgen_generate_lv3(void) {
     texgen_colorize_desaturated_rgba16( segmented_to_virtual(&rf_spinner_final_path_rgba16),
         segmented_to_virtual(&rf_spinner_final_path_rgba16),
         2048, sColorPalletepixelFloatsLv3[colorPalletIndex][2]  );
+
+    
+    texgen_colorize_desaturated_rgba16( segmented_to_virtual(&rf_rino_bowzerwood_rgba16),
+        segmented_to_virtual(&rf_rino_bowzerwood_rgba16),
+        2048, sColorPalletepixelFloatsLv3[colorPalletIndex][0]  );
+    texgen_colorize_rgba16( segmented_to_virtual(&rf_rino_obj_bowzerwood_rgba16),
+        segmented_to_virtual(&rf_rino_obj_bowzerwood_rgba16),
+        2048, sColorPalletepixelFloatsLv3[colorPalletIndex][2]  );
 }
