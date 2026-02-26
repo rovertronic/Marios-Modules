@@ -128,6 +128,29 @@ void texgen_colorize_rgba16(u16 * texture, u16 * texout, int size, u32 color) {
     }
 }
 
+void texgen_colorize_desaturated_rgba16(u16 * texture, u16 * texout, int size, u32 color) {
+    int pixelCount = size/2;
+    for (int i = 0; i < pixelCount; i++) {
+        f32 colorFloat[4];
+        f32 texFloat[4];
+        f32 newColorFloat[4];
+
+        rgba5551_to_f32(texture[i],&colorFloat);
+        rgba888_to_f32(color,&texFloat);
+        // This is backwards. What the fuck was i thinking?
+
+        for (int j = 0; j < 4; j++) {
+            texFloat[j] = approach_f32_asymptotic(texFloat[j],1.0f,0.7f);
+            newColorFloat[j] = colorFloat[j] * texFloat[j];
+        }
+
+        // Respects alpha
+        if (colorFloat[3] > .5f) {
+            texout[i] = f32_to_rgba5551(&newColorFloat);
+        }
+    }
+}
+
 void texgen_generate_lv2(void) {
     int colorPalletIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sColorPalletepixelFloats)/12);
     int brickTextureIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBrickTextures)/4);
@@ -209,7 +232,7 @@ void texgen_generate_lv3(void) {
                         4096, sColorPalletepixelFloatsLv3[colorPalletIndex][1]  );
 
     // Spinner Textures
-    texgen_colorize_rgba16( segmented_to_virtual(&rf_spinner_final_path_rgba16),
-                        segmented_to_virtual(&rf_spinner_final_path_rgba16),
-                        2048, sColorPalletepixelFloatsLv3[colorPalletIndex][2]  );
+    texgen_colorize_desaturated_rgba16( segmented_to_virtual(&rf_spinner_final_path_rgba16),
+        segmented_to_virtual(&rf_spinner_final_path_rgba16),
+        2048, sColorPalletepixelFloatsLv3[colorPalletIndex][2]  );
 }
