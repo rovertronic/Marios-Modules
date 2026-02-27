@@ -6714,6 +6714,8 @@ sound_ref .sound_air_bowser_spit_fire
 sound_ref .sound_air_bowser_spit_fire
 sound_ref .sound_air_bowser_spit_fire
 sound_ref .sound_air_bowser_spit_fire
+sound_ref .sound_air_bowser_spit_fire2
+sound_ref .sound_reverse_time
 
 .sound_air_bowser_spit_fire:
 chan_setbank 7
@@ -8236,3 +8238,16 @@ layer_jump .layer_env_shredder_loop
 .layer_env_shredder_loop:
 layer_note1 39, 0x160, 127
 layer_jump .layer_env_shredder_loop
+
+.sound_air_bowser_spit_fire2:
+chan_end
+
+.sound_reverse_time:
+chan_setbank 0
+chan_setinstr 6
+chan_setlayer 0, .layer_reverse_time2
+chan_end
+
+.layer_reverse_time2:
+layer_note1 39, 0xBF, 127
+layer_end

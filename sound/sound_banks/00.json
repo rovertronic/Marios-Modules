@@ -3,9 +3,25 @@
     "sample_bank": "sfx_1",
     "envelopes": {
         "envelope0": [
-            [2, 32700],
-            [1, 32700],
-            [32700, 29430],
+            [
+                2,
+                32700
+            ],
+            [
+                1,
+                32700
+            ],
+            [
+                32700,
+                29430
+            ],
+            "hang"
+        ],
+        "envelope1": [
+            [
+                2,
+                32700
+            ],
             "hang"
         ]
     },
@@ -39,6 +55,11 @@
             "release_rate": 208,
             "envelope": "envelope0",
             "sound": "05_heavy_landing"
+        },
+        "inst6": {
+            "release_rate": 208,
+            "envelope": "envelope1",
+            "sound": "player_time_slowdown"
         }
     },
     "instrument_list": [
@@ -47,6 +68,7 @@
         "inst2",
         "inst3",
         "inst4",
-        "inst5"
+        "inst5",
+        "inst6"
     ]
 }

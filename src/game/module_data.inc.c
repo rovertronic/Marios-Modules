@@ -222,6 +222,8 @@ void module_rewind_time(struct module_execution_thread * met, u8 call_context) {
     met->doaircooldown = TRUE;
     switch(call_context) {
         case MCC_INVOKE:
+            play_sound(SOUND_REVERSE_TIME, gGlobalSoundSource);
+
             if (met->time_mod > 8) {
                 met->time_mod = 8;
             }
@@ -1076,7 +1078,7 @@ struct module_info module_infos[] = {
     [MOD_ZACTION] = {
         .name = "Crouch Move",
         .type = MTYPE_MOVE,
-        .tex = micons_ground_rgba16,
+        .tex = micons_crouch_rgba16,
         .desc = "Ground pound in air, long jump on floor.",
         .unchainable = TRUE,
         .func = module_zaction,
