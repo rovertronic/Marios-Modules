@@ -211,6 +211,7 @@ enum module_id {
     MOD_IF_SENSOR,
     MOD_CANCEL,
     MOD_REWIND_TIME, // Chaezepin
+    MOD_NO_CAP,
 
     MOD_MONITOR,
     MOD_COUNT,

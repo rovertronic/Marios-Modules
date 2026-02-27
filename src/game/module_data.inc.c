@@ -610,6 +610,12 @@ void module_woman(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+void module_no_cap(struct module_execution_thread * met, u8 call_context) {
+    gMarioState->noCap = TRUE;
+    gModuleUpdateVanity = TRUE;
+    met->x++;
+}
+
 void module_flip(struct module_execution_thread * met, u8 call_context) {
     module_log_message(met,"Y velocity set to %d.",-gMarioState->vel[1]);
 
@@ -1350,6 +1356,15 @@ struct module_info module_infos[] = {
         .func = module_woman,
     },
 
+    [MOD_NO_CAP] = {
+        .name = "No Cap",
+        .type = MTYPE_VANITY,
+        .tex = micons_nocap_rgba16,
+        .desc = "Removes Mario's cap.",
+        .creative = TRUE,
+        .func = module_no_cap,
+    },
+
     // Settings
     [MOD_60HZ] = {
         .name = "60Hz",
@@ -1577,7 +1592,7 @@ struct module_info module_infos[] = {
     [MOD_REWIND_TIME] = {
         .name = "Rewind Time",
         .type = MTYPE_MOVE,
-        .tex = micons_clock_rgba16,
+        .tex = micons_rewind_rgba16,
         .desc = "Replays the last second in reverse. Momentum is preserved on exit.",
         .upg_desc = "Rewind speed multiplied by @O@UPG@@.",
         .unchainable = FALSE,

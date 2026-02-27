@@ -297,6 +297,7 @@ void module_update(void) {
                 }
                 if (met == &module_execution_threads[MODULE_EXEC_VANITY]) {
                     gMarioState->marioObj->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_MARIO];
+                    gMarioState->noCap = FALSE;
                 }
             }
             escape_halt:

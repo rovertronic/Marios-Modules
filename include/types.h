@@ -488,6 +488,7 @@ struct MarioState {
              s16 gateAngle;
              u32 passiveFlag;
              u8 bonkSignal;
+             u8 noCap;
 
              struct Animation * queueTargetAnim;
              s32 queueTargetAnimID;
