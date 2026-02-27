@@ -212,6 +212,7 @@ enum module_id {
     MOD_CANCEL,
     MOD_REWIND_TIME, // Chaezepin
     MOD_NO_CAP,
+    MOD_CROUCH,
 
     MOD_MONITOR,
     MOD_COUNT,
@@ -251,6 +252,7 @@ enum {
     PASSIVE_FLAG_DEFENSE,
     PASSIVE_FLAG_MINIMAP,
     PASSIVE_FLAG_GRAVITY,
+    PASSIVE_FLAG_CROUCH,
 };
 
 enum {

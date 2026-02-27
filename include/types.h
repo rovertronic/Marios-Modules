@@ -487,6 +487,7 @@ struct MarioState {
              s16 wallYaw;
              s16 gateAngle;
              u32 passiveFlag;
+             u32 prevPassiveFlag;
              u8 bonkSignal;
              u8 noCap;
 

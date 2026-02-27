@@ -293,6 +293,7 @@ void module_update(void) {
             if (met->begin) {
                 met->begin = FALSE;
                 if (met == &module_execution_threads[MODULE_EXEC_PASSIVE]) {
+                    gMarioState->prevPassiveFlag = gMarioState->passiveFlag;
                     gMarioState->passiveFlag = 0;
                 }
                 if (met == &module_execution_threads[MODULE_EXEC_VANITY]) {
@@ -338,6 +339,7 @@ void module_update(void) {
                 if (met->doaircooldown || met->cooltime > 1) {
                     met->cooldown = TRUE;
                     if (met == &module_execution_threads[MODULE_EXEC_PASSIVE]) {
+                        gMarioState->prevPassiveFlag = gMarioState->passiveFlag;
                         gMarioState->passiveFlag = 0;
                     }
                 } else {
@@ -1155,6 +1157,7 @@ u8 sPassiveFlagModuleDisplayTable[] = {
     MOD_DEFENSE,
     MOD_MINIMAP,
     MOD_LOW_GRAVITY,
+    MOD_CROUCH,
 };
 
 void print_execution_status(int x, int y, int execthread, int module) {

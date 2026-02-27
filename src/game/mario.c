@@ -1421,6 +1421,9 @@ void update_mario_inputs(struct MarioState *m) {
     }
 #endif
 
+    if ((m->passiveFlag & (1 << PASSIVE_FLAG_CROUCH)) && GROUNDED) {
+        m->input |= INPUT_Z_DOWN;
+    }
     //update_mario_button_inputs(m);
     update_mario_joystick_inputs(m);
     update_mario_geometry_inputs(m);

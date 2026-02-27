@@ -127,7 +127,15 @@ struct module_type_info module_type_infos[] = {
 void module_jump(struct module_execution_thread * met, u8 call_context) {
     met->doaircooldown = TRUE;
 
+    if ((gMarioState->passiveFlag & (1 << PASSIVE_FLAG_CROUCH)) && GROUNDED) {
+        module_log_message(met,"Crouch overrides base jump behavior.",0);
+        gMarioState->input |= INPUT_A_PRESSED;
+        met->x++;
+        return;
+    }
+
     u8 force = FALSE;
+    /*
     if (met->element != ELEMENT_NORMAL) {
         Mat4 direction;
         Vec3f origin = {gMarioState->pos[0],gMarioState->pos[1]-100.0f,gMarioState->pos[2]};
@@ -135,6 +143,7 @@ void module_jump(struct module_execution_thread * met, u8 call_context) {
         met->element = ELEMENT_NORMAL;
         force = TRUE;
     }
+    */
 
     if ((force)||(!mario_floor_is_steep(gMarioState) && (GROUNDED))) {
         switch(met->mod) {
@@ -188,6 +197,18 @@ void module_attack(struct module_execution_thread * met, u8 call_context) {
     gMarioState->input |= INPUT_B_PRESSED;
 
     met->spd = 0;
+
+    met->x++;
+}
+
+void module_crouch(struct module_execution_thread * met, u8 call_context) {
+
+    if (!(gMarioState->prevPassiveFlag & (1 << PASSIVE_FLAG_CROUCH))) {
+        module_log_message(met,"Pressing Z.",0);
+        gMarioState->input |= INPUT_Z_PRESSED;
+    }
+    module_log_message(met,"Holding Z.",0);
+    gMarioState->passiveFlag |= (1 << PASSIVE_FLAG_CROUCH);
 
     met->x++;
 }
@@ -1578,6 +1599,16 @@ struct module_info module_infos[] = {
         .cooldown = .5f,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_2,
+    },
+
+    [MOD_CROUCH] = {
+        .name = "Crouch",
+        .type = MTYPE_PASSIVE,
+        .tex = micons_crouch_rgba16,
+        .desc = "Makes Mario crouch.",
+        .func = module_crouch,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
 
     [MOD_CANCEL] = {
