@@ -1926,6 +1926,9 @@ void bhv_car(void) {
             if (gCurrLevelNum == LEVEL_PITSTOP && gMarioObject->platform == o) {
                 save_marios_modules_silent(gVec3fZero);
                 gMainMenuWarpLocation = 1;
+                if (gMariosModulesSave.file[gMariosModulesSaveIndex].level == 2) {
+                    gMainMenuWarpLocation = 2;
+                }
                 level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
                 o->oAction++;
             }

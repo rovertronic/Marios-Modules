@@ -29,6 +29,7 @@ const LevelScript level_pitstop_entry[] = {
 	AREA(1, pitstop_area_1),
 		WARP_NODE(0x0A, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		WARP_NODE(0x01, LEVEL_ROGUE, 0x01, 0x0A, WARP_NO_CHECKPOINT),
+		WARP_NODE(0x02, LEVEL_RF, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		OBJECT(MODEL_NONE, 0, 0, 0, 0, -180, 0, 0x00000000, bhvDungeonSpawn),
 		OBJECT(MODEL_CHEST, -1000, 66, 8302, 0, 90, 0, (50 << 24) | (0 << 16) | (2 << 8) | (3), bhvChest),
 		OBJECT(MODEL_CHEST, -1000, 66, 9302, 0, 90, 0, (50 << 24) | (0 << 16) | (2 << 8) | (1), bhvChest),

@@ -218,7 +218,12 @@ void king_bobomb_act_death(void) { // act 7
         spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 3.0f, TINY_DIRT_PARTICLE_ANIM_STATE_YELLOW);
         cur_obj_shake_screen(SHAKE_POS_SMALL);
 
-        cur_obj_spawn_star_at_y_offset(o->oHomeX,o->oHomeY+500.0f,o->oHomeZ, 200.0f);
+        if (cur_obj_has_behavior(bhvKingBobombRogue)) {
+            struct Object * dungeonExitItem = spawn_default_star(o->oHomeX,o->oHomeY+500.0f,o->oHomeZ);
+            SET_BPARAM4(dungeonExitItem->oBehParams,1);
+        } else {
+            cur_obj_spawn_star_at_y_offset(o->oHomeX,o->oHomeY+500.0f,o->oHomeZ, 200.0f);
+        }
 
         obj_mark_for_deletion(my_shock);
 

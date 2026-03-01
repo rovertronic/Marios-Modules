@@ -956,7 +956,7 @@ struct DungeonRoomVariantCellList sRoomBossCellList[] = {
 struct DungeonObject sRoomBossObjectList[] = {
     {.bhv = bhvDungeonDoorLocked, .model = MODEL_DUNGEON_DOOR, .param = 1,
     .angle = 0x4000, .pos = {-90.0236f,0.0f,16.3737f}},
-    {.bhv = bhvKingBobomb, .model = MODEL_KINGBOBOMB_GLOBAL, .param = 0,
+    {.bhv = bhvKingBobombRogue, .model = MODEL_KINGBOBOMB_GLOBAL, .param = 0,
     .angle = 0x4000, .pos = {-109.687f,0.0f,13.7393f}},
     {.end = TRUE},
 };
