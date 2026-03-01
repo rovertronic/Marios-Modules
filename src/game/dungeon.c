@@ -133,6 +133,7 @@ struct DungeonRoomVariant * sLv2RoomVariantList[] = {
     &sRoomAutoMaze,
     &sRoomSilverPillar,
     &sRoomRedCoin,
+    &sRoomLavaDrop,
 
     // Easter-Egg Rooms
     &sRoomFnab,
@@ -1003,8 +1004,6 @@ void dungeon_generate_lv3(void) {
 }
 
 void dungeon_generate(int level) {
-    level = 2;
-
     // Randomize Seed
     tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
 

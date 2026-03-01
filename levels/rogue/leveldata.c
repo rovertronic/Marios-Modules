@@ -120,3 +120,5 @@ u16 gDungeonTextureCloudBrick2[4096] = {0};
 #include "rmemorize_2/collision.inc.c"
 #include "rmemorizepanel1/model.inc.c"
 #include "rmemorizepanel2/model.inc.c"
+#include "rlavadrop/collision.inc.c"
+#include "rlavadrop/model.inc.c"

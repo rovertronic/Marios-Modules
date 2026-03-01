@@ -1197,6 +1197,46 @@ struct DungeonRoomVariant sRoomMemorize = {
     .generateOnce = TRUE,
 };
 
+// Room Lava Drop
+
+s8 sRoomLavaDropRequiredLoot[] = {
+    MOD_PASSIVE, 1,
+    MOD_REWIND_TIME, 1,
+    MOD_IF_SENSOR, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonObject sRoomLavaDropObjectList[] = {
+    {.bhv = bhvFloorSwitchHiddenObjects, .model = MODEL_PURPLE_SWITCH, .param = 0, .param3 = 200, .param4 = 3,
+    .angle = 0x0, .pos = {-24.3105f,1.23448f,0.0f}},
+
+    {.bhv = bhvSilverStar, .model = MODEL_SILVER_STAR, .param = 0,
+    .angle = 0x0, .pos = {-27.6758f,16.9188f,-15.8636f}},
+    {.bhv = bhvSilverStar, .model = MODEL_SILVER_STAR, .param = 0,
+    .angle = 0x0, .pos = {-16.2968f,1.66695f,-15.8636f}},
+    {.bhv = bhvSilverStar, .model = MODEL_SILVER_STAR, .param = 0,
+    .angle = 0x0, .pos = {-16.2968f,7.69899f,-15.8636f}},
+    {.bhv = bhvSilverStar, .model = MODEL_SILVER_STAR, .param = 0,
+    .angle = 0x0, .pos = {2.44177f,25.895f,-15.8636f}},
+    {.bhv = bhvSilverStar, .model = MODEL_SILVER_STAR, .param = 0,
+    .angle = 0x0, .pos = {2.68387f,16.9237f,-15.8636f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomLavaDrop = {
+    .minimapDL = &rmapgrindr_rmapgrindr_mesh,
+
+    .cellList = &sRoomGrindrCellList,
+    .model = MODEL_ROOM_LAVADROP,
+    .collision = rlavadrop_collision,
+    .objectList = &sRoomLavaDropObjectList,
+    .maxLootCt = 0,
+    .starCt = 1,
+    .lootLocations = NULL,
+    .requiredLoot = &sRoomLavaDropRequiredLoot,
+    .generateOnce = TRUE,
+};
+
 // Rogue Final: Paths
 
 struct DungeonObject sRoomRfStraight1ObjectList[] = {

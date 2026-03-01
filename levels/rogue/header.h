@@ -108,4 +108,6 @@ extern const LevelScript level_rogue_entry[];
 #include "rmemorize_2/collision_header.h"
 #include "rmemorizepanel1/geo_header.h"
 #include "rmemorizepanel2/geo_header.h"
+#include "rlavadrop/collision_header.h"
+#include "rlavadrop/geo_header.h"
 #endif

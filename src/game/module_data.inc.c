@@ -841,7 +841,7 @@ void module_sensor(struct module_execution_thread * met, u8 call_context) {
     if (met->option == 3) {
         struct Surface * floor;
         f32 floory = find_floor(gMarioState->pos[0],gMarioState->pos[1],gMarioState->pos[2],&floor);
-        if (floor && ABS(floory - gMarioState->pos[1]) < 50.0f && floor->type == SURFACE_BURNING) {
+        if (floor && ABS(floory - gMarioState->pos[1]) < 50.0f + ABS(gMarioState->vel[1]) && floor->type == SURFACE_BURNING) {
             detected = TRUE;
         }
     } else {
