@@ -922,6 +922,7 @@ void cur_obj_update(void) {
 #endif
 
     // Handle visibility of object
+    /*
     if (o->oRoom != -1) {
         // If the object is in a room, only show it when Mario is in the room.
         if (
@@ -938,7 +939,9 @@ void cur_obj_update(void) {
             o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
             o->activeFlags |= ACTIVE_FLAG_FAR_AWAY;
         }
-    } else if (
+    }
+    */
+    if (
         o->collisionData == NULL
         &&  (objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO)
         && !(objFlags & OBJ_FLAG_ACTIVE_FROM_AFAR)
@@ -961,7 +964,7 @@ void cur_obj_update(void) {
         o->oVelY = 0.0f;
     }
 
-    if (objFlags & OBJ_FLAG_DUNGEON_CULL) {
+    if ((objFlags & OBJ_FLAG_DUNGEON_CULL) && (gCurrLevelNum != LEVEL_RF)) {
         u8 visible = !(!dungeon_room_is_visible(o->dungeonRoom[0]) && !dungeon_room_is_visible(o->dungeonRoom[1]));
         if (visible) {
             o->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
