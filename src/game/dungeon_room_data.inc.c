@@ -1269,6 +1269,7 @@ struct DungeonRoomVariant sRoomRfRight = {
     .cellList = &sRoomRfRightCellList,
     .model = MODEL_ROOM_RF_RIGHT,
     .collision = rf_right_collision,
+    .safe = TRUE,
 
     .maxLootCt = 0,
     .objectList = NULL,
@@ -1284,6 +1285,7 @@ struct DungeonRoomVariant sRoomRfLeft = {
     .cellList = &sRoomRfLeftCellList,
     .model = MODEL_ROOM_RF_LEFT,
     .collision = rf_left_collision,
+    .safe = TRUE,
 
     .maxLootCt = 0,
     .objectList = NULL,

@@ -3,6 +3,31 @@
 const GeoLayout rf_area_1_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
+		GEO_SWITCH_CASE(4, geo_switch_area),
+		GEO_OPEN_NODE(),
+			GEO_BRANCH(1, rf_dl_room0_geo),
+			GEO_BRANCH(1, rf_dl_room1_geo),
+			GEO_BRANCH(1, rf_dl_room2_geo),
+		GEO_CLOSE_NODE(),
+		GEO_ASM(0, geo_render_preview_mario),
+	GEO_CLOSE_NODE(),
+	GEO_RETURN(),
+};
+const GeoLayout rf_dl_room0_geo[] = {
+	GEO_NODE_START(),
+	GEO_OPEN_NODE(),
+	GEO_CLOSE_NODE(),
+	GEO_RETURN(),
+};
+const GeoLayout rf_dl_room1_geo[] = {
+	GEO_NODE_START(),
+	GEO_OPEN_NODE(),
+	GEO_CLOSE_NODE(),
+	GEO_RETURN(),
+};
+const GeoLayout rf_dl_room2_geo[] = {
+	GEO_NODE_START(),
+	GEO_OPEN_NODE(),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
