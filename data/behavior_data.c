@@ -6569,6 +6569,7 @@ const BehaviorScript bhvRfSpinner[] = {
     BEGIN(OBJ_LIST_SURFACE),
     LOAD_COLLISION_DATA(rf_spinner_collision),
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    SET_FLOAT(oDrawingDistance, 10000),
     BEGIN_LOOP(),
         ADD_INT(oFaceAngleYaw, 0x200),
         CALL_NATIVE(load_object_collision_model),
