@@ -1432,6 +1432,27 @@ struct DungeonRoomVariant sRoomRfRino = {
     .requiredLoot = NULL,
 };
 
+// Final Challenge Ice Slope
+
+struct DungeonRoomVariantCellList sRoomRfSlopeCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+    {.x = 2, .y = 0, .doorFlags = DOOR_RIGHT},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfSlope = {
+    .cellList = &sRoomRfSlopeCellList,
+    .model = MODEL_ROOM_RF_SLOPE,
+    .collision = &rf_slope_collision,
+
+    .maxLootCt = 0,
+    .objectList = NULL,
+    .requiredLoot = NULL,
+
+    .generateOnce = TRUE,
+};
+
 // Room Facade 3
 
 struct DungeonObject sRoomFacade3ObjectList[] = {

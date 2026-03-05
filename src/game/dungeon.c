@@ -153,6 +153,9 @@ struct DungeonRoomVariant * sLv3RoomVariantList[] = {
     &sRoomRfSquarish,
     &sRoomRfAmplected,
     &sRoomRfRino,
+
+    // Super Challenges
+    &sRoomRfSlope,
 };
 
 struct DungeonRoom * dungeon_get_mario_room(void) {

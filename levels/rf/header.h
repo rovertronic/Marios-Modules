@@ -31,4 +31,6 @@ extern const LevelScript level_rf_entry[];
 #include "rf_rino_obj/geo_header.h"
 #include "rf_rino_plat/collision_header.h"
 #include "rf_rino_plat/geo_header.h"
+#include "rf_slope/collision_header.h"
+#include "rf_slope/geo_header.h"
 #endif

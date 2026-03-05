@@ -27,3 +27,4 @@
 #include "rf_rino/geo.inc.c"
 #include "rf_rino_obj/geo.inc.c"
 #include "rf_rino_plat/geo.inc.c"
+#include "rf_slope/geo.inc.c"
