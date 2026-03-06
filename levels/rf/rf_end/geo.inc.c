@@ -1,0 +1,11 @@
+#include "src/game/envfx_snow.h"
+
+const GeoLayout rf_end_geo[] = {
+	GEO_CULLING_RADIUS(10000),
+	GEO_OPEN_NODE(),
+		GEO_DISPLAY_LIST(LAYER_OPAQUE, rf_end_rf_end_mesh_layer_1),
+		GEO_DISPLAY_LIST(LAYER_ALPHA, rf_end_rf_end_mesh_layer_4),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, rf_end_rf_end_mesh_layer_5),
+	GEO_CLOSE_NODE(),
+	GEO_END(),
+};

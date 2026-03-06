@@ -30,3 +30,4 @@
 #include "rf_slope/geo.inc.c"
 #include "rf_blankjump/geo.inc.c"
 #include "rf_vertical/geo.inc.c"
+#include "rf_end/geo.inc.c"

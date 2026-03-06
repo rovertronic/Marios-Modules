@@ -550,7 +550,7 @@ s32 dungeon_generate_boss_room(struct DungeonRoomVariant * selectedVariant) {
     for (int i = iMax-1; i >= 0; i--) {
         struct DungeonRoom * originRoom = &sDungeonRoomList[sDungeonCellProcessList[i]->id-1];
 
-        if (originRoom->challengeLv < 4) {
+        if (originRoom->challengeLv < 4 && sDungeonGeneratingLevelId == 1) {
             continue;
         }
 
@@ -561,8 +561,10 @@ s32 dungeon_generate_boss_room(struct DungeonRoomVariant * selectedVariant) {
                 int y = sDungeonCellProcessList[i]->y - (sDirectionList[j][1]);
 
                 if (dungeon_check_room_viability(selectedVariant,j,x,y)) {
-                    dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
-                    dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
+                    if (sDungeonGeneratingLevelId == 1) {
+                        dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
+                        dungeon_place_loot_in_random_previous_room(MOD_NONMOD_KEY);
+                    }
                     dungeon_create_room(selectedVariant,j,x,y,sDungeonCellProcessList[i]->worldY);
                     return TRUE;
                 }
@@ -1000,10 +1002,12 @@ void dungeon_generate_lv3(void) {
     dungeon_create_room(&sRoomRfFacade3, 0, 1, 16, 0);
 
     // Generate dungeon rooms
-    sDungeonTargetRoomCount = 45;
+    sDungeonTargetRoomCount = 35;
     dungeon_generate_rooms_at_doors(sLv3RoomVariantList,sizeof(sLv3RoomVariantList));
 
-    if (sDungeonForceRegen || sDungeonRoomCount < 40) {
+    dungeon_generate_boss_room(&sRoomRfEnd);
+
+    if (sDungeonForceRegen || sDungeonRoomCount < 30) {
         goto redo_generate;
     }
 }

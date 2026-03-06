@@ -36,4 +36,6 @@ extern const LevelScript level_rf_entry[];
 #include "rf_blankjump/geo_header.h"
 #include "rf_vertical/collision_header.h"
 #include "rf_vertical/geo_header.h"
+#include "rf_end/geo_header.h"
+#include "rf_end/collision_header.h"
 #endif

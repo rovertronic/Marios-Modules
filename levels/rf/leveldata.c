@@ -40,3 +40,5 @@
 #include "rf_blankjump/model.inc.c"
 #include "rf_vertical/collision.inc.c"
 #include "rf_vertical/model.inc.c"
+#include "rf_end/model.inc.c"
+#include "rf_end/collision.inc.c"

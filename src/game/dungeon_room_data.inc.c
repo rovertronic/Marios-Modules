@@ -1521,3 +1521,14 @@ struct DungeonRoomVariant sRoomRfFacade3 = {
     .objectList = &sRoomFacade3ObjectList,
     .requiredLoot = NULL,
 };
+
+// Final Room Ending
+struct DungeonRoomVariant sRoomRfEnd = {
+    .cellList = &sRoomRfBlankJumpCellList,
+    .model = MODEL_ROOM_RF_END,
+    .collision = rf_end_collision,
+
+    .maxLootCt = 0,
+    .objectList = NULL,
+    .requiredLoot = NULL,
+};
