@@ -28,3 +28,5 @@
 #include "rf_rino_obj/geo.inc.c"
 #include "rf_rino_plat/geo.inc.c"
 #include "rf_slope/geo.inc.c"
+#include "rf_blankjump/geo.inc.c"
+#include "rf_vertical/geo.inc.c"

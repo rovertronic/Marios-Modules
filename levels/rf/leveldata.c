@@ -37,3 +37,6 @@
 #include "rf_rino_plat/model.inc.c"
 #include "rf_slope/collision.inc.c"
 #include "rf_slope/model.inc.c"
+#include "rf_blankjump/model.inc.c"
+#include "rf_vertical/collision.inc.c"
+#include "rf_vertical/model.inc.c"

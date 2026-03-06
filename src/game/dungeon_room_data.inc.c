@@ -1274,6 +1274,8 @@ struct DungeonRoomVariant sRoomRfRight = {
     .maxLootCt = 0,
     .objectList = NULL,
     .requiredLoot = NULL,
+
+    .rarity = 2,
 };
 
 struct DungeonRoomVariantCellList sRoomRfLeftCellList[] = {
@@ -1290,6 +1292,8 @@ struct DungeonRoomVariant sRoomRfLeft = {
     .maxLootCt = 0,
     .objectList = NULL,
     .requiredLoot = NULL,
+
+    .rarity = 2,
 };
 
 // Final Ramp
@@ -1328,6 +1332,8 @@ struct DungeonRoomVariant sRoomRfSpinning = {
     .maxLootCt = 0,
     .objectList = &sRoomRfSpinningObjectList,
     .requiredLoot = NULL,
+
+    .rarity = 2,
 };
 
 // Final Tilting Wooden Platform
@@ -1350,6 +1356,8 @@ struct DungeonRoomVariant sRoomRfTilting = {
     .maxLootCt = 0,
     .objectList = &sRoomRfTiltingObjectList,
     .requiredLoot = NULL,
+
+    .rarity = 2,
 };
 
 // Final Squarish Platforms
@@ -1370,6 +1378,8 @@ struct DungeonRoomVariant sRoomRfSquarish = {
     .maxLootCt = 0,
     .objectList = &sRoomRfSquarishObjectList,
     .requiredLoot = NULL,
+
+    .rarity = 2,
 };
 
 // Final Amp Path
@@ -1400,6 +1410,8 @@ struct DungeonRoomVariant sRoomRfAmplected = {
     .maxLootCt = 0,
     .objectList = &sRoomRfAmplectedObjectList,
     .requiredLoot = NULL,
+
+    .rarity = 4,
 };
 
 // Final Rino
@@ -1430,6 +1442,8 @@ struct DungeonRoomVariant sRoomRfRino = {
     .maxLootCt = 0,
     .objectList = &sRoomRfRinoObjectList,
     .requiredLoot = NULL,
+
+    .rarity = 2,
 };
 
 // Final Challenge Ice Slope
@@ -1450,6 +1464,43 @@ struct DungeonRoomVariant sRoomRfSlope = {
     .objectList = NULL,
     .requiredLoot = NULL,
 
+    .rarity = 3,
+    .generateOnce = TRUE,
+};
+
+// Final Challenge 4000 unit horizontal jump
+
+struct DungeonRoomVariantCellList sRoomRfBlankJumpCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0, .doorFlags = DOOR_RIGHT},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomRfBlankJump = {
+    .cellList = &sRoomRfBlankJumpCellList,
+    .model = MODEL_ROOM_RF_BLANKJUMP,
+    .collision = NULL,
+
+    .maxLootCt = 0,
+    .objectList = NULL,
+    .requiredLoot = NULL,
+
+    .rarity = 3,
+    .generateOnce = TRUE,
+};
+
+// Final Challenge 2000 unit vertical jump with wallkick assistance
+
+struct DungeonRoomVariant sRoomRfVertical = {
+    .cellList = &sRoomRfRampCellList,
+    .model = MODEL_ROOM_RF_VERTICAL,
+    .collision = rf_vertical_collision,
+
+    .maxLootCt = 0,
+    .objectList = NULL,
+    .requiredLoot = NULL,
+
+    .rarity = 3,
     .generateOnce = TRUE,
 };
 

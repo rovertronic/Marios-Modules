@@ -1742,6 +1742,16 @@ void bhv_dungeon_door(void) {
 }
 
 void bhv_dungeon_room(void) {
+    if (gCurrLevelNum == LEVEL_RF) {
+        f32 dist_squared = sqr(gMarioState->pos[0] - o->oPosX) + sqr(gMarioState->pos[2] - o->oPosZ);
+        if (dist_squared <  400000000.f) {
+            o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
+        } else {
+            o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
+        }
+        return;
+    }
+
     u8 visible = !(!dungeon_room_is_visible(o->dungeonRoom[0]) && !dungeon_room_is_visible(o->dungeonRoom[1]));
 
     switch(o->oAction) {

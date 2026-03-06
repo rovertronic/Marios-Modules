@@ -41,6 +41,8 @@ const LevelScript level_rf_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_AMPLECTED, rf_amplected_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_RINO, rf_rino_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_SLOPE, rf_slope_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_BLANKJUMP, rf_blankjump_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_RF_VERTICAL, rf_vertical_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_RF_TILTING, rf_tilting_obj_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_RF_SPINNER, rf_spinner_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_RF_SQUARISH, rf_squarish_obj_geo), 
