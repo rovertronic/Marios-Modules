@@ -1981,3 +1981,44 @@ void bhv_rf_rino_plat(void) {
     o->oPosZ = o->oHomeZ + coss(o->oFaceAngleYaw) * sins(angle) * RINO_PLAT_DIST;
     o->oPosY = o->oHomeY + coss(angle) * RINO_PLAT_DIST;
 }
+
+struct ObjectHitbox sFireballHitbox = {
+    /* interactType:      */ INTERACT_NONE,
+    /* downOffset:        */ 10,
+    /* damageOrCoinValue: */ 0,
+    /* health:            */ 1,
+    /* numLootCoins:      */ 0,
+    /* radius:            */ 30,
+    /* height:            */ 30,
+    /* hurtboxRadius:     */ 30,
+    /* hurtboxHeight:     */ 30,
+};
+
+void bhv_fireball_attack(void) {
+    switch(o->oAction) {
+        case 0:
+            cur_obj_scale(3.5f);
+            obj_set_hitbox(o, &sFireballHitbox);
+            cur_obj_become_tangible();
+            o->activeFlags &= ~ACTIVE_FLAG_DESTRUCTIVE_OBJ_DONT_DESTROY;
+            o->oPosY += 50.0f;
+            o->oAction++;
+            break;
+        case 1:
+            obj_attack_collided_from_other_object(o);
+            o->oGravity = 2.5f;
+            o->oFriction = 0.8f;
+
+            o->oForwardVel = 25.0f;
+            s16 collisionFlags = object_step();
+
+            if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
+                o->oVelY = 20.0f;
+            }
+
+            if (o->oTimer > 300) {
+                obj_mark_for_deletion(o);
+            }
+            break;
+    }
+}

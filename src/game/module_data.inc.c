@@ -877,6 +877,11 @@ void module_sensor(struct module_execution_thread * met, u8 call_context) {
     met->x++;
 }
 
+void module_fireball(struct module_execution_thread * met, u8 call_context) {
+    struct Object * hover = spawn_object(gMarioState->marioObj,MODEL_RED_FLAME_SHADOW,bhvFireball);
+    met->x++;
+}
+
 Vec3f moduleRed = {1.0f,0.0f,0.0f};
 Vec3f moduleBlue = {0.0f,0.0f,1.0f};
 Vec3f moduleGreen = {0.0f,1.0f,0.0f};
@@ -1632,5 +1637,17 @@ struct module_info module_infos[] = {
         .func = module_rewind_time,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_2,
+    },
+
+    [MOD_FIREBALL] = {
+        .name = "Fireball",
+        .type = MTYPE_MOVE,
+        .tex = micons_fireball_rgba16,
+        .desc = "Throws a fireball in front of Mario that damages enemies.",
+        .upg_desc = "Increases damage + size.",
+        .unchainable = FALSE,
+        .func = module_fireball,
+        .cooldown = 5.0f,
+        .creative = TRUE,
     },
 };

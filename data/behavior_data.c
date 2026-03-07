@@ -5209,7 +5209,7 @@ const BehaviorScript bhvGoomba[] = {
 };
 
 const BehaviorScript bhvStackGoomba[] = {
-    BEGIN(OBJ_LIST_LEVEL),
+    BEGIN(OBJ_LIST_GENACTOR),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     DROP_TO_FLOOR(),
     LOAD_ANIMATIONS(oAnimations, goomba_seg8_anims_0801DA4C),
@@ -6576,7 +6576,7 @@ const BehaviorScript bhvRfSpinner[] = {
     END_LOOP(),
 };
 
-void bhv_rf_squarish(void);
+extern void bhv_rf_squarish(void);
 const BehaviorScript bhvRfSquarish[] = {
     BEGIN(OBJ_LIST_SURFACE),
     LOAD_COLLISION_DATA(rf_squarish_obj_collision),
@@ -6588,7 +6588,7 @@ const BehaviorScript bhvRfSquarish[] = {
     END_LOOP(),
 };
 
-void bhv_rf_rino(void);
+extern void bhv_rf_rino(void);
 const BehaviorScript bhvRfRinoX[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
@@ -6597,7 +6597,7 @@ const BehaviorScript bhvRfRinoX[] = {
     END_LOOP(),
 };
 
-void bhv_rf_rino_plat(void);
+extern void bhv_rf_rino_plat(void);
 const BehaviorScript bhvRfRinoPlat[] = {
     BEGIN(OBJ_LIST_SURFACE),
     LOAD_COLLISION_DATA(rf_rino_plat_collision),
@@ -6606,5 +6606,18 @@ const BehaviorScript bhvRfRinoPlat[] = {
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_rf_rino_plat),
         CALL_NATIVE(load_object_collision_model),
+    END_LOOP(),
+};
+
+extern void bhv_fireball_attack(void);
+const BehaviorScript bhvFireball[] = {
+    BEGIN(OBJ_LIST_DESTRUCTIVE),
+    OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    BILLBOARD(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_fireball_attack),
+        SET_INT(oIntangibleTimer, 0),
+        SET_INT(oInteractStatus, INT_STATUS_NONE),
+        ANIMATE_TEXTURE(oAnimState, 2),
     END_LOOP(),
 };

@@ -213,6 +213,7 @@ enum module_id {
     MOD_REWIND_TIME, // Chaezepin
     MOD_NO_CAP,
     MOD_CROUCH,
+    MOD_FIREBALL,
 
     MOD_MONITOR,
     MOD_COUNT,

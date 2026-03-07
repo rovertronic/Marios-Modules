@@ -586,5 +586,6 @@ extern const BehaviorScript bhvRfSquarish[];
 extern const BehaviorScript bhvRfRinoX[];
 extern const BehaviorScript bhvRfRinoPlat[];
 extern const BehaviorScript bhvKingBobombRogue[];
+extern const BehaviorScript bhvFireball[];
 
 #endif // BEHAVIOR_DATA_H
