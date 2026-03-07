@@ -878,9 +878,14 @@ void module_sensor(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_fireball(struct module_execution_thread * met, u8 call_context) {
-    struct Object * fireball = spawn_object(gMarioState->marioObj,MODEL_RED_FLAME_SHADOW,bhvFireball);
-    fireball->oBehParams2ndByte = met->mod;
-    met->mod = 0;
+    if (count_objects_with_behavior(bhvFireball) < 10) {
+        play_sound(SOUND_FIREBALL, gGlobalSoundSource);
+        struct Object * fireball = spawn_object(gMarioState->marioObj,MODEL_RED_FLAME_SHADOW,bhvFireball);
+        fireball->oBehParams2ndByte = met->mod;
+        met->mod = 0;
+    } else {
+        module_log_message(met,"Too many balls.",0);
+    }
     met->x++;
 }
 

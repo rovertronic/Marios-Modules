@@ -2874,6 +2874,7 @@ sound_ref .sound_general_boing1
 sound_ref .sound_general_boing2
 sound_ref .sound_general_yoshi_walk
 sound_ref .sound_general_enemy_alert1
+sound_ref .sound_fireball
 
 .sound_general_activate_cap_switch:
 chan_setbank 5
@@ -8250,4 +8251,14 @@ chan_end
 
 .layer_reverse_time2:
 layer_note1 39, 0xBF, 127
+layer_end
+
+.sound_fireball:
+chan_setbank 3
+chan_setinstr 11
+chan_setlayer 0, .layer_fireball
+chan_end
+
+.layer_fireball:
+layer_note1 39, 0x08, 127
 layer_end

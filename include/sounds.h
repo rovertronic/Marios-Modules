@@ -374,6 +374,7 @@ enum SoundBank {
 #define SOUND_GENERAL_GRAND_STAR_JUMP            /* 0x30740081 */ SOUND_ARG_LOAD(SOUND_BANK_GENERAL,  0x74, 0x00, SOUND_DISCRETE) // unverified
 #define SOUND_GENERAL_BOAT_ROCK                  /* 0x30750081 */ SOUND_ARG_LOAD(SOUND_BANK_GENERAL,  0x75, 0x00, SOUND_DISCRETE) // unverified
 #define SOUND_GENERAL_VANISH_SFX                 /* 0x30762081 */ SOUND_ARG_LOAD(SOUND_BANK_GENERAL,  0x76, 0x20, SOUND_DISCRETE) // unverified
+#define SOUND_FIREBALL                           /* 0x30808081 */ SOUND_ARG_LOAD(SOUND_BANK_GENERAL,  0x80, 0x80, SOUND_DISCRETE)
 
 /* Environment Sound Effects */
 #define SOUND_ENV_WATERFALL1                     /* 0x40000001 */ SOUND_ARG_LOAD(SOUND_BANK_ENV,      0x00, 0x00, 0) // unverified
