@@ -1690,7 +1690,7 @@ void bhv_bowser_init(void) {
     // Set Bowser B-param depending of the stage
     if (gCurrLevelNum == LEVEL_BOWSER_2) {
         level = BOWSER_BP_BITFS;
-    } else if (gCurrLevelNum == LEVEL_BOWSER_3) {
+    } else if (gCurrLevelNum == LEVEL_FINALBOSS) {
         level = BOWSER_BP_BITS;
     } else { // LEVEL_BOWSER_1
         level = BOWSER_BP_BITDW;
@@ -1859,6 +1859,8 @@ Gfx *geo_switch_bowser_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4
  * Geo switch that sets Bowser's Rainbow coloring (in BitS)
  */
 Gfx *geo_bits_bowser_coloring(s32 callContext, struct GraphNode *node, UNUSED s32 context) {
+    return NULL;
+
     Gfx *gfxHead = NULL;
 
     if (callContext == GEO_CONTEXT_RENDER) {

@@ -672,6 +672,9 @@ enum new_models {
     MODEL_RF_SQUARISH,
     MODEL_RF_RINO,
     MODEL_RF_RINO_PLAT,
+
+    //Final Boss
+    MODEL_FAUXIMEDES,
 };
 
 #endif // MODEL_IDS_H

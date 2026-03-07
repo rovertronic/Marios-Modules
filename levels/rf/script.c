@@ -56,7 +56,7 @@ const LevelScript level_rf_entry[] = {
 		WARP_NODE(0x0A, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		WARP_NODE(0x0B /* fall recover */, LEVEL_RF, 0x01, 0x0B, WARP_NO_CHECKPOINT),
 		WARP_NODE(0xF1 /* death */, LEVEL_PITSTOP, 0x01, 0x0A, WARP_NO_CHECKPOINT),
-		WARP_NODE(0 /*final boss*/, LEVEL_BOWSER_3, 0x01, 0x0A, WARP_NO_CHECKPOINT),
+		WARP_NODE(0 /*final boss*/, LEVEL_FINALBOSS, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		OBJECT(MODEL_NONE, 0, -297, 0, 0, 0, 0, (0x0B << 16), bhvFadingWarp),
 		OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, (0x0A << 16), bhvInstantActiveWarp),
 		TERRAIN(rf_area_1_collision),
