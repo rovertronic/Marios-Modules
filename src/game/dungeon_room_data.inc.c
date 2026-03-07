@@ -1526,6 +1526,8 @@ struct DungeonRoomVariant sRoomRfFacade3 = {
 struct DungeonObject sRoomRfEndObjectList[] = {
     {.bhv = bhvWarpPipe, .model = MODEL_GLOBAL_PIPE, .param = 1,
     .angle = 0, .pos = {-31.1418f,0.f,1.64602f}},
+    {.bhv = bhvChest, .model = MODEL_CHEST, .param = MOD_FIREBALL,
+    .angle = 0x4000, .pos = {-26.1418f,0.f,1.64602f}},
     {.end = TRUE},
 };
 
