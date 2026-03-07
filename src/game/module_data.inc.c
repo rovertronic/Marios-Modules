@@ -1654,7 +1654,7 @@ struct module_info module_infos[] = {
         .upg_desc = "Increases damage + size.",
         .unchainable = FALSE,
         .func = module_fireball,
-        .cooldown = 6.0f,
+        .cooldown = 15.0f,
         .creative = TRUE,
     },
 };

@@ -1523,12 +1523,19 @@ struct DungeonRoomVariant sRoomRfFacade3 = {
 };
 
 // Final Room Ending
+struct DungeonObject sRoomRfEndObjectList[] = {
+    {.bhv = bhvWarpPipe, .model = MODEL_GLOBAL_PIPE, .param = 1,
+    .angle = 0, .pos = {-31.1418f,0.f,1.64602f}},
+    {.end = TRUE},
+};
+
+
 struct DungeonRoomVariant sRoomRfEnd = {
     .cellList = &sRoomRfBlankJumpCellList,
     .model = MODEL_ROOM_RF_END,
     .collision = rf_end_collision,
 
     .maxLootCt = 0,
-    .objectList = NULL,
+    .objectList = sRoomRfEndObjectList,
     .requiredLoot = NULL,
 };

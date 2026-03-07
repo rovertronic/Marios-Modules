@@ -609,8 +609,8 @@ void bowser_act_spit_fire_into_sky(void) {
 void bowser_act_hit_mine(void) {
     // Similar vel values from bowser_fly_back_dead
     if (o->oTimer == 0) {
-        o->oForwardVel = -400.0f;
-        o->oVelY = 100.0f;
+        o->oForwardVel = -0.0f;
+        o->oVelY = 80.0f;
         o->oMoveAngleYaw = o->oBowserAngleToCenter + 0x8000;
         o->oBowserEyesShut = TRUE; // close eyes
     }
@@ -665,6 +665,7 @@ s32 bowser_land(void) {
         spawn_mist_particles_variable(0, 0, 60.0f);
         cur_obj_init_animation_with_sound(BOWSER_ANIM_JUMP_STOP);
         o->header.gfx.animInfo.animFrame = 0;
+        o->header.gfx.animInfo.animFrameF = 0;
         cur_obj_start_cam_event(o, CAM_EVENT_BOWSER_JUMP);
         // Set status attacks in BitDW since the other levels
         // have different attacks defined
@@ -927,9 +928,9 @@ void bowser_act_charge_mario(void) {
  */
 s32 bowser_check_hit_mine(void) {
     f32 dist;
-    struct Object *mine = cur_obj_find_nearest_object_with_behavior(bhvBowserBomb, &dist);
-    if (mine != NULL && dist < 800.0f) {
-        mine->oInteractStatus |= INT_STATUS_HIT_MINE;
+    struct Object *mine = cur_obj_find_nearest_object_with_behavior(bhvFireball, &dist);
+    if (mine != NULL && dist < 400.0f) {
+        o->oHealth-= mine->oBehParams2ndByte+1;
         return TRUE;
     }
 
@@ -956,15 +957,6 @@ void bowser_act_thrown(void) {
     // Stand up and after play, set to default act
     } else if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_STAND_UP)) {
         o->oAction = BOWSER_ACT_DEFAULT;
-    }
-    // Hit mine check, reduce health and set specific action depending of it
-    if (bowser_check_hit_mine()) {
-        o->oHealth--;
-        if (o->oHealth <= 0) {
-            o->oAction = BOWSER_ACT_DEAD;
-        } else {
-            o->oAction = BOWSER_ACT_HIT_MINE;
-        }
     }
 }
 
@@ -1108,11 +1100,7 @@ void bowser_spawn_collectable(void) {
 void bowser_fly_back_dead(void) {
     cur_obj_init_animation_with_sound(BOWSER_ANIM_FLIP_DOWN);
     // More knockback in BitS
-    if (o->oBehParams2ndByte == BOWSER_BP_BITS) {
-        o->oForwardVel = -400.0f;
-    } else {
-        o->oForwardVel = -200.0f;
-    }
+     o->oForwardVel = 0;
     o->oVelY = 100.0f;
     o->oMoveAngleYaw = o->oBowserAngleToCenter + 0x8000;
     o->oBowserTimer = 0;
@@ -1504,7 +1492,7 @@ s8 sBowserRainbowLight[] = { FALSE, FALSE, TRUE };
 /**
  * Set how much health Bowser has on each stage
  */
-s8 sBowserHealth[] = { 1, 1, 3 };
+s8 sBowserHealth[] = { 1, 1, 15 };
 
 /**
  * Update Bowser's actions when he's hands free
@@ -1523,6 +1511,19 @@ void bowser_free_update(void) {
     // Update positions and actions (default action)
     cur_obj_update_floor_and_walls();
     cur_obj_call_action_function(sBowserActions);
+
+    // Hit mine check, reduce health and set specific action depending of it
+    if (o->oAction != BOWSER_ACT_HIT_MINE && o->oAction != BOWSER_ACT_DEAD) {
+        if (bowser_check_hit_mine()) {
+
+            if (o->oHealth <= 0) {
+                o->oAction = BOWSER_ACT_DEAD;
+            } else {
+                o->oAction = BOWSER_ACT_HIT_MINE;
+            }
+        }
+    }
+
     cur_obj_move_standard(-78);
     // Jump on stage if Bowser has fallen off
     if (bowser_check_fallen_off_stage()) {

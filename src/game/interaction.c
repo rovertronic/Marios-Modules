@@ -923,6 +923,7 @@ u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *
 #endif
 
             mario_stop_riding_object(m);
+            save_marios_modules_silent(gVec3fZero);
             return set_mario_action(m, ACT_DISAPPEARED, (WARP_OP_WARP_OBJECT << 16) + 2);
         }
     }

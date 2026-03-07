@@ -131,6 +131,7 @@ const LevelScript level_main_scripts_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_CAR, car_geo),
     LOAD_MODEL_FROM_GEO(MODEL_LIVE, live_geo),
     LOAD_MODEL_FROM_GEO(MODEL_GSHREDDER, gshredder_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_GLOBAL_PIPE, warp_pipe_geo),
 
     LOAD_MODEL_FROM_GEO(MODEL_UTILITY_MACE, utilityMace_geo),
     LOAD_MODEL_FROM_GEO(MODEL_UTILITY_FLAME, utilityFlame_geo),
