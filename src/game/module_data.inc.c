@@ -878,7 +878,9 @@ void module_sensor(struct module_execution_thread * met, u8 call_context) {
 }
 
 void module_fireball(struct module_execution_thread * met, u8 call_context) {
-    struct Object * hover = spawn_object(gMarioState->marioObj,MODEL_RED_FLAME_SHADOW,bhvFireball);
+    struct Object * fireball = spawn_object(gMarioState->marioObj,MODEL_RED_FLAME_SHADOW,bhvFireball);
+    fireball->oBehParams2ndByte = met->mod;
+    met->mod = 0;
     met->x++;
 }
 
@@ -1647,7 +1649,7 @@ struct module_info module_infos[] = {
         .upg_desc = "Increases damage + size.",
         .unchainable = FALSE,
         .func = module_fireball,
-        .cooldown = 5.0f,
+        .cooldown = 6.0f,
         .creative = TRUE,
     },
 };

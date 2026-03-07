@@ -1997,11 +1997,11 @@ struct ObjectHitbox sFireballHitbox = {
 void bhv_fireball_attack(void) {
     switch(o->oAction) {
         case 0:
-            cur_obj_scale(3.5f);
+            cur_obj_scale(3.5f + o->oBehParams2ndByte * 2.0f);
             obj_set_hitbox(o, &sFireballHitbox);
             cur_obj_become_tangible();
             o->activeFlags &= ~ACTIVE_FLAG_DESTRUCTIVE_OBJ_DONT_DESTROY;
-            o->oPosY += 50.0f;
+            o->oPosY += 80.0f;
             o->oAction++;
             break;
         case 1:
@@ -2013,7 +2013,7 @@ void bhv_fireball_attack(void) {
             s16 collisionFlags = object_step();
 
             if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
-                o->oVelY = 20.0f;
+                o->oVelY = 25.0f;
             }
 
             if (o->oTimer > 300) {
