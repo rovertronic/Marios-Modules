@@ -52,7 +52,7 @@ const LevelScript level_pitstop_entry[] = {
 		OBJECT(MODEL_MCHEST, 2454, 66, 9302, 0, -90, 0, (15 << 24) | (0 << 16) | (0 << 8) | (0), bhvMysteryChest),
 		OBJECT(MODEL_MCHEST, 2454, 66, 8302, 0, -90, 0, (15 << 24) | (0 << 16) | (0 << 8) | (0), bhvMysteryChest),
 		OBJECT(MODEL_CHEST, 2454, 29, 10061, 0, -180, 0, 0x00000000, bhvRecycleChest),
-		OBJECT(MODEL_SAVE, 463, 300, 811, 0, 0, 0, 0x00000000, bhvSaveBox),
+		OBJECT(MODEL_SAVE, 463, 423, 811, 0, 0, 0, 0x00000000, bhvSaveBox),
 		OBJECT(MODEL_GSHREDDER, 2454, 229, 10333, 0, -90, 0, 0x00000000, bhvShredder),
 		OBJECT(MODEL_GSHREDDER, 2454, 229, 10424, 0, 90, 0, (0 << 16), bhvShredder),
 		OBJECT(MODEL_NONE, 0, 300, 0, 0, 0, 0, (0x0A << 16), bhvInstantActiveWarp),

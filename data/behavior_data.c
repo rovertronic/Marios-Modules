@@ -6335,7 +6335,7 @@ extern void bhv_save_box(void);
 const BehaviorScript bhvSaveBox[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(savec_collision),
+    LOAD_COLLISION_DATA(exclamation_box_outline_seg8_collision_08025F78),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     SET_FLOAT(oCollisionDistance, 300),
     SET_HOME(),

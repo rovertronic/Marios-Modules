@@ -3,21 +3,35 @@
 const GeoLayout finalboss_area_1_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_SWITCH_CASE(2, geo_switch_area),
+		GEO_SWITCH_CASE(4, geo_switch_area),
 		GEO_OPEN_NODE(),
+			GEO_BRANCH(1, finalboss_dl_room0_geo),
 			GEO_BRANCH(1, finalboss_dl_room1_geo),
+			GEO_BRANCH(1, finalboss_dl_room2_geo),
 		GEO_CLOSE_NODE(),
-		GEO_TRANSLATE_NODE_WITH_DL(LAYER_OPAQUE, 0, -505, 0, finalboss_dl_Cylinder_010_mesh_layer_1),
-		GEO_OPEN_NODE(),
-			GEO_DISPLAY_LIST(LAYER_TRANSPARENT, finalboss_dl_Cylinder_010_mesh_layer_5),
-		GEO_CLOSE_NODE(),
+		GEO_ASM(0, geo_render_preview_mario),
+	GEO_CLOSE_NODE(),
+	GEO_RETURN(),
+};
+const GeoLayout finalboss_dl_room0_geo[] = {
+	GEO_NODE_START(),
+	GEO_OPEN_NODE(),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
 const GeoLayout finalboss_dl_room1_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_ASM(0, geo_render_preview_mario),
+	GEO_CLOSE_NODE(),
+	GEO_RETURN(),
+};
+const GeoLayout finalboss_dl_room2_geo[] = {
+	GEO_NODE_START(),
+	GEO_OPEN_NODE(),
+		GEO_TRANSLATE_NODE_WITH_DL(LAYER_OPAQUE, 0, -505, 0, finalboss_dl_vis_mesh_layer_1),
+		GEO_OPEN_NODE(),
+			GEO_DISPLAY_LIST(LAYER_TRANSPARENT, finalboss_dl_vis_mesh_layer_5),
+		GEO_CLOSE_NODE(),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };

@@ -1,4 +1,4 @@
-void scroll_finalboss_dl_Cylinder_010_mesh_layer_5_vtx_0() {
+void scroll_finalboss_dl_vis_mesh_layer_5_vtx_0() {
 	int i = 0;
 	int count = 100;
 	int width = 64 * 0x20;
@@ -16,7 +16,7 @@ void scroll_finalboss_dl_Cylinder_010_mesh_layer_5_vtx_0() {
 	float amplitudeY = 5.0;
 	float frequencyY = 0.10000000149011612;
 	float offsetY = 1.5;
-	Vtx *vertices = segmented_to_virtual(finalboss_dl_Cylinder_010_mesh_layer_5_vtx_0);
+	Vtx *vertices = segmented_to_virtual(finalboss_dl_vis_mesh_layer_5_vtx_0);
 
 	deltaX = (int)(amplitudeX * frequencyX * coss((frequencyX * timeX + offsetX) * (1024 * 16 - 1) / 6.28318530718) * 0x20);
 	deltaY = (int)(amplitudeY * frequencyY * coss((frequencyY * timeY + offsetY) * (1024 * 16 - 1) / 6.28318530718) * 0x20);
@@ -36,5 +36,5 @@ void scroll_finalboss_dl_Cylinder_010_mesh_layer_5_vtx_0() {
 }
 
 void scroll_finalboss() {
-	scroll_finalboss_dl_Cylinder_010_mesh_layer_5_vtx_0();
+	scroll_finalboss_dl_vis_mesh_layer_5_vtx_0();
 };
