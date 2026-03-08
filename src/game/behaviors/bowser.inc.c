@@ -109,7 +109,8 @@ void bhv_bowser_flame_spawn_loop(void) {
             o->oMoveAngleYaw = data[5 * animFrame + 3] + (s16) bowser->oMoveAngleYaw;
             // Spawns the flames on a non-odd animFrame value
             if (!(animFrame & 1)) {
-                spawn_object(o, MODEL_RED_FLAME, bhvFlameMovingForwardGrowing);
+                struct Object * flame = spawn_object(o, MODEL_RED_FLAME, bhvFlameMovingForwardGrowing);
+                flame->oPosY += 200.0f;
             }
         }
     }
@@ -334,10 +335,11 @@ void bowser_bitdw_actions(void) {
 void bowser_bitfs_actions(void) {
     // Generate random float
     f32 rand = random_float();
+    f32 rand2 = random_float();
     // Set attacks when Bowser Reacts
     if (!o->oBowserIsReacting) {
         if (o->oBowserStatus & BOWSER_STATUS_ANGLE_MARIO) {
-            if (o->oDistanceToMario < 1300.0f) {  // nearby
+            if (rand2 > 0.5f) {  // nearby
                 if (rand < 0.5f) { // 50% chance
                     o->oAction = BOWSER_ACT_TELEPORT;
                 } else {
@@ -366,8 +368,9 @@ void bowser_bitfs_actions(void) {
  */
 void bowser_bits_action_list(void) {
     f32 rand = random_float();
-    if (o->oBowserStatus & BOWSER_STATUS_ANGLE_MARIO) {
-        if (o->oDistanceToMario < 1000.0f) { // nearby
+    f32 rand2 = random_float();
+    if (1) {
+        if (rand2 > .5f) { // nearby
             if (rand < 0.4f) {
                 o->oAction = BOWSER_ACT_SPIT_FIRE_ONTO_FLOOR; // 40% chance
             } else if (rand < 0.8f) {
@@ -381,6 +384,7 @@ void bowser_bits_action_list(void) {
             o->oAction = BOWSER_ACT_CHARGE_MARIO;
         }
     } else {
+        // Fuck you, no stalling
         // Keep walking
         o->oAction = BOWSER_ACT_WALK_TO_MARIO;
     }
@@ -590,9 +594,9 @@ void bowser_act_spit_fire_into_sky(void) {
     if (animFrame > 24 && animFrame < 36) {
         cur_obj_play_sound_1(SOUND_AIR_BOWSER_SPIT_FIRE);
         if (animFrame == 35) { // Spawns Blue flames at this frame
-            spawn_object_relative(1, 0, 400, 100, o, MODEL_RED_FLAME, bhvBlueBowserFlame);
+            spawn_object_relative(1, 0, 600, 100, o, MODEL_RED_FLAME, bhvBlueBowserFlame);
         } else { // Spawns Red flames
-            spawn_object_relative(0, 0, 400, 100, o, MODEL_RED_FLAME, bhvBlueBowserFlame);
+            spawn_object_relative(0, 0, 600, 100, o, MODEL_RED_FLAME, bhvBlueBowserFlame);
         }
     }
     // Return to default act once the animation is over
@@ -802,7 +806,7 @@ void bowser_act_spit_fire_onto_floor(void) {
     // Play animation and split fire at a specific frame
     cur_obj_init_animation_with_sound(BOWSER_ANIM_BREATH_QUICK);
     if (cur_obj_check_anim_frame(5)) {
-        obj_spit_fire(0, 200, 180, 7.0f, MODEL_RED_FLAME, 30.0f, 10.0f, 0x1000);
+        obj_spit_fire(0, 200, 380, 7.0f, MODEL_RED_FLAME, 30.0f, 10.0f, 0x1000);
     }
     // Use subaction as a timer when the animation is over
     if (cur_obj_check_if_near_animation_end()) {
@@ -1265,6 +1269,7 @@ s32 bowser_dead_final_stage_ending(void) {
  * This action is divided in subaction functions
  */
 void bowser_act_dead(void) {
+    o->oGraphYOffset = 0.0f;
     switch (o->oSubAction) {
         case BOWSER_SUB_ACT_DEAD_FLY_BACK:
             bowser_fly_back_dead();
@@ -1276,6 +1281,8 @@ void bowser_act_dead(void) {
 
         case BOWSER_SUB_ACT_DEAD_WAIT:
             // Check if Mario is close to Bowser
+            //TODO: Warp to end screen
+            /*
             if (bowser_dead_wait_for_mario()) {
                 o->oBowserTimer = 0;
                 // Set different (final) subaction in BitS
@@ -1286,7 +1293,9 @@ void bowser_act_dead(void) {
                     o->activeFlags |= ACTIVE_FLAG_DITHERED_ALPHA;
                     o->oSubAction++; // BOWSER_SUB_ACT_DEAD_DEFAULT_END
                 }
+                
             }
+            */
             break;
 
         case BOWSER_SUB_ACT_DEAD_DEFAULT_END:
