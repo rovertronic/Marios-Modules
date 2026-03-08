@@ -526,6 +526,12 @@ SECTIONS
 	END_SEG(capcom)
 #endif
 
+BEGIN_SEG(dma_textures, __romPos)
+{
+   KEEP(BUILD_DIR/bin/dma_texture.o(.data*));
+}
+END_SEG(dma_textures)
+
 #ifdef DEBUG_MAP_STACKTRACE
    BEGIN_SEG(mapData, (RAM_END - 0x00100000)) {
       KEEP(BUILD_DIR/asm/debug/map.o(.data*));

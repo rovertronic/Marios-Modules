@@ -1,5 +1,7 @@
 // bowser.inc.c
 
+int sFaceFrame = 0;
+
 /**
  * Behavior for Bowser and it's actions (Tail, Flame, Body)
  */
@@ -373,15 +375,21 @@ void bowser_bits_action_list(void) {
         if (rand2 > .5f) { // nearby
             if (rand < 0.4f) {
                 o->oAction = BOWSER_ACT_SPIT_FIRE_ONTO_FLOOR; // 40% chance
+                sFaceFrame = 1066;
             } else if (rand < 0.8f) {
                 o->oAction = BOWSER_ACT_SPIT_FIRE_INTO_SKY; // 80% chance
+                sFaceFrame = 1066;
             } else {
                 o->oAction = BOWSER_ACT_BREATH_FIRE;
+                sFaceFrame = 1066;
             } // far away
         } else if (rand < 0.5f) {
             o->oAction = BOWSER_ACT_BIG_JUMP; // 50% chance
+            sFaceFrame = 1066;
         } else {
             o->oAction = BOWSER_ACT_CHARGE_MARIO;
+            sFaceFrame = 472;
+
         }
     } else {
         // Fuck you, no stalling
@@ -508,6 +516,7 @@ void bowser_act_walk_to_mario(void) {
         // Start walking
         if (bowser_set_anim_look_up_and_walk()) {
             o->oSubAction++;
+            sFaceFrame = 201;
         }
     } else if (o->oSubAction == 1) {
         // Keep walking slowly
@@ -1269,9 +1278,13 @@ s32 bowser_dead_final_stage_ending(void) {
  * This action is divided in subaction functions
  */
 void bowser_act_dead(void) {
+    if (o->oTimer % 200 == 0) {
+        sFaceFrame = 472;
+    }
     o->oGraphYOffset = 0.0f;
     switch (o->oSubAction) {
         case BOWSER_SUB_ACT_DEAD_FLY_BACK:
+            sFaceFrame = 472;
             bowser_fly_back_dead();
             break;
 
@@ -1618,6 +1631,9 @@ void bowser_thrown_dropped_update(void) {
 /**
  * Bowser's main loop
  */
+#include "levels/finalboss/header.h"
+extern u8 dmaFaceTexture[];
+
 void bhv_bowser_loop(void) {
     s16 angleToMario;  // AngleToMario from Bowser's perspective
     s16 angleToCenter; // AngleToCenter from Bowser's perspective
@@ -1683,6 +1699,15 @@ void bhv_bowser_loop(void) {
             }
         }
     }
+
+    sFaceFrame++;
+    if (sFaceFrame > 1225) {
+        sFaceFrame = 1225;
+    }
+
+    int size = 2048;
+    int index = sFaceFrame;
+    dma_read(segmented_to_virtual(fauximedes_palasample_i4),dmaFaceTexture+(index*size),dmaFaceTexture+size+(index*size));
 }
 
 /**
