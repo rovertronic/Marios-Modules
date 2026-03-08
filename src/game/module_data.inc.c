@@ -595,6 +595,32 @@ void module_clothes_color(struct module_execution_thread * met, u8 call_context)
     met->x++;
 }
 
+void module_eye_color(struct module_execution_thread * met, u8 call_context) {
+    if (colorBlendCount == 0) {
+        module_log_message(met,"No colors to apply, do nothing.",0);
+        met->x++;
+        return;
+    }
+
+    Vec3f final = {0.0f,0.0f,0.0f};
+    for (int i = 0; i < colorBlendCount; i++) {
+        for (int j = 0; j < 3; j++) {
+            final[j] += colorBlendStack[i][j] * (1.0f/colorBlendCount);
+        }
+    }
+
+    gMarioEyeColor[0] = final[0] * 255.0f;
+    gMarioEyeColor[1] = final[1] * 255.0f;
+    gMarioEyeColor[2] = final[2] * 255.0f;
+
+    colorBlendCount = 0;
+
+    module_log_message(met,"Applying colors to eyes.",0);
+
+    gModuleUpdateVanity = TRUE;
+    met->x++;
+}
+
 // Not ideal, somewhat messy...
 extern struct module_info module_infos[];
 
@@ -924,7 +950,7 @@ Gfx * skinLights[] = {
     &mat_mario_face_2___eye_closed_v3_001,
     &mat_mario_mustache_v3_001,
 
-    &mat_woman_womanEye1,
+    &mat_woman_womanEye1_layer1,
     &mat_woman_womanEye2,
     &mat_woman_womanEye3,
     &mat_woman_mouth,
@@ -1280,6 +1306,15 @@ struct module_info module_infos[] = {
         .func = module_clothes_color,
         .creative = TRUE,
         .extra_data = skinLights,
+    },
+
+    [MOD_VAN_EYE] = {
+        .name = "Eye Color",
+        .type = MTYPE_VANITY,
+        .tex = micons_sensor_rgba16,
+        .desc = "Mixes colors into eyes.",
+        .func = module_eye_color,
+        .creative = TRUE,
     },
 
     [MOD_RED] = {

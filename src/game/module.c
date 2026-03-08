@@ -9,6 +9,7 @@
 #include "audio/external.h"
 #include "engine/math_util.h"
 #include "mario.h"
+#include "mario_misc.h"
 #include "emutest.h"
 #include "behavior_data.h"
 #include "area.h"

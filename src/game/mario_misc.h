@@ -12,6 +12,8 @@ extern struct MarioBodyState gBodyStates[2];
 extern struct GraphNodeObject gPreviewMario;
 extern struct GraphNodeObject gGameTitle;
 
+extern f32 gMarioEyeColor[3];
+
 #ifdef KEEP_MARIO_HEAD
 Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, Mat4 *mtx);
 #endif

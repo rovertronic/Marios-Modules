@@ -168,6 +168,7 @@ enum module_id {
     MOD_VAN_PANTS,
     MOD_VAN_HAIR,
     MOD_VAN_SKIN,
+    MOD_VAN_EYE,
     MOD_WILDCOLOR,
     MOD_RED,
     MOD_BLUE,

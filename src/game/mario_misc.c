@@ -42,6 +42,8 @@
 #define TOAD_STAR_2_DIALOG_AFTER DIALOG_155
 #define TOAD_STAR_3_DIALOG_AFTER DIALOG_156
 
+f32 gMarioEyeColor[3] = {32, 107, 222};
+
 enum ToadMessageStates {
     TOAD_MESSAGE_FADED,
     TOAD_MESSAGE_OPAQUE,
@@ -370,6 +372,10 @@ Gfx *geo_switch_mario_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4 
     struct MarioBodyState *bodyState = &gBodyStates[switchCase->numCases];
     s16 blinkFrame;
 
+    Gfx *gfx = NULL;
+    Gfx *gfxHead = NULL;
+    struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
+
     if (callContext == GEO_CONTEXT_RENDER) {
         if (bodyState->eyeState == 0) {
             blinkFrame = ((switchCase->numCases * 32 + gAreaUpdateCounter) >> 1) & 0x1F;
@@ -381,6 +387,14 @@ Gfx *geo_switch_mario_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4 
         } else {
             switchCase->selectedCase = bodyState->eyeState - 1;
         }
+
+
+        //SET_GRAPH_NODE_LAYER(asGenerated->fnNode.node.flags, LAYER_OPAQUE);
+        gfxHead = alloc_display_list(3 * sizeof(*gfxHead));
+        gfx = gfxHead;
+        gDPSetEnvColor(gfxHead++, (u8)(gMarioEyeColor[0]), (u8)(gMarioEyeColor[1]), (u8)(gMarioEyeColor[2]), 255);
+        gSPEndDisplayList(gfxHead);
+        geo_append_display_list(gfx, LAYER_OPAQUE);
     }
     return NULL;
 }
