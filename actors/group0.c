@@ -72,3 +72,5 @@
 #include "car/model.inc.c"
 #include "live/model.inc.c"
 #include "gshredder/model.inc.c"
+#include "gravity_crystal/model.inc.c"
+#include "oldmap/model.inc.c"

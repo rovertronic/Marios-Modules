@@ -35,3 +35,5 @@
 #include "car/geo.inc.c"
 #include "live/geo.inc.c"
 #include "gshredder/geo.inc.c"
+#include "gravity_crystal/geo.inc.c"
+#include "oldmap/geo.inc.c"

@@ -956,7 +956,7 @@ struct DungeonRoomVariantCellList sRoomBossCellList[] = {
 struct DungeonObject sRoomBossObjectList[] = {
     {.bhv = bhvDungeonDoorLocked, .model = MODEL_DUNGEON_DOOR, .param = 1,
     .angle = 0x4000, .pos = {-90.0236f,0.0f,16.3737f}},
-    {.bhv = bhvKingBobombRogue, .model = MODEL_KINGBOBOMB_GLOBAL, .param = 0,
+    {.bhv = bhvWigglerRogue, .model = MODEL_WIGHEAD, .param = 0,
     .angle = 0x4000, .pos = {-109.687f,0.0f,13.7393f}},
     {.end = TRUE},
 };
@@ -1464,7 +1464,7 @@ struct DungeonRoomVariant sRoomRfSlope = {
     .objectList = NULL,
     .requiredLoot = NULL,
 
-    .rarity = 3,
+    .rarity = 4,
     .generateOnce = TRUE,
 };
 
@@ -1485,7 +1485,7 @@ struct DungeonRoomVariant sRoomRfBlankJump = {
     .objectList = NULL,
     .requiredLoot = NULL,
 
-    .rarity = 3,
+    .rarity = 4,
     .generateOnce = TRUE,
 };
 

@@ -1828,7 +1828,7 @@ void bhv_aboomboomination(void) {
             }
             if (kild) {
                 o->oAction++;
-                struct Object * dungeonExitItem = spawn_default_star(o->oPosX,o->oPosY,o->oPosZ);
+                struct Object * dungeonExitItem = spawn_default_star(o->oPosX,o->oPosY + 400.0f,o->oPosZ);
                 SET_BPARAM4(dungeonExitItem->oBehParams,1);
             }
             break;

@@ -23,6 +23,13 @@ void bhv_collect_star_init(void) {
         } else {
             o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
         }
+    } else {
+        // Dungeon Item
+
+        o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_OLD_MAP];
+        if (gMariosModulesSave.file[gMariosModulesSaveIndex].level == 1) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_GRAVITY_CRYSTAL];
+        }
     }
 
     obj_set_hitbox(o, &sCollectStarHitbox);

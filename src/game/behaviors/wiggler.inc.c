@@ -227,8 +227,14 @@ static void wiggler_act_walk(void) {
 
         // If Mario is positioned below the wiggler, assume he entered through the
         // lower cave entrance, so don't display text.
+        /*
         if (o->oDistanceToMario < 1500.0f && cur_obj_update_dialog_with_cutscene(
             MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_NONE, CUTSCENE_DIALOG, NEWTEXT_BOSS_2)) {
+            o->oWigglerTextStatus = WIGGLER_TEXT_STATUS_COMPLETED_DIALOG;
+        }
+        */
+
+        if (o->oDistanceToMario < 1500.0f) {
             o->oWigglerTextStatus = WIGGLER_TEXT_STATUS_COMPLETED_DIALOG;
         }
     } else {
@@ -355,7 +361,13 @@ static void wiggler_act_shrink(void) {
 
         // 4 is the default scale, so shrink to 1/4 of regular size
         if (approach_f32_ptr(&o->header.gfx.scale[0], 1.0f, 0.1f)) {
-            spawn_default_star(o->oHomeX,o->oHomeY+400.0f,o->oHomeZ);
+            if (cur_obj_has_behavior(bhvWigglerRogue)) {
+                struct Object * dungeonExitItem = spawn_default_star(o->oHomeX,o->oHomeY+400.0f,o->oHomeZ);
+                SET_BPARAM4(dungeonExitItem->oBehParams,1);
+                dungeonExitItem->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_GRAVITY_CRYSTAL];
+            } else {
+                spawn_default_star(o->oHomeX,o->oHomeY+400.0f,o->oHomeZ);
+            }
             o->oAction = WIGGLER_ACT_FALL_THROUGH_FLOOR;
         }
 
@@ -442,7 +454,12 @@ void bhv_wiggler_update(void) {
         // Update the rest of the segments to follow segment 0
         wiggler_update_segments();
 
-        while (cur_obj_lateral_dist_to_home() > 1000.0f) {
+        f32 invisWallRadius = 1000.0f;
+        if (gCurrLevelNum == LEVEL_ROGUE) {
+            invisWallRadius = 600.0f;
+        }
+
+        while (cur_obj_lateral_dist_to_home() > invisWallRadius) {
             s16 homeAngle = cur_obj_angle_to_home();
             o->oPosX += sins(homeAngle);
             o->oPosZ += coss(homeAngle);
