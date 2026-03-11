@@ -1104,6 +1104,8 @@ void ui_render(void) {
     //print_utf8("Option 3",40,108-80);
 }
 
+u8 gHighlightUtf8Box = 0;
+
 void print_utf8_boxed(char * str, int x, int y, f32 alpha, int centered) {
     int sx;
     int sy;
@@ -1114,7 +1116,7 @@ void print_utf8_boxed(char * str, int x, int y, f32 alpha, int centered) {
         offset = -(sx/2);
     }
 
-    gDPSetEnvColor(gDisplayListHead++, 0,0,0, alpha*160.0f);
+    gDPSetEnvColor(gDisplayListHead++, gHighlightUtf8Box,gHighlightUtf8Box,gHighlightUtf8Box, alpha*160.0f);
     gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
     render_4slice(x-4+offset,y+18,x+sx+4+offset,y-2);
 

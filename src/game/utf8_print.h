@@ -123,4 +123,6 @@ void print_utf8_color(char * str, int x, int y, u8 r, u8 g, u8 b);
 
 void ui_render(void);
 
+extern u8 gHighlightUtf8Box;
+
 #endif

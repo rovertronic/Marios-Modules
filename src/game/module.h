@@ -313,6 +313,8 @@ enum {
     MAIN_MENU_OPENING_CUTSCENE,
     MAIN_MENU_LEVEL_WARP_CONTINUE,
     MAIN_MENU_FILE_ACTION,
+    MAIN_MENU_EXTRA,
+    MAIN_MENU_SOUNDTRACK,
     MAIN_MENU_CLOSED,
 };
 
@@ -340,6 +342,11 @@ struct Achievement {
     char * desc;
     u16 rank;
     u16 flag;
+};
+
+struct SongEntry {
+    char * desc;
+    u8 seq;
 };
 
 enum {

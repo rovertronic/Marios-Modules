@@ -178,6 +178,91 @@ f32 sBigTextScroll = 0.0f;
 f32 sMainMenuHandPos[2] = {0.0f};
 f32 sMainMenuHandTargetPos[2] = {0.0f};
 
+int sMainMenuSongIndex = 0;
+int sMainMenuLastSongIndex = 0;
+
+struct Achievement achievementList[] = {
+    [ACHIEVEMENT_WIN] = {
+        .name = "@O@Fate of the Kingdom",
+        .desc = "Escape the manufacturing dungeon.",
+        .rank = 0,
+        .flag = 0,
+    },
+    [ACHIEVEMENT_STARS] = {
+        .name = "@O@Mario's All Powered Up",
+        .desc = "Collect all 15 stars.",
+        .rank = 0,
+        .flag = 1,
+    },
+    [ACHIEVEMENT_SHRED] = {
+        .name = "@O@Thrifter",
+        .desc = "Reroll a module with the Recycletron.",
+        .rank = 0,
+        .flag = 2,
+    },
+    [ACHIEVEMENT_COSMETIC] = {
+        .name = "@O@Starving Artist",
+        .desc = "Shred 5 cosmetic modules.",
+        .rank = 0,
+        .flag = 3,
+    },
+    [ACHIEVEMENT_ECO] = {
+        .name = "@1@Eco Friendly",
+        .desc = "Triple jump without any cooldown.",
+        .rank = 1,
+        .flag = 4,
+    },
+    [ACHIEVEMENT_REPEAT] = {
+        .name = "@1@Threepeater",
+        .desc = "Repeat 3 times during a single socket execution.",
+        .rank = 1,
+        .flag = 5,
+    },
+    [ACHIEVEMENT_FAST] = {
+        .name = "@1@Supersonic",
+        .desc = "Break the sound barrier. (1143+ speed)",
+        .rank = 1,
+        .flag = 6,
+    },
+    [ACHIEVEMENT_FASTSPIN] = {
+        .name = "@1@Superkirby",
+        .desc = "Twirl at 14 revolutions per second.",
+        .rank = 1,
+        .flag = 7,
+    },
+    [ACHIEVEMENT_HOT] = {
+        .name = "@1@Overclocked and Overcooked",
+        .desc = "Incur a 15+ second cooldown.",
+        .rank = 1,
+        .flag = 8,
+    },
+    [ACHIEVEMENT_FALL] = {
+        .name = "@Y@Watch Me Fly, Mama!",
+        .desc = "Stay airborne for 30 seconds or more.",
+        .rank = 2,
+        .flag = 9,
+    },
+    [ACHIEVEMENT_NO_HIT] = {
+        .name = "@Y@You CAN Dodge Forever!",
+        .desc = "Collect all 15 stars without taking damage.",
+        .rank = 2,
+        .flag = 10,
+    },
+    [ACHIEVEMENT_NO_AIR_PLATFORM] = {
+        .name = "@Y@Not A Bowser In The Sky",
+        .desc = "Collect all 15 stars without using the air platform module.",
+        .rank = 2,
+        .flag = 11,
+    },
+};
+
+char * sModeDescriptions[] = {
+    "The standard Mario's Modules experience. Collect @Y@15 stars@@ by finding modules and building moves to complete the game.",
+    "The temple has been insulated with tin-foil. @B@A socket, @G@B socket,@@ and moving with analog is disabled. Use infinite modules to craft a Mario that can get to the end of the temple.",
+    "Infinite modules, everything unlocked. No achievements.",
+};
+
+
 char * sChangelogStr = "\
 Mario's Modules v1.2\n\
 \n\
@@ -297,8 +382,22 @@ Notes / Known issues:\n\
 
 char * sButtonsMain[] = {
     "@G@Play",
+    "Extra",
     "Credits",
-    "Beta Test Info",
+    //"Beta Test Info",
+    NULL
+};
+
+char * sButtonsExtra[] = {
+    "Listen to Soundtrack",
+    "View Meta Progression",
+    "View Journal Entries",
+    NULL
+};
+
+char * sButtonsOST[] = {
+    "Play",
+    "Stop",
     NULL
 };
 
@@ -321,101 +420,33 @@ char * sButtonsFileAction[] = {
     NULL
 };
 
-char * sModeDescriptions[] = {
-    "The standard Mario's Modules experience. Collect @Y@15 stars@@ by finding modules and building moves to complete the game.",
-    "The temple has been insulated with tin-foil. @B@A socket, @G@B socket,@@ and moving with analog is disabled. Use infinite modules to craft a Mario that can get to the end of the temple.",
-    "Infinite modules, everything unlocked. No achievements.",
-};
+#define SONG_COUNT 2
 
-struct Achievement achievementList[] = {
-    [ACHIEVEMENT_WIN] = {
-        .name = "@O@Fate of the Kingdom",
-        .desc = "Escape the manufacturing dungeon.",
-        .rank = 0,
-        .flag = 0,
-    },
-    [ACHIEVEMENT_STARS] = {
-        .name = "@O@Mario's All Powered Up",
-        .desc = "Collect all 15 stars.",
-        .rank = 0,
-        .flag = 1,
-    },
-    [ACHIEVEMENT_SHRED] = {
-        .name = "@O@Thrifter",
-        .desc = "Reroll a module with the Recycletron.",
-        .rank = 0,
-        .flag = 2,
-    },
-    [ACHIEVEMENT_COSMETIC] = {
-        .name = "@O@Starving Artist",
-        .desc = "Shred 5 cosmetic modules.",
-        .rank = 0,
-        .flag = 3,
-    },
-    [ACHIEVEMENT_ECO] = {
-        .name = "@1@Eco Friendly",
-        .desc = "Triple jump without any cooldown.",
-        .rank = 1,
-        .flag = 4,
-    },
-    [ACHIEVEMENT_REPEAT] = {
-        .name = "@1@Threepeater",
-        .desc = "Repeat 3 times during a single socket execution.",
-        .rank = 1,
-        .flag = 5,
-    },
-    [ACHIEVEMENT_FAST] = {
-        .name = "@1@Supersonic",
-        .desc = "Break the sound barrier. (1143+ speed)",
-        .rank = 1,
-        .flag = 6,
-    },
-    [ACHIEVEMENT_FASTSPIN] = {
-        .name = "@1@Superkirby",
-        .desc = "Twirl at 14 revolutions per second.",
-        .rank = 1,
-        .flag = 7,
-    },
-    [ACHIEVEMENT_HOT] = {
-        .name = "@1@Overclocked and Overcooked",
-        .desc = "Incur a 15+ second cooldown.",
-        .rank = 1,
-        .flag = 8,
-    },
-    [ACHIEVEMENT_FALL] = {
-        .name = "@Y@Watch Me Fly, Mama!",
-        .desc = "Stay airborne for 30 seconds or more.",
-        .rank = 2,
-        .flag = 9,
-    },
-    [ACHIEVEMENT_NO_HIT] = {
-        .name = "@Y@You CAN Dodge Forever!",
-        .desc = "Collect all 15 stars without taking damage.",
-        .rank = 2,
-        .flag = 10,
-    },
-    [ACHIEVEMENT_NO_AIR_PLATFORM] = {
-        .name = "@Y@Not A Bowser In The Sky",
-        .desc = "Collect all 15 stars without using the air platform module.",
-        .rank = 2,
-        .flag = 11,
-    },
+struct SongEntry sSongEntries[] = {
+    {.desc = "Super Mario Bros by Nintendo",
+    .seq = SEQ_MENU_TITLE_SCREEN},
+    {.desc = "Swapfell intro by calem",
+    .seq = SEQ_MM64_INTRO},
 };
 
 void render_menu_button_list(char * btns[]) {
     int i = 0;
     char * curStr = btns[0];
     while(curStr != NULL) {
-        print_utf8_boxed(curStr,160,140-(i*22),sMainMenuTransition,TRUE);
+        gHighlightUtf8Box = 0;
         if (i == sMainMenuIndex) {
             int sx; int sy; utf8_size(curStr, &sx, &sy);
             sMainMenuHandTargetPos[0] = 165 + (sx/2);
             sMainMenuHandTargetPos[1] = 85 + (i*22);
+            gHighlightUtf8Box = 50;
         }
+
+        print_utf8_boxed(curStr,160,140-(i*22),sMainMenuTransition,TRUE);
 
         i++;
         curStr = btns[i];
     }
+    gHighlightUtf8Box = 0;
 
 }
 
@@ -468,6 +499,18 @@ void render_mode_info(int mode) {
             " Only 3 lives, then permadeath. Chapter 2 of the MM2 story.";
             break;
     }
+    print_utf8(utf8_autonewline(str,260), 30, 64);
+    gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
+}
+
+void render_song_info(int song) {
+    gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, sMainMenuTransition*160.0f);
+    render_4slice(25,82,33+260,25);
+
+    utf8_print_reset();
+    gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
+    char * str = sSongEntries[sMainMenuSongIndex].desc;
     print_utf8(utf8_autonewline(str,260), 30, 64);
     gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
 }
@@ -545,6 +588,18 @@ void render_main_menu(void) {
             render_main_menu_hand();
             render_menu_button_list(&sButtonsFileAction);
             break;
+        case MAIN_MENU_EXTRA:
+            render_main_menu_hand();
+            render_menu_button_list(&sButtonsExtra);
+            break;
+        case MAIN_MENU_SOUNDTRACK:
+            render_song_info(0);
+
+            render_main_menu_hand();
+            render_menu_button_list(&sButtonsOST);
+
+            print_utf8_boxed("Choose song with @<Y@←@Y@C@@ and @Y@C@Y>@→@@.",160,180,sMainMenuTransition,TRUE);
+            break;
     }
 }
 
@@ -613,9 +668,12 @@ void logic_main_menu(void) {
                         gMainMenuTargetState = MAIN_MENU_FILE;
                         break;
                     case 1:
-                        gMainMenuTargetState = MAIN_MENU_CREDITS;
+                        gMainMenuTargetState = MAIN_MENU_EXTRA;
                         break;
                     case 2:
+                        gMainMenuTargetState = MAIN_MENU_CREDITS;
+                        break;
+                    case 3:
                         gMainMenuTargetState = MAIN_MENU_CHANGELOG;
                         break;
                 }
@@ -697,6 +755,48 @@ void logic_main_menu(void) {
         case MAIN_MENU_CHANGELOG:
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
                 gMainMenuTargetState = MAIN_MENU_MAIN;
+            }
+            break;
+        case MAIN_MENU_EXTRA:
+            main_menu_handle_scroll(3);
+            if (gPlayer1Controller->buttonPressed & (B_BUTTON)) {
+                gMainMenuTargetState = MAIN_MENU_MAIN;
+                break;
+            }
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                switch (sMainMenuIndex) {
+                    case 0:
+                        gMainMenuTargetState = MAIN_MENU_SOUNDTRACK;
+                        break;
+                }
+            }
+            break;
+        case MAIN_MENU_SOUNDTRACK:;
+            main_menu_handle_scroll(2);
+            if (gPlayer1Controller->buttonPressed & (B_BUTTON)) {
+                gMainMenuTargetState = MAIN_MENU_EXTRA;
+                break;
+            }
+            if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
+                sMainMenuSongIndex++;
+            }
+            if (gPlayer1Controller->buttonPressed & L_CBUTTONS) {
+                sMainMenuSongIndex--;
+            }
+            sMainMenuSongIndex = (sMainMenuSongIndex + SONG_COUNT) % SONG_COUNT;
+
+            int song = sSongEntries[sMainMenuSongIndex].seq;
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                switch (sMainMenuIndex) {
+                    case 0:
+                        stop_background_music(SEQUENCE_ARGS(4, sMainMenuLastSongIndex ));
+                        set_background_music(0, song, 0);
+                        sMainMenuLastSongIndex = song;
+                        break;
+                    case 1:
+                        stop_background_music(SEQUENCE_ARGS(4, song ));
+                        break;
+                }
             }
             break;
     }
