@@ -1462,6 +1462,7 @@ s32 lvl_set_current_level(UNUSED s16 initOrUpdate, s32 levelNum) {
 	if (gCurrLevelNum == LEVEL_PITSTOP) return 0;
 	if (gCurrLevelNum == LEVEL_RF) return 0;
 	if (gCurrLevelNum == LEVEL_FINALBOSS) return 0;
+	if (gCurrLevelNum == LEVEL_WIN) return 0;
 
     return !gDebugLevelSelect;
 }

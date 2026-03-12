@@ -697,6 +697,7 @@ void module_if(struct module_execution_thread * met, u8 call_context) {
 
     if (condition) {
         module_log_message(met,"@G@Condition@@ is @B@TRUE@@, continue.",0);
+        set_used_module_flag_manual(MOD_IF);
         met->x++;
     } else {
         u8 revertX = met->x;
@@ -781,6 +782,8 @@ void module_if_input(struct module_execution_thread * met, u8 call_context) {
         cond = (gPlayer1Controller->buttonPressed & inpFlag);
     }
     if (cond) {
+        set_used_module_flag_manual(MOD_IF_INPUT);
+        set_used_module_flag_manual(MOD_ENDBLOCK);
         module_log_message(met,"Input met, condition set to @B@TRUE@@.",0);
         add_met_condition(met,TRUE);
     } else {
@@ -1019,12 +1022,12 @@ char * wildcolorOptions[] = {
 
 struct module_info module_infos[] = {
     // Sockets
-    [MOD_BUTTON_A] = {MTYPE_INPUT,0,0,0,0,"",micons_abtn_rgba16,NULL,NULL,NULL},
-    [MOD_BUTTON_B] = {MTYPE_INPUT,0,0,0,0,"",micons_bbtn_rgba16,NULL,NULL,NULL},
-    [MOD_VANITY] = {MTYPE_INPUT,0,0,0,0,"",micons_vanity_rgba16,NULL,NULL,NULL},
-    [MOD_SETTINGS] = {MTYPE_INPUT,0,0,0,0,"",micons_gear_rgba16,NULL,NULL,NULL},
-    [MOD_WRAP] = {MTYPE_INPUT,0,0,0,0,"",micons_wrap_rgba16,NULL,NULL,NULL},
-    [MOD_PASSIVE] = {MTYPE_INPUT,0,0,0,0,"Passive Socket",micons_p__rgba16,NULL,NULL,NULL},
+    [MOD_BUTTON_A] = {MTYPE_INPUT,0,0,0,0,0,"",micons_abtn_rgba16,NULL,NULL,NULL},
+    [MOD_BUTTON_B] = {MTYPE_INPUT,0,0,0,0,0,"",micons_bbtn_rgba16,NULL,NULL,NULL},
+    [MOD_VANITY] = {MTYPE_INPUT,0,0,0,0,0,"",micons_vanity_rgba16,NULL,NULL,NULL},
+    [MOD_SETTINGS] = {MTYPE_INPUT,0,0,0,0,0,"",micons_gear_rgba16,NULL,NULL,NULL},
+    [MOD_WRAP] = {MTYPE_INPUT,0,0,0,0,0,"",micons_wrap_rgba16,NULL,NULL,NULL},
+    [MOD_PASSIVE] = {MTYPE_INPUT,0,0,0,0,0,"Passive Socket",micons_p__rgba16,NULL,NULL,NULL},
 
     // Actions
     [MOD_JUMP] = {
@@ -1525,6 +1528,7 @@ struct module_info module_infos[] = {
         .func = module_if,
         .options = ifOptions,
         .creative = TRUE,
+        .manual_use_flagging = TRUE,
     },
     [MOD_ENDBLOCK] = {
         .name = "End Block",
@@ -1562,6 +1566,7 @@ struct module_info module_infos[] = {
         .options = ifInputOptions,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_1,
+        .manual_use_flagging = TRUE,
     },
     [MOD_IF_WALL] = {
         .name = "If Touching Wall",

@@ -105,6 +105,7 @@ struct module_info {
     u8 unchainable:1;
     u8 creative:1;
     u8 elementable:1;
+    u8 manual_use_flagging:1;
     u8 loot_tier:2;
     char * name;
     void * tex;
@@ -272,6 +273,8 @@ struct mariosModulesSaveFile {
     s8 inventory[INVENTORY_SLOTS_Y*INVENTORY_SLOTS_X];
     s8 inventoryParam[INVENTORY_SLOTS_Y*INVENTORY_SLOTS_X];
     u32 bin[SAVE_BIN_COUNT];
+    u32 gameTime;
+    u32 usedModules[3];
     u16 coins;
     u8 keys;
     s8 lives;
@@ -401,11 +404,16 @@ s32 save_bin_get_flag_total(int type);
 s32 save_bin_get_max_total(int type);
 s32 save_bin_get_star_all_levels(void);
 
+void set_used_module_flag(int i);
+void set_used_module_flag_manual(int i);
 void save_marios_modules(Vec3f pos);
 void save_marios_modules_silent(Vec3f pos);
 void save_marios_modules_coins_lives(void);
 void load_marios_modules(void);
 void marios_modules_savefile_load_position(void);
 void save_delete_file(int fileIndex);
+
+void render_win_screen(void);
+void render_game_over_screen(void);
 
 #endif

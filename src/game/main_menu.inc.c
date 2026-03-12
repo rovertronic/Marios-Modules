@@ -801,3 +801,38 @@ void logic_main_menu(void) {
             break;
     }
 }
+
+void render_win_screen(void) {
+    gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, 180);
+    render_4slice(20,220,300,20);
+
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, 255);
+
+    char resultScreenStr[100];
+
+    utf8_print_reset();
+    print_utf8("@Y@Crystal Quest COMPLETE!@@",30,190);
+    print_utf8("------------------------------",30,170);
+    sprintf(resultScreenStr,"Time Taken: %s",get_game_time_str());
+    print_utf8(resultScreenStr,30,150);
+    print_utf8("Modules Used:",30,130);
+
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
+    int used = 0;
+    for (int i = 0; i < MOD_COUNT; i++) {
+        int fflag = i%32;
+        int findex = i/32;
+        if (gMariosModulesSave.file[gMariosModulesSaveIndex].usedModules[findex] & (1<<fflag)) {
+            int x = 100 + (used%12)*16;
+            int y = 95 + ((used/12)*16);
+            print_module(i,x,y,0);
+            used++;
+        }
+    }
+}
+
+void render_game_over_screen(void) {
+
+}

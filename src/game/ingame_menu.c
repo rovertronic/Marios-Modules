@@ -2358,6 +2358,11 @@ s32 logic_course_complete_screen(void) {
 s32 render_menus_and_dialogs(void) {
     create_dl_ortho_matrix();
 
+    if (gCurrLevelNum == LEVEL_WIN) {
+        render_win_screen();
+        return;
+    }
+
     if (gMainMenuState != MAIN_MENU_CLOSED) {
         render_main_menu();
         return;

@@ -71,6 +71,32 @@ int sDebugLogModuleDisplays[DEBUG_LOG_MAX][2];
 int sDebugLogModuleNumber[DEBUG_LOG_MAX];
 u8 sDebugLogIndex = 0;
 
+char game_time_str_buff[20];
+char * get_game_time_str(void) {
+    int t = gMariosModulesSave.file[gMariosModulesSaveIndex].gameTime;
+    int s = (t/30)%60;
+    int m = (t/1800)%60;
+    int h = (t/108000);
+
+    sprintf(game_time_str_buff,"%02d:%02d:%02d",h,m,s);
+
+    return game_time_str_buff;
+}
+
+void set_used_module_flag_manual(int i) {
+    int fflag = i%32;
+    int findex = i/32;
+    gMariosModulesSave.file[gMariosModulesSaveIndex].usedModules[findex] |= (1<<fflag);
+}
+
+void set_used_module_flag(int i) {
+    int fflag = i%32;
+    int findex = i/32;
+    if (!module_infos[i].manual_use_flagging && module_infos[i].type != MTYPE_VANITY && module_infos[i].type != MTYPE_SETTINGS) {
+        gMariosModulesSave.file[gMariosModulesSaveIndex].usedModules[findex] |= (1<<fflag);
+    }
+}
+
 void module_log_message(struct module_execution_thread * met, char * logmsg, int num) {
     if (met->debug_monitor == TRUE) {
         sDebugLogStrs[sDebugLogIndex] = logmsg;
@@ -310,6 +336,7 @@ void module_update(void) {
                         met->option = inventoryParam[met->y][met->x];
                         if (module_infos[read_mod].func != NULL) {
                             module_infos[read_mod].func(met,MCC_INVOKE);
+                            set_used_module_flag(read_mod);
                         } else {
                             // No function = passthrough
                             met->x++;
@@ -953,10 +980,10 @@ void print_module_menu(void) {
         utf8_print_reset();
         gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
 
-        sprintf(print_buffer,"Chests: %d/%d\nStars: %d/%d\nSeed: %d",
+        sprintf(print_buffer,"Chests: %d/%d\nStars: %d/%d\nTime: %s",
         save_bin_get_flag_total(SAVE_BIN_CHESTS),save_bin_get_max_total(SAVE_BIN_CHESTS),
         save_bin_get_flag_total(SAVE_BIN_STARS), save_bin_get_max_total(SAVE_BIN_STARS),
-        gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
+        get_game_time_str());
         print_utf8(print_buffer,30,160);
     }
 

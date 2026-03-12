@@ -1832,6 +1832,10 @@ s16 gNearestRedCoinDist = -1;
 s32 execute_mario_action(UNUSED struct Object *obj) {
     s32 inLoop = TRUE;
 
+    if (gCurrLevelNum == LEVEL_WIN) {
+        return 0;
+    }
+
     gMarioState->bonkSignal = FALSE;
 
     struct Object * nearestRedCoin = cur_obj_nearest_object_with_behavior(bhvRedCoin);
@@ -1845,6 +1849,8 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 
     gMarioState->marioObj->shitCullFlags = 0xFFFFFFFF;
     shit_cull_update();
+
+    gMariosModulesSave.file[gMariosModulesSaveIndex].gameTime++;
 
     // Updates once per frame:
     mario_title_logic();
