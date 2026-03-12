@@ -1174,21 +1174,43 @@ u8 dungeon_seq_timer = 0;
 
 extern void seq_player_fade_to_target_volume(s32 player, s32 fadeDuration, u8 targetVolume);
 
+struct CutsceneSplinePoint * introSplineList[] = {
+    temple_area_1_spline_titleSpline2A, temple_area_1_spline_titleSpline2B,
+    temple_area_1_spline_titleSpline1A, temple_area_1_spline_titleSpline1B,
+    temple_area_1_spline_titleSpline3A, temple_area_1_spline_titleSpline3B,
+};
+
 u8 sForceDoorShut = FALSE;
 s16 spline_seg = 0;
 f32 spline_prog = 0;
+u8 spline_intro_index = 0;
 void bhv_dungeon_manager(void) {
     if (gMainMenuState != MAIN_MENU_CLOSED) {
         gCamera->cutscene = 1;
-        if (gMainMenuState != MAIN_MENU_OPENING_CUTSCENE) {
-            spline_prog = 0;
-            spline_seg = 0;
+        //if (gMainMenuState <= MAIN_MENU_TITLE_TRANSITION_2) {
+        if (gMainMenuState <= MAIN_MENU_TITLE_TRANSITION_2) {
+            if (move_point_along_spline(gLakituState.goalPos,
+                segmented_to_virtual(introSplineList[spline_intro_index*2]),&spline_seg,&spline_prog)) {
+                spline_intro_index++;
+                spline_prog = 0;
+                spline_seg = 0;
+
+                spline_intro_index %= 3;
+            } else {
+                move_point_along_spline(gLakituState.goalFocus,
+                    segmented_to_virtual(introSplineList[spline_intro_index*2+1]),&spline_seg,&spline_prog);
+            }
+        } else {
+            if (gMainMenuState != MAIN_MENU_OPENING_CUTSCENE) {
+                spline_prog = 0;
+                spline_seg = 0;
+            }
+            if (move_point_along_spline(gLakituState.goalPos,segmented_to_virtual(temple_area_1_spline_ic_pos),&spline_seg,&spline_prog)) {
+                gCamera->cutscene = 0;
+                gMainMenuState = MAIN_MENU_CLOSED;
+            }
+            move_point_along_spline(gLakituState.goalFocus,segmented_to_virtual(temple_area_1_spline_ic_foc),&spline_seg,&spline_prog);
         }
-        if (move_point_along_spline(gLakituState.goalPos,segmented_to_virtual(temple_area_1_spline_ic_pos),&spline_seg,&spline_prog)) {
-            gCamera->cutscene = 0;
-            gMainMenuState = MAIN_MENU_CLOSED;
-        }
-        move_point_along_spline(gLakituState.goalFocus,segmented_to_virtual(temple_area_1_spline_ic_foc),&spline_seg,&spline_prog);
     }
 
     if (dungeon_seq_change != dungeon_seq_cur) {

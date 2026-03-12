@@ -80,6 +80,8 @@ void load_marios_modules_data_only(void) {
 }
 
 void load_marios_modules(void) {
+    if (gMainMenuState == 0) {return;}
+
     int size = sizeof(struct mariosModulesSaveGame);
     int sizeFile = sizeof(struct mariosModulesSaveFile);
 
@@ -157,6 +159,10 @@ s32 save_bin_get_max_total(int type) {
 }
 
 void marios_modules_savefile_load_position(void) {
+    if (gMariosModulesSave.file[gMariosModulesSaveIndex].pos[0] == 0 &&
+        gMariosModulesSave.file[gMariosModulesSaveIndex].pos[1] == 0) {
+            return;
+    }
     if (gMariosModulesSave.save_magic == SAVE_MAGIC) {
         for (int i = 0; i < 3; i++) {
             gMarioState->pos[i] = gMariosModulesSave.file[gMariosModulesSaveIndex].pos[i];
@@ -703,12 +709,13 @@ void logic_main_menu(void) {
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
                 switch (sMainMenuIndex) {
                     case 0:
-                        gMainMenuTargetState = MAIN_MENU_OPENING_CUTSCENE;
-                        gMainMenuState = MAIN_MENU_OPENING_CUTSCENE;
-                        saveBinTotal[SAVE_BIN_CHESTS] = 0;
-                        play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
+                        //play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
+
                         save_marios_modules_new_game(seed,-1);
-                        tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
+                        gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_NEW;
+
+                        gMainMenuWarpLocation = 2;
+                        level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
                         break;
                     case 1:
                         gMainMenuWarpLocation = 4;

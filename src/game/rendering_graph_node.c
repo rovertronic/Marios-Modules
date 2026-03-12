@@ -1392,7 +1392,7 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         bzero(gCurLookAt, sizeof(LookAt));
 
         if (gRenderPass==0) {
-            if ((!gModuleMenuOpen)&&(!(gEmulator & (EMU_CONSOLE | EMU_ARES)))) {
+            if ((!gModuleMenuOpen)&&(gCamera->cutscene != 1)&&(!(gEmulator & (EMU_CONSOLE | EMU_ARES)))) {
                 clear_framebuffer(0);
             }
         }

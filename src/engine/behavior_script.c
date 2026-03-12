@@ -845,6 +845,10 @@ void cur_obj_update(void) {
         distanceFromMario = 0.0f;
     }
 
+    if (gCamera->cutscene == 1) {
+        o->oDistanceToMario = 1000.0f;
+    }
+
     // Calculate the angle from the object to Mario.
     if (objFlags & OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO) {
         o->oAngleToMario = obj_angle_to_object(o, gMarioObject);

@@ -2036,6 +2036,11 @@ void init_mario(void) {
         gMainMenuState = MAIN_MENU_CLOSED;
     }
 
+    if (gMainMenuState == MAIN_MENU_LEVEL_WARP_NEW) {
+        gMainMenuTargetState = MAIN_MENU_OPENING_CUTSCENE;
+        gMainMenuState = MAIN_MENU_OPENING_CUTSCENE;
+    }
+
     if (gDungeonNeedsToGenerate) {
         vec3f_copy(gMarioState->pos,gDungeonSpawnLocation);
         gMarioState->pos[1] += 300.0f;

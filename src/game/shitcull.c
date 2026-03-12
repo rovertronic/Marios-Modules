@@ -2,6 +2,7 @@
 #include "level_update.h"
 #include "engine/math_util.h"
 #include "engine/graph_node.h"
+#include "camera.h"
 
 struct ShitCullVolume sShitCullVolumeList[100];
 int sShitCullVolumeCount = 0;
@@ -24,6 +25,9 @@ void shit_cull_add_volume(Vec3f pos, Vec3f scale, u8 flag) {
 }
 
 void shit_cull_update(void) {
+    Vec3f * cullAppealPosition = gMarioState->pos;
+    cullAppealPosition = gLakituState.pos;
+
     f32 doorOpenReach = 0.0f;
 
     if (!gShitCullDoorIsOpenSignal) {
@@ -39,7 +43,7 @@ void shit_cull_update(void) {
     for (int i = 0; i < sShitCullVolumeCount; i++) {
         int inside = TRUE;
         for (int j = 0; j < 3; j++) {
-            if (ABS(sShitCullVolumeList[i].pos[j] - gMarioState->pos[j]) > 100.0f * sShitCullVolumeList[i].scale[j] + doorOpenReach) {
+            if (ABS(sShitCullVolumeList[i].pos[j] - (*cullAppealPosition)[j]) > 100.0f * sShitCullVolumeList[i].scale[j] + doorOpenReach) {
                 // Outside box
                 inside = FALSE;
             }
