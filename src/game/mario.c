@@ -2095,6 +2095,13 @@ void init_mario(void) {
     if (gCurrLevelNum == LEVEL_PITSTOP) {
         tinymt32_init(&gGlobalRandomState,random_u16());
     }
+
+    if (is_level_dungeon()) {
+        struct Object * safeWarp = cur_obj_nearest_object_with_behavior(bhvFadingWarp);
+        safeWarp->oPosX = gMarioState->pos[0];
+        safeWarp->oPosZ = gMarioState->pos[2];
+        safeWarp->oPosY = gMarioState->pos[1] + 400.0f;
+    }
 }
 
 void init_mario_from_save_file(void) {
