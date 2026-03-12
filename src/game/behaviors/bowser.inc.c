@@ -1131,6 +1131,7 @@ void bowser_dead_bounce(void) {
     }
     if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) {
         o->oForwardVel = 0.0f;
+        o->oTimer = 0;
         o->oSubAction++; // BOWSER_SUB_ACT_DEAD_WAIT
     }
 }
@@ -1293,6 +1294,10 @@ void bowser_act_dead(void) {
             break;
 
         case BOWSER_SUB_ACT_DEAD_WAIT:
+            if (o->oTimer == 30) {
+                initiate_warp(LEVEL_WIN, 1, 0x0A, 0);
+                level_set_transition(2, NULL);
+            }
             // Check if Mario is close to Bowser
             //TODO: Warp to end screen
             /*
