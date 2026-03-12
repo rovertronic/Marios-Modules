@@ -21,6 +21,7 @@ extern struct MarioRecordState gMarioRecord[MARIO_RECORD_MAX];
 
 extern s16 gNearestRedCoinDist;
 extern int gWarpDamage;
+extern int gLoseLife;
 
 enum marioSounds {
     MARIO_SND_YAH_WAH_HOO,

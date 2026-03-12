@@ -766,11 +766,12 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 break;
 
             case WARP_OP_DEATH:
-                if (!m->isDead && is_level_dungeon()) {
-                    save_marios_modules_coins_lives();
+                if (is_level_dungeon() && gLoseLife == FALSE) {
+                    save_marios_modules_coins();
+                    gLoseLife = TRUE;
                 }
 
-                if (gMariosModulesSave.file[gMariosModulesSaveIndex].lives <= 0) {
+                if (gMariosModulesSave.file[gMariosModulesSaveIndex].lives <= 1) {
                     save_delete_file(gMariosModulesSaveIndex);
                     sDelayedWarpOp = WARP_OP_GAME_OVER;
                 }

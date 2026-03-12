@@ -30,10 +30,16 @@ void save_marios_modules_new_game(u32 seed, s8 level) {
     nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
 }
 
-void save_marios_modules_coins_lives(void) {
+void save_marios_modules_coins(void) {
     // Run this function when fail
     int size = sizeof(struct mariosModulesSaveGame);
     gMariosModulesSave.file[gMariosModulesSaveIndex].coins = gMarioState->numCoins;
+    nuPiWriteSram(0, &gMariosModulesSave, ALIGN8(size));
+}
+
+void save_marios_modules_lose_life(void) {
+    // Run this function when fail
+    int size = sizeof(struct mariosModulesSaveGame);
     gMariosModulesSave.file[gMariosModulesSaveIndex].lives --;
 
     bzero(&gMariosModulesSave.file[gMariosModulesSaveIndex].bin[0],4*SAVE_BIN_COUNT);

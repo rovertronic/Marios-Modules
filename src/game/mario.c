@@ -83,6 +83,7 @@ u32 get_mario_sound_id(int marioSoundEnum) {
 }
 
 int gWarpDamage = 0;
+int gLoseLife = 0;
 
 /**************************************************
  *                    ANIMATIONS                  *
@@ -2009,6 +2010,11 @@ void init_mario(void) {
     gMarioState->hurtCounter = 0;
     gMarioState->healCounter = 0;
 
+    if (gLoseLife) {
+        save_marios_modules_lose_life();
+        gLoseLife = FALSE;
+    }
+    
     if (gWarpDamage > 0) {
         // Respawn from fall, take damage
         gMarioState->hurtCounter = 8;
