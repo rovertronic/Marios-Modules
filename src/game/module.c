@@ -864,8 +864,6 @@ void print_mini_map(void) {
 
     shade_screen();
 
-    if (gCurrLevelNum == LEVEL_PITSTOP) {return;}
-    if (gCurrLevelNum == LEVEL_RF) {return;}
     if (gCurrLevelNum == LEVEL_TEMPLE) {
         create_dl_translation_matrix(MENU_MTX_PUSH, 160.f + mario_x_to_map_x, 120.f + mario_z_to_map_y, 0);
         create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.02f * sMiniMapZoom, 0.02f * sMiniMapZoom, 1.0f);
@@ -883,7 +881,7 @@ void print_mini_map(void) {
         }
 
         gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
-    } else {
+    } else if (gCurrLevelNum == LEVEL_ROGUE) {
         dungeon_print_minimap(sMiniMapZoom);
     }
 

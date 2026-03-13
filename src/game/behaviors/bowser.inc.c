@@ -375,20 +375,15 @@ void bowser_bits_action_list(void) {
         if (rand2 > .5f) { // nearby
             if (rand < 0.4f) {
                 o->oAction = BOWSER_ACT_SPIT_FIRE_ONTO_FLOOR; // 40% chance
-                sFaceFrame = 1066;
             } else if (rand < 0.8f) {
                 o->oAction = BOWSER_ACT_SPIT_FIRE_INTO_SKY; // 80% chance
-                sFaceFrame = 1066;
             } else {
                 o->oAction = BOWSER_ACT_BREATH_FIRE;
-                sFaceFrame = 1066;
             } // far away
         } else if (rand < 0.5f) {
             o->oAction = BOWSER_ACT_BIG_JUMP; // 50% chance
-            sFaceFrame = 1066;
         } else {
             o->oAction = BOWSER_ACT_CHARGE_MARIO;
-            sFaceFrame = 472;
 
         }
     } else {
@@ -445,9 +440,11 @@ void bowser_reset_fallen_off_stage(void) {
  * Unused, makes Bowser be in idle and after it returns to default action
  */
 void bowser_act_idle(void) {
+    /*
     if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_IDLE)) {
         o->oAction = BOWSER_ACT_DEFAULT;
     }
+    */
 }
 
 /**
@@ -516,7 +513,6 @@ void bowser_act_walk_to_mario(void) {
         // Start walking
         if (bowser_set_anim_look_up_and_walk()) {
             o->oSubAction++;
-            sFaceFrame = 201;
         }
     } else if (o->oSubAction == 1) {
         // Keep walking slowly
@@ -620,6 +616,8 @@ void bowser_act_spit_fire_into_sky(void) {
  * Flips Bowser back on stage if he hits a mine with more than 1 health
  */
 void bowser_act_hit_mine(void) {
+    o->oMoveAngleYaw = o->oAngleToMario;
+    o->oFaceAngleYaw = o->oAngleToMario;
     // Similar vel values from bowser_fly_back_dead
     if (o->oTimer == 0) {
         o->oForwardVel = -0.0f;
@@ -1279,13 +1277,9 @@ s32 bowser_dead_final_stage_ending(void) {
  * This action is divided in subaction functions
  */
 void bowser_act_dead(void) {
-    if (o->oTimer % 200 == 0) {
-        sFaceFrame = 472;
-    }
     o->oGraphYOffset = 0.0f;
     switch (o->oSubAction) {
         case BOWSER_SUB_ACT_DEAD_FLY_BACK:
-            sFaceFrame = 472;
             bowser_fly_back_dead();
             break;
 
@@ -1708,8 +1702,8 @@ void bhv_bowser_loop(void) {
     }
 
     sFaceFrame++;
-    if (sFaceFrame > 1225) {
-        sFaceFrame = 1225;
+    if (sFaceFrame >= 750) {
+        sFaceFrame = 0;
     }
 
     int size = 2048;
@@ -1743,7 +1737,7 @@ void bhv_bowser_init(void) {
     // Start camera event, this event is not defined so maybe
     // the "start arena" cutscene was originally called this way
     cur_obj_start_cam_event(o, CAM_EVENT_BOWSER_INIT);
-    o->oAction = BOWSER_ACT_WAIT;
+    o->oAction = BOWSER_ACT_DANCE;
     // Set eyes status
     o->oBowserEyesTimer = 0;
     o->oBowserEyesShut = FALSE;

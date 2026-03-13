@@ -766,7 +766,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 break;
 
             case WARP_OP_DEATH:
-                if (is_level_dungeon() && gLoseLife == FALSE) {
+                if ((is_level_dungeon() || gCurrLevelNum == LEVEL_FINALBOSS) && gLoseLife == FALSE) {
                     save_marios_modules_coins();
                     gLoseLife = TRUE;
                 }
