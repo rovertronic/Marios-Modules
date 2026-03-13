@@ -901,8 +901,7 @@ void initiate_delayed_warp(void) {
         } else {
             switch (sDelayedWarpOp) {
                 case WARP_OP_GAME_OVER:
-                    save_file_reload();
-                    warp_special(WARP_SPECIAL_MARIO_HEAD_DIZZY);
+                    initiate_warp(LEVEL_GAMEOVER, 1, 0x0A, WARP_FLAGS_NONE);
                     break;
 
                 case WARP_OP_CREDITS_END:
@@ -1464,6 +1463,7 @@ s32 lvl_set_current_level(UNUSED s16 initOrUpdate, s32 levelNum) {
 	if (gCurrLevelNum == LEVEL_RF) return 0;
 	if (gCurrLevelNum == LEVEL_FINALBOSS) return 0;
 	if (gCurrLevelNum == LEVEL_WIN) return 0;
+	if (gCurrLevelNum == LEVEL_GAMEOVER) return 0;
 
     return !gDebugLevelSelect;
 }

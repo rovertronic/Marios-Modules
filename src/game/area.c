@@ -419,7 +419,7 @@ void render_game(void) {
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH,
                       SCREEN_HEIGHT - gBorderHeight);
 
-        if (gMainMenuState == MAIN_MENU_CLOSED && !gModuleMenuOpen) {
+        if (gMainMenuState == MAIN_MENU_CLOSED && !gModuleMenuOpen && gCamera->cutscene != 1) {
             render_hud();
         }
 

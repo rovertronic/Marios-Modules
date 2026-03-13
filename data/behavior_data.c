@@ -6647,3 +6647,13 @@ const BehaviorScript bhvWin[] = {
         CALL_NATIVE(bhv_win),
     END_LOOP(),
 };
+
+extern void bhv_gameover(void);
+const BehaviorScript bhvGameOver[] = {
+    BEGIN(OBJ_LIST_DEFAULT),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_gameover),
+    END_LOOP(),
+};

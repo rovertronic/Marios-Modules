@@ -1327,7 +1327,7 @@ void update_mario_joystick_inputs(struct MarioState *m) {
         m->intendedMag = mag / 8.0f;
     }
 
-    if (gModuleMenuOpen || gModuleTutorialState == TUTORIAL_DISCONNECTED || gCurrLevelNum == LEVEL_WIN) {
+    if (gModuleMenuOpen || gModuleTutorialState == TUTORIAL_DISCONNECTED || gCurrLevelNum == LEVEL_WIN || gCurrLevelNum == LEVEL_GAMEOVER) {
         m->intendedMag = 0.0f;
     }
 
@@ -1847,7 +1847,7 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
     gMarioState->marioObj->shitCullFlags = 0xFFFFFFFF;
     shit_cull_update();
 
-    if (gCurrLevelNum != LEVEL_WIN) {
+    if (gCurrLevelNum != LEVEL_WIN && gCurrLevelNum != LEVEL_GAMEOVER) {
         gMariosModulesSave.file[gMariosModulesSaveIndex].gameTime++;
     }
 

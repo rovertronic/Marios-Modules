@@ -1,4 +1,5 @@
 struct mariosModulesSaveGame gMariosModulesSave;
+struct mariosModulesSaveFile gMariosMoudlesStats;
 int gMariosModulesSaveIndex = 0;
 int gMainMenuWarpLocation = 2;
 int gMainMenuTitleAnimationIndex = -1;
@@ -89,6 +90,7 @@ void load_marios_modules_data_only(void) {
 
 void load_marios_modules(void) {
     if (gMainMenuState == 0) {return;}
+    if (gCurrLevelNum == LEVEL_GAMEOVER) {return;}
 
     int size = sizeof(struct mariosModulesSaveGame);
     int sizeFile = sizeof(struct mariosModulesSaveFile);
@@ -819,6 +821,17 @@ void logic_main_menu(void) {
 }
 
 void render_results_screen(void) {
+
+    char * primstr;
+    switch(gResultsScreenDisplay) {
+        case 1:
+            primstr = "@Y@Crystal Quest COMPLETE!@@";
+            break;
+        case 2:
+            primstr = "@R@GAME OVER@@";
+            break;
+    }
+
     gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
     gDPSetEnvColor(gDisplayListHead++, 0,0,0, 180);
     render_4slice(20,220,300,20);
@@ -829,7 +842,7 @@ void render_results_screen(void) {
     char resultScreenStr[100];
 
     utf8_print_reset();
-    print_utf8("@Y@Crystal Quest COMPLETE!@@",30,190);
+    print_utf8(primstr,30,190);
     print_utf8("------------------------------",30,170);
     sprintf(resultScreenStr,"Time Taken: %s",get_game_time_str());
     print_utf8(resultScreenStr,30,150);

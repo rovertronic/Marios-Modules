@@ -1,0 +1,11 @@
+extern const GeoLayout gameover_area_1_geo[];
+extern const GeoLayout gameover_area_1[];
+extern const Collision gameover_area_1_collision[];
+extern const MacroObject gameover_area_1_macro_objs[];
+extern Vtx gameover_dl_Plane_mesh_layer_1_vtx_cull[8];
+extern Vtx gameover_dl_Plane_mesh_layer_1_vtx_0[4];
+extern Gfx gameover_dl_Plane_mesh_layer_1_tri_0[];
+extern Gfx mat_gameover_dl_f3dlite_material_001[];
+extern Gfx mat_revert_gameover_dl_f3dlite_material_001[];
+extern Gfx gameover_dl_Plane_mesh_layer_1[];
+extern Gfx gameover_dl_final_revert_mesh_layer_1[];

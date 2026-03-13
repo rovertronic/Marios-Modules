@@ -589,5 +589,6 @@ extern const BehaviorScript bhvKingBobombRogue[];
 extern const BehaviorScript bhvFireball[];
 extern const BehaviorScript bhvWigglerRogue[];
 extern const BehaviorScript bhvWin[];
+extern const BehaviorScript bhvGameOver[];
 
 #endif // BEHAVIOR_DATA_H
