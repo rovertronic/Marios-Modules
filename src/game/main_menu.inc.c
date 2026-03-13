@@ -3,6 +3,8 @@ int gMariosModulesSaveIndex = 0;
 int gMainMenuWarpLocation = 2;
 int gMainMenuTitleAnimationIndex = -1;
 
+u8 gResultsScreenDisplay = 0;
+
 u8 sMainMenuShowTitle = FALSE;
 int sMainMenuModuleTimer = 0;
 
@@ -359,26 +361,27 @@ Rebalances:\n\
 char * sCreditsStr = "\
 - CREDITS -\n\
 \n\
-@O@Rovertronic@@\n\
-Code, Artwork, 3D Models, Level Design\n\
+@O@Code, Artwork, 3D Models, Level Design@@\n\
+By: Rovertronic\n\
 \n\
-@O@Igorsantusa@@ and @O@Calem28@@\n\
-Soundtrack\n\
-From: SwApFell: I Hate You.\n\
+@O@Original Sound Track@@\n\
+By: ornevelder\n\
 \n\
-Songs used:\n\
-TITLE\n\
-Mouth\n\
-Ancient Kingdom\n\
-TESTAMENT\n\
-KING VERMILLION\n\
+Guitar by: Amon26\n\
+Additional Voice Samples by: mermaidglade\n\
 \n\
-@O@HackerN64 Team@@\n\
+@O@Texture Sources@@\n\
+Vanilla\n\
+SM64DS\n\
+BroDute\n\
+\n\
+@O@Tools Used@@\n\
 HackerSM64\n\
-\n\
-This hack was made for\n\
-a competition,\n\
-Mario Jams 7: Element.";
+Blender\n\
+RealWorld Paint\n\
+GitHub\n\
+FFmpeg\n\
+Davinci Resolve";
 
 char * sBetaInfo = "\
 Mario's Modules 2 roguelite beta test\n\
@@ -815,7 +818,7 @@ void logic_main_menu(void) {
     }
 }
 
-void render_win_screen(void) {
+void render_results_screen(void) {
     gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
     gDPSetEnvColor(gDisplayListHead++, 0,0,0, 180);
     render_4slice(20,220,300,20);
@@ -844,8 +847,4 @@ void render_win_screen(void) {
             used++;
         }
     }
-}
-
-void render_game_over_screen(void) {
-
 }

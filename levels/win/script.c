@@ -28,6 +28,7 @@ const LevelScript level_win_entry[] = {
 
 	AREA(1, win_area_1),
 		WARP_NODE(0x0A, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
+		OBJECT(MODEL_GRAVITY_CRYSTAL, -4016, 653, 0, 0, 0, 0, 0x00000000, bhvWin),
 		OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, (0x0A << 16), bhvInstantActiveWarp),
 		TERRAIN(win_area_1_collision),
 		MACRO_OBJECTS(win_area_1_macro_objs),

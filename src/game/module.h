@@ -302,6 +302,7 @@ extern int gMariosModulesSaveIndex;
 extern u8 gMainMenuState;
 extern u8 gMainMenuTargetState;
 extern u8 gModuleTutorialState;
+extern u8 gResultsScreenDisplay;
 extern int gMainMenuWarpLocation;
 extern int gMainMenuTitleAnimationIndex;
 
@@ -416,7 +417,6 @@ void load_marios_modules(void);
 void marios_modules_savefile_load_position(void);
 void save_delete_file(int fileIndex);
 
-void render_win_screen(void);
-void render_game_over_screen(void);
+void render_results_screen(void);
 
 #endif

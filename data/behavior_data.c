@@ -6637,3 +6637,13 @@ const BehaviorScript bhvFireball[] = {
         ANIMATE_TEXTURE(oAnimState, 2),
     END_LOOP(),
 };
+
+extern void bhv_win(void);
+const BehaviorScript bhvWin[] = {
+    BEGIN(OBJ_LIST_DEFAULT),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_win),
+    END_LOOP(),
+};

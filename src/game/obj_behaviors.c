@@ -2044,3 +2044,33 @@ void bhv_fireball_attack(void) {
             break;
     }
 }
+
+void bhv_win(void) {
+    gCamera->cutscene = 1;
+
+    gLakituState.goalPos[0] = o->oHomeX + 1000.0f;
+    gLakituState.goalPos[1] = o->oHomeY + 1000.0f;
+    gLakituState.goalPos[2] = o->oHomeZ + 1000.0f;
+
+    switch(o->oAction) {
+        case 0:
+            o->oPosX += 500.0f;
+            o->oAction++;
+            break;
+        case 1:
+            vec3f_copy(gLakituState.goalFocus,&o->oPosVec);
+
+            if (o->oPosX > o->oHomeX) {
+                o->oPosX -= 10.0f;
+            } else {
+                o->oAction++;
+            }
+            break;
+        case 2:
+            if (o->oTimer == 30) {
+                gResultsScreenDisplay = 1;
+                o->oAction++;
+            }
+            break;
+    }
+}
