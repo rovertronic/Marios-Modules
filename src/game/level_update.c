@@ -1279,6 +1279,8 @@ s32 update_level(void) {
 }
 
 s32 init_level(void) {
+    gMainMenuWarpLocation = -1;
+
     s32 fadeFromColor = FALSE;
 #ifdef PUPPYPRINT_DEBUG
     OSTime first = osGetTime();

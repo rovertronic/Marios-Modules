@@ -1,7 +1,7 @@
 struct mariosModulesSaveGame gMariosModulesSave;
 struct mariosModulesSaveFile gMariosMoudlesStats;
 int gMariosModulesSaveIndex = 0;
-int gMainMenuWarpLocation = 2;
+int gMainMenuWarpLocation = -1;
 int gMainMenuTitleAnimationIndex = -1;
 
 u8 gResultsScreenDisplay = 0;
@@ -437,6 +437,12 @@ char * sButtonsFileAction[] = {
     NULL
 };
 
+char * sButtonsYesNo[] = {
+    "No",
+    "Yes",
+    NULL
+};
+
 #define SONG_COUNT 2
 
 struct SongEntry sSongEntries[] = {
@@ -605,6 +611,11 @@ void render_main_menu(void) {
             render_main_menu_hand();
             render_menu_button_list(&sButtonsFileAction);
             break;
+        case MAIN_MENU_FILE_ERASE:
+            print_utf8_boxed("Are you sure you want to erase file?",160,180,sMainMenuTransition,TRUE);
+            render_main_menu_hand();
+            render_menu_button_list(&sButtonsYesNo);
+            break;
         case MAIN_MENU_EXTRA:
             render_main_menu_hand();
             render_menu_button_list(&sButtonsExtra);
@@ -621,6 +632,8 @@ void render_main_menu(void) {
 }
 
 void main_menu_handle_scroll(u8 max) {
+    if (gMainMenuState != gMainMenuTargetState) {return;}
+
     joystick_to_dpad();
 
     if (gPlayer1Controller->buttonPressed & D_JPAD) {
@@ -634,6 +647,8 @@ void main_menu_handle_scroll(u8 max) {
 }
 
 void logic_main_menu(void) {
+    if (gMainMenuWarpLocation != -1) {return;}
+
     sMainMenuSeedShaker[0] = random_u16();
     sMainMenuSeedShaker[1] = random_u16();
 
@@ -763,6 +778,23 @@ void logic_main_menu(void) {
                         break;
                     break;
                     case 1:
+                        gMainMenuTargetState = MAIN_MENU_FILE_ERASE;
+                        break;
+                }
+            }
+            break;
+        case MAIN_MENU_FILE_ERASE:
+            main_menu_handle_scroll(2);
+            if (gPlayer1Controller->buttonPressed & (B_BUTTON)) {
+                gMainMenuTargetState = MAIN_MENU_FILE;
+                break;
+            }
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                switch (sMainMenuIndex) {
+                    case 0: // No
+                        gMainMenuTargetState = MAIN_MENU_FILE_ACTION;
+                    break;
+                    case 1: // Yes
                         save_delete_file(gMariosModulesSaveIndex);
                         gMainMenuTargetState = MAIN_MENU_FILE;
                         break;
