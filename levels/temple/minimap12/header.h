@@ -1,0 +1,13 @@
+extern Vtx minimap12_minimap12_mesh_vtx_0[88];
+extern Gfx minimap12_minimap12_mesh_tri_0[];
+extern Vtx minimap12_minimap12_mesh_vtx_1[20];
+extern Gfx minimap12_minimap12_mesh_tri_1[];
+extern Vtx minimap12_minimap12_mesh_vtx_2[184];
+extern Gfx minimap12_minimap12_mesh_tri_2[];
+extern Gfx mat_minimap12_map_mat_1_layer1[];
+extern Gfx mat_revert_minimap12_map_mat_1_layer1[];
+extern Gfx mat_minimap12_map_mat_2_layer1[];
+extern Gfx mat_revert_minimap12_map_mat_2_layer1[];
+extern Gfx mat_minimap12_map_mat_3_layer1[];
+extern Gfx mat_revert_minimap12_map_mat_3_layer1[];
+extern Gfx minimap12_minimap12_mesh[];

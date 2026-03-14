@@ -29,4 +29,5 @@ extern const LevelScript level_temple_entry[];
 #include "minimap10/header.h"
 #include "minimap11/header.h"
 #include "title2/geo_header.h"
+#include "minimap12/header.h"
 #endif

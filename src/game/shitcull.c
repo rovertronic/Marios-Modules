@@ -13,6 +13,20 @@ int gShitCullCurrentRenderId = -1;
 
 u8 gShitCullDoorIsOpenSignal = FALSE;
 
+// Maps shitcull IDs to unlock flags
+u8 sCampaignUnlockMap[32] = {
+    [0] = 0,
+    [4] = 1,
+    [5] = 4,
+    [11] = 7,
+    [15] = 2,
+    [16] = 9,
+    [7] = 5,
+    [23] = 10,
+    [24] = 3,
+    [21] = 6,
+};
+
 void shit_cull_init(void) {
     sShitCullVolumeCount = 0;
 }
@@ -53,6 +67,8 @@ void shit_cull_update(void) {
         }
         if (inside) {
             sShitCullVisibleFlags |= (1 << sShitCullVolumeList[i].flag);
+
+            gMariosModulesSave.file[gMariosModulesSaveIndex].room_discover_flags |= (1 << sCampaignUnlockMap[sShitCullVolumeList[i].flag]);
         }
     }
 }

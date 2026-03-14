@@ -830,6 +830,9 @@ void render_results_screen(void) {
         case 2:
             primstr = "@R@GAME OVER@@";
             break;
+        case 3:
+            primstr = "@Y@Campaign COMPLETE!@@";
+            break;
     }
 
     gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);

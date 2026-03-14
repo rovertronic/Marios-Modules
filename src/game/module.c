@@ -825,8 +825,6 @@ char * module_is_invalid(int x, int y) {
 }
 
 Gfx * sMinimapRoomDls[32] = {
-    NULL, // Buffer
-    NULL, // Minimap
     minimap1_minimap1_mesh,
     minimap2_minimap2_mesh,
     minimap3_minimap3_mesh,
@@ -835,6 +833,7 @@ Gfx * sMinimapRoomDls[32] = {
     minimap6_minimap6_mesh,
     minimap7_minimap7_mesh,
     minimap8_minimap8_mesh,
+    NULL,
     minimap10_minimap10_mesh,
     minimap11_minimap11_mesh,
 };
@@ -871,8 +870,9 @@ void print_mini_map(void) {
         create_dl_translation_matrix(MENU_MTX_PUSH, 160.f + mario_x_to_map_x, 120.f + mario_z_to_map_y, 0);
         create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.02f * sMiniMapZoom, 0.02f * sMiniMapZoom, 1.0f);
 
-        if (gMarioCurrentRoom >= 13 && gMarioCurrentRoom <= 17) {
+        if (gMarioState->pos[1] > 3500.0f) {
             // Hardcoded upstairs DL
+            gSPDisplayList(gDisplayListHead++, minimap12_minimap12_mesh);
         } else {
             for (int i = 0; i < 32; i++) {
                 if (sMinimapRoomDls[i] != NULL &&
