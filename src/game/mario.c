@@ -1843,7 +1843,7 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 
     gMarioState->marioObj->shitCullFlags = 0xFFFFFFFF;
 
-    if (gCurrLevelNum != LEVEL_WIN && gCurrLevelNum != LEVEL_GAMEOVER) {
+    if (gCurrLevelNum != LEVEL_WIN && gCurrLevelNum != LEVEL_GAMEOVER && gMainMenuState == MAIN_MENU_CLOSED) {
         gMariosModulesSave.file[gMariosModulesSaveIndex].gameTime++;
     }
 

@@ -437,6 +437,12 @@ char * sButtonsFileAction[] = {
     NULL
 };
 
+char * sButtonsFileCompleteAction[] = {
+    "Show Results",
+    "Erase",
+    NULL
+};
+
 char * sButtonsYesNo[] = {
     "No",
     "Yes",
@@ -565,10 +571,13 @@ void render_menu_fileinfo(void) {
                     break;
             }
         }
-        sprintf(printBuffer,"Mode: %s\n%sSeed: %d",
+        if (gMariosModulesSave.file[sMainMenuIndex].flags & SAVE_FLAG_COMPLETE) {
+            lvStr = "@Y@Completed@@\n";
+        }
+        sprintf(printBuffer,"Mode: %s\n%sTime: %s",
         modeStr,
         lvStr,
-        gMariosModulesSave.file[sMainMenuIndex].seed);
+        get_game_time_str(sMainMenuIndex));
         str = &printBuffer;
     } else {
         str = "@O@New File";
@@ -611,6 +620,10 @@ void render_main_menu(void) {
             render_main_menu_hand();
             render_menu_button_list(&sButtonsFileAction);
             break;
+        case MAIN_MENU_FILE_COMPLETE_ACTION:
+            render_main_menu_hand();
+            render_menu_button_list(&sButtonsFileCompleteAction);
+            break;
         case MAIN_MENU_FILE_ERASE:
             print_utf8_boxed("Are you sure you want to erase file?",160,180,sMainMenuTransition,TRUE);
             render_main_menu_hand();
@@ -627,6 +640,9 @@ void render_main_menu(void) {
             render_menu_button_list(&sButtonsOST);
 
             print_utf8_boxed("Choose song with @<Y@←@Y@C@@ and @Y@C@Y>@→@@.",160,180,sMainMenuTransition,TRUE);
+            break;
+        case MAIN_MENU_FILE_VIEW:
+            render_results_screen(4);
             break;
     }
 }
@@ -647,8 +663,6 @@ void main_menu_handle_scroll(u8 max) {
 }
 
 void logic_main_menu(void) {
-    if (gMainMenuWarpLocation != -1) {return;}
-
     sMainMenuSeedShaker[0] = random_u16();
     sMainMenuSeedShaker[1] = random_u16();
 
@@ -668,6 +682,9 @@ void logic_main_menu(void) {
         gMainMenuTitleAnimationIndex --;
     }
     gMainMenuTitleAnimationIndex = CLAMP(gMainMenuTitleAnimationIndex,-1,19);
+
+    if (gMainMenuWarpLocation != -1) {return;}
+
     switch(gMainMenuState) {
         case MAIN_MENU_TITLE_TRANSITION_1:
             if (sMainMenuModuleTimer++ >= 20) {
@@ -719,7 +736,11 @@ void logic_main_menu(void) {
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
                 gMariosModulesSaveIndex = sMainMenuIndex;
                 if (gMariosModulesSave.file[sMainMenuIndex].flags & SAVE_FLAG_EXIST) {
-                    gMainMenuTargetState = MAIN_MENU_FILE_ACTION;
+                    if (gMariosModulesSave.file[sMainMenuIndex].flags & SAVE_FLAG_COMPLETE) {
+                        gMainMenuTargetState = MAIN_MENU_FILE_COMPLETE_ACTION;
+                    } else {
+                        gMainMenuTargetState = MAIN_MENU_FILE_ACTION;
+                    }
                 } else {
                     gMainMenuTargetState = MAIN_MENU_MODE;
                 }
@@ -783,6 +804,25 @@ void logic_main_menu(void) {
                 }
             }
             break;
+        case MAIN_MENU_FILE_COMPLETE_ACTION:
+            main_menu_handle_scroll(2);
+            if (gPlayer1Controller->buttonPressed & (B_BUTTON)) {
+                gMainMenuTargetState = MAIN_MENU_FILE;
+                break;
+            }
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                switch (sMainMenuIndex) {
+                    case 0:
+                        gMainMenuTargetState = MAIN_MENU_FILE_VIEW;
+                        break;
+                    break;
+                    case 1:
+                        save_delete_file(gMariosModulesSaveIndex);
+                        gMainMenuTargetState = MAIN_MENU_FILE;
+                        break;
+                }
+            }
+            break;
         case MAIN_MENU_FILE_ERASE:
             main_menu_handle_scroll(2);
             if (gPlayer1Controller->buttonPressed & (B_BUTTON)) {
@@ -805,6 +845,11 @@ void logic_main_menu(void) {
         case MAIN_MENU_CHANGELOG:
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
                 gMainMenuTargetState = MAIN_MENU_MAIN;
+            }
+            break;
+        case MAIN_MENU_FILE_VIEW:
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON|B_BUTTON)) {
+                gMainMenuTargetState = MAIN_MENU_FILE_COMPLETE_ACTION;
             }
             break;
         case MAIN_MENU_EXTRA:
@@ -852,10 +897,10 @@ void logic_main_menu(void) {
     }
 }
 
-void render_results_screen(void) {
-
+void render_results_screen(int type) {
+    f32 alphaDelta = 1.0f;
     char * primstr;
-    switch(gResultsScreenDisplay) {
+    switch(type) {
         case 1:
             primstr = "@Y@Crystal Quest COMPLETE!@@";
             break;
@@ -865,21 +910,25 @@ void render_results_screen(void) {
         case 3:
             primstr = "@Y@Campaign COMPLETE!@@";
             break;
+        case 4:
+            primstr = "Completed File";
+            alphaDelta = sMainMenuTransition;
+            break;
     }
 
     gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
-    gDPSetEnvColor(gDisplayListHead++, 0,0,0, 180);
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, 180 * alphaDelta);
     render_4slice(20,220,300,20);
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 0,0,0, 255);
 
     char resultScreenStr[100];
 
     utf8_print_reset();
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, 255 * alphaDelta);
     print_utf8(primstr,30,190);
     print_utf8("------------------------------",30,170);
-    sprintf(resultScreenStr,"Time Taken: %s",get_game_time_str());
+    sprintf(resultScreenStr,"Time Taken: %s",get_game_time_str(gMariosModulesSaveIndex));
     print_utf8(resultScreenStr,30,150);
     print_utf8("Modules Used:",30,130);
 

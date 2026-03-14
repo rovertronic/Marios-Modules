@@ -319,7 +319,9 @@ enum {
     MAIN_MENU_LEVEL_WARP_CONTINUE,
     MAIN_MENU_LEVEL_WARP_NEW,
     MAIN_MENU_FILE_ACTION,
+    MAIN_MENU_FILE_COMPLETE_ACTION,
     MAIN_MENU_FILE_ERASE,
+    MAIN_MENU_FILE_VIEW,
     MAIN_MENU_EXTRA,
     MAIN_MENU_SOUNDTRACK,
     MAIN_MENU_CLOSED,
@@ -418,6 +420,6 @@ void load_marios_modules(void);
 void marios_modules_savefile_load_position(void);
 void save_delete_file(int fileIndex);
 
-void render_results_screen(void);
+void render_results_screen(int type);
 
 #endif

@@ -72,8 +72,8 @@ int sDebugLogModuleNumber[DEBUG_LOG_MAX];
 u8 sDebugLogIndex = 0;
 
 char game_time_str_buff[20];
-char * get_game_time_str(void) {
-    int t = gMariosModulesSave.file[gMariosModulesSaveIndex].gameTime;
+char * get_game_time_str(int saveIndex) {
+    int t = gMariosModulesSave.file[saveIndex].gameTime;
     int s = (t/30)%60;
     int m = (t/1800)%60;
     int h = (t/108000);
@@ -984,7 +984,7 @@ void print_module_menu(void) {
         sprintf(print_buffer,"Chests: %d/%d\nStars: %d/%d\nTime: %s",
         save_bin_get_flag_total(SAVE_BIN_CHESTS),save_bin_get_max_total(SAVE_BIN_CHESTS),
         save_bin_get_flag_total(SAVE_BIN_STARS), save_bin_get_max_total(SAVE_BIN_STARS),
-        get_game_time_str());
+        get_game_time_str(gMariosModulesSaveIndex));
         print_utf8(print_buffer,30,160);
     }
 

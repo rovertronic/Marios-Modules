@@ -2359,7 +2359,7 @@ s32 render_menus_and_dialogs(void) {
     create_dl_ortho_matrix();
 
     if (gResultsScreenDisplay) {
-        render_results_screen();
+        render_results_screen(gResultsScreenDisplay);
         return;
     }
 
