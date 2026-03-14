@@ -1149,7 +1149,7 @@ void dungeon_print_minimap(f32 mapZoom) {
             f32 dungeon_room_y = (32000.0f - (sDungeonRoomList[i].yorigin * 2000.0f)) - gMarioState->pos[2] + gMiniMapOffsetZ;
 
             Gfx * minimapDL = sDungeonRoomList[i].variant->minimapDL;
-            if (minimapDL != NULL) {
+            if (minimapDL != NULL && ABS(dungeon_room_x) < 15000.0f && ABS(dungeon_room_y) < 10000.0f) {
                 create_dl_translation_matrix(MENU_MTX_PUSH, dungeon_room_x, dungeon_room_y, 0);
                 create_dl_rotation_matrix(MENU_MTX_NOPUSH, sDungeonRoomList[i].direction*-90.0f, 0, 0, 1.0f);
                 gSPDisplayList(gDisplayListHead++, minimapDL);
@@ -1177,10 +1177,12 @@ void dungeon_print_minimap(f32 mapZoom) {
                     f32 dungeon_door_x = ((32000.0f - (sDungeonCellProcessList[i]->x * 2000.0f)) - (1000.f * sDirectionList[j][0])) - gMarioState->pos[0] + gMiniMapOffsetX;
                     f32 dungeon_door_y = ((32000.0f - (sDungeonCellProcessList[i]->y * 2000.0f)) + (1000.f * sDirectionList[j][1])) - gMarioState->pos[2] + gMiniMapOffsetZ;
 
-                    create_dl_translation_matrix(MENU_MTX_PUSH, dungeon_door_x, dungeon_door_y, 0);
-                    create_dl_rotation_matrix(MENU_MTX_NOPUSH, j*-90.0f, 0, 0, 1.0f);
-                    gSPDisplayList(gDisplayListHead++, rmapdoor_rmapdoor_mesh);
-                    gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+                    if (ABS(dungeon_door_x) < 15000.0f && ABS(dungeon_door_y) < 10000.0f) {
+                        create_dl_translation_matrix(MENU_MTX_PUSH, dungeon_door_x, dungeon_door_y, 0);
+                        create_dl_rotation_matrix(MENU_MTX_NOPUSH, j*-90.0f, 0, 0, 1.0f);
+                        gSPDisplayList(gDisplayListHead++, rmapdoor_rmapdoor_mesh);
+                        gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+                    }
                 }
             }
         }

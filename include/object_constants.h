@@ -56,6 +56,7 @@ enum ObjFlags {
     OBJ_FLAG_ONLY_PROCESS_INSIDE_ROOM          = (1 << 23), // 0x00800000
     OBJ_FLAG_THROW_ROTATION                    = (1 << 24),
     OBJ_FLAG_DUNGEON_CULL                      = (1 << 25),
+    OBJ_FLAG_IGNORE_BHV_SHITCULL               = (1 << 26),
     OBJ_FLAG_HITBOX_WAS_SET                    = (1 << 30), // 0x40000000
 };
 

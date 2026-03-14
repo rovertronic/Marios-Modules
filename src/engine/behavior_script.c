@@ -817,9 +817,7 @@ static BhvCommandProc BehaviorCmdTable[] = {
 
 // Execute the behavior script of the current object, process the object flags, and other miscellaneous code for updating objects.
 void cur_obj_update(void) {
-    if (!(o->behavior == segmented_to_virtual(bhvMario) || o->behavior == segmented_to_virtual(bhvDungeonManager))) {
-        if (!shit_cull_object_visible(o) && o->shitCullFlags > 0 && o->oTimer > 0) {return;}
-    }
+    if (!shit_cull_object_visible(o) && (!(o->oFlags & OBJ_FLAG_IGNORE_BHV_SHITCULL)) && o->shitCullFlags > 0 && o->oTimer > 0) {return;}
 
     u32 objFlags = o->oFlags;
     f32 distanceFromMario;

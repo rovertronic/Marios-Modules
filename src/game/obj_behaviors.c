@@ -848,12 +848,17 @@ void bhv_chest_price_number(void) {
             offset = -95.0f;
         }
     }
-    o->oPosX = o->parentObj->oPosX + sins(gCamera->nextYaw + 0x4000) * offset;
-    o->oPosZ = o->parentObj->oPosZ + coss(gCamera->nextYaw + 0x4000) * offset;
+
+    f32 atanx = gLakituState.pos[0] - gLakituState.focus[0];
+    f32 atanz = gLakituState.pos[2] - gLakituState.focus[2];
+    s16 angle = atan2s(atanz,atanx);
+
+    o->oPosX = o->parentObj->oPosX + sins(angle + 0x4000) * offset;
+    o->oPosZ = o->parentObj->oPosZ + coss(angle + 0x4000) * offset;
     
     o->oPosY = o->parentObj->oPosY + 200.0f;
 
-    if (o->oTimer > 0) {
+    if (o->oTimer > 1) {
         obj_mark_for_deletion(o);
     }
 }

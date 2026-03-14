@@ -3,6 +3,7 @@
 #include "engine/math_util.h"
 #include "engine/graph_node.h"
 #include "camera.h"
+#include "obj_behaviors.h"
 
 struct ShitCullVolume sShitCullVolumeList[100];
 int sShitCullVolumeCount = 0;
@@ -26,7 +27,9 @@ void shit_cull_add_volume(Vec3f pos, Vec3f scale, u8 flag) {
 
 void shit_cull_update(void) {
     Vec3f * cullAppealPosition = gMarioState->pos;
-    cullAppealPosition = gLakituState.pos;
+    if (gCamera->cutscene == 1) {
+        cullAppealPosition = gCamera->pos;
+    }
 
     f32 doorOpenReach = 0.0f;
 
@@ -52,7 +55,6 @@ void shit_cull_update(void) {
             sShitCullVisibleFlags |= (1 << sShitCullVolumeList[i].flag);
         }
     }
-    
 }
 
 void shit_cull_init_object(struct Object * obj) {

@@ -36,6 +36,7 @@
 #include "module.h"
 #include "behavior_data.h"
 #include "dungeon.h"
+#include "shitcull.h"
 
 #include "config.h"
 
@@ -1027,6 +1028,7 @@ void basic_update(void) {
 }
 
 s32 play_mode_normal(void) {
+    shit_cull_update();
 #ifndef DISABLE_DEMO
     if (gCurrDemoInput != NULL) {
         print_intro_text();

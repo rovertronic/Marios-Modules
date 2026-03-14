@@ -470,6 +470,10 @@ void geo_process_perspective(struct GraphNodePerspective *node) {
         sAspectRatio = 4.0f / 3.0f; // 1.33333f
 #endif
 
+        if (gRenderPass==1) {
+            sAspectRatio = 4.0f / 3.0f;
+        }
+
         f32 vHalfFov = ( ((node->fov * 4096.f) + 8192.f) ) / 45.f;
 
         // We need to account for aspect ratio changes by multiplying by the widescreen horizontal stretch 

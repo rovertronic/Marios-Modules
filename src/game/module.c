@@ -854,10 +854,13 @@ void print_mini_map(void) {
         gMiniMapOffsetX += 500.0f * gFrameLerpDeltaTime;
     }
 
-    sMiniMapZoom += (gPlayer1Controller->rawStickY/400.0f) * gFrameLerpDeltaTime;
-    sMiniMapZoom = CLAMP(sMiniMapZoom,0.333f,1.0f);
+    //sMiniMapZoom += (gPlayer1Controller->rawStickY/400.0f) * gFrameLerpDeltaTime;
+    //sMiniMapZoom = CLAMP(sMiniMapZoom,0.333f,1.0f);
 
-    sMiniMapZoom = .777f;
+    sMiniMapZoom = .5f;
+    if (gEmulator & (EMU_CONSOLE|EMU_ARES)) {
+        sMiniMapZoom = 1.0f;
+    }
 
     f32 mario_x_to_map_x = ((gMarioState->pos[0] - gMiniMapOffsetX)/-50.f) * sMiniMapZoom;
     f32 mario_z_to_map_y = ((gMarioState->pos[2] + gMiniMapOffsetZ)/50.f) * sMiniMapZoom;

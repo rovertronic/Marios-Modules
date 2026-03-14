@@ -1,13 +1,9 @@
-extern Vtx rmapspaceworld_rmapspaceworld_mesh_vtx_0[12];
+extern Vtx rmapspaceworld_rmapspaceworld_mesh_vtx_0[8];
 extern Gfx rmapspaceworld_rmapspaceworld_mesh_tri_0[];
-extern Vtx rmapspaceworld_rmapspaceworld_mesh_vtx_1[24];
+extern Vtx rmapspaceworld_rmapspaceworld_mesh_vtx_1[16];
 extern Gfx rmapspaceworld_rmapspaceworld_mesh_tri_1[];
-extern Vtx rmapspaceworld_rmapspaceworld_mesh_vtx_2[4];
-extern Gfx rmapspaceworld_rmapspaceworld_mesh_tri_2[];
 extern Gfx mat_rmapspaceworld_map_mat_1_layer1[];
 extern Gfx mat_revert_rmapspaceworld_map_mat_1_layer1[];
 extern Gfx mat_rmapspaceworld_map_mat_3_layer1[];
 extern Gfx mat_revert_rmapspaceworld_map_mat_3_layer1[];
-extern Gfx mat_rmapspaceworld_map_mat_2_layer1[];
-extern Gfx mat_revert_rmapspaceworld_map_mat_2_layer1[];
 extern Gfx rmapspaceworld_rmapspaceworld_mesh[];

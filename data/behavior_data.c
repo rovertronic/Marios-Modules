@@ -474,7 +474,7 @@ const BehaviorScript bhvGiantPole[] = {
 extern void bhv_orangepole(void);
 const BehaviorScript bhvPoleGrabbing[] = {
     BEGIN(OBJ_LIST_POLELIKE),
-    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_IGNORE_BHV_SHITCULL)),
     SET_INT(oInteractType, INTERACT_POLE),
     SET_HITBOX(/*Radius*/ 80, /*Height*/ 1500),
     CALL_NATIVE(bhv_pole_init),
@@ -3529,7 +3529,7 @@ UNUSED static const u64 behavior_data_unused_0 = 0;
 const BehaviorScript bhvMario[] = {
     BEGIN(OBJ_LIST_PLAYER),
     SET_INT(oIntangibleTimer, 0),
-    OR_LONG(oFlags, (OBJ_FLAG_PLAYER | OBJ_FLAG_SILHOUETTE)),
+    OR_LONG(oFlags, (OBJ_FLAG_PLAYER | OBJ_FLAG_SILHOUETTE | OBJ_FLAG_IGNORE_BHV_SHITCULL)),
     OR_INT(oUnk94, 0x0001),
     SET_HITBOX(/*Radius*/ 37, /*Height*/ 160),
     BEGIN_LOOP(),
@@ -6331,7 +6331,7 @@ const BehaviorScript bhvVolume[] = {
 extern void bhv_dungeon_manager(void);
 const BehaviorScript bhvDungeonManager[] = {
     BEGIN(OBJ_LIST_SPAWNER),
-    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_IGNORE_BHV_SHITCULL)),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_dungeon_manager),
     END_LOOP(),
@@ -6443,6 +6443,7 @@ const BehaviorScript bhvShredder[] = {
 extern void bhv_cutscene_camera(void);
 const BehaviorScript bhvCutsceneCamera[] = {
     BEGIN(OBJ_LIST_LEVEL),
+    OR_LONG(oFlags, (OBJ_FLAG_IGNORE_BHV_SHITCULL)),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_cutscene_camera),
     END_LOOP(),
@@ -6459,6 +6460,7 @@ const BehaviorScript bhvRedCoinSpawner[] = {
 extern void bhv_red_coin_manager(void);
 const BehaviorScript bhvRedCoinManager[] = {
     BEGIN(OBJ_LIST_LEVEL),
+    OR_LONG(oFlags, (OBJ_FLAG_IGNORE_BHV_SHITCULL)),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_red_coin_manager),
     END_LOOP(),

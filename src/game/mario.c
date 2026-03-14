@@ -1845,7 +1845,6 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
     gMariosModulesSave.file[gMariosModulesSaveIndex].room_discover_flags |= (1 << room);
 
     gMarioState->marioObj->shitCullFlags = 0xFFFFFFFF;
-    shit_cull_update();
 
     if (gCurrLevelNum != LEVEL_WIN && gCurrLevelNum != LEVEL_GAMEOVER) {
         gMariosModulesSave.file[gMariosModulesSaveIndex].gameTime++;

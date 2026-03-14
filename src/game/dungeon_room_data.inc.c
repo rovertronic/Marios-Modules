@@ -783,7 +783,7 @@ struct DungeonObject sRoomAutoMazeObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomAutoMaze = {
-    .minimapDL = &rmap_maze_rmap_maze_mesh,
+    .minimapDL = &rmapvanishhop_rmapvanishhop_mesh,
     
     .cellList = &sRoomAutoMazeCellList,
     .model = MODEL_ROOM_AUTOMAZE,
