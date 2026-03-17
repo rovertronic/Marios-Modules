@@ -750,7 +750,7 @@ s32 act_quicksand_death(struct MarioState *m) {
     }
     if (m->actionState == ACT_STATE_QUICKSAND_DEATH_SINK) {
         if (m->quicksandDepth >= 100.0f) {
-            play_sound_if_no_flag(m, SOUND_MARIO_WAAAOOOW, MARIO_ACTION_SOUND_PLAYED);
+            play_sound_if_no_flag(m, get_mario_sound_id(MARIO_SND_WAAAOOOW), MARIO_ACTION_SOUND_PLAYED);
         }
         if ((m->quicksandDepth += 5.0f) >= 180.0f) {
             level_trigger_warp(m, WARP_OP_WARP_FLOOR);
@@ -1184,7 +1184,7 @@ extern u8 dungeon_seq_timer;
 s32 act_death_exit(struct MarioState *m) {
     if (15 < m->actionTimer++
         && launch_mario_until_land(m, ACT_DEATH_EXIT_LAND, MARIO_ANIM_GENERAL_FALL, -32.0f)) {
-        play_sound(SOUND_MARIO_OOOF2, m->marioObj->header.gfx.cameraToObject);
+        play_sound(get_mario_sound_id(MARIO_SND_OOOF2), m->marioObj->header.gfx.cameraToObject);
         dungeon_seq_cur = -1;
         dungeon_seq_timer = 120;
 #if ENABLE_RUMBLE
@@ -1206,7 +1206,7 @@ s32 act_death_exit(struct MarioState *m) {
 
 s32 act_unused_death_exit(struct MarioState *m) {
     if (launch_mario_until_land(m, ACT_FREEFALL_LAND_STOP, MARIO_ANIM_GENERAL_FALL, 0.0f)) {
-        play_sound(SOUND_MARIO_OOOF2, m->marioObj->header.gfx.cameraToObject);
+        play_sound(get_mario_sound_id(MARIO_SND_OOOF2), m->marioObj->header.gfx.cameraToObject);
 #ifdef ENABLE_LIVES
         m->numLives--;
 #endif
@@ -1225,7 +1225,7 @@ s32 act_falling_death_exit(struct MarioState *m) {
     if (launch_mario_until_land(m, ACT_DEATH_EXIT_LAND, MARIO_ANIM_GENERAL_FALL, 0.0f)) {
         dungeon_seq_cur = -1;
         dungeon_seq_timer = 120;
-        play_sound(SOUND_MARIO_OOOF2, m->marioObj->header.gfx.cameraToObject);
+        play_sound(get_mario_sound_id(MARIO_SND_OOOF2), m->marioObj->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
@@ -1482,7 +1482,7 @@ s32 act_teleport_fade_in(struct MarioState *m) {
             set_mario_action(m, ACT_WATER_IDLE, 0);
         } else {
             set_mario_action(m, ACT_IDLE, 0);
-        }
+    }
     }
 
     m->pos[1] = m->floorHeight;
@@ -1492,7 +1492,7 @@ s32 act_teleport_fade_in(struct MarioState *m) {
 }
 
 s32 act_shocked(struct MarioState *m) {
-    play_sound_if_no_flag(m, SOUND_MARIO_WAAAOOOW, MARIO_ACTION_SOUND_PLAYED);
+    play_sound_if_no_flag(m, get_mario_sound_id(MARIO_SND_WAAAOOOW), MARIO_ACTION_SOUND_PLAYED);
     play_sound(SOUND_MOVING_SHOCKED, m->marioObj->header.gfx.cameraToObject);
     set_camera_shake_from_hit(SHAKE_SHOCK);
 

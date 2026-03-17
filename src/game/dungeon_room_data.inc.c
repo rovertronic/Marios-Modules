@@ -52,6 +52,7 @@ struct DungeonRoomVariantCellList sRoomMiniJuncCellList[] = {
 
 // Coins variant
 struct DungeonRoomVariant sRoomMiniJunc1 = {
+    .metaFlag = 0,
     .minimapDL = &rmapjunc_rmapjunc_mesh,
 
     .cellList = &sRoomMiniJuncCellList,
@@ -68,6 +69,7 @@ struct DungeonRoomVariant sRoomMiniJunc1 = {
 
 // Enemy spawn variant
 struct DungeonRoomVariant sRoomMiniJunc2 = {
+    .metaFlag = 0,
     .minimapDL = &rmapjunc_rmapjunc_mesh,
 
     .cellList = &sRoomMiniJuncCellList,
@@ -101,6 +103,7 @@ Vec4f sRoomLobbyLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomLobby = {
+    .metaFlag = 1,
     .minimapDL = &rmaplobby_rmaplobby_mesh,
 
     .cellList = &sRoomLobbyCellList,
@@ -129,6 +132,7 @@ Vec4f sRoomTreasureLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomTreasure = {
+    .metaFlag = 2,
     .minimapDL = &rmaptreasure_rmaptreasure_mesh,
 
     .cellList = &sRoomTreasureCellList,
@@ -161,6 +165,7 @@ s8 sRoomSuperTreasureRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomSuperTreasure = {
+    .metaFlag = 3,
     .minimapDL = &rmaptreasure_rmaptreasure_mesh,
 
     .cellList = &sRoomTreasureCellList,
@@ -216,6 +221,7 @@ struct DungeonObject sRoomWallJumpObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomWallJump = {
+    .metaFlag = 4,
     .minimapDL = &rmapwallkick_rmapwallkick_mesh,
 
     .cellList = &sRoomWallJumpCellList,
@@ -248,6 +254,7 @@ s8 sRoomLongJumpRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomLongJump = {
+    .metaFlag = 5,
     .minimapDL = &rzmapigzag_rzmapigzag_mesh,
     
     .cellList = &sRoomLongJumpCellList,
@@ -289,6 +296,7 @@ Vec4f sRoomVanishHopLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomVanishHop = {
+    .metaFlag = 6,
     .minimapDL = &rmapvanishhop_rmapvanishhop_mesh,
     
     .cellList = &sRoomVanishHopCellList,
@@ -317,6 +325,7 @@ s8 sRoomFnabRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomFnab = {
+    .metaFlag = 7,
     .minimapDL = &rmapjunc_rmapjunc_mesh,
 
     .cellList = &sRoomFnabCellList,
@@ -356,6 +365,7 @@ s8 sRoomBtcmRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomBtcm = {
+    .metaFlag = 8,
     .minimapDL = &rmapbtcm_rmapbtcm_mesh,
 
     .cellList = &sRoomBtcmCellList,
@@ -384,6 +394,7 @@ struct DungeonObject sRoomBaldiObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomBaldi = {
+    .metaFlag = 9,
     .minimapDL = &rmapjunc_rmapjunc_mesh,
 
     .cellList = &sRoomTreasureCellList,
@@ -431,6 +442,7 @@ Vec4f sRoomWoodLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomWood = {
+    .metaFlag = 10,
     .minimapDL = &rmapjunc_rmapjunc_mesh,
 
     .cellList = &sRoomWoodCellList,
@@ -482,6 +494,7 @@ Vec4f sRoomSpaceworldLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomSpaceworld = {
+    .metaFlag = 11,
     .minimapDL = rmapspaceworld_rmapspaceworld_mesh,
 
     .cellList = &sRoomSpaceworldCellList,
@@ -536,6 +549,7 @@ Vec4f sRoomFacade1LootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomFacade1 = {
+    .metaFlag = 12,
     .minimapDL = &rmapfacade1_rmapfacade1_mesh,
 
     .cellList = &sRoomFacade1CellList,
@@ -576,6 +590,7 @@ s8 sRoomGardenHallRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomGardenHall = {
+    .metaFlag = 13,
     .minimapDL = &rmapgarden_rmapgarden_mesh,
 
     .cellList = &sRoomGardenHallCellList,
@@ -607,6 +622,7 @@ Vec4f sRoomFurnceLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomFurnace = {
+    .metaFlag = 14,
     .minimapDL = &rmapfurnace_rmapfurnace_mesh,
 
     .cellList = &sRoomGardenHallCellList,
@@ -641,6 +657,7 @@ struct DungeonObject sRoomGrindrObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomGrindr = {
+    .metaFlag = 15,
     .minimapDL = &rmapgrindr_rmapgrindr_mesh,
 
     .cellList = &sRoomGrindrCellList,
@@ -669,6 +686,7 @@ s8 sRoomCaveJumpRequiredLoot[] = {
 };
 
 struct DungeonRoomVariant sRoomCaveJump = {
+    .metaFlag = 16,
     .minimapDL = &rmapcavejump_rmapcavejump_mesh,
 
     .cellList = &sRoomGardenHallCellList,
@@ -697,6 +715,7 @@ struct DungeonRoomVariantCellList sRoomSplitHallCellList[] = {
 };
 
 struct DungeonRoomVariant sRoomSplitHall = {
+    .metaFlag = 17,
     .minimapDL = &rmapsplithall_rmapsplithall_mesh,
 
     .cellList = &sRoomSplitHallCellList,
@@ -783,6 +802,7 @@ struct DungeonObject sRoomAutoMazeObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomAutoMaze = {
+    .metaFlag = 18,
     .minimapDL = &rmapvanishhop_rmapvanishhop_mesh,
     
     .cellList = &sRoomAutoMazeCellList,
@@ -844,6 +864,7 @@ struct DungeonObject sRoomSilverPillarObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomSilverPillar = {
+    .metaFlag = 19,
     .minimapDL = &rmapsilverpillar_rmapsilverpillar_mesh,
 
     .cellList = &sRoomSilverPillarCellList,
@@ -860,6 +881,7 @@ struct DungeonRoomVariant sRoomSilverPillar = {
 // Blade & Sorcery Room
 
 struct DungeonRoomVariant sRoomBns = {
+    .metaFlag = 20,
     .minimapDL = &rmapjunc_rmapjunc_mesh,
 
     .cellList = &sRoomTreasureCellList,
@@ -896,6 +918,7 @@ Vec4f sRoomClockLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomClock = {
+    .metaFlag = 21,
     .minimapDL = &rmapjunc_rmapjunc_mesh,
 
     .cellList = &sRoomClockCellList,
@@ -920,6 +943,7 @@ struct DungeonObject sRoomRedCoinObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomRedCoin = {
+    .metaFlag = 22,
     .minimapDL = &rmaptreasure_rmaptreasure_mesh,
 
     .cellList = &sRoomTreasureCellList,
@@ -962,6 +986,7 @@ struct DungeonObject sRoomBossObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomBoss = {
+    .metaFlag = 23,
     .minimapDL = &rmapboss_rmapboss_mesh,
 
     .cellList = &sRoomBossCellList,
@@ -1019,6 +1044,7 @@ struct DungeonObject sRoomFacade2ObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomFacade2 = {
+    .metaFlag = 24,
     .minimapDL = &rmapfacade2_rmapfacade2_mesh,
 
     .cellList = &sRoomFacade2CellList,
@@ -1048,6 +1074,7 @@ struct DungeonRoomVariantCellList sRoomLobby2CellList[] = {
 };
 
 struct DungeonRoomVariant sRoomLobby2 = {
+    .metaFlag = 25,
     .minimapDL = &rmap_lobby2_rmap_lobby2_mesh,
 
     .cellList = &sRoomLobby2CellList,
@@ -1094,6 +1121,7 @@ Vec4f sRoomPushLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomPush = {
+    .metaFlag = 26,
     .minimapDL = &rmappush_rmappush_mesh,
 
     .cellList = &sRoomPushCellList,
@@ -1148,6 +1176,7 @@ Vec4f sRoomThwompsLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomThwomps = {
+    .metaFlag = 27,
     .minimapDL = &rmap_thwomps_rmap_thwomps_mesh,
 
     .cellList = &sRoomThwompsCellList,
@@ -1184,6 +1213,7 @@ Vec4f sRoomMemorizeLootLocations[] = {
 };
 
 struct DungeonRoomVariant sRoomMemorize = {
+    .metaFlag = 28,
     .minimapDL = &rmapgarden_rmapgarden_mesh,
 
     .cellList = &sRoomMemorizeCellList,
@@ -1224,6 +1254,7 @@ struct DungeonObject sRoomLavaDropObjectList[] = {
 };
 
 struct DungeonRoomVariant sRoomLavaDrop = {
+    .metaFlag = 29,
     .minimapDL = &rmapgrindr_rmapgrindr_mesh,
 
     .cellList = &sRoomGrindrCellList,

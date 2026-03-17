@@ -26,6 +26,7 @@
 #include "config.h"
 #include "module.h"
 #include "ingame_menu.h"
+#include "mario.h"
 
 u8  sDelayInvincTimer;
 s16 sInvulnerable;
@@ -1109,7 +1110,7 @@ u32 interact_tornado(struct MarioState *m, UNUSED u32 interactType, struct Objec
         marioObj->oMarioTornadoYawVel = 0x400;
         marioObj->oMarioTornadoPosY = m->pos[1] - obj->oPosY;
 
-        play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->header.gfx.cameraToObject);
+        play_sound(get_mario_sound_id(MARIO_SND_WAAAOOOW), m->marioObj->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
         queue_rumble_data(30, 60);
 #endif
@@ -1132,7 +1133,7 @@ u32 interact_whirlpool(struct MarioState *m, UNUSED u32 interactType, struct Obj
 
         marioObj->oMarioWhirlpoolPosY = m->pos[1] - obj->oPosY;
 
-        play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->header.gfx.cameraToObject);
+        play_sound(get_mario_sound_id(MARIO_SND_WAAAOOOW), m->marioObj->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
         queue_rumble_data(30, 60);
 #endif
@@ -1154,7 +1155,7 @@ u32 interact_strong_wind(struct MarioState *m, UNUSED u32 interactType, struct O
         m->forwardVel = -24.0f;
         m->vel[1] = 12.0f;
 
-        play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->header.gfx.cameraToObject);
+        play_sound(get_mario_sound_id(MARIO_SND_WAAAOOOW), m->marioObj->header.gfx.cameraToObject);
         update_mario_sound_and_camera(m);
         return set_mario_action(m, ACT_GETTING_BLOWN, 0);
     }
@@ -1492,7 +1493,7 @@ u32 check_object_grab_mario(struct MarioState *m, UNUSED u32 interactType, struc
             m->usedObj      = obj;
 
             update_mario_sound_and_camera(m);
-            play_sound(SOUND_MARIO_OOOF, m->marioObj->header.gfx.cameraToObject);
+            play_sound(get_mario_sound_id(MARIO_SND_OOOF), m->marioObj->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
             queue_rumble_data(5, 80);
 #endif
@@ -1877,7 +1878,7 @@ void mario_process_interactions(struct MarioState *m) {
 void check_death_barrier(struct MarioState *m) {
     if (m->pos[1] < m->floorHeight + 2048.0f) {
         if (level_trigger_warp(m, WARP_OP_WARP_FLOOR) == 20 && !(m->flags & MARIO_FALL_SOUND_PLAYED)) {
-            play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->header.gfx.cameraToObject);
+            play_sound(get_mario_sound_id(MARIO_SND_WAAAOOOW), m->marioObj->header.gfx.cameraToObject);
         }
     }
 }

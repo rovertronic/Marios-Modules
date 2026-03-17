@@ -55,6 +55,7 @@ struct DungeonRoomVariant {
     u8 needKey:1;
     u8 safe:1;
     u8 rarity;
+    u8 metaFlag;
 };
 
 struct DungeonRoom {

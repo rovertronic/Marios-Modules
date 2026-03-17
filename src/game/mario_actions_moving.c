@@ -1586,7 +1586,7 @@ s32 common_ground_knockback_action(struct MarioState *m, s32 animation, s32 chec
     if (actionArg > 0) {
         play_sound_if_no_flag(m, get_mario_sound_id(MARIO_SND_ATTACKED), MARIO_MARIO_SOUND_PLAYED);
     } else {
-        play_sound_if_no_flag(m, SOUND_MARIO_OOOF2, MARIO_MARIO_SOUND_PLAYED);
+        play_sound_if_no_flag(m, get_mario_sound_id(MARIO_SND_OOOF2), MARIO_MARIO_SOUND_PLAYED);
     }
 
     if (m->forwardVel > 32.0f) {

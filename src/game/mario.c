@@ -64,7 +64,9 @@ u32 sMarioCharacterSoundTable[][2] = {
     [MARIO_SND_PANTING_COLD]         = { SOUND_MARIO_PANTING_COLD,        SOUND_NONE },
     [MARIO_SND_YAHOO_WAHA_YIPPEE]    = { SOUND_MARIO_YAHOO_WAHA_YIPPEE,   SOUND_GIRL_TRIPLEJUMP },
     [MARIO_SND_HOO]                  = { SOUND_MARIO_PUNCH_HOO,           SOUND_GIRL_HOO},
-    [MARIO_SND_PUNCH]                = { SOUND_MARIO_PUNCH_YAH,           SOUND_GIRL_HOO},                     
+    [MARIO_SND_PUNCH]                = { SOUND_MARIO_PUNCH_YAH,           SOUND_GIRL_HOO},
+    [MARIO_SND_DOH]                  = { SOUND_MARIO_DOH,                 SOUND_NONE},  
+    [MARIO_SND_GPWAH]                = { SOUND_MARIO_GROUND_POUND_WAH,    SOUND_NONE},                 
 };
 
 u32 get_mario_sound_id(int marioSoundEnum) {
