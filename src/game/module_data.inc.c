@@ -1022,12 +1022,12 @@ char * wildcolorOptions[] = {
 
 struct module_info module_infos[] = {
     // Sockets
-    [MOD_BUTTON_A] = {MTYPE_INPUT,0,0,0,0,0,"",micons_abtn_rgba16,NULL,NULL,NULL},
-    [MOD_BUTTON_B] = {MTYPE_INPUT,0,0,0,0,0,"",micons_bbtn_rgba16,NULL,NULL,NULL},
-    [MOD_VANITY] = {MTYPE_INPUT,0,0,0,0,0,"",micons_vanity_rgba16,NULL,NULL,NULL},
-    [MOD_SETTINGS] = {MTYPE_INPUT,0,0,0,0,0,"",micons_gear_rgba16,NULL,NULL,NULL},
-    [MOD_WRAP] = {MTYPE_INPUT,0,0,0,0,0,"",micons_wrap_rgba16,NULL,NULL,NULL},
-    [MOD_PASSIVE] = {MTYPE_INPUT,0,0,0,0,0,"Passive Socket",micons_p__rgba16,NULL,NULL,NULL},
+    [MOD_BUTTON_A] = {MTYPE_INPUT,0,0,0,0,0,0,"",micons_abtn_rgba16,NULL,NULL,NULL},
+    [MOD_BUTTON_B] = {MTYPE_INPUT,0,0,0,0,0,0,"",micons_bbtn_rgba16,NULL,NULL,NULL},
+    [MOD_VANITY] = {MTYPE_INPUT,0,0,0,0,0,0,"",micons_vanity_rgba16,NULL,NULL,NULL},
+    [MOD_SETTINGS] = {MTYPE_INPUT,0,0,0,0,0,0,"",micons_gear_rgba16,NULL,NULL,NULL},
+    [MOD_WRAP] = {MTYPE_INPUT,0,0,0,0,0,0,"",micons_wrap_rgba16,NULL,NULL,NULL},
+    [MOD_PASSIVE] = {MTYPE_INPUT,0,0,0,0,0,0,"Passive Socket",micons_p__rgba16,NULL,NULL,NULL},
 
     // Actions
     [MOD_JUMP] = {
@@ -1537,6 +1537,7 @@ struct module_info module_infos[] = {
         .desc = "Marks end of a block.",
         .func = NULL,
         .creative = TRUE,
+        .manual_use_flagging = TRUE,
     },
     [MOD_IF_FLOOR] = {
         .name = "If Grounded",

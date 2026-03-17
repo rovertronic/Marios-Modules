@@ -83,18 +83,45 @@ char * get_game_time_str(int saveIndex) {
     return game_time_str_buff;
 }
 
+void save_set_meta_flag(int slot, int flag) {
+    int fflag = flag%8;
+    int findex = slot + (flag/8);
+    gMariosModulesSave.metaflags[findex] |= (1<<fflag);
+}
+
+s32 save_get_meta_flag(int slot, int flag) {
+    int fflag = flag%8;
+    int findex = slot + (flag/8);
+    return (gMariosModulesSave.metaflags[findex] & (1<<fflag)) > 0;
+}
+
+s32 save_tally_meta_flag(int slot, int endSlot) {
+    int ct = 0;
+    for (int i = slot; i < endSlot+1; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (save_get_meta_flag(i,j)) {
+                ct++;
+            }
+        }
+    }
+    return ct;
+}
+
 void set_used_module_flag_manual(int i) {
     int fflag = i%32;
     int findex = i/32;
     gMariosModulesSave.file[gMariosModulesSaveIndex].usedModules[findex] |= (1<<fflag);
+    save_set_meta_flag(METAFLAGS_MODULES,module_infos[i].meta_flag);
 }
 
 void set_used_module_flag(int i) {
     int fflag = i%32;
     int findex = i/32;
+
     if (!module_infos[i].manual_use_flagging && module_infos[i].type != MTYPE_VANITY && module_infos[i].type != MTYPE_SETTINGS) {
         gMariosModulesSave.file[gMariosModulesSaveIndex].usedModules[findex] |= (1<<fflag);
     }
+    save_set_meta_flag(METAFLAGS_MODULES,module_infos[i].meta_flag);
 }
 
 void module_log_message(struct module_execution_thread * met, char * logmsg, int num) {
@@ -207,7 +234,19 @@ void update_creative_inventory(void) {
     }
 }
 
+void set_module_meta_flags(void) {
+    int count = 0;
+    for (int i = 0; i < MOD_COUNT; i++) {
+        if (module_infos[i].creative) {
+            module_infos[i].meta_flag = count;
+            count++;
+        }
+    }
+}
+
 void init_module_inventory(void) {
+    set_module_meta_flags();
+
     for (int x = 0; x<INVENTORY_SLOTS_X; x++) {
         for (int y = 0; y<INVENTORY_SLOTS_Y; y++) {
             inventory[y][x] = MOD_EMPTY;
@@ -336,11 +375,11 @@ void module_update(void) {
                         met->option = inventoryParam[met->y][met->x];
                         if (module_infos[read_mod].func != NULL) {
                             module_infos[read_mod].func(met,MCC_INVOKE);
-                            set_used_module_flag(read_mod);
                         } else {
                             // No function = passthrough
                             met->x++;
                         }
+                        set_used_module_flag(read_mod);
                         met->cooltime += module_infos[read_mod].cooldown*30.0f;
 
                         if (met == &module_execution_threads[MODULE_EXEC_PASSIVE] && met->doaircooldown) {

@@ -1,3 +1,5 @@
+extern Texture texture_hud_char_star[];
+
 struct mariosModulesSaveGame gMariosModulesSave;
 struct mariosModulesSaveFile gMariosMoudlesStats;
 int gMariosModulesSaveIndex = 0;
@@ -79,12 +81,12 @@ void load_marios_modules_data_only(void) {
     int size = sizeof(struct mariosModulesSaveGame);
     
     if (gSramProbe != 0) {
+        nuPiReadSram(0, &gMariosModulesSave, ALIGN8(size));
+
         if (gMariosModulesSave.save_magic != SAVE_MAGIC) {
             bzero(&gMariosModulesSave, size);
             gMariosModulesSave.save_magic = SAVE_MAGIC;
         }
-
-        nuPiReadSram(0, &gMariosModulesSave, ALIGN8(size));
     }
 }
 
@@ -373,9 +375,9 @@ Guitar by: Amon26\n\
 Additional Voice Samples by: mermaidglade\n\
 \n\
 @O@Texture Sources@@\n\
-Vanilla\n\
-SM64DS\n\
+Majora's Mask\n\
 BroDute\n\
+Vanilla SM64\n\
 \n\
 @O@Tools Used@@\n\
 HackerSM64\n\
@@ -644,6 +646,68 @@ void render_main_menu(void) {
         case MAIN_MENU_FILE_VIEW:
             render_results_screen(4);
             break;
+        case MAIN_MENU_META_PROGRESSION:
+            gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+            gDPSetEnvColor(gDisplayListHead++, 0,0,0, 180 * sMainMenuTransition);
+            render_4slice(20,220,300,20);
+
+            gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
+
+            char resultScreenStr[100];
+
+            utf8_print_reset();
+            print_utf8("Campaign Stars:",30,200);
+            print_utf8("Crystal Quest Stars:",30,160);
+            print_utf8("Completion:",180,160);
+            print_utf8("Discovered Modules:",30,120);
+            sprintf(resultScreenStr,"Discovered Rooms: %d/30",
+                save_tally_meta_flag(METAFLAGS_ROOMS,METAFLAGS_ROOMS_4));
+            print_utf8(resultScreenStr,30,30);
+
+            gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
+            // Campaign
+            for (int i = 0; i < 15; i++) {
+                if (save_get_meta_flag(METAFLAGS_CAMPAIGN_STARS,i)) {
+                    gDPSetEnvColor(gDisplayListHead++, 255,255,255, 255);
+                } else {
+                    gDPSetEnvColor(gDisplayListHead++, 50,50,50, 255);
+                }
+                print_texture(texture_hud_char_star,16,30 + (16*i),40);
+            }
+            // Rogue
+            for (int i = 0; i < 8; i++) {
+                if (save_get_meta_flag(METAFLAGS_ROGUE_STARS,i)) {
+                    gDPSetEnvColor(gDisplayListHead++, 255,255,255, 255);
+                } else {
+                    gDPSetEnvColor(gDisplayListHead++, 50,50,50, 255);
+                }
+                print_texture(texture_hud_char_star,16,30 + (16*i),80);
+            }
+            // Completion
+            for (int i = 0; i < 2; i++) {
+                if (save_get_meta_flag(METAFLAGS_COMPLETION,i)) {
+                    gDPSetEnvColor(gDisplayListHead++, 255,255,255, 255);
+                } else {
+                    gDPSetEnvColor(gDisplayListHead++, 50,50,50, 255);
+                }
+                print_texture(texture_hud_char_star,16,180 + (16*i),80);
+            }
+            // Discovered Modules
+            int count = 0;
+            for (int i = 0; i < MOD_COUNT; i++) {
+                int x = 30+(16*(count%16));
+                int y = 120+(16*(count/16));
+                if (module_infos[i].creative) {
+                    if (save_get_meta_flag(METAFLAGS_MODULES,module_infos[i].meta_flag)) {
+                        print_module(i,x,y,0);
+                    } else {
+                        gDPSetEnvColor(gDisplayListHead++, 50,50,50, 255);
+                        print_texture(micons_piece_rgba16,32,x,y);
+                    }
+                    count++;
+                }
+            }
+            break;
     }
 }
 
@@ -863,6 +927,9 @@ void logic_main_menu(void) {
                     case 0:
                         gMainMenuTargetState = MAIN_MENU_SOUNDTRACK;
                         break;
+                    case 1:
+                        gMainMenuTargetState = MAIN_MENU_META_PROGRESSION;
+                        break;
                 }
             }
             break;
@@ -892,6 +959,12 @@ void logic_main_menu(void) {
                         stop_background_music(SEQUENCE_ARGS(4, song ));
                         break;
                 }
+            }
+            break;
+        case MAIN_MENU_META_PROGRESSION:
+            animate_wildcolor_module();
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON|B_BUTTON)) {
+                gMainMenuTargetState = MAIN_MENU_EXTRA;
             }
             break;
     }

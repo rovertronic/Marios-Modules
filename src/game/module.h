@@ -102,6 +102,7 @@ enum module_loot_ids {
 
 struct module_info {
     u8 type;
+    u8 meta_flag;
     u8 unchainable:1;
     u8 creative:1;
     u8 elementable:1;
@@ -289,9 +290,31 @@ struct mariosModulesSaveFile {
 #define SAVE_FLAG_PASSIVE  (1 << 1)
 #define SAVE_FLAG_COMPLETE (1 << 2)
 
+// Metaflags = 8 bits per
+// Intended to be convenient to use with star display
+enum {
+    METAFLAGS_COMPLETION,
+    METAFLAGS_CAMPAIGN_STARS,
+    METAFLAGS_CAMPAIGN_STARS_2,
+    METAFLAGS_ROGUE_STARS,
+    METAFLAGS_ROOMS,
+    METAFLAGS_ROOMS_2,
+    METAFLAGS_ROOMS_3,
+    METAFLAGS_ROOMS_4,
+    METAFLAGS_MODULES,
+    METAFLAGS_MODULES_2,
+    METAFLAGS_MODULES_3,
+    METAFLAGS_MODULES_4,
+    METAFLAGS_MODULES_5,
+    METAFLAGS_MODULES_6,
+    METAFLAGS_MODULES_7,
+    METAFLAGS_MODULES_8, // Not needed, room for DLC
+    METAFLAGS_COUNT
+};
+
 struct mariosModulesSaveGame {
+    u8 metaflags[METAFLAGS_COUNT];
     struct mariosModulesSaveFile file[3];
-    u32 achievements;
     u32 save_magic;
 };
 
@@ -324,6 +347,7 @@ enum {
     MAIN_MENU_FILE_VIEW,
     MAIN_MENU_EXTRA,
     MAIN_MENU_SOUNDTRACK,
+    MAIN_MENU_META_PROGRESSION,
     MAIN_MENU_CLOSED,
 };
 
@@ -374,7 +398,6 @@ enum {
     ACHIEVEMENT_COUNT,
 };
 
-
 void display_generic_message(char * str);
 void display_tutorial_message(char * str, u8 tutorialId);
 
@@ -412,6 +435,7 @@ s32 save_bin_get_star_all_levels(void);
 
 void set_used_module_flag(int i);
 void set_used_module_flag_manual(int i);
+void save_set_meta_flag(int slot, int flag);
 void save_marios_modules(Vec3f pos);
 void save_marios_modules_silent(Vec3f pos);
 void save_marios_modules_coins(void);

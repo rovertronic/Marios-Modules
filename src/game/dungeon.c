@@ -1130,6 +1130,8 @@ void dungeon_set_mario_room(void) {
         int index = id/32;
         int flag = id%32;
         sDungeonDiscoveredFlags[index] |= (1 << flag);
+
+        save_set_meta_flag(METAFLAGS_ROOMS,gDungeonMarioRoom->variant->metaFlag);
     }
 }
 

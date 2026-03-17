@@ -1289,6 +1289,7 @@ void bowser_act_dead(void) {
 
         case BOWSER_SUB_ACT_DEAD_WAIT:
             if (o->oTimer == 30) {
+                save_set_meta_flag(METAFLAGS_COMPLETION,1);
                 gMariosModulesSave.file[gMariosModulesSaveIndex].flags |= SAVE_FLAG_COMPLETE;
                 save_marios_modules_silent(gVec3fZero);
                 initiate_warp(LEVEL_WIN, 1, 0x0A, 0);

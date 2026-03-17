@@ -414,7 +414,7 @@ ALIGNED8 static const Texture texture_hud_char_mario_head[] = {
 #include "textures/segment2/segment2.05A00.rgba16.inc.c"
 };
 
-ALIGNED8 static const Texture texture_hud_char_star[] = {
+ALIGNED8 Texture texture_hud_char_star[] = {
 #include "textures/segment2/segment2.05C00.rgba16.inc.c"
 };
 
@@ -1931,7 +1931,7 @@ ALIGNED8 static const Texture texture_font_char_us_star_filled[] = {
 #include "textures/segment2/font_graphics.06C00.ia4.inc.c"
 };
 
-ALIGNED8 static const Texture texture_font_char_us_star_hollow[] = {
+ALIGNED8 Texture texture_font_char_us_star_hollow[] = {
 #include "textures/segment2/font_graphics.06C40.ia4.inc.c"
 };
 

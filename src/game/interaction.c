@@ -846,6 +846,10 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
         } else {
             obj_save_bin_write(obj);
             m->numStars = save_bin_get_star_all_levels();
+
+            if (gCurrLevelNum == LEVEL_TEMPLE) {
+                save_set_meta_flag(METAFLAGS_CAMPAIGN_STARS, obj->saveBinId);
+            }
         }
 
         if (!noExit) {
