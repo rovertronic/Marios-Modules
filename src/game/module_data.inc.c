@@ -1,6 +1,6 @@
 // INVENTORY STRUCTURE DECLARATIONS
 s32 creativePanelCondition(void) {
-    return FALSE;
+    return TRUE;
 }
 
 s32 storagePanelCondition(void) {
@@ -948,8 +948,8 @@ Gfx * hairLights[] = {
 };
 
 Gfx * skinLights[] = {
-    &mat_mario_face_0___eye_open_v3_001,
-    &mat_mario_face_1___eye_half_v3_001,
+    &mat_mario_face_0___eye_open_v3_001_layer1,
+    &mat_mario_face_1___eye_half_v3_001_layer1,
     &mat_mario_face_2___eye_closed_v3_001,
     &mat_mario_mustache_v3_001,
 
