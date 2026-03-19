@@ -428,7 +428,7 @@ char * sButtonsFile[] = {
 };
 
 char * sButtonsMode[] = {
-    "@B@Campaign@@",
+    "@B@Manusanctuary Escape@@",
     "@P@Crystal Quest@@",
     NULL
 };
@@ -522,11 +522,11 @@ void render_mode_info(int mode) {
     char * str;
     switch(mode) {
         case 0:
-            str = "A large introductory hand-crafted level. "
+            str = "Mario's Modules 2 campaign mode. "
             "Recommended for starting players! Chapter 1 of the MM2 story.";
             break;
         case 1:
-            str = "Mario's Modules roguelite mode. Progress through 3 randomly generated levels."
+            str = "Mario's Modules 2 roguelike mode. Progress through 3 randomly generated levels."
             " Only 3 lives, then permadeath. Chapter 2 of the MM2 story.";
             break;
     }
@@ -557,7 +557,7 @@ void render_menu_fileinfo(void) {
     gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
     char * str;
     if (gMariosModulesSave.file[sMainMenuIndex].flags & SAVE_FLAG_EXIST) {
-        char * modeStr = "@B@Campaign@@";
+        char * modeStr = "@B@Manusanctuary Escape@@";
         char * lvStr = "";
         if (gMariosModulesSave.file[sMainMenuIndex].level != -1) {
             modeStr = "@P@Crystal Quest@@";
@@ -656,7 +656,7 @@ void render_main_menu(void) {
             char resultScreenStr[100];
 
             utf8_print_reset();
-            print_utf8("Campaign Stars:",30,200);
+            print_utf8("Manusanctuary Escape Stars:",30,200);
             print_utf8("Crystal Quest Stars:",30,160);
             print_utf8("Completion:",180,160);
             print_utf8("Discovered Modules:",30,120);
@@ -981,7 +981,7 @@ void render_results_screen(int type) {
             primstr = "@R@GAME OVER@@";
             break;
         case 3:
-            primstr = "@Y@Campaign COMPLETE!@@";
+            primstr = "@Y@Manusanctuary Escape COMPLETE!@@";
             break;
         case 4:
             primstr = "Completed File";
