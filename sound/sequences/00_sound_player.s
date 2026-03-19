@@ -2116,6 +2116,8 @@ sound_ref .sound_girl_hurt
 sound_ref .sound_girl_doublejump
 sound_ref .sound_girl_triplejump
 sound_ref .sound_girl_wow
+sound_ref .sound_girl_herewego
+sound_ref .sound_girl_aiee
 
 .sound_mario_jump_hoo:
 chan_setbank 8
@@ -8261,4 +8263,24 @@ chan_end
 
 .layer_fireball:
 layer_note1 39, 0x08, 127
+layer_end
+
+.sound_girl_herewego:
+chan_setbank 10
+chan_setinstr 27
+chan_setlayer 0, .layer_girl_herewego
+chan_end
+
+.layer_girl_herewego:
+layer_note1 39, 0xBD, 127
+layer_end
+
+.sound_girl_aiee:
+chan_setbank 10
+chan_setinstr 28
+chan_setlayer 0, .layer_girl_aiee
+chan_end
+
+.layer_girl_aiee:
+layer_note1 39, 0x9C, 127
 layer_end

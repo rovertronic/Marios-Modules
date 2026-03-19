@@ -200,6 +200,16 @@
             "release_rate": 208,
             "envelope": "envelope1",
             "sound": "0girl_wow"
+        },
+        "inst26": {
+            "release_rate": 208,
+            "envelope": "envelope1",
+            "sound": "girl_herewego"
+        },
+        "inst27": {
+            "release_rate": 208,
+            "envelope": "envelope1",
+            "sound": "girl_aiee"
         }
     },
     "instrument_list": [
@@ -229,6 +239,8 @@
         "inst22",
         "inst23",
         "inst24",
-        "inst25"
+        "inst25",
+        "inst26",
+        "inst27"
     ]
 }

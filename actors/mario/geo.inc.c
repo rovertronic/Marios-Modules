@@ -184,7 +184,7 @@ const GeoLayout mario_geo_opt_7_1[] = {
 const GeoLayout mario_geo_opt_1_2_opt_1_opt_1[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_1),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_1_opt_1),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_6),
 	GEO_CLOSE_NODE(),
@@ -193,7 +193,7 @@ const GeoLayout mario_geo_opt_1_2_opt_1_opt_1[] = {
 const GeoLayout mario_geo_opt_1_2_opt_1_opt_2[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_2),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_1_opt_2),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_6),
 	GEO_CLOSE_NODE(),
@@ -202,7 +202,7 @@ const GeoLayout mario_geo_opt_1_2_opt_1_opt_2[] = {
 const GeoLayout mario_geo_opt_1_2_opt_1_opt_3[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_2),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_1_opt_2),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_6),
 	GEO_CLOSE_NODE(),
@@ -211,7 +211,7 @@ const GeoLayout mario_geo_opt_1_2_opt_1_opt_3[] = {
 const GeoLayout mario_geo_opt_1_2_opt_1_opt_4[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_2),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_1_opt_2),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_6),
 	GEO_CLOSE_NODE(),
@@ -220,7 +220,7 @@ const GeoLayout mario_geo_opt_1_2_opt_1_opt_4[] = {
 const GeoLayout mario_geo_opt_1_2_opt_1_opt_5[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_2),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_1_opt_2),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_6),
 	GEO_CLOSE_NODE(),
@@ -229,7 +229,7 @@ const GeoLayout mario_geo_opt_1_2_opt_1_opt_5[] = {
 const GeoLayout mario_geo_opt_1_2_opt_1_opt_6[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_2),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_1_opt_2),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_6),
 	GEO_CLOSE_NODE(),
@@ -238,7 +238,7 @@ const GeoLayout mario_geo_opt_1_2_opt_1_opt_6[] = {
 const GeoLayout mario_geo_opt_1_2_opt_1_opt_7[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_7),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_1_opt_7),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_4),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_6),
 	GEO_CLOSE_NODE(),
@@ -251,7 +251,7 @@ const GeoLayout mario_armature_002_switch_option_002_opt_1[] = {
 		GEO_OPEN_NODE(),
 			GEO_NODE_START(),
 			GEO_OPEN_NODE(),
-				GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1),
+				GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1_opt_1_0),
 				GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_6),
 			GEO_CLOSE_NODE(),
 			GEO_BRANCH(1, mario_geo_opt_1_1_opt_1),
@@ -268,7 +268,7 @@ const GeoLayout mario_armature_002_switch_option_002_opt_1[] = {
 const GeoLayout mario_geo_opt_1_1_opt_1[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1_opt_1),
+		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1_opt_1_1),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_6),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
@@ -388,7 +388,7 @@ const GeoLayout mario_geo_opt_1_2[] = {
 										GEO_OPEN_NODE(),
 											GEO_NODE_START(),
 											GEO_OPEN_NODE(),
-												GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1),
+												GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_1_opt_1_0),
 												GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_4),
 												GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_000_displaylist_mesh_layer_6),
 											GEO_CLOSE_NODE(),
