@@ -179,7 +179,9 @@ void chuckya_move(void) {
 }
 
 void bhv_chuckya_loop(void) {
-    cur_obj_scale(2.0f);
+    if (!o->objRiding) {
+        cur_obj_scale(2.0f);
+    }
     o->oInteractionSubtype |= INT_SUBTYPE_GRABS_MARIO;
 
     switch (o->oHeldState) {

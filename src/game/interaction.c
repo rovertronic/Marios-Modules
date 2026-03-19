@@ -835,6 +835,8 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
         gStarModelLastCollected = obj_get_model_id(obj);
 
         if (GET_BPARAM4(obj->oBehParams) == 1) {
+            gMarioForceDance = TRUE;
+
             gMariosModulesSave.file[gMariosModulesSaveIndex].level++;
 
             gMariosModulesSave.file[gMariosModulesSaveIndex].accumulatedStars

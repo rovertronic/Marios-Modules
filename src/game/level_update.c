@@ -1279,6 +1279,7 @@ s32 update_level(void) {
 }
 
 s32 init_level(void) {
+    gMarioForceDance = FALSE;
     gMainMenuWarpLocation = -1;
 
     s32 fadeFromColor = FALSE;

@@ -107,7 +107,7 @@ void bhv_wiggler_body_part_update(void) {
     vec3f_copy(o->saddlePos,&o->oPosVec);
     o->saddlePos[1] += 200.0f;
 
-    if (o->parentObj->oAction == WIGGLER_ACT_FALL_THROUGH_FLOOR) {
+    if (o->parentObj->oAction == WIGGLER_ACT_FALL_THROUGH_FLOOR && o->oTimer > 0) {
         cur_obj_hide();
         if (o->objRider) {
             obj_mark_for_deletion(o->objRider);
@@ -379,11 +379,14 @@ static void wiggler_act_shrink(void) {
  * Fall through floors until y < 1700, then enter the walking action.
  */
 static void wiggler_act_fall_through_floor(void) {
-    if (o->oTimer == 60) {
+    if (o->oTimer == 2) {
         stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));
         cur_obj_hide();
         
         if (o->objRider) {
+            if (gMarioState->action == ACT_GRABBED) {
+                set_mario_action(gMarioState,ACT_IDLE,0);
+            }
             obj_mark_for_deletion(o->objRider);
             o->objRider = NULL;
         }
@@ -467,5 +470,9 @@ void bhv_wiggler_update(void) {
     }
 
     vec3f_copy(o->saddlePos,&o->oPosVec);
-    o->saddlePos[1] += 200.0f;
+    o->saddlePos[1] += 200.0f * o->header.gfx.scale[1]/4.f;
+
+    if (o->objRider) {
+        obj_scale(o->objRider,o->header.gfx.scale[1]/2.f);
+    }
 }

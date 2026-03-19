@@ -35,6 +35,7 @@
 #include "module.h"
 #include "dungeon.h"
 
+int gMarioForceDance = FALSE;
 int gMarioRecordIndex = 0;
 struct MarioRecordState gMarioRecord[MARIO_RECORD_MAX];
 
@@ -1847,6 +1848,10 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 
     if (gCurrLevelNum != LEVEL_WIN && gCurrLevelNum != LEVEL_GAMEOVER && gMainMenuState == MAIN_MENU_CLOSED) {
         gMariosModulesSave.file[gMariosModulesSaveIndex].gameTime++;
+    }
+
+    if (gMarioForceDance && GROUNDED && gMarioState->action != ACT_STAR_DANCE_EXIT) {
+        set_mario_action(gMarioState,ACT_STAR_DANCE_EXIT,0);
     }
 
     // Updates once per frame:
