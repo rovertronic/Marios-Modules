@@ -393,6 +393,7 @@ enum BehaviorCommands {
 
 
 extern void bhv_has_star_init(void);
+extern void bhv_magnetized(void);
 
 const BehaviorScript bhvStarDoor[] = {
     BEGIN(OBJ_LIST_SURFACE),
@@ -5925,6 +5926,7 @@ const BehaviorScript bhvSnufitBalls[] = {
     SCALE(/*Unused*/ 0, /*Field*/ 10),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_snufit_balls_loop),
+        CALL_NATIVE(bhv_magnetized),
     END_LOOP(),
 };
 
@@ -6270,6 +6272,16 @@ const BehaviorScript bhvHover[] = {
         CALL_NATIVE(bhv_hover),
     END_LOOP(),
 };
+
+const BehaviorScript bhvLavawall[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_NO_AUTO_DISPLACEMENT)),
+    SET_HOME(),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_hover),
+    END_LOOP(),
+};
+
 
 extern void bhv_bdoor(void);
 extern void bhv_init_bdoor(void);
@@ -6637,6 +6649,17 @@ const BehaviorScript bhvFireball[] = {
         SET_INT(oIntangibleTimer, 0),
         SET_INT(oInteractStatus, INT_STATUS_NONE),
         ANIMATE_TEXTURE(oAnimState, 2),
+    END_LOOP(),
+};
+
+extern void bhv_lavawall_attack(void);
+const BehaviorScript bhvLavawallAttack[] = {
+    BEGIN(OBJ_LIST_DESTRUCTIVE),
+    OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_lavawall_attack),
+        SET_INT(oIntangibleTimer, 0),
+        SET_INT(oInteractStatus, INT_STATUS_NONE),
     END_LOOP(),
 };
 

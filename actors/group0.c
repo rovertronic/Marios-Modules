@@ -74,3 +74,6 @@
 #include "gshredder/model.inc.c"
 #include "gravity_crystal/model.inc.c"
 #include "oldmap/model.inc.c"
+#include "lavawall/model.inc.c"
+#include "lavawall/collision.inc.c"
+#include "lavawall_2/collision.inc.c"

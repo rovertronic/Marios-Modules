@@ -32,6 +32,31 @@ s16 sCoinArrowPositions[][2] = {
     { 100, 50 },
 };
 
+void bhv_magnetized(void) {
+    if (gMarioState->passiveFlag & (1 << PASSIVE_FLAG_MAGNET)) {
+        Vec3f toMario;
+        Vec3f pos = {o->oPosX,o->oPosY,o->oPosZ};
+        vec3f_diff(toMario,pos,gMarioState->pos);
+        vec3f_normalize(toMario);
+
+        f32 dist;
+        vec3f_get_dist(pos,gMarioState->pos,&dist);
+
+        if (dist < 1000.0f) {
+            if (o->oUnk94 < 20) {
+                o->oUnk94++;
+            }
+            f32 magtimer = (f32)(o->oUnk94/20.f);
+
+            f32 pullForce = -((1000.0f-dist)*.05f) * magtimer;
+            if (pullForce > 20.0f) {pullForce = 20.0f;}
+            o->oPosX += toMario[0] * pullForce;
+            o->oPosY += toMario[1] * pullForce;
+            o->oPosZ += toMario[2] * pullForce;
+        }
+    }
+}
+
 s32 bhv_coin_sparkles_init(void) {
     if (o->oInteractStatus & INT_STATUS_INTERACTED
         && !(o->oInteractStatus & INT_STATUS_TOUCHED_BOB_OMB)) {
@@ -72,6 +97,7 @@ void bhv_yellow_coin_init(void) {
 void bhv_yellow_coin_loop(void) {
     bhv_coin_sparkles_init();
     o->oAnimState++;
+    bhv_magnetized();
 }
 
 void bhv_temp_coin_loop(void) {
@@ -155,6 +181,7 @@ void bhv_coin_loop(void) {
     }
 
     bhv_coin_sparkles_init();
+    bhv_magnetized();
 }
 
 void bhv_coin_formation_spawned_coin_loop(void) {
@@ -186,6 +213,7 @@ void bhv_coin_formation_spawned_coin_loop(void) {
     if (o->parentObj->oAction == COIN_FORMATION_ACT_DEACTIVATE) {
         obj_mark_for_deletion(o);
     }
+    bhv_magnetized();
 }
 
 void spawn_coin_in_formation(s32 index, s32 shape) {

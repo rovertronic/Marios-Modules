@@ -37,3 +37,4 @@
 #include "gshredder/geo.inc.c"
 #include "gravity_crystal/geo.inc.c"
 #include "oldmap/geo.inc.c"
+#include "lavawall/geo.inc.c"

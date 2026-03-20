@@ -517,6 +517,52 @@ void module_platform(struct module_execution_thread * met, u8 call_context) {
     }
 }
 
+void module_lava_wall(struct module_execution_thread * met, u8 call_context) {
+    switch(call_context) {
+        case MCC_INVOKE:
+            module_log_message(met,"Spawned lava wall.",0);
+
+            if (met->time_mod > 0) {
+                module_log_message(met,"Extra time from time extend: %ds",met->time_mod);
+            }
+
+            met->doaircooldown = TRUE;
+            met->halted = TRUE;
+            met->timer = 0;
+
+            play_sound(SOUND_MOVING_LAVA_BURN, gGlobalSoundSource);
+            struct Object * hover = spawn_object(gMarioState->marioObj,MODEL_LAVAWALL,bhvLavawall);
+            hover->oBehParams2ndByte = met->mod;
+            hover->oPosX += sins(gMarioState->faceAngle[1]) * 100.0f;
+            hover->oPosZ += coss(gMarioState->faceAngle[1]) * 100.0f;
+            hover->oFaceAngleYaw = gMarioState->faceAngle[1];
+
+            spawn_object(hover,MODEL_NONE,bhvLavawallAttack);
+
+            f32 floory = find_floor_height(hover->oPosX, hover->oPosY, hover->oPosZ);
+            if (ABS(floory - hover->oPosY) < 90.0f) {
+                hover->collisionData = segmented_to_virtual(lavawall_2_collision);
+            } else {
+                hover->collisionData = segmented_to_virtual(lavawall_collision);
+            }
+
+            SET_BPARAM4(hover->oBehParams, met->time_mod);
+            if (gMarioState->vel[1] < 0.0f) {
+                gMarioState->vel[1] = 0.0f;
+            }
+            break;
+        case MCC_HALTED:
+            if (met->timer >= 2) {
+                met->halted = FALSE;
+                met->x++;
+                met->mod = 0;
+                met->time_mod = 0;
+                break;
+            }
+            break;
+    }
+}
+
 void module_cap(struct module_execution_thread * met, u8 call_context) {
     s16 capTime = 60 + (met->time_mod*30);
     if (gMarioState->capTimer < capTime) {
@@ -1091,6 +1137,19 @@ struct module_info module_infos[] = {
         .loot_tier = LOOT_TIER_2,
     },
 
+    [MOD_LAVAWALL] = {
+        .name = "Firewall",
+        .type = MTYPE_MOVE,
+        .tex = micons_firewall_rgba16,
+        .desc = "Spawns a temporary lava wall in front of Mario for one second.",
+        .upg_desc = "Size +50* per @O@UPG@@.",
+        .unchainable = TRUE,
+        .func = module_lava_wall,
+        .cooldown = 2.0f,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
+    },
+
     [MOD_SWAP] = {
         .name = "Swap",
         .type = MTYPE_MOVE,
@@ -1519,6 +1578,7 @@ struct module_info module_infos[] = {
         .desc = "Stops the sequence prematurely.",
         .func = module_stop,
         .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
     },
     [MOD_IF] = {
         .name = "Start If Block",
@@ -1602,10 +1662,10 @@ struct module_info module_infos[] = {
         .name = "Defense",
         .type = MTYPE_PASSIVE,
         .tex = micons_def_rgba16,
-        .desc = "Reduces damage taken by 25*.",
+        .desc = "Reduces damage taken by 25*. Increases gravity by 10*.",
         .func = module_passive_effect,
         .extra_data = PASSIVE_FLAG_DEFENSE,
-        .cooldown = .5f,
+        .cooldown = .0f,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_2,
     },
@@ -1646,10 +1706,10 @@ struct module_info module_infos[] = {
         .name = "Low Gravity",
         .type = MTYPE_PASSIVE,
         .tex = micons_hover_rgba16,
-        .desc = "Reduces gravity by 10*.",
+        .desc = "Reduces gravity by 10*. Increases damage by 50*.",
         .func = module_passive_effect,
         .extra_data = PASSIVE_FLAG_GRAVITY,
-        .cooldown = .5f,
+        .cooldown = .0f,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_2,
     },
@@ -1660,6 +1720,17 @@ struct module_info module_infos[] = {
         .tex = micons_crouch_rgba16,
         .desc = "Makes Mario crouch.",
         .func = module_crouch,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
+    },
+
+    [MOD_MAGNET] = {
+        .name = "Magnet",
+        .type = MTYPE_PASSIVE,
+        .tex = micons_magnet_rgba16,
+        .desc = "Attracts coins to Mario.\nOh, and also snufit bullets...",
+        .func = module_passive_effect,
+        .extra_data = PASSIVE_FLAG_MAGNET,
         .creative = TRUE,
         .loot_tier = LOOT_TIER_1,
     },
@@ -1691,7 +1762,7 @@ struct module_info module_infos[] = {
         .name = "Fireball",
         .type = MTYPE_MOVE,
         .tex = micons_fireball_rgba16,
-        .desc = "Throws a fireball in front of Mario that damages enemies.",
+        .desc = "Throws a fireball in front of Mario that damages enemies and bosses.",
         .upg_desc = "Increases damage + size.",
         .unchainable = FALSE,
         .func = module_fireball,

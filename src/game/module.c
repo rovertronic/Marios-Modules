@@ -1227,6 +1227,7 @@ u8 sPassiveFlagModuleDisplayTable[] = {
     MOD_MINIMAP,
     MOD_LOW_GRAVITY,
     MOD_CROUCH,
+    MOD_MAGNET,
 };
 
 void print_execution_status(int x, int y, int execthread, int module) {

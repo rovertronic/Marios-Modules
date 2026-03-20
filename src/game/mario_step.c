@@ -616,7 +616,10 @@ u32 should_strengthen_gravity_for_jump_ascent(struct MarioState *m) {
 void apply_gravity(struct MarioState *m) {
     f32 gravityDelta = 1.0f;
     if (m->passiveFlag & (1 << PASSIVE_FLAG_GRAVITY)) {
-        gravityDelta = 0.9f;
+        gravityDelta *= 0.9f;
+    }
+    if (m->passiveFlag & (1 << PASSIVE_FLAG_DEFENSE)) {
+        gravityDelta *= 1.1f;
     }
 
     if (m->action == ACT_TWIRLING && m->vel[1] < 0.0f) {

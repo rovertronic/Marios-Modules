@@ -119,6 +119,7 @@ const LevelScript level_main_scripts_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_CCHEST, cchest_geo),
     LOAD_MODEL_FROM_GEO(MODEL_MCHEST, mchest_geo),
     LOAD_MODEL_FROM_GEO(MODEL_HOVER, hover_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_LAVAWALL, lavawall_geo),
     LOAD_MODEL_FROM_GEO(MODEL_KINGBOBOMB_GLOBAL, king_bobomb_geo),
     LOAD_MODEL_FROM_GEO(MODEL_WOMAN, woman_geo),
     LOAD_MODEL_FROM_GEO(MODEL_SAVE, save_geo),

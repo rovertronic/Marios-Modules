@@ -444,4 +444,7 @@ extern const struct Animation *const wiggler_seg5_anims_0500EC8C[];
 #include "gshredder/geo_header.h"
 #include "gravity_crystal/geo_header.h"
 #include "oldmap/geo_header.h"
+#include "lavawall/geo_header.h"
+#include "lavawall/collision_header.h"
+#include "lavawall_2/collision_header.h"
 #endif

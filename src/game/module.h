@@ -216,6 +216,8 @@ enum module_id {
     MOD_REWIND_TIME, // Chaezepin
     MOD_NO_CAP,
     MOD_CROUCH,
+    MOD_MAGNET,
+    MOD_LAVAWALL,
     MOD_FIREBALL,
 
     MOD_MONITOR,
@@ -257,6 +259,7 @@ enum {
     PASSIVE_FLAG_MINIMAP,
     PASSIVE_FLAG_GRAVITY,
     PASSIVE_FLAG_CROUCH,
+    PASSIVE_FLAG_MAGNET,
 };
 
 enum {
@@ -308,7 +311,7 @@ enum {
     METAFLAGS_MODULES_5,
     METAFLAGS_MODULES_6,
     METAFLAGS_MODULES_7,
-    METAFLAGS_MODULES_8, // Not needed, room for DLC
+    METAFLAGS_MODULES_8,
     METAFLAGS_COUNT
 };
 
