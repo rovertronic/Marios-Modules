@@ -104,6 +104,7 @@ struct DungeonRoomVariant * sLv1RoomVariantList[] = {
     &sRoomCaveJump,
     &sRoomSilverPillar,
     &sRoomRedCoin,
+    &sRoomFlipPuzzle,
 };
 
 struct DungeonRoomVariant * sLv2RoomVariantList[] = {
@@ -134,6 +135,7 @@ struct DungeonRoomVariant * sLv2RoomVariantList[] = {
     &sRoomSilverPillar,
     &sRoomRedCoin,
     &sRoomLavaDrop,
+    &sRoomFlipPuzzle,
 
     // Easter-Egg Rooms
     &sRoomFnab,

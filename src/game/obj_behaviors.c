@@ -2134,3 +2134,93 @@ void bhv_gameover(void) {
             break;
     }
 }
+
+u8 sFPTiles[5][5];
+
+void fp_flip_tile(int x, int y) {
+    sFPTiles[y][x] = !sFPTiles[y][x];
+
+    sFPTiles[y+1][x] = !sFPTiles[y+1][x];
+    sFPTiles[y-1][x] = !sFPTiles[y-1][x];
+
+    sFPTiles[y][x+1] = !sFPTiles[y][x+1];
+    sFPTiles[y][x-1] = !sFPTiles[y][x-1];
+}
+
+void bhv_flippuzzle(void) {
+    switch(o->oAction) {
+        case 0:;
+            bzero(sFPTiles,sizeof(sFPTiles));
+            int difficulty = 2;
+            if (gMariosModulesSave.file[gMariosModulesSaveIndex].level == 1) {
+                difficulty = 5;
+            }
+            for (int i = 0; i < difficulty; i++) {
+                int x = 1+(tinymt32_generate_u32(&gGlobalRandomState)%3);
+                int y = 1+(tinymt32_generate_u32(&gGlobalRandomState)%3);
+                fp_flip_tile(x,y);
+            }
+            for (int x = 0; x < 3; x++) {
+                for (int y = 0; y < 3; y++) {
+                    struct Object * tile = spawn_object(o,MODEL_DUNGEON_FP_TILE,bhvFpTile);
+                    tile->oPosX += (x-1) * 400.0f;
+                    tile->oPosZ += (y-1) * 400.0f;
+                    tile->oBehParams2ndByte = x + y*3;
+                }
+            }
+            o->oAction++;
+            break;
+        case 1:;
+            int complete = TRUE;
+            for (int x = 1; x < 4; x++) {
+                for (int y = 1; y < 4; y++) {
+                    if (sFPTiles[y][x] != 0) {
+                        complete = FALSE;
+                    }
+                }
+            }
+            if (complete) {
+                play_puzzle_jingle();
+                o->oAction++;
+            }
+            break;
+        case 2:;
+            struct Object * gate = cur_obj_nearest_object_with_behavior(bhvFpBar);
+            gate->oPosY += 20.0f;
+            if (o->oTimer > 30) {
+                o->oAction++;
+            }
+            break;
+    }
+}
+
+void bhv_fp_tile(void) {
+    int x = 1+(o->oBehParams2ndByte%3);
+    int y = 1+(o->oBehParams2ndByte/3);
+
+    s16 targetPitch;
+    if (!sFPTiles[y][x]) {
+        targetPitch = 0x8000;
+    } else {
+        targetPitch = 0x0;
+    }
+
+    o->oFaceAnglePitch = approach_s16_symmetric(o->oFaceAnglePitch, targetPitch, 0x800);
+
+    if (o->oAction == 0) {
+        if (cur_obj_is_mario_ground_pounding_platform()) {
+            fp_flip_tile(x,y);
+            o->oAction = 1;
+            play_sound(SOUND_OBJ_CANNON_BARREL_PITCH, gGlobalSoundSource);
+        }
+    } else {
+        if (!cur_obj_is_mario_ground_pounding_platform()) {
+            o->oAction = 0;
+        }
+    }
+
+    if (o->oFaceAnglePitch == targetPitch) {
+        load_object_collision_model();
+    }
+    
+}

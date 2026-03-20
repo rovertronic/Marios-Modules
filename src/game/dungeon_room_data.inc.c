@@ -1268,6 +1268,43 @@ struct DungeonRoomVariant sRoomLavaDrop = {
     .generateOnce = TRUE,
 };
 
+// Room Flip Puzzle
+
+struct DungeonObject sRoomFlipPuzzleObjectList[] = {
+    {.bhv = bhvStar, .model = MODEL_STAR, .param = 0,
+    .angle = 0x0, .pos = {-25.5208f,12.6797f,3.43345f}},
+    {.bhv = bhvFlipPuzzle, .model = MODEL_NONE, .param = 0,
+    .angle = 0x0, .pos = {-5.16932f,13.0536f,0.773787f}},
+    {.bhv = bhvMessagePanel, .model = MODEL_WOODEN_SIGNPOST, .param = NEWTEXT_ANTIVANISH_2,
+    .angle = 0x4000, .pos = {-22.4621f,6.67959f,0.f}},
+    {.bhv = bhvFpBar, .model = MODEL_DUNGEON_FP_BAR, .param = 0,
+    .angle = 0x0, .pos = {-23.562f,12.6797f,0.f}},
+    {.end = TRUE},
+};
+
+s8 sRoomFlipPuzzleRequiredLoot[] = {
+    MOD_JUMP, 1,
+    MOD_GRAV, 1,
+    MOD_ZACTION, 1,
+    MOD_NONMOD_STAR, 1,
+    MOD_EMPTY,
+};
+
+struct DungeonRoomVariant sRoomFlipPuzzle = {
+    .metaFlag = 30,
+    .minimapDL = &rmapgrindr_rmapgrindr_mesh,
+
+    .cellList = &sRoomGrindrCellList,
+    .model = MODEL_ROOM_FLIPPUZZLE,
+    .collision = rflippuzzle_collision,
+    .objectList = &sRoomFlipPuzzleObjectList,
+    .maxLootCt = 0,
+    .starCt = 1,
+    .lootLocations = NULL,
+    .requiredLoot = &sRoomFlipPuzzleRequiredLoot,
+    .generateOnce = TRUE,
+};
+
 // Rogue Final: Paths
 
 struct DungeonObject sRoomRfStraight1ObjectList[] = {

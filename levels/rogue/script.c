@@ -72,11 +72,14 @@ const LevelScript level_rogue_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_MEMORIZE_PANEL_1, rmemorizepanel1_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_MEMORIZE_PANEL_2, rmemorizepanel2_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ROOM_LAVADROP, rlavadrop_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_ROOM_FLIPPUZZLE, rflippuzzle_geo),
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_JUNCBLOCK, juncblock_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_CLOCKBLOCK, clockblock_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_1, bubbly_tree_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_2, spiky_tree_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_TREE_3, palm_tree_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_FP_TILE, fptile_geo),
+	LOAD_MODEL_FROM_GEO(MODEL_DUNGEON_FP_BAR, fpbar_geo),
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 

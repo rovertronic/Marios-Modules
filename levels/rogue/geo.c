@@ -56,3 +56,6 @@
 #include "rmemorizepanel1/geo.inc.c"
 #include "rmemorizepanel2/geo.inc.c"
 #include "rlavadrop/geo.inc.c"
+#include "rflippuzzle/geo.inc.c"
+#include "fptile/geo.inc.c"
+#include "fpbar/geo.inc.c"
