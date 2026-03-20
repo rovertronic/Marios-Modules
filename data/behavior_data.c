@@ -6581,7 +6581,7 @@ const BehaviorScript bhvAboomboomination[] = {
 extern void  bhv_utility_mace(void);
 const BehaviorScript bhvUtilityMace[] = {
     BEGIN(OBJ_LIST_LEVEL),
-    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO)),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_utility_mace),
     END_LOOP(),
