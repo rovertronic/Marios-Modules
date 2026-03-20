@@ -847,11 +847,15 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
             save_marios_modules_silent(gVec3fZero);
         } else {
             obj_save_bin_write(obj);
-            m->numStars = save_bin_get_star_all_levels();
 
             if (gCurrLevelNum == LEVEL_TEMPLE) {
                 save_set_meta_flag(METAFLAGS_CAMPAIGN_STARS, obj->saveBinId);
+            } else {
+                // Rogue stars are counted linearly
+                save_set_meta_flag(METAFLAGS_ROGUE_STARS, m->numStars);
             }
+
+            m->numStars = save_bin_get_star_all_levels();
         }
 
         if (!noExit) {

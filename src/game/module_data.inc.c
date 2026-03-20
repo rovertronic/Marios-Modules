@@ -1,6 +1,6 @@
 // INVENTORY STRUCTURE DECLARATIONS
 s32 creativePanelCondition(void) {
-    return TRUE;
+    return FALSE;
 }
 
 s32 storagePanelCondition(void) {
@@ -1147,7 +1147,7 @@ struct module_info module_infos[] = {
         .func = module_lava_wall,
         .cooldown = 2.0f,
         .creative = TRUE,
-        .loot_tier = LOOT_TIER_1,
+        .loot_tier = LOOT_TIER_2,
     },
 
     [MOD_SWAP] = {
@@ -1728,7 +1728,7 @@ struct module_info module_infos[] = {
         .name = "Magnet",
         .type = MTYPE_PASSIVE,
         .tex = micons_magnet_rgba16,
-        .desc = "Attracts coins to Mario.\nOh, and also snufit bullets...",
+        .desc = "Attracts coins to Mario.\nOh, and also snufit bullets, among other things...",
         .func = module_passive_effect,
         .extra_data = PASSIVE_FLAG_MAGNET,
         .creative = TRUE,

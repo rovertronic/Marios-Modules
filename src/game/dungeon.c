@@ -499,6 +499,11 @@ void dungeon_generate_rooms_at_doors(struct DungeonRoomVariant ** variantList, i
                             continue;
                         }
 
+                        if (selectedVariant->starCt && sDungeonInventory[MOD_NONMOD_STAR] >= 8) {
+                            trycount++;
+                            continue;
+                        }
+
                         if (selectedVariant->rarity > 0 &&
                             (tinymt32_generate_u32(&gGlobalRandomState) % selectedVariant->rarity != 0)) {
                             // Roll for room rarity
@@ -971,6 +976,12 @@ void dungeon_generate_lv2(void) {
     // Generate dungeon rooms
     sDungeonTargetRoomCount = 45;
     dungeon_generate_rooms_at_doors(sLv2RoomVariantList,sizeof(sLv2RoomVariantList));
+
+    // Place extra stars if not at 8 total
+    int starDeficit = 8 - sDungeonInventory[MOD_NONMOD_STAR];
+    for (int i = 0; i < starDeficit; i++) {
+        dungeon_place_loot_in_random_previous_room(MOD_NONMOD_STAR);
+    }
 
     // Place the boss room
     dungeon_generate_boss_room(&sRoomBoss);
