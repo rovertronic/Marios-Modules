@@ -974,10 +974,12 @@ void bhv_chest(void) {
 
     obj_element_enemy_loop();
 
+    /*
     if (gMariosModulesSave.file[gMariosModulesSaveIndex].seed != o->oChestSeed) {
         // Redo init on seed change
         o->oAction = 0;
     }
+    */
 }
 
 void bhv_mystery_chest(void) {
@@ -1102,10 +1104,12 @@ void bhv_mystery_chest(void) {
             break;
     }
 
+    /*
     if (gMariosModulesSave.file[gMariosModulesSaveIndex].seed != o->oChestSeed) {
         // Redo init on seed change
         o->oAction = 0;
     }
+    */
 }
 
 void bhv_recycle_chest(void) {
