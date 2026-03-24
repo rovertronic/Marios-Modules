@@ -507,6 +507,9 @@ void render_main_menu_big_text(char * str) {
     if (sBigTextScroll > -sy - 200) {
         sBigTextScroll = -sy - 200;
     }
+    if (sBigTextScroll <= -sy - 201) {
+        grok_imagine_generate_rick_and_morty_eating_poop(280,10);
+    }
     if (sBigTextScroll < 0) {
         sBigTextScroll = 0;
     }
