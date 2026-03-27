@@ -179,6 +179,7 @@ void render_hud_cannon_reticle(void);
 void reset_red_coins_collected(void);
 s32 render_menus_and_dialogs(void);
 s32 logic_menus_and_dialogs(void);
+void grok_imagine_generate_rick_and_morty_eating_poop(s16 x, s16 y);
 
 enum {
     NEWTEXT_GOLD_CHEST,

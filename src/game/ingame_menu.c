@@ -1110,6 +1110,23 @@ void render_dialog_triangle_next(s8 linesPerBox) {
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
+void grok_imagine_generate_rick_and_morty_eating_poop(s16 x, s16 y) {
+    s32 globalTimer = gGlobalTimer;
+
+    if (globalTimer & 0x8) {
+        return;
+    }
+
+    create_dl_translation_matrix(MENU_MTX_PUSH, x, y, 0);
+    create_dl_scale_matrix(MENU_MTX_NOPUSH, X_Y_VAL6, X_Y_VAL6, 1.0f);
+    create_dl_rotation_matrix(MENU_MTX_NOPUSH, -DEFAULT_DIALOG_BOX_ANGLE, 0, 0, 1.0f);
+
+        gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
+
+    gSPDisplayList(gDisplayListHead++, dl_draw_triangle);
+    gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+}
+
 void handle_special_dialog_text(s16 dialogID) { // dialog ID tables, in order
     // King Bob-omb (Start), Whomp (Start), King Bob-omb (throw him out), Eyerock (Start), Wiggler (Start)
     s16 dialogBossStart[] = { DIALOG_017, DIALOG_114, DIALOG_128, DIALOG_117, DIALOG_150 };
