@@ -1524,6 +1524,7 @@ struct DungeonRoomVariantCellList sRoomRfSlopeCellList[] = {
 };
 
 struct DungeonRoomVariant sRoomRfSlope = {
+    .metaFlag = 31,
     .cellList = &sRoomRfSlopeCellList,
     .model = MODEL_ROOM_RF_SLOPE,
     .collision = &rf_slope_collision,
@@ -1545,6 +1546,7 @@ struct DungeonRoomVariantCellList sRoomRfBlankJumpCellList[] = {
 };
 
 struct DungeonRoomVariant sRoomRfBlankJump = {
+    .metaFlag = 32,
     .cellList = &sRoomRfBlankJumpCellList,
     .model = MODEL_ROOM_RF_BLANKJUMP,
     .collision = NULL,
@@ -1560,6 +1562,7 @@ struct DungeonRoomVariant sRoomRfBlankJump = {
 // Final Challenge 2000 unit vertical jump with wallkick assistance
 
 struct DungeonRoomVariant sRoomRfVertical = {
+    .metaFlag = 33,
     .cellList = &sRoomRfRampCellList,
     .model = MODEL_ROOM_RF_VERTICAL,
     .collision = rf_vertical_collision,
