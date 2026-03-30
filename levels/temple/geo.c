@@ -21,3 +21,4 @@
 #include "asrielcage/geo.inc.c"
 #include "orangepole/geo.inc.c"
 #include "title2/geo.inc.c"
+#include "fappingDoor/geo.inc.c"

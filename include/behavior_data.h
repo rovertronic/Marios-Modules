@@ -595,5 +595,6 @@ extern const BehaviorScript bhvLavawallAttack[];
 extern const BehaviorScript bhvFlipPuzzle[];
 extern const BehaviorScript bhvFpTile[];
 extern const BehaviorScript bhvFpBar[];
+extern const BehaviorScript bhvFappingDoor[];
 
 #endif // BEHAVIOR_DATA_H

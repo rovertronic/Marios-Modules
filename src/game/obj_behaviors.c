@@ -1324,6 +1324,7 @@ void bhv_init_bdoor(void) {
 void bhv_bdoor(void) {
     f32 dist;
     u8 needs_key = (o->oBehParams2ndByte==1);
+    u8 needs_12_star = (o->oBehParams2ndByte==2);
     u8 open = FALSE;
     vec3_get_dist(gMarioState->pos,&o->oHomeVec,&dist);
     if (dist < 800.0f && (o->oAction == 1 || o->oAction == 2)) {
@@ -1348,6 +1349,9 @@ void bhv_bdoor(void) {
         } else {
             cur_obj_set_model(MODEL_DUNGEON_DOOR_LOCKED);
         }
+    }
+    if (needs_12_star && gMarioState->numStars < 12) {
+        open = FALSE;
     }
 
     switch(o->oAction) {

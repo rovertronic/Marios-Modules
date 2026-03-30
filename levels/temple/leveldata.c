@@ -31,3 +31,5 @@
 #include "minimap11/model.inc.c"
 #include "title2/model.inc.c"
 #include "minimap12/model.inc.c"
+#include "fappingDoorCol/collision.inc.c"
+#include "fappingDoor/model.inc.c"

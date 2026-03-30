@@ -38170,24 +38170,11 @@ Gfx temple_dl_vis_room7_001_mesh_layer_1_tri_3[] = {
 	gsSPEndDisplayList(),
 };
 
-Vtx temple_dl_vis_room7_001_mesh_layer_1_vtx_4[56] = {
+Vtx temple_dl_vis_room7_001_mesh_layer_1_vtx_4[41] = {
 	{{ {13995, 4177, -688}, 0, {-6386, 1625}, {72, 117, 75, 255} }},
 	{{ {13995, 4177, -79}, 0, {-6037, 3337}, {117, 188, 122, 255} }},
 	{{ {14895, 4177, -79}, 0, {-3505, 2820}, {117, 188, 122, 255} }},
 	{{ {14895, 4177, -688}, 0, {-3855, 1109}, {72, 117, 75, 255} }},
-	{{ {13934, 4177, -688}, 0, {2372, 3056}, {188, 188, 188, 255} }},
-	{{ {13934, 4905, -688}, 0, {2372, -206}, {188, 188, 188, 255} }},
-	{{ {13934, 4953, -736}, 0, {2588, -423}, {188, 188, 188, 255} }},
-	{{ {13934, 4177, -736}, 0, {2588, 3056}, {188, 188, 188, 255} }},
-	{{ {13934, 4905, -79}, 0, {-356, -206}, {188, 188, 188, 255} }},
-	{{ {13934, 4177, -79}, 0, {-356, 3056}, {188, 188, 188, 255} }},
-	{{ {13934, 4177, -31}, 0, {-572, 3056}, {188, 188, 188, 255} }},
-	{{ {13934, 4953, -31}, 0, {-572, -423}, {188, 188, 188, 255} }},
-	{{ {13934, 5040, -245}, 0, {388, -810}, {188, 188, 188, 255} }},
-	{{ {13934, 5091, -211}, 0, {235, -1040}, {188, 188, 188, 255} }},
-	{{ {13934, 5040, -522}, 0, {1628, -810}, {188, 188, 188, 255} }},
-	{{ {13934, 5091, -556}, 0, {1781, -1040}, {188, 188, 188, 255} }},
-	{{ {13934, 4953, -736}, 0, {2588, -423}, {188, 188, 188, 255} }},
 	{{ {16895, 6177, -282}, 0, {2001, 1102}, {117, 188, 122, 255} }},
 	{{ {16895, 6177, -79}, 0, {2117, 1673}, {117, 188, 122, 255} }},
 	{{ {17895, 6177, -79}, 0, {4929, 1099}, {117, 188, 122, 255} }},
@@ -38199,26 +38186,24 @@ Vtx temple_dl_vis_room7_001_mesh_layer_1_vtx_4[56] = {
 	{{ {18626, 6177, -698}, 0, {6627, -1060}, {117, 188, 122, 255} }},
 	{{ {16895, 6177, -688}, 0, {1768, -38}, {117, 188, 122, 255} }},
 	{{ {16895, 6177, -485}, 0, {1885, 532}, {117, 188, 122, 255} }},
-	{{ {13934, 5040, -522}, 0, {872, 388}, {188, 188, 188, 255} }},
-	{{ {13934, 4905, -688}, 0, {872, -356}, {188, 188, 188, 255} }},
+	{{ {13965, 5036, -530}, 0, {1008, 350}, {188, 188, 188, 255} }},
+	{{ {13965, 4905, -688}, 0, {1008, -356}, {188, 188, 188, 255} }},
 	{{ {13995, 4905, -688}, 0, {1144, -356}, {188, 188, 188, 255} }},
 	{{ {13995, 5033, -539}, 0, {1144, 312}, {188, 188, 188, 255} }},
-	{{ {13934, 5040, -245}, 0, {872, 1628}, {117, 117, 117, 255} }},
-	{{ {13934, 5040, -522}, 0, {872, 388}, {188, 188, 188, 255} }},
-	{{ {13995, 5033, -539}, 0, {1144, 312}, {188, 188, 188, 255} }},
+	{{ {13965, 5036, -237}, 0, {1008, 1666}, {117, 117, 117, 255} }},
 	{{ {13995, 5033, -228}, 0, {1144, 1704}, {117, 117, 117, 255} }},
-	{{ {13934, 4905, -79}, 0, {872, 2372}, {188, 188, 188, 255} }},
+	{{ {13965, 4905, -79}, 0, {1008, 2372}, {188, 188, 188, 255} }},
 	{{ {13995, 4905, -79}, 0, {1144, 2372}, {188, 188, 188, 255} }},
-	{{ {13934, 4905, -688}, 0, {872, -206}, {188, 188, 188, 255} }},
-	{{ {13934, 4177, -688}, 0, {872, 3056}, {117, 117, 117, 255} }},
+	{{ {13965, 4905, -688}, 0, {1008, -206}, {188, 188, 188, 255} }},
+	{{ {13965, 4177, -688}, 0, {1008, 3056}, {117, 117, 117, 255} }},
 	{{ {13995, 4177, -688}, 0, {1144, 3056}, {117, 117, 117, 255} }},
 	{{ {13995, 4905, -688}, 0, {1144, -206}, {188, 188, 188, 255} }},
-	{{ {13934, 4177, -79}, 0, {872, 3056}, {188, 188, 188, 255} }},
-	{{ {13934, 4905, -79}, 0, {872, -206}, {188, 188, 188, 255} }},
+	{{ {13965, 4177, -79}, 0, {1008, 3056}, {188, 188, 188, 255} }},
+	{{ {13965, 4905, -79}, 0, {1008, -206}, {188, 188, 188, 255} }},
 	{{ {13995, 4905, -79}, 0, {1144, -206}, {188, 188, 188, 255} }},
 	{{ {13995, 4177, -79}, 0, {1144, 3056}, {188, 188, 188, 255} }},
-	{{ {13934, 4177, -688}, 0, {872, -356}, {117, 117, 117, 255} }},
-	{{ {13934, 4177, -79}, 0, {872, 2372}, {188, 188, 188, 255} }},
+	{{ {13965, 4177, -688}, 0, {1008, -356}, {117, 117, 117, 255} }},
+	{{ {13965, 4177, -79}, 0, {1008, 2372}, {188, 188, 188, 255} }},
 	{{ {13995, 4177, -79}, 0, {1144, 2372}, {188, 188, 188, 255} }},
 	{{ {13995, 4177, -688}, 0, {1144, -356}, {117, 117, 117, 255} }},
 	{{ {18094, 6177, -247}, 0, {5392, 515}, {162, 255, 168, 255} }},
@@ -38230,28 +38215,23 @@ Vtx temple_dl_vis_room7_001_mesh_layer_1_vtx_4[56] = {
 };
 
 Gfx temple_dl_vis_room7_001_mesh_layer_1_tri_4[] = {
-	gsSPVertex(temple_dl_vis_room7_001_mesh_layer_1_vtx_4 + 0, 32, 0),
+	gsSPVertex(temple_dl_vis_room7_001_mesh_layer_1_vtx_4 + 0, 31, 0),
 	gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
 	gsSP2Triangles(4, 5, 6, 0, 4, 6, 7, 0),
-	gsSP2Triangles(8, 9, 10, 0, 8, 10, 11, 0),
-	gsSP2Triangles(12, 8, 11, 0, 12, 11, 13, 0),
-	gsSP2Triangles(14, 12, 13, 0, 14, 13, 15, 0),
-	gsSP2Triangles(5, 14, 15, 0, 5, 15, 16, 0),
-	gsSP2Triangles(17, 18, 19, 0, 17, 19, 20, 0),
-	gsSP2Triangles(19, 21, 20, 0, 22, 20, 21, 0),
-	gsSP2Triangles(22, 21, 23, 0, 24, 22, 23, 0),
-	gsSP2Triangles(24, 23, 25, 0, 26, 22, 24, 0),
-	gsSP2Triangles(26, 27, 22, 0, 27, 20, 22, 0),
-	gsSP2Triangles(27, 17, 20, 0, 28, 29, 30, 0),
-	gsSP1Triangle(28, 30, 31, 0),
-	gsSPVertex(temple_dl_vis_room7_001_mesh_layer_1_vtx_4 + 32, 24, 0),
+	gsSP2Triangles(6, 8, 7, 0, 9, 7, 8, 0),
+	gsSP2Triangles(9, 8, 10, 0, 11, 9, 10, 0),
+	gsSP2Triangles(11, 10, 12, 0, 13, 9, 11, 0),
+	gsSP2Triangles(13, 14, 9, 0, 14, 7, 9, 0),
+	gsSP2Triangles(14, 4, 7, 0, 15, 16, 17, 0),
+	gsSP2Triangles(15, 17, 18, 0, 19, 15, 18, 0),
+	gsSP2Triangles(19, 18, 20, 0, 21, 19, 20, 0),
+	gsSP2Triangles(21, 20, 22, 0, 23, 24, 25, 0),
+	gsSP2Triangles(23, 25, 26, 0, 27, 28, 29, 0),
+	gsSP1Triangle(27, 29, 30, 0),
+	gsSPVertex(temple_dl_vis_room7_001_mesh_layer_1_vtx_4 + 31, 10, 0),
 	gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
-	gsSP2Triangles(4, 0, 3, 0, 4, 3, 5, 0),
-	gsSP2Triangles(6, 7, 8, 0, 6, 8, 9, 0),
-	gsSP2Triangles(10, 11, 12, 0, 10, 12, 13, 0),
-	gsSP2Triangles(14, 15, 16, 0, 14, 16, 17, 0),
-	gsSP2Triangles(18, 19, 20, 0, 21, 18, 20, 0),
-	gsSP2Triangles(21, 20, 22, 0, 23, 21, 22, 0),
+	gsSP2Triangles(4, 5, 6, 0, 7, 4, 6, 0),
+	gsSP2Triangles(7, 6, 8, 0, 9, 7, 8, 0),
 	gsSPEndDisplayList(),
 };
 
@@ -38613,7 +38593,7 @@ Gfx temple_dl_vis_room7_002_mesh_layer_1_tri_4[] = {
 	gsSPEndDisplayList(),
 };
 
-Vtx temple_dl_vis_room7_002_mesh_layer_1_vtx_5[111] = {
+Vtx temple_dl_vis_room7_002_mesh_layer_1_vtx_5[146] = {
 	{{ {10153, 4177, -2492}, 0, {-953, 512}, {191, 191, 191, 255} }},
 	{{ {8918, 4177, -1257}, 0, {-3725, 512}, {191, 191, 191, 255} }},
 	{{ {8918, 3735, -1257}, 0, {-3725, 1504}, {255, 101, 59, 255} }},
@@ -38725,6 +38705,41 @@ Vtx temple_dl_vis_room7_002_mesh_layer_1_vtx_5[111] = {
 	{{ {7694, 2568, -3809}, 0, {1231, 1142}, {0, 0, 0, 255} }},
 	{{ {7694, 2568, -3694}, 0, {1104, 1065}, {0, 0, 0, 255} }},
 	{{ {7694, 4068, -3706}, 0, {2118, -597}, {255, 130, 79, 255} }},
+	{{ {13934, 4177, -688}, 0, {2372, 3056}, {188, 188, 188, 255} }},
+	{{ {13934, 4905, -688}, 0, {2372, -206}, {188, 188, 188, 255} }},
+	{{ {13934, 4953, -736}, 0, {2588, -423}, {188, 188, 188, 255} }},
+	{{ {13934, 4177, -736}, 0, {2588, 3056}, {188, 188, 188, 255} }},
+	{{ {13934, 4905, -79}, 0, {-356, -206}, {188, 188, 188, 255} }},
+	{{ {13934, 4177, -79}, 0, {-356, 3056}, {188, 188, 188, 255} }},
+	{{ {13934, 4177, -31}, 0, {-572, 3056}, {188, 188, 188, 255} }},
+	{{ {13934, 4953, -31}, 0, {-572, -423}, {188, 188, 188, 255} }},
+	{{ {13934, 5040, -245}, 0, {388, -810}, {188, 188, 188, 255} }},
+	{{ {13934, 5091, -211}, 0, {235, -1040}, {188, 188, 188, 255} }},
+	{{ {13934, 5040, -522}, 0, {1628, -810}, {188, 188, 188, 255} }},
+	{{ {13934, 5091, -556}, 0, {1781, -1040}, {188, 188, 188, 255} }},
+	{{ {13934, 4953, -736}, 0, {2588, -423}, {188, 188, 188, 255} }},
+	{{ {13934, 4905, -79}, 0, {872, 2372}, {188, 188, 188, 255} }},
+	{{ {13965, 5036, -237}, 0, {1008, 1666}, {117, 117, 117, 255} }},
+	{{ {13965, 4905, -79}, 0, {1008, 2372}, {188, 188, 188, 255} }},
+	{{ {13934, 5040, -245}, 0, {872, 1628}, {117, 117, 117, 255} }},
+	{{ {13934, 5040, -245}, 0, {872, 1628}, {117, 117, 117, 255} }},
+	{{ {13965, 5036, -530}, 0, {1008, 350}, {188, 188, 188, 255} }},
+	{{ {13965, 5036, -237}, 0, {1008, 1666}, {117, 117, 117, 255} }},
+	{{ {13934, 5040, -522}, 0, {872, 388}, {188, 188, 188, 255} }},
+	{{ {13965, 4905, -688}, 0, {1008, -356}, {188, 188, 188, 255} }},
+	{{ {13934, 4905, -688}, 0, {872, -356}, {188, 188, 188, 255} }},
+	{{ {13934, 4177, -688}, 0, {872, -356}, {117, 117, 117, 255} }},
+	{{ {13934, 4177, -79}, 0, {872, 2372}, {188, 188, 188, 255} }},
+	{{ {13965, 4177, -79}, 0, {1008, 2372}, {188, 188, 188, 255} }},
+	{{ {13965, 4177, -688}, 0, {1008, -356}, {117, 117, 117, 255} }},
+	{{ {13934, 4177, -79}, 0, {872, 3056}, {188, 188, 188, 255} }},
+	{{ {13934, 4905, -79}, 0, {872, -206}, {188, 188, 188, 255} }},
+	{{ {13965, 4905, -79}, 0, {1008, -206}, {188, 188, 188, 255} }},
+	{{ {13965, 4177, -79}, 0, {1008, 3056}, {188, 188, 188, 255} }},
+	{{ {13934, 4905, -688}, 0, {872, -206}, {188, 188, 188, 255} }},
+	{{ {13934, 4177, -688}, 0, {872, 3056}, {117, 117, 117, 255} }},
+	{{ {13965, 4177, -688}, 0, {1008, 3056}, {117, 117, 117, 255} }},
+	{{ {13965, 4905, -688}, 0, {1008, -206}, {188, 188, 188, 255} }},
 };
 
 Gfx temple_dl_vis_room7_002_mesh_layer_1_tri_5[] = {
@@ -38761,11 +38776,23 @@ Gfx temple_dl_vis_room7_002_mesh_layer_1_tri_5[] = {
 	gsSP2Triangles(21, 20, 22, 0, 23, 19, 21, 0),
 	gsSP2Triangles(23, 24, 19, 0, 25, 26, 27, 0),
 	gsSP2Triangles(25, 27, 28, 0, 29, 30, 31, 0),
-	gsSPVertex(temple_dl_vis_room7_002_mesh_layer_1_vtx_5 + 96, 15, 0),
+	gsSPVertex(temple_dl_vis_room7_002_mesh_layer_1_vtx_5 + 96, 32, 0),
 	gsSP2Triangles(0, 1, 2, 0, 3, 4, 5, 0),
 	gsSP2Triangles(3, 5, 6, 0, 7, 8, 9, 0),
 	gsSP2Triangles(7, 9, 10, 0, 11, 12, 13, 0),
-	gsSP1Triangle(11, 13, 14, 0),
+	gsSP2Triangles(11, 13, 14, 0, 15, 16, 17, 0),
+	gsSP2Triangles(15, 17, 18, 0, 19, 20, 21, 0),
+	gsSP2Triangles(19, 21, 22, 0, 23, 19, 22, 0),
+	gsSP2Triangles(23, 22, 24, 0, 25, 23, 24, 0),
+	gsSP2Triangles(25, 24, 26, 0, 16, 25, 26, 0),
+	gsSP2Triangles(16, 26, 27, 0, 28, 29, 30, 0),
+	gsSP1Triangle(28, 31, 29, 0),
+	gsSPVertex(temple_dl_vis_room7_002_mesh_layer_1_vtx_5 + 128, 18, 0),
+	gsSP2Triangles(0, 1, 2, 0, 0, 3, 1, 0),
+	gsSP2Triangles(3, 4, 1, 0, 3, 5, 4, 0),
+	gsSP2Triangles(6, 7, 8, 0, 6, 8, 9, 0),
+	gsSP2Triangles(10, 11, 12, 0, 10, 12, 13, 0),
+	gsSP2Triangles(14, 15, 16, 0, 14, 16, 17, 0),
 	gsSPEndDisplayList(),
 };
 
@@ -53535,7 +53562,7 @@ Gfx mat_revert_temple_dl_dots[] = {
 };
 
 Gfx mat_temple_dl_fence[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -53553,7 +53580,7 @@ Gfx mat_temple_dl_fence[] = {
 };
 
 Gfx mat_revert_temple_dl_fence[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -53737,7 +53764,7 @@ Gfx mat_revert_temple_dl_rock[] = {
 };
 
 Gfx mat_temple_dl_grate[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -53751,7 +53778,7 @@ Gfx mat_temple_dl_grate[] = {
 };
 
 Gfx mat_revert_temple_dl_grate[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsSPEndDisplayList(),
@@ -53981,7 +54008,7 @@ Gfx mat_revert_temple_dl_white_light_strip[] = {
 };
 
 Gfx mat_temple_dl_gear[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -53999,7 +54026,7 @@ Gfx mat_temple_dl_gear[] = {
 };
 
 Gfx mat_revert_temple_dl_gear[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -54033,7 +54060,7 @@ Gfx mat_revert_temple_dl_pipe[] = {
 };
 
 Gfx mat_temple_dl_vine[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -54051,7 +54078,7 @@ Gfx mat_temple_dl_vine[] = {
 };
 
 Gfx mat_revert_temple_dl_vine[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -54085,7 +54112,7 @@ Gfx mat_revert_temple_dl_pillar[] = {
 };
 
 Gfx mat_temple_dl_rays_layer5[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, 0, 0, 0, SHADE, TEXEL0, TEXEL1, PRIMITIVE, TEXEL1),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -54104,7 +54131,7 @@ Gfx mat_temple_dl_rays_layer5[] = {
 };
 
 Gfx mat_revert_temple_dl_rays_layer5[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetCycleType(G_CYC_1CYCLE),
@@ -54185,7 +54212,7 @@ Gfx mat_revert_temple_dl_cobble[] = {
 };
 
 Gfx mat_temple_dl_flower[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -54203,7 +54230,7 @@ Gfx mat_temple_dl_flower[] = {
 };
 
 Gfx mat_revert_temple_dl_flower[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -54264,7 +54291,7 @@ Gfx mat_revert_temple_dl_warning[] = {
 };
 
 Gfx mat_temple_dl_pipeDS[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0, TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -54282,7 +54309,7 @@ Gfx mat_temple_dl_pipeDS[] = {
 };
 
 Gfx mat_revert_temple_dl_pipeDS[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -54452,7 +54479,7 @@ Gfx mat_revert_temple_dl_pipeOpaqueDecal[] = {
 };
 
 Gfx mat_temple_dl_droplet[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -54470,7 +54497,7 @@ Gfx mat_temple_dl_droplet[] = {
 };
 
 Gfx mat_revert_temple_dl_droplet[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -54613,7 +54640,7 @@ Gfx mat_revert_temple_dl_crate[] = {
 };
 
 Gfx mat_temple_dl_pick[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -54631,7 +54658,7 @@ Gfx mat_temple_dl_pick[] = {
 };
 
 Gfx mat_revert_temple_dl_pick[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -54639,7 +54666,7 @@ Gfx mat_revert_temple_dl_pick[] = {
 };
 
 Gfx mat_temple_dl_web[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -54657,7 +54684,7 @@ Gfx mat_temple_dl_web[] = {
 };
 
 Gfx mat_revert_temple_dl_web[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -54710,7 +54737,7 @@ Gfx mat_revert_temple_dl_lantern[] = {
 };
 
 Gfx mat_temple_dl_chain[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -54724,7 +54751,7 @@ Gfx mat_temple_dl_chain[] = {
 };
 
 Gfx mat_revert_temple_dl_chain[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsSPEndDisplayList(),
@@ -54752,7 +54779,7 @@ Gfx mat_revert_temple_dl_rockSiding[] = {
 };
 
 Gfx mat_temple_dl_rail[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -54770,7 +54797,7 @@ Gfx mat_temple_dl_rail[] = {
 };
 
 Gfx mat_revert_temple_dl_rail[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -54908,7 +54935,7 @@ Gfx mat_revert_temple_dl_f3dlite_material_003[] = {
 };
 
 Gfx mat_temple_dl_leaf[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -54926,7 +54953,7 @@ Gfx mat_temple_dl_leaf[] = {
 };
 
 Gfx mat_revert_temple_dl_leaf[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -54934,7 +54961,7 @@ Gfx mat_revert_temple_dl_leaf[] = {
 };
 
 Gfx mat_temple_dl_weed[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -54952,7 +54979,7 @@ Gfx mat_temple_dl_weed[] = {
 };
 
 Gfx mat_revert_temple_dl_weed[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -55029,7 +55056,7 @@ Gfx mat_revert_temple_dl_dirt[] = {
 };
 
 Gfx mat_temple_dl_grate2[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -55043,7 +55070,7 @@ Gfx mat_temple_dl_grate2[] = {
 };
 
 Gfx mat_revert_temple_dl_grate2[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsSPEndDisplayList(),

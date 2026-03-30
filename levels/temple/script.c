@@ -37,6 +37,7 @@ const LevelScript level_temple_entry[] = {
 	LOAD_MODEL_FROM_GEO(MODEL_ASRIELCAGE, asrielcage_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_ORANGEPOLE, orangepole_geo), 
 	LOAD_MODEL_FROM_GEO(MODEL_GAME_TITLE, title2_geo), 
+	LOAD_MODEL_FROM_GEO(MODEL_FAPPING_DOOR, fappingDoor_geo), 
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 
@@ -158,6 +159,7 @@ const LevelScript level_temple_entry[] = {
 		OBJECT(MODEL_RED_COIN, -3220, 3958, -2213, 0, 0, 0, 0x00000000, bhvFakeRedCoin),
 		OBJECT(MODEL_RED_COIN, -2887, 3958, -1881, 0, 0, 0, 0x00000000, bhvFakeRedCoin),
 		OBJECT(MODEL_RED_COIN, -2555, 3958, -1548, 0, 0, 0, 0x00000000, bhvFakeRedCoin),
+		OBJECT(MODEL_FAPPING_DOOR, 13965, 4277, -384, 0, 0, 0, (2 << 16), bhvFappingDoor),
 		OBJECT(MODEL_NONE, -10709, 989, -8633, 0, 0, 0, 0x00000000, bhvFireGoomba),
 		OBJECT(MODEL_NONE, -9886, 989, -4744, 0, 0, 0, 0x00000000, bhvFireGoomba),
 		OBJECT(MODEL_NONE, -11192, 989, -8691, 0, 42, 0, 0x00000000, bhvFireGoomba),
