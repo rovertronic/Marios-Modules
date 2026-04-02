@@ -147,3 +147,50 @@ cult forming around the BtCM book. No, not like a fandom- a literal cult. The ar
 the 'Lunatic Imitators.' They believe that BtCM was written, not as fiction, but rather as a prophecy for \
 what is to come. Of course, their attempts at replicating events in the book have been rather feeble so far, \
 so it's a silly thing to put any amount of thought towards.";
+
+// -- Time Skip
+
+char gLoreEntry18[] = "18-9-2268\n\
+Entry 0x98\n\
+Dr.Westein\n\
+\n\
+The first-born of the Mario family has been killed in a battle against the Bob-omb regime. The entire Mushroom Kingdom is in a state \
+of mass panic. MK Intelligence has tasked MIPS labs with a herculean task- to recreate Mario. To any other run-of-the-mill engineer, \
+that'd be a rediculous and almost comically impossible request. To us though? With the power of our modules, we can make anything \
+possible.\n\
+We will rebuild Mario.";
+
+char gLoreEntry19[] = "3-6-2273\n\
+Entry 0x17A\n\
+Dr.Westein\n\
+\n\
+We've received approval to build a high scale multi versatile manufacturing facility exclusively utilizing our module technology. \
+Expected outcomes are much more efficient mass product output and billions of coins in revenue. They will be manned by \
+our module-powered humanoid workers.";
+
+char gLoreEntry20[] = "12-12-2275\n\
+Entry 0x20B\n\
+Dr.Westein\n\
+\n\
+They did it.\n\
+The lunatic cultists actually fucking did it!\n\
+They put the fictional parasite moon, from the fictional book Beyond the Cursed Mirror, into the fucking sky!\n\
+And the worst part? They stole our modules to make it possible.\n\
+They've made their next steps clear: They are going to send one of our Moduloid Marios to their faux Agamemnon, and \
+fell the moon to Earth and kill literally everyone.\n\
+I don't have words to describe my incredulity.\n\
+But now's not the time for panic, I need to think of a solution that could potentially save lives.";
+
+char gLoreEntry21[] = "13-12-2275\n\
+Entry 0x20C\n\
+Dr.Westein\n\
+\n\
+I was able to synthesize a new crystal- the gravity crystal. It makes a giant local magnetic field that can pull matter together. \
+Not at the scale of a planet, of course, but enough to preserve small portions of any given planetary body. Unfortunately, it's looking \
+like the moon is going to drop any day now, so I don't have the time to install gravity crystals everywhere. I will install one at \
+the Manusanctuary, since it's the most vital production line the Mushroom Kingdom has at this present moment. To evade the watchful \
+eye of the lunatic cultists, I shall house the rest of my gravity crystals inside the various castles throughout the land.\n\
+\n\
+To the Moduloid that reads this, many years after my passing- It is your duty to go out and retrieve the gravity crystals. It will take an unsurmountable \
+amount of time, but...\n\
+Little by little, you can rebuild the Earth, one castle, one crystal, and one module at a time.";
