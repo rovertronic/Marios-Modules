@@ -752,7 +752,7 @@ void print_utf8_color(char * str, int x, int y, u8 r, u8 g, u8 b) {
     }
 }
 
-char sAutoNewlineBuffer[512];
+char sAutoNewlineBuffer[2048];
 char * utf8_autonewline(char * str, int maxX) {
     int charIndex = 0;
     int printX = 0;

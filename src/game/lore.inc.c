@@ -3,7 +3,7 @@ Entry 0x5E\n\
 Dr.Westein\n\
 \n\
 I have been experimenting with the synthesis of natural and artificial polymers. \
-When an electical impulse is applied to this new structure, it elicits various behaviors. \
+When an electrical impulse is applied to this new structure, it elicits various behaviors. \
 If I figure out how to find a consistent way of producing specific structures, this \
 could be a revolutionary new field of science.";
 
@@ -18,7 +18,7 @@ nothing happened. However, half an hour later, my instruments registered an exac
 of the initial impulse. So, there's that.";
 
 char gLoreEntry3[] = "15-2-2257\n\
-Entry 0x61\n\
+Entry 0x60\n\
 Dr.Westein\n\
 \n\
 MIPS Laboratories is running out of money again. Mark Henzy has submitted another request for \
@@ -26,7 +26,7 @@ funding to the Mushroom Kingdom Science Commission. We're on thin ice, and thing
 for us if our funding gets denied.";
 
 char gLoreEntry4[] = "16-2-2257\n\
-Entry 0x60\n\
+Entry 0x61\n\
 Dr.Westein\n\
 \n\
 I spilled the hybrid polymer solution onto my arm. To my absolute surprise and dismay, a \
@@ -36,7 +36,7 @@ is both horrifying and enamouring. This hybrid polymer won't only be useful for 
 but medical science as well. Maybe this will be our key to saving MIPS laboratories.";
 
 char gLoreEntry5[] = "17-2-2257\n\
-Entry 0x61\n\
+Entry 0x62\n\
 Dr.Westein\n\
 \n\
 My collegue Jon managed to synthesize another hybrid polymer today- an incredibly useful one at that, too. \
@@ -45,7 +45,7 @@ we could potentially see some more colors... Maybe even radiation outside the vi
 the microwave industry to smithereens... but I'm getting ahead of myself here.";
 
 char gLoreEntry6[] = "19-2-2257\n\
-Entry 0x62\n\
+Entry 0x63\n\
 Dr.Westein\n\
 \n\
 No progress so far... However, we have been able to do practical experiments with our 2 current \
@@ -59,14 +59,14 @@ to see the latest innovations of the scientific community. This will be a great 
 off our new hybrid polymer.";
 
 char gLoreEntry7[] = "21-2-2257\n\
-Entry 0x63\n\
+Entry 0x64\n\
 Dr.Westein\n\
 \n\
 Our funding was denied. If we don't attract investors at the MKSC showfair, this may be the end for MIPs \
 laboratories.";
 
 char gLoreEntry8[] = "28-2-2257\n\
-Entry 0x64\n\
+Entry 0x65\n\
 Dr.Westein\n\
 \n\
 We've been working tirelessly on a presentable technology to demonstrate our hybrid polymer. Jon, with his usual brilliance, \
@@ -116,7 +116,7 @@ Dr.Westein\n\
 I think I've had a fair spark of inspiration when reading BtCM. The Parasite Moon feeds and propels its \
 wicked cause via attention. Observation is critical to the interworkings of this terrible entity. \
 It's so integral to its operation that it evolved an entire process of siphoning attention from a \
-captive audience to fuel it's continued existence. Photons change their behavior when observed. Is\
+captive audience to fuel its continued existence. Photons change their behavior when observed. Is \
 it possible that observation is interfering with the forces exerted by poly3?";
 
 char gLoreEntry15[] = "8-3-2257\n\
@@ -174,8 +174,9 @@ Dr.Westein\n\
 \n\
 They did it.\n\
 The lunatic cultists actually fucking did it!\n\
-They put the fictional parasite moon, from the fictional book Beyond the Cursed Mirror, into the fucking sky!\n\
+They put the fictional parasite moon, from the fictional book Beyond the Cursed Mirror, into the real ass fucking sky!\n\
 And the worst part? They stole our modules to make it possible.\n\
+Meaning, me! Myself! I! I am a link in the chain that lead to the apocalypse!\n\
 They've made their next steps clear: They are going to send one of our Moduloid Marios to their faux Agamemnon, and \
 fell the moon to Earth and kill literally everyone.\n\
 I don't have words to describe my incredulity.\n\
@@ -185,7 +186,7 @@ char gLoreEntry21[] = "13-12-2275\n\
 Entry 0x20C\n\
 Dr.Westein\n\
 \n\
-I was able to synthesize a new crystal- the gravity crystal. It makes a giant local magnetic field that can pull matter together. \
+I was able to synthesize a new substance- gravity crystals. It makes a giant local magnetic field that can pull matter together. \
 Not at the scale of a planet, of course, but enough to preserve small portions of any given planetary body. Unfortunately, it's looking \
 like the moon is going to drop any day now, so I don't have the time to install gravity crystals everywhere. I will install one at \
 the Manusanctuary, since it's the most vital production line the Mushroom Kingdom has at this present moment. To evade the watchful \
@@ -194,3 +195,26 @@ eye of the lunatic cultists, I shall house the rest of my gravity crystals insid
 To the Moduloid that reads this, many years after my passing- It is your duty to go out and retrieve the gravity crystals. It will take an unsurmountable \
 amount of time, but...\n\
 Little by little, you can rebuild the Earth, one castle, one crystal, and one module at a time.";
+
+char * gLoreEntries[] = {
+    gLoreEntry1,
+    gLoreEntry2,
+    gLoreEntry3,
+    gLoreEntry4,
+    gLoreEntry5,
+    gLoreEntry6,
+    gLoreEntry7,
+    gLoreEntry8,
+    gLoreEntry10,
+    gLoreEntry11,
+    gLoreEntry12,
+    gLoreEntry13,
+    gLoreEntry14,
+    gLoreEntry15,
+    gLoreEntry16,
+    gLoreEntry17,
+    gLoreEntry18,
+    gLoreEntry19,
+    gLoreEntry20,
+    gLoreEntry21,
+};

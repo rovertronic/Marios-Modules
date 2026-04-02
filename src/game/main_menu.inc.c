@@ -1,3 +1,5 @@
+#include "lore.inc.c"
+
 extern Texture texture_hud_char_star[];
 
 struct mariosModulesSaveGame gMariosModulesSave;
@@ -10,6 +12,8 @@ u8 gResultsScreenDisplay = 0;
 
 u8 sMainMenuShowTitle = FALSE;
 int sMainMenuModuleTimer = 0;
+
+s8 sJournalEntryIndex = 0;
 
 void save_delete_file(int fileIndex) {
     int size = sizeof(struct mariosModulesSaveGame);
@@ -500,9 +504,13 @@ void render_main_menu_big_text(char * str) {
     render_4slice(-10,241,330,0);
 
     gDPSetEnvColor(gDisplayListHead++, 255,255,255, sMainMenuTransition*255.0f);
+
+    str = utf8_autonewline(str,300);
+
     print_utf8(str,10,220+sBigTextScroll);
     sBigTextScroll -= gFrameLerpDeltaTime*(gPlayer1Controller->rawStickY/16.0f);
     int sx; int sy; utf8_size(str, &sx, &sy);
+    sy -= 16;
 
     if (sBigTextScroll > -sy - 200) {
         sBigTextScroll = -sy - 200;
@@ -648,6 +656,30 @@ void render_main_menu(void) {
             break;
         case MAIN_MENU_FILE_VIEW:
             render_results_screen(4);
+            break;
+        case MAIN_MENU_JOURNAL_ENTRIES:;
+            char entryStr[30];
+
+            s32 unlocked = TRUE;
+            char * lockedText = "@1@Locked - Star %d of Manusanctuary Escape";
+            if (sJournalEntryIndex > 2 && sJournalEntryIndex < 18) {
+                unlocked = save_get_meta_flag(METAFLAGS_CAMPAIGN_STARS,sJournalEntryIndex-3);
+            } else if (sJournalEntryIndex == 18) {
+                lockedText = "@1@Locked - Complete Crystal Quest";
+                unlocked = save_get_meta_flag(METAFLAGS_COMPLETION, 1);
+            } else if (sJournalEntryIndex == 19){
+                lockedText = "@1@Locked - Complete Manusanctuary Escape";
+                unlocked = save_get_meta_flag(METAFLAGS_COMPLETION, 0);            
+            }
+
+            if (!unlocked) {
+                sprintf(entryStr,lockedText,sJournalEntryIndex-2);
+                render_main_menu_big_text(entryStr);
+            } else {
+                render_main_menu_big_text(gLoreEntries[sJournalEntryIndex]);
+            }
+            sprintf(entryStr,"@<Y@←@Y@C@@ Entry %d/20 @Y@C@Y>@→@@",sJournalEntryIndex+1);
+            print_utf8_boxed(entryStr,10,10,sMainMenuTransition,FALSE);
             break;
         case MAIN_MENU_META_PROGRESSION:
             gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
@@ -933,6 +965,9 @@ void logic_main_menu(void) {
                     case 1:
                         gMainMenuTargetState = MAIN_MENU_META_PROGRESSION;
                         break;
+                    case 2:
+                        gMainMenuTargetState = MAIN_MENU_JOURNAL_ENTRIES;
+                        break;
                 }
             }
             break;
@@ -969,6 +1004,20 @@ void logic_main_menu(void) {
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON|B_BUTTON)) {
                 gMainMenuTargetState = MAIN_MENU_EXTRA;
             }
+            break;
+        case MAIN_MENU_JOURNAL_ENTRIES:
+                if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON|B_BUTTON)) {
+                    gMainMenuTargetState = MAIN_MENU_EXTRA;
+                }
+
+                int entryCount = 20;
+                if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
+                    sJournalEntryIndex++;
+                }
+                if (gPlayer1Controller->buttonPressed & L_CBUTTONS) {
+                    sJournalEntryIndex--;
+                }
+                sJournalEntryIndex = (sJournalEntryIndex + entryCount) % entryCount;
             break;
     }
 }
