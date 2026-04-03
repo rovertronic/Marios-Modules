@@ -22,7 +22,9 @@ void grindel_thwomp_act_falling(void) {
 void grindel_thwomp_act_land(void) {
     if (o->oTimer == 0 && o->oDistanceToMario < 1500.0f) {
         cur_obj_shake_screen(SHAKE_POS_SMALL);
-        cur_obj_play_sound_2(SOUND_OBJ_THWOMP);
+        if (gMainMenuState != MAIN_MENU_REMOVE_PLAYER_CONTROL) {
+            cur_obj_play_sound_2(SOUND_OBJ_THWOMP);
+        }
     }
     if (o->oTimer >= 10) {
         o->oAction = GRINDEL_THWOMP_ACT_ON_GROUND;

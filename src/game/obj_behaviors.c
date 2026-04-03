@@ -1194,7 +1194,7 @@ s16 spline_seg = 0;
 f32 spline_prog = 0;
 u8 spline_intro_index = 0;
 void bhv_dungeon_manager(void) {
-    if (gMainMenuState != MAIN_MENU_CLOSED) {
+    if (gMainMenuState != MAIN_MENU_CLOSED && gMainMenuState != MAIN_MENU_REMOVE_PLAYER_CONTROL) {
         gCamera->cutscene = 1;
         //if (gMainMenuState <= MAIN_MENU_TITLE_TRANSITION_2) {
         if (gMainMenuState <= MAIN_MENU_TITLE_TRANSITION_2) {
@@ -1231,6 +1231,30 @@ void bhv_dungeon_manager(void) {
             dungeon_seq_cur = dungeon_seq_change;
             dungeon_seq_timer = 0;
         }
+    }
+
+    // End Cutscene
+    switch(o->oAction) {
+        case 1:
+            gMainMenuState = MAIN_MENU_REMOVE_PLAYER_CONTROL;
+            gMainMenuTargetState = MAIN_MENU_REMOVE_PLAYER_CONTROL;
+
+            gCamera->cutscene = 1;
+            spline_prog = 0;
+            spline_seg = 0;
+            o->oAction++;
+            break;
+        case 2:
+            move_point_along_spline(gLakituState.goalPos,segmented_to_virtual(temple_area_1_spline_endPos),&spline_seg,&spline_prog);
+            move_point_along_spline(gLakituState.goalFocus,segmented_to_virtual(temple_area_1_spline_endFoc),&spline_seg,&spline_prog);
+            if (o->oTimer == 600) {
+                o->oAction++;
+                gResultsScreenDisplay = 3;
+                save_set_meta_flag(METAFLAGS_COMPLETION,0);
+                gMariosModulesSave.file[gMariosModulesSaveIndex].flags |= SAVE_FLAG_COMPLETE;
+                save_marios_modules_silent(gVec3fZero);
+            }
+            break;
     }
 
     sForceDoorShut = FALSE;
@@ -1308,6 +1332,12 @@ void bhv_volume(void) {
             case VOLUME_RECONNECT:
                 if (gModuleTutorialState == TUTORIAL_DISCONNECTED) {
                     gModuleTutorialState = TUTORIAL_DONE;
+                }
+                break;
+            case VOLUME_WIN:;
+                struct Object * dmanager = cur_obj_nearest_object_with_behavior(bhvDungeonManager);
+                if (dmanager->oAction == 0) {
+                    dmanager->oAction = 1;
                 }
                 break;
         }

@@ -1330,7 +1330,7 @@ void update_mario_joystick_inputs(struct MarioState *m) {
         m->intendedMag = mag / 8.0f;
     }
 
-    if (gModuleMenuOpen || gModuleTutorialState == TUTORIAL_DISCONNECTED || gCurrLevelNum == LEVEL_WIN || gCurrLevelNum == LEVEL_GAMEOVER) {
+    if (gModuleMenuOpen || gModuleTutorialState == TUTORIAL_DISCONNECTED || gMainMenuState == MAIN_MENU_REMOVE_PLAYER_CONTROL) {
         m->intendedMag = 0.0f;
     }
 
@@ -1413,7 +1413,9 @@ void update_mario_inputs(struct MarioState *m) {
     m->particleFlags = PARTICLE_NONE;
     m->input = INPUT_NONE;
 
-    module_update();
+    if (gMainMenuState != MAIN_MENU_REMOVE_PLAYER_CONTROL) {
+        module_update();
+    }
 
     m->collidedObjInteractTypes = m->marioObj->collidedObjInteractTypes;
     m->flags &= 0xFFFFFF;
@@ -1798,7 +1800,7 @@ void queue_rumble_particles(struct MarioState *m) {
 u16 sIntroCutsceneBlinkTimer = 0;
 
 void mario_title_logic(void) {
-    if (gMainMenuState != MAIN_MENU_CLOSED) {
+    if (gMainMenuState != MAIN_MENU_CLOSED && gMainMenuState != MAIN_MENU_REMOVE_PLAYER_CONTROL) {
         gMarioState->faceAngle[1] = 0x8000;
         gMarioState->action = ACT_TITLE;
         gMarioState->marioObj->header.gfx.angle[1] = 0x8000;
@@ -1849,7 +1851,7 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 
     gMarioState->marioObj->shitCullFlags = 0xFFFFFFFF;
 
-    if (gCurrLevelNum != LEVEL_WIN && gCurrLevelNum != LEVEL_GAMEOVER && gMainMenuState == MAIN_MENU_CLOSED) {
+    if (gMainMenuState == MAIN_MENU_CLOSED) {
         gMariosModulesSave.file[gMariosModulesSaveIndex].gameTime++;
     }
 
@@ -2105,6 +2107,10 @@ void init_mario(void) {
         safeWarp->oPosX = gMarioState->pos[0];
         safeWarp->oPosZ = gMarioState->pos[2];
         safeWarp->oPosY = gMarioState->pos[1] + 400.0f;
+    }
+
+    if (gCurrLevelNum == LEVEL_WIN || gCurrLevelNum == LEVEL_GAMEOVER) {
+        gMainMenuState = MAIN_MENU_REMOVE_PLAYER_CONTROL;
     }
 }
 
