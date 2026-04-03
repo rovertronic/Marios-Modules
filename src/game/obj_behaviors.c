@@ -2127,19 +2127,14 @@ void bhv_win(void) {
 void bhv_gameover(void) {
     gCamera->cutscene = 1;
 
-    gLakituState.goalPos[0] = o->oHomeX + 2000.0f;
+    gLakituState.goalPos[0] = o->oHomeX + 2000.0f * sins(o->oTimer * 0x30 + 0x2000);
     gLakituState.goalPos[1] = o->oHomeY;
-    gLakituState.goalPos[2] = o->oHomeZ + 2000.0f;
+    gLakituState.goalPos[2] = o->oHomeZ + 2000.0f * coss(o->oTimer * 0x30 + 0x2000);
 
     vec3f_copy(gLakituState.goalFocus,&o->oPosVec);
 
-    switch(o->oAction) {
-        case 0:
-            if (o->oTimer == 30) {
-                gResultsScreenDisplay = 2;
-                o->oAction++;
-            }
-            break;
+    if (o->oTimer == 30) {
+        gResultsScreenDisplay = 2;
     }
 }
 

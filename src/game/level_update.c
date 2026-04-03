@@ -1246,6 +1246,11 @@ UNUSED static s32 play_mode_unused(void) {
 s32 update_level(void) {
     s32 changeLevel = FALSE;
 
+    if (gCurrLevelNum == LEVEL_WIN || gCurrLevelNum == LEVEL_GAMEOVER) {
+        gPlayer1Controller->buttonDown = 0;
+        gPlayer1Controller->buttonPressed = 0;
+    }
+
     gMenuOptSelectIndex = logic_menus_and_dialogs();
 
     if (gMenuOptSelectIndex != 0) {

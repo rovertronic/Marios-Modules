@@ -22,7 +22,7 @@ const LevelScript level_gameover_entry[] = {
 	LOAD_YAY0(0x07, _gameover_segment_7SegmentRomStart, _gameover_segment_7SegmentRomEnd), 
 	LOAD_YAY0(0x0A, _bitfs_skybox_yay0SegmentRomStart, _bitfs_skybox_yay0SegmentRomEnd), 
 	ALLOC_LEVEL_POOL(),
-	MARIO(MODEL_MARIO, 0x00000001, bhvMario),
+	MARIO(MODEL_MARIO, 0x00000001, bhvMario), 
 	/* Fast64 begin persistent block [level commands] */
 	/* Fast64 end persistent block [level commands] */
 
