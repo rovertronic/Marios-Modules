@@ -776,10 +776,14 @@ void geo_process_generated_list(struct GraphNodeGenerated *node) {
  * the function of the node. If that function is null or returns null, a black
  * rectangle is drawn instead.
  */
+extern u32 sShitCullVisibleFlags;
 void geo_process_background(struct GraphNodeBackground *node) {
     Gfx *list = NULL;
 
     if (gRenderPass == 1) {
+        return NULL;
+    }
+    if (gCurrLevelNum == LEVEL_TEMPLE && (!(sShitCullVisibleFlags & (1 << 10))) ) {
         return NULL;
     }
     if (node->fnNode.func != NULL) {

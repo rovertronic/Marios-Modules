@@ -731,6 +731,7 @@ enum {
     VOLUME_SEQ_CHANGE,
     VOLUME_DISCONNECT,
     VOLUME_RECONNECT,
+    VOLUME_WIN,
 };
 
 #endif // SM64_H
