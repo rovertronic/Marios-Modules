@@ -77,3 +77,5 @@
 #include "lavawall/model.inc.c"
 #include "lavawall/collision.inc.c"
 #include "lavawall_2/collision.inc.c"
+#include "car/anims/data.inc.c"
+#include "car/anims/table.inc.c"

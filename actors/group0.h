@@ -447,4 +447,5 @@ extern const struct Animation *const wiggler_seg5_anims_0500EC8C[];
 #include "lavawall/geo_header.h"
 #include "lavawall/collision_header.h"
 #include "lavawall_2/collision_header.h"
+#include "car/anim_header.h"
 #endif

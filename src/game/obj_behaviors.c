@@ -1970,7 +1970,33 @@ void bhv_utility_mace(void) {
 struct Object *spawn_object_relative(s16 behaviorParam, s16 relativePosX, s16 relativePosY, s16 relativePosZ,
                                      struct Object *parent, ModelID32 model, const BehaviorScript *behavior);
 
+f32 sCarSuspensionDelta = 0.0f;
+struct Object * sCarChildLive[2];
+
 void bhv_car(void) {
+    s32 onCar = (gMarioObject->platform == o && gMarioState->pos[1] > o->oPosY + 200.0f);
+    f32 ytarget = 0.f;
+    if (onCar) {
+        ytarget = 1.f;
+    }
+    sCarSuspensionDelta = approach_f32_asymptotic(sCarSuspensionDelta,ytarget,.2f);
+    o->oPosY = o->oHomeY + (-20.f) + (sCarSuspensionDelta * -50.f);
+
+    if (o->oAction == 0) {
+        sCarChildLive[0] = NULL;
+        sCarChildLive[1] = NULL;
+    }
+
+    for (int i = 0; i < 2; i++) {
+        if (sCarChildLive[i] != NULL) {
+            sCarChildLive[i]->oPosY = o->oPosY + 400.0f;
+        }
+    }
+
+    o->header.gfx.animInfo.animFrame = 0;
+    o->header.gfx.animInfo.animFrameF = sCarSuspensionDelta * 15.f;
+    o->header.gfx.animInfo.animAccelF = 0.0f;
+
     switch(o->oAction) {
         case 0:
             cur_obj_set_model(MODEL_CAR);
@@ -1978,6 +2004,7 @@ void bhv_car(void) {
             for (int i = 0; i < count; i++) {
                 struct Object * live = spawn_object_relative(0, 400,400, -100 + (200*i),
                     o,MODEL_LIVE,bhvLive);
+                sCarChildLive[i] = live;
             }
             o->oAction++;
         break;
@@ -1987,7 +2014,10 @@ void bhv_car(void) {
             }
             break;
         case 2:
-            if (gCurrLevelNum == LEVEL_PITSTOP && gMarioObject->platform == o) {
+            if (gCurrLevelNum == LEVEL_PITSTOP && (o->oTimer % 10 == 0)) {
+                spawn_object_relative(0, 600,125, -100,o,MODEL_BURN_SMOKE ,bhvBlackSmokeMario);
+            }
+            if (gCurrLevelNum == LEVEL_PITSTOP && onCar) {
                 save_marios_modules_silent(gVec3fZero);
                 gMainMenuWarpLocation = 1;
                 if (gMariosModulesSave.file[gMariosModulesSaveIndex].level == 2) {
