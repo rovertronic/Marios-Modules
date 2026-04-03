@@ -57,12 +57,12 @@ void bhv_purple_switch_loop(void) {
                 if (o->oBehParams2ndByte == 1 && gMarioObject->platform != o) {
                     o->oAction++;
                 } else {
-                    if (o->oTimer < 360 + GET_BPARAM3(o->oBehParams)*2) {
+                    if (o->oTimer < 360 + GET_BPARAM3(o->oBehParams)*2 * (GET_BPARAM1(o->oBehParams)*-1)) {
                         play_sound(SOUND_GENERAL2_SWITCH_TICK_FAST, gGlobalSoundSource);
                     } else {
                         play_sound(SOUND_GENERAL2_SWITCH_TICK_SLOW, gGlobalSoundSource);
                     }
-                    if (o->oTimer > 400 + GET_BPARAM3(o->oBehParams)*2) {
+                    if (o->oTimer > 400 + GET_BPARAM3(o->oBehParams)*2 * (GET_BPARAM1(o->oBehParams)*-1)) {
                         o->oAction = PURPLE_SWITCH_ACT_WAIT_FOR_MARIO_TO_GET_OFF;
                     }
                 }
