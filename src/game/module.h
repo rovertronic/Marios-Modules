@@ -320,6 +320,7 @@ enum {
 struct mariosModulesSaveGame {
     u8 metaflags[METAFLAGS_COUNT];
     struct mariosModulesSaveFile file[3];
+    u32 persistentSeedTimer;
     u32 save_magic;
 };
 

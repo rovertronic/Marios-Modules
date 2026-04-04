@@ -208,7 +208,6 @@ u8 gMainMenuState = MAIN_MENU_TITLE_TRANSITION_1;
 u8 gMainMenuTargetState = MAIN_MENU_TITLE_TRANSITION_1;
 f32 sMainMenuTransition = 1.0f;
 s8 sMainMenuIndex = 0;
-u16 sMainMenuSeedShaker[2];
 
 f32 sBigTextScroll = 0.0f;
 
@@ -796,8 +795,7 @@ void main_menu_handle_scroll(u8 max) {
 }
 
 void logic_main_menu(void) {
-    sMainMenuSeedShaker[0] = random_u16();
-    sMainMenuSeedShaker[1] = random_u16();
+    gMariosModulesSave.persistentSeedTimer++;
 
     if (gMainMenuState != gMainMenuTargetState) {
         sMainMenuTransition -= .1f;
@@ -879,14 +877,17 @@ void logic_main_menu(void) {
                 }
             }
             break;
-        case MAIN_MENU_MODE:;
-            u32 seed = sMainMenuSeedShaker[0] | (sMainMenuSeedShaker[1] << 16);
+        case MAIN_MENU_MODE:
             main_menu_handle_scroll(2);
             if (gPlayer1Controller->buttonPressed & (B_BUTTON)) {
                 gMainMenuTargetState = MAIN_MENU_FILE;
                 break;
             }
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+
+                tinymt32_init(&gGlobalRandomState,gMariosModulesSave.persistentSeedTimer);
+                u32 seed = tinymt32_generate_u32(&gGlobalRandomState);
+
                 switch (sMainMenuIndex) {
                     case 0:
                         //play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
@@ -1124,9 +1125,14 @@ void render_results_screen(int type) {
     gDPSetEnvColor(gDisplayListHead++, 0,0,0, 255 * alphaDelta);
     print_utf8(primstr,30,190);
     print_utf8("------------------------------",30,170);
-    sprintf(resultScreenStr,"Time Taken: %s",get_game_time_str(gMariosModulesSaveIndex));
+
+    sprintf(resultScreenStr,"Seed: %d",gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
     print_utf8(resultScreenStr,30,150);
-    print_utf8("Modules Used:",30,130);
+
+    sprintf(resultScreenStr,"Time Taken: %s",get_game_time_str(gMariosModulesSaveIndex));
+    print_utf8(resultScreenStr,30,130);
+
+    print_utf8("Modules Used:",30,110);
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     int used = 0;
@@ -1135,7 +1141,7 @@ void render_results_screen(int type) {
         int findex = i/32;
         if (gMariosModulesSave.file[gMariosModulesSaveIndex].usedModules[findex] & (1<<fflag)) {
             int x = 100 + (used%12)*16;
-            int y = 95 + ((used/12)*16);
+            int y = 115 + ((used/12)*16);
             print_module(i,x,y,0);
             used++;
         }
