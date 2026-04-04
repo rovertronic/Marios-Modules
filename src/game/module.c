@@ -29,6 +29,7 @@ struct ScreenMessage sScreenMessageList[15];
 s8 sScreenMessageCount = -1;
 s8 sScreenMessageIndex = -1;
 
+u8 gModuleCreativeEnabled = FALSE;
 u8 gModuleMenuOpen = FALSE;
 f32 sMiniMapZoom = 1.0f;
 f32 gMiniMapOffsetX = 0.0f;
@@ -895,10 +896,12 @@ void print_mini_map(void) {
     //sMiniMapZoom += (gPlayer1Controller->rawStickY/400.0f) * gFrameLerpDeltaTime;
     //sMiniMapZoom = CLAMP(sMiniMapZoom,0.333f,1.0f);
 
-    sMiniMapZoom = .5f;
+    sMiniMapZoom = 1.0f;
+    /*
     if (gEmulator & (EMU_CONSOLE|EMU_ARES)) {
         sMiniMapZoom = 1.0f;
     }
+    */
 
     f32 mario_x_to_map_x = ((gMarioState->pos[0] - gMiniMapOffsetX)/-50.f) * sMiniMapZoom;
     f32 mario_z_to_map_y = ((gMarioState->pos[2] + gMiniMapOffsetZ)/50.f) * sMiniMapZoom;

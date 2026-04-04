@@ -1450,6 +1450,11 @@ struct ObjectHitbox sSaveBoxHitbox = {
 void bhv_save_box(void) {
     switch(o->oAction) {
         case 0:
+            if (gModuleCreativeEnabled) {
+                obj_mark_for_deletion(o);
+                break;
+            }
+
             obj_set_hitbox(o, &sSaveBoxHitbox);
             o->oAction = 1;
             //cur_obj_init_animation_with_accel_and_sound(0, 1.0f);

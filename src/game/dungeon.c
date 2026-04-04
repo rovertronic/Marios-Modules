@@ -551,6 +551,7 @@ void dungeon_generate_rooms_at_doors(struct DungeonRoomVariant ** variantList, i
 }
 
 s32 dungeon_generate_boss_room(struct DungeonRoomVariant * selectedVariant) {
+    if (gModuleCreativeEnabled) {return FALSE;}
     int iMax = sDungeonCellProcessCount;
 
     // Check latest generated rooms first, which will make the boss room generate deep in
@@ -1057,10 +1058,15 @@ void dungeon_generate(int level) {
             texgen_generate_lv2();
             break;
         case 2: // Bowser Level
-            dungeon_generate_lv1();
-            dungeon_sync_inventory();
-            dungeon_generate_lv2();
-            dungeon_sync_inventory();
+
+            // Not needed, because bowser levels don't generate
+            // with item logic
+
+            //dungeon_generate_lv1();
+            //dungeon_sync_inventory();
+            //dungeon_generate_lv2();
+            //dungeon_sync_inventory();
+
             dungeon_generate_lv3();
             texgen_generate_lv3();
             break;

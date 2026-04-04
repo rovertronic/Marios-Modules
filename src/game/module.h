@@ -14,6 +14,7 @@ extern s8 gRecycleChestContent;
 extern s8 gRecycledModule;
 extern u8 gGameSettings[];
 extern Vec3f gModulePreviewPos;
+extern u8 gModuleCreativeEnabled;
 
 extern f32 gMessageDisplayTimer;
 
@@ -353,6 +354,7 @@ enum {
     MAIN_MENU_SOUNDTRACK,
     MAIN_MENU_META_PROGRESSION,
     MAIN_MENU_JOURNAL_ENTRIES,
+    MAIN_MENU_CREATIVE_LEVELS,
     MAIN_MENU_REMOVE_PLAYER_CONTROL,
     MAIN_MENU_CLOSED,
 };

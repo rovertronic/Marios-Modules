@@ -736,6 +736,13 @@ void initiate_painting_warp(void) {
 s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
     s32 fadeMusic = TRUE;
 
+    if (warpOp == WARP_OP_DEATH && gModuleCreativeEnabled) {
+        m->health = 0x880;
+        set_mario_action(m,ACT_IDLE,0);
+        reset_camera(gCurrentArea->camera);
+        return 0;
+    }
+
     if (sDelayedWarpOp == WARP_OP_NONE) {
         m->invincTimer = -1;
         sDelayedWarpArg = WARP_FLAGS_NONE;

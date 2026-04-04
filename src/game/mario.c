@@ -1954,7 +1954,12 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
         queue_rumble_particles(gMarioState);
 #endif
 
-        
+        if (gMarioState->action == ACT_DISAPPEARED && gModuleCreativeEnabled) {
+            set_mario_action(gMarioState,ACT_IDLE,0);
+            gMarioState->marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+            gMarioState->squishTimer = 0;
+        }        
+
         s16 target_angle = 0xA000;
         if (gModuleMenuOpen) {
             target_angle = 0x0;
