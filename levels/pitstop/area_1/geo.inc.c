@@ -3,6 +3,23 @@
 const GeoLayout pitstop_area_1_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
+		GEO_SWITCH_CASE(3, geo_switch_area),
+		GEO_OPEN_NODE(),
+			GEO_BRANCH(1, pitstop_dl_room1_geo),
+			GEO_BRANCH(1, pitstop_dl_room2_geo),
+		GEO_CLOSE_NODE(),
+	GEO_CLOSE_NODE(),
+	GEO_RETURN(),
+};
+const GeoLayout pitstop_dl_room1_geo[] = {
+	GEO_NODE_START(),
+	GEO_OPEN_NODE(),
+	GEO_CLOSE_NODE(),
+	GEO_RETURN(),
+};
+const GeoLayout pitstop_dl_room2_geo[] = {
+	GEO_NODE_START(),
+	GEO_OPEN_NODE(),
 		GEO_ASM(0, geo_render_preview_mario),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, pitstop_dl_vis_mesh_layer_5),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, pitstop_dl_vis_mesh_layer_1),

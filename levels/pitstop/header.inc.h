@@ -1,6 +1,9 @@
 extern const GeoLayout pitstop_area_1_geo[];
+extern const GeoLayout pitstop_dl_room1_geo[];
+extern const GeoLayout pitstop_dl_room2_geo[];
 extern const GeoLayout pitstop_area_1[];
 extern const Collision pitstop_area_1_collision[];
+extern const u8 pitstop_area_1_collision_rooms[];
 extern const MacroObject pitstop_area_1_macro_objs[];
 extern u8 pitstop_dl_Material2_ci8[];
 extern u8 pitstop_dl_Material2_pal_rgba16[];

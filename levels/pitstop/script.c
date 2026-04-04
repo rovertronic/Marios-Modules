@@ -60,6 +60,7 @@ const LevelScript level_pitstop_entry[] = {
 		OBJECT(MODEL_GSHREDDER, 2454, 229, 10424, 0, 90, 0, (0 << 16), bhvShredder),
 		OBJECT(MODEL_NONE, 0, 300, 0, 0, 0, 0, (0x0A << 16), bhvInstantActiveWarp),
 		TERRAIN(pitstop_area_1_collision),
+		ROOMS(pitstop_area_1_collision_rooms),
 		MACRO_OBJECTS(pitstop_area_1_macro_objs),
 		STOP_MUSIC(0),
 		TERRAIN_TYPE(TERRAIN_STONE),
