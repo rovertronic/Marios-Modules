@@ -1394,7 +1394,7 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         Mtx *initialMatrix;
         Vp *viewport = alloc_display_list(sizeof(*viewport));
 
-        gDisplayListHeap = alloc_only_pool_init(0x3000, MEMORY_POOL_LEFT);
+        gDisplayListHeap = alloc_only_pool_init(0x3000, MEMORY_POOL_RIGHT);
         initialMatrix = alloc_display_list(sizeof(*initialMatrix));
         gCurLookAt = (LookAt*)alloc_display_list(sizeof(LookAt));
         bzero(gCurLookAt, sizeof(LookAt));

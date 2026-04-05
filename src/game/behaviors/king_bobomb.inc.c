@@ -1,9 +1,4 @@
 // king_bobomb.inc.c
-
-void bhv_has_star_init(void) {
-    obj_save_bin_count(SAVE_BIN_STARS);
-}
-
 // Copy of geo_update_projectile_pos_from_parent
 Gfx *geo_update_held_mario_pos(s32 callContext, UNUSED struct GraphNode *node, Mat4 mtx) {
     if (callContext == GEO_CONTEXT_RENDER) {

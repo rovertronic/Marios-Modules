@@ -41,7 +41,7 @@ void shit_cull_add_volume(Vec3f pos, Vec3f scale, u8 flag) {
 
 void shit_cull_update(void) {
     Vec3f * cullAppealPosition = gMarioState->pos;
-    if (gCamera->cutscene == 1) {
+    if (gCamera->cutscene != 0) {
         cullAppealPosition = gCamera->pos;
     }
 

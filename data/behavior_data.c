@@ -4640,7 +4640,7 @@ const BehaviorScript bhvStarSpawnCoordinates[] = {
 
 const BehaviorScript bhvHiddenRedCoinStar[] = {
     BEGIN(OBJ_LIST_LEVEL),
-    OR_INT(oFlags, (OBJ_FLAG_PERSISTENT_RESPAWN | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    OR_LONG(oFlags, (OBJ_FLAG_PERSISTENT_RESPAWN | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_IGNORE_BHV_SHITCULL)),
     CALL_NATIVE(bhv_hidden_red_coin_star_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_hidden_red_coin_star_loop),
@@ -4649,7 +4649,7 @@ const BehaviorScript bhvHiddenRedCoinStar[] = {
 
 const BehaviorScript bhvRedCoin[] = {
     BEGIN(OBJ_LIST_LEVEL),
-    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_IGNORE_BHV_SHITCULL)),
     BILLBOARD(),
     SET_INT(oIntangibleTimer, 0),
     SET_INT(oAnimState, OBJ_ANIM_STATE_INIT_ANIM),
@@ -6464,6 +6464,7 @@ const BehaviorScript bhvCutsceneCamera[] = {
 extern void bhv_red_coin_spawner(void);
 const BehaviorScript bhvRedCoinSpawner[] = {
     BEGIN(OBJ_LIST_LEVEL),
+    OR_LONG(oFlags, (OBJ_FLAG_IGNORE_BHV_SHITCULL)),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_red_coin_spawner),
     END_LOOP(),

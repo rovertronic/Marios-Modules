@@ -328,7 +328,7 @@ struct Object {
     /*0x218*/ void *collisionData;
     /*0x21C*/ Mat4 transform;
     /*0x25C*/ void *respawnInfo;
-              u8 saveBinId;
+              s8 saveBinId;
               u8 saveBinType;
 
               struct Object * objRiding;

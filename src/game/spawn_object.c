@@ -197,7 +197,7 @@ struct Object *allocate_object(struct ObjectNode *objList) {
 
     obj->element = NULL;
 
-    obj->saveBinId = 0;
+    obj->saveBinId = -1;
     obj->saveBinType = 0;
 
     obj->objRiding = NULL;

@@ -151,6 +151,7 @@ void spawn_red_coin_cutscene_star(f32 x, f32 y, f32 z) {
     starObj = spawn_star(starObj, x, y, z);
     starObj->oBehParams2ndByte = SPAWN_STAR_ARC_CUTSCENE_BP_HIDDEN_STAR;
     starObj->saveBinId = starObj->parentObj->saveBinId;
+    starObj->oFlags |= OBJ_FLAG_IGNORE_BHV_SHITCULL;
 }
 
 void spawn_no_exit_star(f32 x, f32 y, f32 z) {

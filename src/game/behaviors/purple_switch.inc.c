@@ -11,6 +11,12 @@ extern int sSilverStarCt;
  */
 
 void bhv_purple_switch_loop(void) {
+    s32 timeOffset = GET_BPARAM3(o->oBehParams)*2;
+    if (GET_BPARAM3(o->oBehParams) == 99) {
+        // eh
+        timeOffset = -120;
+    }
+
     switch (o->oAction) {
         /**
          * Set the switch's model and scale. If Mario is standing near the
@@ -57,17 +63,17 @@ void bhv_purple_switch_loop(void) {
                 if (o->oBehParams2ndByte == 1 && gMarioObject->platform != o) {
                     o->oAction++;
                 } else {
-                    if (o->oTimer < 360 + GET_BPARAM3(o->oBehParams)*2 * (GET_BPARAM1(o->oBehParams)*-1)) {
+                    if (o->oTimer < 360 + timeOffset) {
                         play_sound(SOUND_GENERAL2_SWITCH_TICK_FAST, gGlobalSoundSource);
                     } else {
                         play_sound(SOUND_GENERAL2_SWITCH_TICK_SLOW, gGlobalSoundSource);
                     }
-                    if (o->oTimer > 400 + GET_BPARAM3(o->oBehParams)*2 * (GET_BPARAM1(o->oBehParams)*-1)) {
+                    if (o->oTimer > 400 + timeOffset) {
                         o->oAction = PURPLE_SWITCH_ACT_WAIT_FOR_MARIO_TO_GET_OFF;
                     }
                 }
             }
-            if (gButtonPressId == 3 && sSilverStarCt >= 5) {
+            if (GET_BPARAM4(o->oBehParams) == 3 && sSilverStarCt >= 5) {
                 o->oAction = 99;
                 spawn_default_star(o->oPosX,o->oPosY+400.0f,o->oPosZ);
             }
