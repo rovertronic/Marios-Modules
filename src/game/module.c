@@ -296,8 +296,6 @@ void init_module_inventory(void) {
 
     update_creative_inventory();
 
-    tinymt32_init(&gGlobalRandomState,0);
-
     update_settings();
 }
 

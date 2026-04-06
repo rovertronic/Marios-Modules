@@ -1298,6 +1298,7 @@ s32 init_level(void) {
     }
 
     set_play_mode(PLAY_MODE_NORMAL);
+    tinymt32_init(&gGlobalRandomState,0);
     init_module_inventory();
     save_bin_reset();
     load_marios_modules();
