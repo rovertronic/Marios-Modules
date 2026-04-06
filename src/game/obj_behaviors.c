@@ -1123,7 +1123,6 @@ void bhv_recycle_chest(void) {
             o->header.gfx.animInfo.animFrameF = 0.0f;
             o->header.gfx.animInfo.animAccelF = 0.0f;
             if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-                obj_save_bin_write(o);
                 o->header.gfx.animInfo.animAccelF = 1.0f;
 
                 play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);
