@@ -1476,7 +1476,6 @@ struct module_info module_infos[] = {
         .extra_data = &moduleWild,
         .options = wildcolorOptions,
         .creative = TRUE,
-        .loot_tier = LOOT_VANITY,
     },
 
     [MOD_WOMAN] = {

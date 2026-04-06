@@ -164,7 +164,7 @@ u32 obj_save_bin_read(void) {
 }
 
 void obj_save_bin_write(struct Object * obj) {
-    if (obj->saveBinId < 0) {while(1){}}
+    if (obj->saveBinId < 0) {return;} // Can happen during the roguelike shop
     if (gCurrLevelNum == LEVEL_PITSTOP) {return;}
     gMariosModulesSave.file[gMariosModulesSaveIndex].bin[obj->saveBinType] |= (1 << obj->saveBinId);
 }

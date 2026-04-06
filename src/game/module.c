@@ -276,6 +276,14 @@ void init_module_inventory(void) {
     inventory[46][0] = MOD_WOMAN;
     inventory[46][1] = MOD_BROWN;
 
+    // Wildcolor module(s) is a meta reward for competions
+    if (save_get_meta_flag(METAFLAGS_COMPLETION,0)) {
+        inventory[46][2] = MOD_WILDCOLOR;
+    }
+    if (save_get_meta_flag(METAFLAGS_COMPLETION,1)) {
+        inventory[46][3] = MOD_WILDCOLOR;
+    }
+
     // Starter inventory
     inventory[4][7] = MOD_MONITOR;
 
