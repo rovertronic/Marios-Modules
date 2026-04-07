@@ -66,10 +66,10 @@ struct DungeonObject sBottomEnemyList[] = {
 };
 
 struct DungeonObject sTopEnemyList[] = {
-    {.bhv = bhvStackGoomba, .model = MODEL_GOOMBA, .param = 0,
-    .angle = 0, .pos = {0.f,0.f,0.f}},
-    {.bhv = bhvFireSpitter, .model = MODEL_BOWLING_BALL, .param = 0,
-    .angle = 0, .pos = {0.f,0.f,0.f}},
+    //{.bhv = bhvStackGoomba, .model = MODEL_GOOMBA, .param = 0,
+    //.angle = 0, .pos = {0.f,0.f,0.f}},
+    //{.bhv = bhvFireSpitter, .model = MODEL_BOWLING_BALL, .param = 0,
+    //.angle = 0, .pos = {0.f,0.f,0.f}},
     {.bhv = bhvSnufit, .model = MODEL_SNUFIT, .param = 0,
     .angle = 0, .pos = {0.f,0.f,0.f}},
     {.bhv = bhvUtilityMace, .model = MODEL_NONE, .param = 0,
@@ -88,36 +88,42 @@ struct DungeonRoomVariant * sLv1RoomVariantList[] = {
     NULL,
 
     // Transition Rooms
-    &sRoomMiniJunc1,
-    &sRoomMiniJunc2,
-    &sRoomHall,
-    &sRoomLobby,
-    &sRoomThwomps,
-    &sRoomSplitHall,
-
-    // Special Rooms
-    &sRoomTreasure,
-
-    // Challenge Rooms
-    &sRoomGardenHall,
-    &sRoomVanishHop,
-    &sRoomWallJump,
-    &sRoomWood,
-    &sRoomCaveJump,
-    &sRoomSilverPillar,
-    &sRoomRedCoin,
-    &sRoomFlipPuzzle,
+    //&sRoomMiniJunc1,
+    //&sRoomMiniJunc2,
+    //&sRoomHall,
+    //&sRoomLobby,
+    //&sRoomThwomps,
+    //&sRoomSplitHall,
+//
+    //// Special Rooms
+    //&sRoomTreasure,
+//
+    //// Challenge Rooms
+    //&sRoomGardenHall,
+    //&sRoomVanishHop,
+    //&sRoomWallJump,
+    //&sRoomWood,
+    //&sRoomCaveJump,
+    //&sRoomSilverPillar,
+    //&sRoomRedCoin,
+    //&sRoomFlipPuzzle,
 };
 
 struct DungeonRoomVariant * sLv2RoomVariantList[] = {
+    NULL, // Age Lobby
+
+    NULL, // sRoomFlipPuzzle or sRoomSilverPillar
+    NULL, // sRoomPush or sRoomLavaDrop
+    NULL, // sRoomMemorize or &sRoomFurnace
+    NULL, // sRoomWood or sRoomCaveJump
+
     // Transition Rooms
     &sRoomMiniJunc1,
     &sRoomMiniJunc2,
     &sRoomHall,
     &sRoomLobby,
-    &sRoomLobby2,
     &sRoomSplitHall,
-    &sRoomSpaceworld,
+    &sRoomThwomps,
 
     // Special Rooms
     &sRoomTreasure,
@@ -130,14 +136,8 @@ struct DungeonRoomVariant * sLv2RoomVariantList[] = {
     &sRoomLongJump,
     &sRoomVanishHop,
     &sRoomWallJump,
-    &sRoomWood,
-    &sRoomFurnace,
-    &sRoomCaveJump,
     &sRoomAutoMaze,
-    &sRoomSilverPillar,
     &sRoomRedCoin,
-    &sRoomLavaDrop,
-    &sRoomFlipPuzzle,
 
     // Easter-Egg Rooms
     &sRoomFnab,
@@ -961,8 +961,8 @@ void dungeon_generate_lv2(void) {
     // Pick random enemies
     int s = sizeof(sBottomEnemyList[0]);
     gDungeonEnemies[0] = &sBottomEnemyList[tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBottomEnemyList)/s)];
-    gDungeonEnemies[1] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
-    gDungeonEnemies[2] = &sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
+    gDungeonEnemies[1] = &sTopEnemyList[gSurveyData[SURVEY_WEAPON]];
+    gDungeonEnemies[2] = NULL;//&sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
     gDungeonEnemies[3] = NULL;
 
     // Shuffle location of chest in wood room
@@ -978,13 +978,44 @@ void dungeon_generate_lv2(void) {
 
     // Generate dungeon rooms
     sDungeonTargetRoomCount = 45;
+
+    if (gSurveyData[SURVEY_AGE] == 0) {
+        // Over 18
+        sLv2RoomVariantList[0] = &sRoomLobby2;
+    } else {
+        // Under 18
+        sLv2RoomVariantList[0] = &sRoomSpaceworld;
+    }
+
+    if (gSurveyData[SURVEY_PUZZLE] == 0) {
+        // Puzzle
+        if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
+            sRoomMemorize.collision = rmemorize_1_collision;
+            sRoomMemorize.objectList[0].model = MODEL_ROOM_MEMORIZE_PANEL_1;
+        } else {
+            sRoomMemorize.collision = rmemorize_2_collision;
+            sRoomMemorize.objectList[0].model = MODEL_ROOM_MEMORIZE_PANEL_2;
+        }
+    
+        sLv2RoomVariantList[1] = &sRoomFlipPuzzle;
+        sLv2RoomVariantList[2] = &sRoomPush;
+        sLv2RoomVariantList[3] = &sRoomMemorize;
+        sLv2RoomVariantList[4] = &sRoomWood;
+    } else {
+        // Action
+        sLv2RoomVariantList[1] = &sRoomSilverPillar;
+        sLv2RoomVariantList[2] = &sRoomLavaDrop;
+        sLv2RoomVariantList[3] = &sRoomFurnace;
+        sLv2RoomVariantList[4] = &sRoomCaveJump;
+    }
+
     dungeon_generate_rooms_at_doors(sLv2RoomVariantList,sizeof(sLv2RoomVariantList));
 
     // Place extra stars if not at 8 total
-    int starDeficit = 8 - sDungeonInventory[MOD_NONMOD_STAR];
-    for (int i = 0; i < starDeficit; i++) {
-        dungeon_place_loot_in_random_previous_room(MOD_NONMOD_STAR);
-    }
+    //int starDeficit = 8 - sDungeonInventory[MOD_NONMOD_STAR];
+    //for (int i = 0; i < starDeficit; i++) {
+    //    dungeon_place_loot_in_random_previous_room(MOD_NONMOD_STAR);
+    //}
 
     // Place the boss room
     dungeon_generate_boss_room(&sRoomBoss);
@@ -1041,9 +1072,6 @@ void dungeon_generate(int level) {
             texgen_generate_lv1();
             break;
         case 1: // Big Dungeon
-            dungeon_generate_lv1();
-            dungeon_sync_inventory();
-
 #ifdef DUNGEON_DEBUG
             for (int i = 0; i < MOD_COUNT; i++) {
                 for (int j = 0; j < sDungeonTotalInventory[i]; j++) {

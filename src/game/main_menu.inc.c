@@ -515,6 +515,14 @@ char * sSurveyAge[] = {
     NULL,
 };
 
+char * sSurveyWeapon[] = {
+    "Weapon of choice?",
+    "Gun",
+    "Mace",
+    "Flamethrower",
+    NULL,
+};
+
 char * sSurveySurprise[] = {
     "Do you like surprises?",
     "I hate surprises.",
@@ -541,6 +549,7 @@ char ** sSurveyEntries[] = {
     sSurveyPuzzle,
     sSurveyMusic,
     sSurveyAge,
+    sSurveyWeapon,
     sSurveySurprise,
     sSurveyTutorial,
     sSurveyEnd,

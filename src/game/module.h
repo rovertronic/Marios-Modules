@@ -409,17 +409,6 @@ enum {
     ACHIEVEMENT_COUNT,
 };
 
-enum {
-    SURVEY_FRUIT,
-    SURVEY_PUZZLE,
-    SURVEY_MUSIC,
-    SURVEY_AGE,
-    SURVEY_SURPRISE,
-    SURVEY_TUTORIAL,
-    SURVEY_END,
-    SURVEY_COUNT,
-};
-
 void display_generic_message(char * str);
 void display_tutorial_message(char * str, u8 tutorialId);
 

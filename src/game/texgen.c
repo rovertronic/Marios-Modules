@@ -2,6 +2,7 @@
 #include "engine/math_util.h"
 #include "levels/rogue/header.h"
 #include "levels/rf/header.h"
+#include "dungeon.h"
 
 u32 sColorPalletepixelFloats[][3] = {
     {0xD81159,0x8F2D56,0xFFBC42},
@@ -139,7 +140,7 @@ void texgen_colorize_desaturated_rgba16(u16 * texture, u16 * texout, int size, u
 }
 
 void texgen_generate_lv2(void) {
-    int colorPalletIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sColorPalletepixelFloats)/12);
+    int colorPalletIndex = gSurveyData[SURVEY_FRUIT];
     int brickTextureIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBrickTextures)/4);
     int tileTextureIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTileTextures)/4);
     int altWallTextureIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sAltWallTextures)/4);

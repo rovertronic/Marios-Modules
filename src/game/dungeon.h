@@ -91,6 +91,18 @@ void dungeon_clear_exploration_flags(void);
 
 s32 is_level_dungeon(void);
 
+enum {
+    SURVEY_FRUIT,
+    SURVEY_PUZZLE,
+    SURVEY_MUSIC,
+    SURVEY_AGE,
+    SURVEY_WEAPON,
+    SURVEY_SURPRISE,
+    SURVEY_TUTORIAL,
+    SURVEY_END,
+    SURVEY_COUNT,
+};
+
 extern u8 gSurveyData[];
 
 #endif
