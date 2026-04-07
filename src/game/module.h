@@ -389,6 +389,7 @@ struct Achievement {
 struct SongEntry {
     char * desc;
     u8 seq;
+    s8 unlock;
 };
 
 enum {

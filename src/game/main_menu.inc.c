@@ -479,14 +479,44 @@ char * sButtonsCreativeLevels[] = {
     NULL
 };
 
-#define SONG_COUNT 2
-
 struct SongEntry sSongEntries[] = {
-    {.desc = "Super Mario Bros by Nintendo",
-    .seq = SEQ_MENU_TITLE_SCREEN},
-    {.desc = "Swapfell intro by calem",
-    .seq = SEQ_MM64_INTRO},
+    {.desc = "RAM Check\nBy: ornevelder",
+    .seq = SEQ_MENU_TITLE_SCREEN,
+    .unlock = -1},
+    {.desc = "Mechanism\nBy: ornevelder",
+    .seq = SEQ_MENU_TITLE_SCREEN,
+    .unlock = 0},
+    {.desc = "Augment\nBy: ornevelder",
+    .seq = SEQ_MENU_TITLE_SCREEN,
+    .unlock = 0},
+    {.desc = "Another Module\nBy: ornevelder",
+    .seq = SEQ_MENU_TITLE_SCREEN,
+    .unlock = 0},
+    {.desc = "Surge Protector\nBy: ornevelder",
+    .seq = SEQ_MENU_TITLE_SCREEN,
+    .unlock = 0},
+    {.desc = "Overclocked\nBy: ornevelder",
+    .seq = SEQ_MENU_TITLE_SCREEN,
+    .unlock = 0},
+
+    {.desc = "Heat Sink\nBy: ornevelder",
+    .seq = SEQ_MENU_TITLE_SCREEN,
+    .unlock = 1},
+    {.desc = "Shop\nBy: ornevelder",
+    .seq = SEQ_MENU_TITLE_SCREEN,
+    .unlock = 1},
+    {.desc = "Nostalgia.z64\nBy: ornevelder",
+    .seq = SEQ_MENU_TITLE_SCREEN,
+    .unlock = 1},
+    {.desc = "Reflect\nBy: ornevelder",
+    .seq = SEQ_MENU_TITLE_SCREEN,
+    .unlock = 1},
+    {.desc = "Beyond\nBy: ornevelder",
+    .seq = SEQ_MENU_TITLE_SCREEN,
+    .unlock = 1},
 };
+
+#define SONG_COUNT (sizeof(sSongEntries) / sizeof(sSongEntries[0]))
 
 void render_menu_button_list(char * btns[]) {
     int i = 0;
@@ -577,6 +607,10 @@ void render_song_info(int song) {
     utf8_print_reset();
     gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
     char * str = sSongEntries[sMainMenuSongIndex].desc;
+    s8 unlockValue = sSongEntries[sMainMenuSongIndex].unlock;
+    if (unlockValue > -1 && !save_get_meta_flag(METAFLAGS_COMPLETION, unlockValue) ) {
+        str = "@1@Not Yet Unlocked";
+    }
     print_utf8(utf8_autonewline(str,260), 30, 64);
     gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
 }
@@ -1028,6 +1062,10 @@ void logic_main_menu(void) {
             sMainMenuSongIndex = (sMainMenuSongIndex + SONG_COUNT) % SONG_COUNT;
 
             int song = sSongEntries[sMainMenuSongIndex].seq;
+            s8 unlockValue = sSongEntries[sMainMenuSongIndex].unlock;
+            if (unlockValue > -1 && !save_get_meta_flag(METAFLAGS_COMPLETION, unlockValue)) {
+                break;
+            }
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
                 switch (sMainMenuIndex) {
                     case 0:
