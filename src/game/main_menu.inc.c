@@ -434,6 +434,12 @@ char * sButtonsExtra[] = {
     NULL
 };
 
+char * sButtonsMoreWaysToPlay[] = {
+    "Sandbox Mode",
+    "SurvAI.exe",
+    NULL,
+};
+
 char * sButtonsOST[] = {
     "Play",
     "Stop",
@@ -599,6 +605,26 @@ void render_mode_info(int mode) {
     gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
 }
 
+void render_mwtp_info(int mode) {
+    gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+    gDPSetEnvColor(gDisplayListHead++, 0,0,0, sMainMenuTransition*160.0f);
+    render_4slice(25,82,33+260,25);
+
+    utf8_print_reset();
+    gDPSetEnvColor(gDisplayListHead++, 255,255,255,255);
+    char * str;
+    switch(mode) {
+        case 0:
+            str = "Drop into any map. Access to an unlimited supply of every module in the game.";
+            break;
+        case 1:
+            str = "Take a survey. Once complete, the submission will be used to generate a personalized adventure.";
+            break;
+    }
+    print_utf8(utf8_autonewline(str,260), 30, 64);
+    gSPDisplayList(gDisplayListHead++, mat_revert_micons_sm64ds_latin_layer1);
+}
+
 void render_song_info(int song) {
     gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
     gDPSetEnvColor(gDisplayListHead++, 0,0,0, sMainMenuTransition*160.0f);
@@ -703,10 +729,16 @@ void render_main_menu(void) {
         case MAIN_MENU_EXTRA:;
             s32 unlockedCreative = save_get_meta_flag(METAFLAGS_COMPLETION,0) || save_get_meta_flag(METAFLAGS_COMPLETION,1);
             if (unlockedCreative) {
-                sButtonsExtra[3] = "Sandbox Mode";
+                sButtonsExtra[3] = "More Ways To Play";
             }
             render_main_menu_hand();
             render_menu_button_list(&sButtonsExtra);
+            break;
+        case MAIN_MENU_MORE_WAYS_TO_PLAY:
+            render_mwtp_info(sMainMenuIndex);
+
+            render_main_menu_hand();
+            render_menu_button_list(&sButtonsMoreWaysToPlay);
             break;
         case MAIN_MENU_SOUNDTRACK:
             render_song_info(0);
@@ -1041,9 +1073,23 @@ void logic_main_menu(void) {
                     case 3:;
                         s32 unlockedCreative = save_get_meta_flag(METAFLAGS_COMPLETION,0) || save_get_meta_flag(METAFLAGS_COMPLETION,1);
                         if (unlockedCreative) {
-                            gMainMenuTargetState = MAIN_MENU_CREATIVE_LEVELS;
+                            gMainMenuTargetState = MAIN_MENU_MORE_WAYS_TO_PLAY;
                         }
                         break;
+                }
+            }
+            break;
+        case MAIN_MENU_MORE_WAYS_TO_PLAY:
+            main_menu_handle_scroll(2);
+            if (gPlayer1Controller->buttonPressed & (B_BUTTON)) {
+                gMainMenuTargetState = MAIN_MENU_EXTRA;
+                break;
+            }
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                switch (sMainMenuIndex) {
+                    case 0:
+                        gMainMenuTargetState = MAIN_MENU_CREATIVE_LEVELS;
+                    break;
                 }
             }
             break;
@@ -1103,7 +1149,7 @@ void logic_main_menu(void) {
             main_menu_handle_scroll(4);
 
             if (gPlayer1Controller->buttonPressed & (B_BUTTON)) {
-                gMainMenuTargetState = MAIN_MENU_EXTRA;
+                gMainMenuTargetState = MAIN_MENU_MORE_WAYS_TO_PLAY;
                 break;
             }
 
