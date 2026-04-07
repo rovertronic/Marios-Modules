@@ -11,6 +11,7 @@ int gMainMenuTitleAnimationIndex = -1;
 u8 gResultsScreenDisplay = 0;
 
 u8 sMainMenuShowTitle = FALSE;
+u8 sMainMenuDoFade = FALSE;
 int sMainMenuModuleTimer = 0;
 
 s8 sJournalEntryIndex = 0;
@@ -792,6 +793,11 @@ void render_main_menu(void) {
             render_main_menu_hand();
             render_menu_button_list(&sButtonsMain);
             break;
+        case MAIN_MENU_TITLE_TRANSITION_2:
+            if (gMainMenuTargetState == MAIN_MENU_MAIN) {
+                sMainMenuDoFade = TRUE;
+            }
+            break;
         case MAIN_MENU_FILE:
             print_utf8_boxed("Select a file.",160,180,sMainMenuTransition,TRUE);
             render_main_menu_hand();
@@ -948,6 +954,15 @@ void render_main_menu(void) {
             if (gMainMenuState < MAIN_MENU_SURVEY) {break;}
             render_survey(sSurveyEntries[gMainMenuState-MAIN_MENU_SURVEY]);
             break;
+    }
+
+    s32 alpha = 255.0f-(sMainMenuTransition*255.0f);
+    if (alpha > 0 && sMainMenuDoFade) {
+        gSPDisplayList(gDisplayListHead++, mat_micons_fourslice_layer1);
+        gDPSetEnvColor(gDisplayListHead++, 0,0,0, alpha);
+        render_4slice(-50,241,370,0);
+    } else {
+        sMainMenuDoFade = FALSE;
     }
 }
 
