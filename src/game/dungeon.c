@@ -14,6 +14,8 @@
 #include "levels/rogue/header.h"
 #include "levels/rf/header.h"
 
+u8 gSurveyData[SURVEY_COUNT];
+
 struct DungeonRoom * gDungeonMarioRoom = NULL;
 u32 sDungeonDiscoveredFlags[2];
 

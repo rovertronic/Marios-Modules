@@ -358,6 +358,7 @@ enum {
     MAIN_MENU_CREATIVE_LEVELS,
     MAIN_MENU_REMOVE_PLAYER_CONTROL,
     MAIN_MENU_CLOSED,
+    MAIN_MENU_SURVEY,
 };
 
 enum {
@@ -406,6 +407,17 @@ enum {
     ACHIEVEMENT_NO_HIT,
     ACHIEVEMENT_NO_AIR_PLATFORM,
     ACHIEVEMENT_COUNT,
+};
+
+enum {
+    SURVEY_FRUIT,
+    SURVEY_PUZZLE,
+    SURVEY_MUSIC,
+    SURVEY_AGE,
+    SURVEY_SURPRISE,
+    SURVEY_TUTORIAL,
+    SURVEY_END,
+    SURVEY_COUNT,
 };
 
 void display_generic_message(char * str);

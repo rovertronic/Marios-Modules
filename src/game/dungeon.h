@@ -91,4 +91,6 @@ void dungeon_clear_exploration_flags(void);
 
 s32 is_level_dungeon(void);
 
+extern u8 gSurveyData[];
+
 #endif
