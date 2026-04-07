@@ -2,6 +2,7 @@
 #include "engine/math_util.h"
 #include "levels/rogue/header.h"
 #include "levels/rf/header.h"
+#include "dungeon.h"
 
 u32 sColorPalletepixelFloats[][3] = {
     {0xFFE74C,0xFF5964,0xFFFFFF},
@@ -42,6 +43,15 @@ u32 sColorPalletepixelFloatsLv3[][3] = {
     {0xB7FDFE,0x5EF38C,0x2B9720},
     {0xFB3640,0x605F5E,0xDDE8B9},
     {0x5AB1BB,0xA5C882,0xF7DD72},
+};
+
+u32 sColorPalletepixelFloatsFruit[][3] = {
+    {0xD81159,0x8F2D56,0xFFBC42},
+    {0xEE8434,0x558B6E,0x95190C},
+    {0xD5B942,0xD9D375,0xE3DE8F},
+    {0x7BC950,0x7CE577,0x9CFFD9},
+    {0x068D9D,0x53599A,0x6D9DC5},
+    {0x420039,0x932F6D,0xE07BE0},
 };
 
 u16 * sBrickTextures[] = {
@@ -246,4 +256,50 @@ void texgen_generate_lv3(void) {
     texgen_colorize_desaturated_rgba16( segmented_to_virtual(&rf_rino_plat_tile2_rgba16),
         segmented_to_virtual(&rf_rino_plat_tile2_rgba16),
         2048, sColorPalletepixelFloatsLv3[colorPalletIndex][1]  );
+}
+
+void texgen_generate_personalized(void) {
+    int colorPalletIndex = gSurveyData[SURVEY_FRUIT];
+    int brickTextureIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBrickTextures)/4);
+    int tileTextureIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTileTextures)/4);
+    int altWallTextureIndex = tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sAltWallTextures)/4);
+
+    u16 * texture;
+
+    // Generate Brick Texture
+    texture = segmented_to_virtual(sBrickTextures[brickTextureIndex]);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureBrick), 4096, sColorPalletepixelFloatsFruit[colorPalletIndex][1]  );
+
+    // Generate Carpet Texture
+    texture = segmented_to_virtual(&texgensamples_CarpetGrayscale_rgba16);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureCarpet), 2048, sColorPalletepixelFloatsFruit[colorPalletIndex][0]  );
+
+    // Generate Tile Texture
+    u32 tileColor = 0xFFFFFF;
+    if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
+        tileColor = sColorPalletepixelFloatsFruit[colorPalletIndex][2];
+    }
+
+    texture = segmented_to_virtual(sTileTextures[tileTextureIndex]);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureTile), 2048, tileColor  );
+
+    // Generate Alt Wall Texture
+
+    texture = segmented_to_virtual(sAltWallTextures[altWallTextureIndex]);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureAltWall), 4096, 0xFFFFFF  );
+
+    // Generate Shingles Texture
+
+    texture = segmented_to_virtual(&texgensamples_shingles_rgba16);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureShingles), 2048, sColorPalletepixelFloatsFruit[colorPalletIndex][2]  );
+
+    // Generate Cloud Bricks
+
+    texture = segmented_to_virtual(&texgensamples_texgenbrick_rgba16);
+    texgen_colorize_rgba16( texture, segmented_to_virtual(&gDungeonTextureCloudBrick1), 4096, sColorPalletepixelFloatsFruit[colorPalletIndex][1]  );
+    texgen_colorize_rgba16( segmented_to_virtual(&texgensamples_clouds_rgba16), segmented_to_virtual(&gDungeonTextureCloudBrick1), 4096, 0xFFFFFFFF  );
+
+    texgen_colorize_rgba16( segmented_to_virtual(&texgensamples_texgenbrick_rgba16), segmented_to_virtual(&gDungeonTextureCloudBrick2), 4096, sColorPalletepixelFloatsFruit[colorPalletIndex][1]  );
+    texgen_colorize_rgba16( segmented_to_virtual(&texgensamples_clouds_rgba16), segmented_to_virtual(&gDungeonTextureCloudBrick2), 4096, 0xFFFFFFFF  );
+    texgen_colorize_rgba16( segmented_to_virtual(&texgensamples_hillz_rgba16), segmented_to_virtual(&gDungeonTextureCloudBrick2), 4096, sColorPalletepixelFloatsFruit[colorPalletIndex][2]  );
 }

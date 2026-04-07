@@ -524,6 +524,88 @@ struct SongEntry sSongEntries[] = {
 
 #define SONG_COUNT (sizeof(sSongEntries) / sizeof(sSongEntries[0]))
 
+// PERSONALIZATION SURVEY
+
+char * sSurveyFruit[] = {
+    "Choose your favorite fruit.",
+    "Apple",
+    "Orange",
+    "Banana",
+    "Watermelon",
+    "Blueberry",
+    "Grape",
+    NULL,
+};
+
+char * sSurveyPuzzle[] = {
+    "Do you prefer puzzles or action?",
+    "Puzzles",
+    "Action",
+    NULL,
+};
+
+/*
+char * sSurveyMusic[] = {
+    "What kind of music do you like?",
+    "A funky jam.",
+    "A holiday jam.",
+    "An exciting jam.",
+    "A relaxing jam.",
+    "A spicy jam.",
+    "A foreboding jam.",
+    NULL,
+};
+*/
+
+char * sSurveyAge[] = {
+    "How old are you?",
+    "Over 18",
+    "Under 18",
+    NULL,
+};
+
+char * sSurveyWeapon[] = {
+    "Weapon of choice?",
+    "Gun",
+    "Mace",
+    "Flamethrower",
+    NULL,
+};
+
+char * sSurveySurprise[] = {
+    "Do you like surprises?",
+    "I hate surprises.",
+    "I like some surprises.",
+    "Novelty is my first name.",
+    NULL,
+};
+
+/*
+char * sSurveyTutorial[] = {
+    "Do you know how to play Mario's Modules already?",
+    "No",
+    "Yes",
+    NULL,
+};
+*/
+
+char * sSurveyEnd[] = {
+    "You accept everything that will happen from now on.",
+    "I agree",
+    NULL,
+};
+
+char ** sSurveyEntries[] = {
+    sSurveyFruit,
+    sSurveyPuzzle,
+    sSurveyAge,
+    sSurveyWeapon,
+    sSurveySurprise,
+    //sSurveyTutorial,
+    sSurveyEnd,
+    NULL,
+};
+
 void render_menu_button_list(char * btns[]) {
     int i = 0;
     char * curStr = btns[0];
@@ -543,6 +625,23 @@ void render_menu_button_list(char * btns[]) {
     }
     gHighlightUtf8Box = 0;
 
+}
+
+s32 menu_button_count(char * btns[]) {
+    int i = 0;
+    char * curStr = btns[0];
+    while(curStr != NULL) {
+        i++;
+        curStr = btns[i];
+    }
+    return i-1;
+}
+
+void render_survey(char ** surveyStr) {
+    if (surveyStr == NULL) {return;}
+    print_utf8_boxed(surveyStr[0],160,180,sMainMenuTransition,TRUE);
+    render_main_menu_hand();
+    render_menu_button_list(&(surveyStr[1]));
 }
 
 void render_main_menu_hand(void) {
@@ -843,6 +942,12 @@ void render_main_menu(void) {
 
             print_utf8_boxed("Choose a map.",160,180,sMainMenuTransition,TRUE);
             break;
+        case MAIN_MENU_CLOSED:
+            break;
+        default: // Survey
+            if (gMainMenuState < MAIN_MENU_SURVEY) {break;}
+            render_survey(sSurveyEntries[gMainMenuState-MAIN_MENU_SURVEY]);
+            break;
     }
 }
 
@@ -1090,6 +1195,9 @@ void logic_main_menu(void) {
                     case 0:
                         gMainMenuTargetState = MAIN_MENU_CREATIVE_LEVELS;
                     break;
+                    case 1:
+                        gMainMenuTargetState = MAIN_MENU_SURVEY;
+                        break;
                 }
             }
             break;
@@ -1174,6 +1282,28 @@ void logic_main_menu(void) {
                 level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
                 gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;
                 gModuleTutorialState = TUTORIAL_DONE;
+            }
+            break;
+        case MAIN_MENU_CLOSED:
+            break;
+        default: // Survey Logic
+            if (gMainMenuState < MAIN_MENU_SURVEY) {break;}
+            main_menu_handle_scroll(menu_button_count(sSurveyEntries[gMainMenuState-MAIN_MENU_SURVEY]));
+            if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                gSurveyData[gMainMenuState-MAIN_MENU_SURVEY] = sMainMenuIndex;
+
+                if (sSurveyEntries[gMainMenuState-MAIN_MENU_SURVEY+1] == NULL) {
+                    gMariosModulesSaveIndex = 0;
+                    save_marios_modules_new_game(0,3);
+                    gMainMenuWarpLocation = 4;
+                    level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
+                    gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;
+                    gModuleTutorialState = TUTORIAL_DONE;
+                    break;
+                }
+
+                gMainMenuTargetState++;
+                break;
             }
             break;
     }

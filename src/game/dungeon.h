@@ -81,6 +81,20 @@ struct DungeonCell {
     s16 worldY;
 };
 
+enum {
+    SURVEY_FRUIT,
+    SURVEY_PUZZLE,
+    //SURVEY_MUSIC,
+    SURVEY_AGE,
+    SURVEY_WEAPON,
+    SURVEY_SURPRISE,
+    //SURVEY_TUTORIAL,
+    SURVEY_END,
+    SURVEY_COUNT,
+};
+
+extern u8 gSurveyData[SURVEY_COUNT];
+
 void dungeon_generate(int level);
 void dungeon_debug_print(void);
 void dungeon_set_mario_room(void);

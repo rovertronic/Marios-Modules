@@ -6,6 +6,7 @@
 void texgen_generate_lv3(void);
 void texgen_generate_lv2(void);
 void texgen_generate_lv1(void);
+void texgen_generate_personalized(void);
 
 // From levels/rogue/leveldata.c
 extern u16 gDungeonTextureBrick[4096];

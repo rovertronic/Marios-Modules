@@ -52,6 +52,8 @@ s8 sDirectionList[4][2] = {
     { 0,-1}, // Up
 };
 
+u8 gSurveyData[SURVEY_COUNT];
+
 /* ENEMY DATA */
 
 struct DungeonObject sBottomEnemyList[] = {
@@ -162,6 +164,42 @@ struct DungeonRoomVariant * sLv3RoomVariantList[] = {
     &sRoomRfVertical,
 };
 
+struct DungeonRoomVariant * sPersonalizedRoomVariantList[] = {
+    NULL, // Age Lobby
+    NULL, // &sRoomFnab, or sRoomBtcm
+
+    NULL, // sRoomFlipPuzzle or sRoomSilverPillar
+    NULL, // sRoomPush or sRoomLavaDrop
+    NULL, // sRoomMemorize or &sRoomFurnace
+    NULL, // sRoomWood or sRoomCaveJump
+
+    // Transition Rooms
+    &sRoomMiniJunc1,
+    &sRoomMiniJunc2,
+    &sRoomHall,
+    &sRoomLobby,
+    &sRoomSplitHall,
+    &sRoomThwomps,
+
+    // Special Rooms
+    &sRoomTreasure,
+    &sRoomSuperTreasure,
+    &sRoomGrindr,
+
+    // Challenge Rooms
+    &sRoomGardenHall,
+    &sRoomClock,
+    &sRoomLongJump,
+    &sRoomVanishHop,
+    &sRoomWallJump,
+    &sRoomAutoMaze,
+    &sRoomRedCoin,
+
+    // Easter-Egg Rooms
+    &sRoomBaldi,
+    &sRoomBns,
+};
+
 struct DungeonRoom * dungeon_get_mario_room(void) {
     if (!is_level_dungeon()) {return NULL;}
     u32 x = (((-gMarioState->pos[0])+32000.f + 1000.f)/2000.f);
@@ -220,6 +258,18 @@ s32 dungeon_place_loot_in_random_previous_room(s8 loot) {
         if (sDungeonGeneratingLevelId == 0) {
             // Level 1 only has one key, make it a challenge to get.
             minLv = 3;
+        }
+    }
+
+    if (gSurveyData[SURVEY_SURPRISE] == 2) {
+        switch(loot) {
+            case MOD_NONMOD_KEY:
+            case MOD_NONMOD_STAR:
+            case MOD_PASSIVE:
+            break;
+            default:
+                loot = MOD_NONMOD_MYSTERY_CHEST;
+            break;
         }
     }
 
@@ -488,15 +538,35 @@ void dungeon_generate_rooms_at_doors(struct DungeonRoomVariant ** variantList, i
                             continue;
                         }
 
-                        if ((selectedVariant->easterEgg || selectedVariant == &sRoomRedCoin) && sDungeonCurrentDepth < 6) {
-                            trycount++;
-                            continue;
-                        } 
+                        switch(gSurveyData[SURVEY_SURPRISE]) {
+                            case 0:
+                                // hate
+                                if (selectedVariant->easterEgg) {
+                                    trycount++;
+                                    continue;
+                                }
+                            break;
+                            case 1:
+                                // like
+                                if ((selectedVariant->easterEgg || selectedVariant == &sRoomRedCoin) && sDungeonCurrentDepth < 6) {
+                                    trycount++;
+                                    continue;
+                                }
 
-                        if (sDungeonEasterEggGenerated && selectedVariant->easterEgg) {
-                            // only generate 1 easter egg per level, and farther in
-                            trycount++;
-                            continue;
+                                if (sDungeonEasterEggGenerated && selectedVariant->easterEgg) {
+                                    // only generate 1 easter egg per level, and farther in
+                                    trycount++;
+                                    continue;
+                                }
+                            break;
+                            case 2:
+                                if (sDungeonEasterEggGenerated && selectedVariant->easterEgg &&
+                                    (tinymt32_generate_u32(&gGlobalRandomState) % 8 != 0)) {
+                                    // more easter eggs, but still rare
+                                    trycount++;
+                                    continue;
+                                }
+                            break;
                         }
 
                         if (selectedVariant->starCt && sDungeonInventory[MOD_NONMOD_STAR] >= 8) {
@@ -888,6 +958,7 @@ void dungeon_shuffle_wood_room_treasure(void) {
 }
 
 void dungeon_generate_lv1(void) {
+    gSurveyData[SURVEY_SURPRISE] = 1;
     sDungeonGeneratingLevelId = 0;
     
     // Determine freebie star
@@ -1026,6 +1097,85 @@ void dungeon_generate_lv3(void) {
     }
 }
 
+void dungeon_generate_personalized(void) {
+    sDungeonGeneratingLevelId = 1;
+
+    // Pick a random tree type
+    gDungeonTreeModel = MODEL_DUNGEON_TREE_1;
+    if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
+        gDungeonTreeModel = MODEL_DUNGEON_TREE_2;
+    }
+
+    // Pick random enemies
+    int s = sizeof(sBottomEnemyList[0]);
+    gDungeonEnemies[0] = &sBottomEnemyList[tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sBottomEnemyList)/s)];
+    gDungeonEnemies[1] = &sTopEnemyList[gSurveyData[SURVEY_WEAPON]+2];
+    gDungeonEnemies[2] = NULL;//&sTopEnemyList[   tinymt32_generate_u32(&gGlobalRandomState)%(sizeof(sTopEnemyList)/s)   ];
+    gDungeonEnemies[3] = NULL;
+
+    // Shuffle location of chest in wood room
+    dungeon_shuffle_wood_room_treasure();
+
+    redo_generate:
+
+    // Clear dungeon data
+    dungeon_clear_data();
+
+    // Build First Room
+    dungeon_create_room(&sRoomFacade1, 0, 2, 16, 0);
+
+    // Generate dungeon rooms
+    sDungeonTargetRoomCount = 45;
+
+    if (gSurveyData[SURVEY_AGE] == 0) {
+        // Over 18
+        sPersonalizedRoomVariantList[0] = &sRoomLobby2;
+        sPersonalizedRoomVariantList[1] = &sRoomBtcm;
+    } else {
+        // Under 18
+        // children yearn for beta
+        sPersonalizedRoomVariantList[0] = &sRoomSpaceworld;
+        sPersonalizedRoomVariantList[1] = &sRoomFnab;
+    }
+
+    if (gSurveyData[SURVEY_PUZZLE] == 0) {
+        // Puzzle
+        if (tinymt32_generate_u32(&gGlobalRandomState)%2==0) {
+            sRoomMemorize.collision = rmemorize_1_collision;
+            sRoomMemorize.objectList[0].model = MODEL_ROOM_MEMORIZE_PANEL_1;
+        } else {
+            sRoomMemorize.collision = rmemorize_2_collision;
+            sRoomMemorize.objectList[0].model = MODEL_ROOM_MEMORIZE_PANEL_2;
+        }
+    
+        sPersonalizedRoomVariantList[2] = &sRoomFlipPuzzle;
+        sPersonalizedRoomVariantList[3] = &sRoomPush;
+        sPersonalizedRoomVariantList[4] = &sRoomMemorize;
+        sPersonalizedRoomVariantList[5] = &sRoomWood;
+    } else {
+        // Action
+        sPersonalizedRoomVariantList[2] = &sRoomSilverPillar;
+        sPersonalizedRoomVariantList[3] = &sRoomLavaDrop;
+        sPersonalizedRoomVariantList[4] = &sRoomFurnace;
+        sPersonalizedRoomVariantList[5] = &sRoomCaveJump;
+    }
+
+    dungeon_generate_rooms_at_doors(sPersonalizedRoomVariantList,sizeof(sPersonalizedRoomVariantList));
+
+    // Place extra stars if not at 8 total
+    //int starDeficit = 8 - sDungeonInventory[MOD_NONMOD_STAR];
+    //for (int i = 0; i < starDeficit; i++) {
+    //    dungeon_place_loot_in_random_previous_room(MOD_NONMOD_STAR);
+    //}
+
+    // Place the boss room
+    dungeon_generate_boss_room(&sRoomBoss);
+
+    if (sDungeonLoopCount < 2 || sDungeonForceRegen || sDungeonRoomCount < 5) {
+        goto redo_generate;
+    }
+}
+
 void dungeon_generate(int level) {
     // Randomize Seed
     tinymt32_init(&gGlobalRandomState,gMariosModulesSave.file[gMariosModulesSaveIndex].seed);
@@ -1070,9 +1220,15 @@ void dungeon_generate(int level) {
             dungeon_generate_lv3();
             texgen_generate_lv3();
             break;
+        case 3: // Personalized
+            dungeon_generate_personalized();
+            texgen_generate_personalized();
+            break;
     }
 
-    dungeon_fill_empty_treasure_rooms();
+    if (gSurveyData[SURVEY_SURPRISE] != 0) {
+        dungeon_fill_empty_treasure_rooms();
+    }
     dungeon_calculate_all_neighbor_flags();
     dungeon_remove_pointless_rooms();
 
