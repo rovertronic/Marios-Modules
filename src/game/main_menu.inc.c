@@ -590,6 +590,22 @@ char * sSurveyTutorial[] = {
 };
 */
 
+char * sSurveyNeuro[] = {
+    "Which condition best describes you?",
+    "Neurotypical",
+    "Autism",
+    "ADHD",
+    NULL,
+};
+
+char * sSurveySize[] = {
+    "What level of scale do you appreciate most?",
+    "The Micro",
+    "The Macro",
+    "Somewhere in-between",
+    NULL,
+};
+
 char * sSurveyEnd[] = {
     "You accept everything that will happen from now on.",
     "I agree",
@@ -603,6 +619,8 @@ char ** sSurveyEntries[] = {
     sSurveyWeapon,
     sSurveySurprise,
     //sSurveyTutorial,
+    sSurveyNeuro,
+    sSurveySize,
     sSurveyEnd,
     NULL,
 };
@@ -1286,7 +1304,6 @@ void logic_main_menu(void) {
             }
 
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
-                // Overwrites first save file, but creative mode discombobulates save functionality
                 gModuleCreativeEnabled = TRUE; // Disables nuPiSramWrite
 
                 gMariosModulesSaveIndex = 3; // Slot 3 for minigames
@@ -1314,16 +1331,24 @@ void logic_main_menu(void) {
             if (gMainMenuState < MAIN_MENU_SURVEY) {break;}
             main_menu_handle_scroll(menu_button_count(sSurveyEntries[gMainMenuState-MAIN_MENU_SURVEY]));
             if (gPlayer1Controller->buttonPressed & (START_BUTTON|A_BUTTON)) {
+                if (gMainMenuState != gMainMenuTargetState) {break;} // Fix mash crash
                 gSurveyData[gMainMenuState-MAIN_MENU_SURVEY] = sMainMenuIndex;
 
                 if (sSurveyEntries[gMainMenuState-MAIN_MENU_SURVEY+1] == NULL) {
                     gMariosModulesSaveIndex = 3; // Slot 3 for minigames
                     save_marios_modules_new_game(0,3);
+                    gMariosModulesSave.file[3].lives = 0;
                     gMainMenuWarpLocation = 4;
                     level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
                     gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;
                     gModuleTutorialState = TUTORIAL_DONE;
                     break;
+                }
+
+                // Hardcoded Case that skips size question if you answered ADHD, impossible gen
+                if (gSurveyData[SURVEY_NEURO] == 2 && 
+                    gMainMenuState-MAIN_MENU_SURVEY+1 == SURVEY_SIZE) {
+                    gMainMenuTargetState++;
                 }
 
                 gMainMenuTargetState++;

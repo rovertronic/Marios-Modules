@@ -526,10 +526,21 @@ void dungeon_generate_rooms_at_doors(struct DungeonRoomVariant ** variantList, i
                             continue;
                         }
 
-                        if (selectedVariant->generateOnce &&
-                            sDungeonUniqueVariantGeneratedFlags & (1<<selectedVariantIndex)) {
-                            trycount++;
-                            continue;
+                        switch(gSurveyData[SURVEY_NEURO]) {
+                            case 0: // Standard Generation
+                                if (selectedVariant->generateOnce &&
+                                    sDungeonUniqueVariantGeneratedFlags & (1<<selectedVariantIndex)) {
+                                    trycount++;
+                                    continue;
+                                }
+                            break;
+                            //case 1: // Autism - No restriction on repetition
+                            case 2: // ADHD
+                                if (sDungeonUniqueVariantGeneratedFlags & (1<<selectedVariantIndex)) {
+                                    trycount++;
+                                    continue;
+                                }  
+                            break;
                         }
 
                         if (dungeon_requirement_list_length(selectedVariant->requiredLoot) > sDungeonLootSlotsAvailible) {
@@ -959,6 +970,7 @@ void dungeon_shuffle_wood_room_treasure(void) {
 
 void dungeon_generate_lv1(void) {
     gSurveyData[SURVEY_SURPRISE] = 1;
+    gSurveyData[SURVEY_NEURO] = 0;
     sDungeonGeneratingLevelId = 0;
     
     // Determine freebie star
@@ -1125,7 +1137,17 @@ void dungeon_generate_personalized(void) {
     dungeon_create_room(&sRoomFacade1, 0, 2, 16, 0);
 
     // Generate dungeon rooms
-    sDungeonTargetRoomCount = 45;
+    switch(gSurveyData[SURVEY_SIZE]) {
+        case 0:
+            sDungeonTargetRoomCount = 20;
+            break;
+        case 1:
+            sDungeonTargetRoomCount = 63;
+            break;
+        case 2:
+            sDungeonTargetRoomCount = 45;
+            break;
+    }
 
     if (gSurveyData[SURVEY_AGE] == 0) {
         // Over 18
@@ -1171,7 +1193,7 @@ void dungeon_generate_personalized(void) {
     // Place the boss room
     dungeon_generate_boss_room(&sRoomBoss);
 
-    if (sDungeonLoopCount < 2 || sDungeonForceRegen || sDungeonRoomCount < 5) {
+    if (sDungeonLoopCount < 2 || sDungeonForceRegen || sDungeonRoomCount < sDungeonTargetRoomCount - 10) {
         goto redo_generate;
     }
 }
