@@ -646,7 +646,8 @@ void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags)
         sWarpDest.type = WARP_TYPE_SAME_AREA;
     }
 
-    if (gMainMenuState == MAIN_MENU_LEVEL_WARP_CONTINUE) {
+    if (gMainMenuState == MAIN_MENU_LEVEL_WARP_CONTINUE ||
+        gMainMenuState == MAIN_MENU_LEVEL_WARP_NEW) {
         sWarpDest.type = WARP_TYPE_CHANGE_LEVEL;
     }
 
