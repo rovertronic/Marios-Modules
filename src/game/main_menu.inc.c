@@ -788,6 +788,9 @@ void render_main_menu(void) {
         case MAIN_MENU_TITLE:
             gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
             gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
+
+            gDPSetEnvColor(gDisplayListHead++, 0,0,0, 255 * sMainMenuTransition);
+            gSPDisplayList(gDisplayListHead++, rogo_Plane_001_mesh);
             break;
         case MAIN_MENU_MAIN:
             render_main_menu_hand();
@@ -1013,6 +1016,7 @@ void logic_main_menu(void) {
             if (sMainMenuModuleTimer++ >= 20) {
                 gMainMenuTargetState = MAIN_MENU_TITLE;
                 gMainMenuState = MAIN_MENU_TITLE;
+                sMainMenuTransition = 0.0f;
                 sMainMenuModuleTimer = 0;
                 sMainMenuShowTitle = TRUE;
             }

@@ -34,3 +34,4 @@
 #include "fappingDoorCol/collision.inc.c"
 #include "fappingDoor/model.inc.c"
 #include "depths/model.inc.c"
+#include "rogo/model.inc.c"
