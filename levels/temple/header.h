@@ -32,4 +32,5 @@ extern const LevelScript level_temple_entry[];
 #include "minimap12/header.h"
 #include "fappingDoorCol/collision_header.h"
 #include "fappingDoor/geo_header.h"
+#include "depths/header.h"
 #endif

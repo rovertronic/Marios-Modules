@@ -844,6 +844,10 @@ void render_main_menu(void) {
 
             render_main_menu_hand();
             render_menu_button_list(&sButtonsMoreWaysToPlay);
+
+            if (gMainMenuTargetState == MAIN_MENU_SURVEY) {
+                sMainMenuDoFade = TRUE;
+            }
             break;
         case MAIN_MENU_SOUNDTRACK:
             render_song_info(0);
@@ -952,6 +956,7 @@ void render_main_menu(void) {
             break;
         default: // Survey
             if (gMainMenuState < MAIN_MENU_SURVEY) {break;}
+            gSPDisplayList(gDisplayListHead++, depths_depths_mesh);
             render_survey(sSurveyEntries[gMainMenuState-MAIN_MENU_SURVEY]);
             break;
     }
@@ -1280,7 +1285,7 @@ void logic_main_menu(void) {
                 // Overwrites first save file, but creative mode discombobulates save functionality
                 gModuleCreativeEnabled = TRUE; // Disables nuPiSramWrite
 
-                gMariosModulesSaveIndex = 0;
+                gMariosModulesSaveIndex = 3; // Slot 3 for minigames
                 save_marios_modules_new_game(0,-1 + sMainMenuIndex);
 
                 if (gMariosModulesSave.file[0].level != -1) {
@@ -1308,7 +1313,7 @@ void logic_main_menu(void) {
                 gSurveyData[gMainMenuState-MAIN_MENU_SURVEY] = sMainMenuIndex;
 
                 if (sSurveyEntries[gMainMenuState-MAIN_MENU_SURVEY+1] == NULL) {
-                    gMariosModulesSaveIndex = 0;
+                    gMariosModulesSaveIndex = 3; // Slot 3 for minigames
                     save_marios_modules_new_game(0,3);
                     gMainMenuWarpLocation = 4;
                     level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
