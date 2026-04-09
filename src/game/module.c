@@ -445,6 +445,7 @@ void module_update(void) {
 }
 
 void add_met_condition(struct module_execution_thread * met, s32 condition) {
+    if (met->condition_count >= 16) {return;}
     if (condition) {
         met->condition_flags |= (1<<met->condition_count);
     }

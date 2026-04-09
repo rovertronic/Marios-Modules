@@ -318,6 +318,19 @@ void module_repeat(struct module_execution_thread * met, u8 call_context) {
     }
 }
 
+void module_short_circuit(struct module_execution_thread * met, u8 call_context) {
+    switch(call_context) {
+        case MCC_INVOKE:
+            met->halted = TRUE;
+            break;
+        case MCC_HALTED:
+            set_mario_action(gMarioState,ACT_SHOCKED,0);
+            met->x = 0;
+            met->halted = FALSE;
+            break;
+    }
+}
+
 void module_floor(struct module_execution_thread * met, u8 call_context) {
     switch(call_context) {
         case MCC_INVOKE:
@@ -1768,4 +1781,16 @@ struct module_info module_infos[] = {
         .cooldown = 15.0f,
         .creative = TRUE,
     },
+
+    [MOD_SHORT_CIRCUIT] = {
+        .name = "Defect Module",
+        .type = MTYPE_MOVE,
+        .tex = micons_fireball_rgba16,
+        .desc = "A manufacturing error. Prone to short-circuiting.",
+        .unchainable = FALSE,
+        .func = module_short_circuit,
+        .cooldown = 0.0f,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
+    }
 };

@@ -222,6 +222,7 @@ enum module_id {
     MOD_FIREBALL,
 
     MOD_MONITOR,
+    MOD_SHORT_CIRCUIT,
     MOD_COUNT,
 };
 
