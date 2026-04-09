@@ -49,7 +49,13 @@ void bhv_magnetized(void) {
             f32 magtimer = (f32)(o->oUnk94/20.f);
 
             f32 pullForce = -((1000.0f-dist)*.05f) * magtimer;
+
             if (pullForce > 20.0f) {pullForce = 20.0f;}
+
+            if (obj_has_behavior(o,bhvCirclingAmp)) {
+                pullForce *= 6.0f;
+            }
+
             o->oPosX += toMario[0] * pullForce;
             o->oPosY += toMario[1] * pullForce;
             o->oPosZ += toMario[2] * pullForce;
