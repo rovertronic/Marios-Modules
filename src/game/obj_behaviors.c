@@ -1264,6 +1264,30 @@ void bhv_dungeon_manager(void) {
     sForceDoorShut = FALSE;
 }
 
+s8 sMusicBeforeBoss = SEQ_SOUND_PLAYER;
+
+void play_boss_music(s8 seqId) {
+    sMusicBeforeBoss = dungeon_seq_cur;
+    dungeon_seq_change = seqId;
+
+    stop_background_music(SEQUENCE_ARGS(4, dungeon_seq_cur));
+    play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, dungeon_seq_change), 0);
+    seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL,100,255);
+    dungeon_seq_cur = dungeon_seq_change;
+    dungeon_seq_timer = 0;
+}
+
+void stop_boss_music(void) {
+    stop_background_music(SEQUENCE_ARGS(4, dungeon_seq_cur));
+    
+    dungeon_seq_change = sMusicBeforeBoss;
+
+    play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, dungeon_seq_change), 0);
+    seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL,100,255);
+    dungeon_seq_cur = dungeon_seq_change;
+    dungeon_seq_timer = 0;
+}
+
 void bhv_volume(void) {
     f32 scale = (GET_BPARAM4(o->oBehParams)+1)*400.0f;
     if (is_level_dungeon()) {

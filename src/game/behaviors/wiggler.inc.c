@@ -235,6 +235,7 @@ static void wiggler_act_walk(void) {
         */
 
         if (o->oDistanceToMario < 1500.0f) {
+            play_boss_music(SEQ_WIGGLER);
             o->oWigglerTextStatus = WIGGLER_TEXT_STATUS_COMPLETED_DIALOG;
         }
     } else {
@@ -361,6 +362,8 @@ static void wiggler_act_shrink(void) {
 
         // 4 is the default scale, so shrink to 1/4 of regular size
         if (approach_f32_ptr(&o->header.gfx.scale[0], 1.0f, 0.1f)) {
+            stop_boss_music();
+
             if (cur_obj_has_behavior(bhvWigglerRogue)) {
                 struct Object * dungeonExitItem = spawn_default_star(o->oHomeX,o->oHomeY+400.0f,o->oHomeZ);
                 SET_BPARAM4(dungeonExitItem->oBehParams,1);

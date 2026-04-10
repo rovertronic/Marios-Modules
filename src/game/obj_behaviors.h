@@ -177,5 +177,7 @@ void bhv_rr_cruiser_wing_init(void);
 void bhv_rr_cruiser_wing_loop(void);
 struct Object * spawn_default_star(f32 x, f32 y, f32 z);
 s16 object_step(void);
+void play_boss_music(s8 seqId);
+void stop_boss_music(void);
 
 #endif // OBJ_BEHAVIORS_H

@@ -38,6 +38,8 @@ void king_bobomb_act_inactive(void) { // act 0
         DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, NEWTEXT_BOSS_1)) {
     */
     } else {
+        play_boss_music(SEQ_UH);
+        
         o->oAction = KING_BOBOMB_ACT_ACTIVE;
         o->oFlags |= OBJ_FLAG_HOLDABLE;
 
@@ -218,6 +220,8 @@ void king_bobomb_act_death(void) { // act 7
         spawn_mist_particles_variable(0, 0, 200.0f);
         spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 3.0f, TINY_DIRT_PARTICLE_ANIM_STATE_YELLOW);
         cur_obj_shake_screen(SHAKE_POS_SMALL);
+
+        stop_boss_music();
 
         if (cur_obj_has_behavior(bhvKingBobombRogue)) {
             struct Object * dungeonExitItem = spawn_default_star(o->oHomeX,o->oHomeY+500.0f,o->oHomeZ);
