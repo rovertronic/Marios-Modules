@@ -52,7 +52,7 @@ void bhv_magnetized(void) {
 
             if (pullForce > 20.0f) {pullForce = 20.0f;}
 
-            if (obj_has_behavior(o,bhvCirclingAmp)) {
+            if (obj_has_behavior(o,bhvCirclingAmp) && o->oBehParams2ndByte != AMP_BP_ROT_RADIUS_0) {
                 pullForce *= 6.0f;
             }
 

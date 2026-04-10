@@ -282,6 +282,8 @@ static void fixed_circling_amp_idle_loop(void) {
     // Where there is a cur_obj_play_sound_1 call in the main circling amp update function,
     // there is nothing here. Fixed amps are the only amps that never play
     // the "amp buzzing" sound.
+    
+    bhv_magnetized();
 }
 
 /**

@@ -117,6 +117,7 @@ struct module_type_info module_type_infos[] = {
     [MTYPE_LOGIC] = {"Y","Logic",{210,176,0}},
     [MTYPE_ELEMENT] = {"E","Element",{0,0x90,0x90}},
     [MTYPE_PASSIVE] = {"E","Passive",{0,0x90,0x90}},
+    [MTYPE_DEFUNCT] = {"","",{0xFF,0xFF,0xFF}},
 };
 
 #define INVENTORY_PRINT_OFFSET_X 26
@@ -324,8 +325,13 @@ void module_short_circuit(struct module_execution_thread * met, u8 call_context)
             met->halted = TRUE;
             break;
         case MCC_HALTED:
-            set_mario_action(gMarioState,ACT_SHOCKED,0);
-            met->x = 0;
+            if (gMarioState->health >= 0x100) {
+                gMarioState->hurtCounter ++;
+                set_mario_action(gMarioState,ACT_SHOCKED,0);
+                met->x = 0;
+            } else {
+                met->x++;
+            }
             met->halted = FALSE;
             break;
     }
@@ -1747,6 +1753,17 @@ struct module_info module_infos[] = {
         .loot_tier = LOOT_TIER_1,
     },
 
+    [MOD_OVERCLOCK] = {
+        .name = "Overclock",
+        .type = MTYPE_PASSIVE,
+        .tex = micons_overclock_rgba16,
+        .desc = "Speeds up module cooldown 4x.\nSlowly depletes Mario's HP.",
+        .func = module_passive_effect,
+        .extra_data = PASSIVE_FLAG_OVERCLOCK,
+        .creative = TRUE,
+        .loot_tier = LOOT_TIER_1,
+    },
+
     [MOD_CANCEL] = {
         .name = "Cancel",
         .type = MTYPE_MOVE,
@@ -1784,8 +1801,8 @@ struct module_info module_infos[] = {
 
     [MOD_SHORT_CIRCUIT] = {
         .name = "Defect Module",
-        .type = MTYPE_MOVE,
-        .tex = micons_fireball_rgba16,
+        .type = MTYPE_DEFUNCT,
+        .tex = micons_defect_rgba16,
         .desc = "A manufacturing error. Prone to short-circuiting.",
         .unchainable = FALSE,
         .func = module_short_circuit,

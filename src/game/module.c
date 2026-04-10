@@ -360,6 +360,9 @@ void module_update(void) {
                 && (count_objects_with_behavior(bhvHover) == 0)
             ) {
                 met->timer++;
+                if (gMarioState->passiveFlag & (1 << PASSIVE_FLAG_OVERCLOCK)) {
+                    met->timer+=3;
+                }
             }
         } else if (met->executing) {
             s8 read_mod = get_inventory(met->x,met->y);
@@ -1238,6 +1241,7 @@ u8 sPassiveFlagModuleDisplayTable[] = {
     MOD_LOW_GRAVITY,
     MOD_CROUCH,
     MOD_MAGNET,
+    MOD_OVERCLOCK,
 };
 
 void print_execution_status(int x, int y, int execthread, int module) {
