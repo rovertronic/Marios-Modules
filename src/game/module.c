@@ -88,6 +88,7 @@ void save_set_meta_flag(int slot, int flag) {
     int fflag = flag%8;
     int findex = slot + (flag/8);
     gMariosModulesSave.metaflags[findex] |= (1<<fflag);
+    gMariosModulesSave.metaflags[METAFLAGS_ACTIVE_BIT] |= 0;
 }
 
 s32 save_get_meta_flag(int slot, int flag) {

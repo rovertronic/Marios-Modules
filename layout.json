@@ -1,0 +1,50 @@
+{
+  "$schema": "https://parallel-launcher.ca/layout/advanced-01/schema.json",
+  "format": {
+    "save_type": "SRAM",
+    "num_slots": 1,
+    "slots_start": 0,
+    "slot_size": 18,
+    "active_bit": 0,
+    "checksum_offset": null
+  },
+  "groups": [
+    {
+      "name": "Meta Progression",
+      "side": "top",
+      "courses": [
+        {
+          "name": "Completion",
+          "data": [
+            {
+              "offset": 1,
+              "mask": 3
+            }
+          ]
+        },
+        {
+          "name": "Manusanctuary Escape",
+          "data": [
+            {
+              "offset": 2,
+              "mask": 255
+            },
+            {
+              "offset": 3,
+              "mask": 127
+            }
+          ]
+        },
+        {
+          "name": "Crystal Quest",
+          "data": [
+            {
+              "offset": 4,
+              "mask": 255
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -301,6 +301,7 @@ struct mariosModulesSaveFile {
 // Metaflags = 8 bits per
 // Intended to be convenient to use with star display
 enum {
+    METAFLAGS_ACTIVE_BIT,
     METAFLAGS_COMPLETION,
     METAFLAGS_CAMPAIGN_STARS,
     METAFLAGS_CAMPAIGN_STARS_2,
