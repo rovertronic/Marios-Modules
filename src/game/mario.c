@@ -34,6 +34,7 @@
 #include "rumble_init.h"
 #include "module.h"
 #include "dungeon.h"
+#include "seq_ids.h"
 
 int gMarioForceDance = FALSE;
 int gMarioRecordIndex = 0;

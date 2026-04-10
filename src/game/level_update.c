@@ -1390,6 +1390,17 @@ s32 init_level(void) {
         sound_banks_disable(SEQ_PLAYER_SFX, SOUND_BANKS_DISABLED_DURING_INTRO_CUTSCENE);
     }
 
+    if (is_level_dungeon()) {
+        switch(gMariosModulesSave.file[gMariosModulesSaveIndex].level) {
+            case 0:
+                set_background_music(0, SEQ_NOSTALGIA, 0);
+                break;
+            case 1:
+                set_background_music(0, SEQ_NOSTALGIA, 0);
+                break;
+        }
+    }
+
     append_puppyprint_log("Level loaded in %d" PP_CYCLE_STRING ".", (s32)(PP_CYCLE_CONV(osGetTime() - first)));
     return TRUE;
 }

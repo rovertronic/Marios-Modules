@@ -56,6 +56,7 @@ enum SeqId {
     SEQ_TENSE,  // 0x2B
     SEQ_WIGGLER,  // 0x2C
     SEQ_UH,  // 0x2D
+    SEQ_NOSTALGIA,  // 0x2E
     SEQ_COUNT,
 };
 
