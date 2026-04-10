@@ -488,8 +488,14 @@ char * sButtonsCreativeLevels[] = {
 
 struct SongEntry sSongEntries[] = {
     {.desc = "RAM Check\nBy: ornevelder",
-    .seq = SEQ_MENU_TITLE_SCREEN,
+    .seq = SEQ_MM64_TITLE,
     .unlock = -1},
+    {.desc = "Initializing...\nBy: ornevelder",
+    .seq = SEQ_MM64_INTRO,
+    .unlock = -1},
+    {.desc = "Before\nBy: ornevelder",
+    .seq = SEQ_MM64_TUTORIAL,
+    .unlock = 0},
     {.desc = "Mechanism\nBy: ornevelder",
     .seq = SEQ_MENU_TITLE_SCREEN,
     .unlock = 0},
@@ -500,17 +506,17 @@ struct SongEntry sSongEntries[] = {
     .seq = SEQ_MENU_TITLE_SCREEN,
     .unlock = 0},
     {.desc = "Surge Protector\nBy: ornevelder",
-    .seq = SEQ_MENU_TITLE_SCREEN,
+    .seq = SEQ_UH,
     .unlock = 0},
     {.desc = "Overclocked\nBy: ornevelder",
-    .seq = SEQ_MENU_TITLE_SCREEN,
+    .seq = SEQ_WIGGLER,
     .unlock = 0},
 
     {.desc = "Heat Sink\nBy: ornevelder",
     .seq = SEQ_MENU_TITLE_SCREEN,
     .unlock = 1},
     {.desc = "Shop\nBy: ornevelder",
-    .seq = SEQ_MENU_TITLE_SCREEN,
+    .seq = SEQ_SHOP,
     .unlock = 1},
     {.desc = "Nostalgia.z64\nBy: ornevelder",
     .seq = SEQ_MENU_TITLE_SCREEN,
@@ -519,7 +525,10 @@ struct SongEntry sSongEntries[] = {
     .seq = SEQ_MENU_TITLE_SCREEN,
     .unlock = 1},
     {.desc = "Beyond\nBy: ornevelder",
-    .seq = SEQ_MENU_TITLE_SCREEN,
+    .seq = SEQ_FAUXIMEDES,
+    .unlock = 1},
+    {.desc = "Null\nBy: ornevelder",
+    .seq = SEQ_TENSE,
     .unlock = 1},
 };
 
@@ -1037,6 +1046,9 @@ void logic_main_menu(void) {
                 sMainMenuTransition = 0.0f;
                 sMainMenuModuleTimer = 0;
                 sMainMenuShowTitle = TRUE;
+
+                set_background_music(0, SEQ_MM64_TITLE, 0);
+                sMainMenuLastSongIndex = SEQ_MM64_TITLE;
             }
             break;
         case MAIN_MENU_TITLE:
@@ -1104,8 +1116,6 @@ void logic_main_menu(void) {
 
                 switch (sMainMenuIndex) {
                     case 0:
-                        //play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
-
                         save_marios_modules_new_game(seed,-1);
                         gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_NEW;
 
@@ -1239,6 +1249,10 @@ void logic_main_menu(void) {
                     break;
                     case 1:
                         gMainMenuTargetState = MAIN_MENU_SURVEY;
+
+                        stop_background_music(SEQUENCE_ARGS(4, sMainMenuLastSongIndex ));
+                        set_background_music(0, SEQ_TENSE, 0);
+                        sMainMenuLastSongIndex = SEQ_TENSE;
                         break;
                 }
             }
@@ -1270,7 +1284,7 @@ void logic_main_menu(void) {
                         sMainMenuLastSongIndex = song;
                         break;
                     case 1:
-                        stop_background_music(SEQUENCE_ARGS(4, song ));
+                        stop_background_music(SEQUENCE_ARGS(4, sMainMenuLastSongIndex ));
                         break;
                 }
             }

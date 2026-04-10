@@ -50,6 +50,12 @@ enum SeqId {
     SEQ_MM64_MAIN,  // 0x25
     SEQ_MM64_UPPER,  // 0x26
     SEQ_MM64_BOSS,  // 0x27
+    SEQ_SHOP,  // 0x28
+    SEQ_MM64_TITLE,  // 0x29
+    SEQ_FAUXIMEDES,  // 0x2A
+    SEQ_TENSE,  // 0x2B
+    SEQ_WIGGLER,  // 0x2C
+    SEQ_UH,  // 0x2D
     SEQ_COUNT,
 };
 

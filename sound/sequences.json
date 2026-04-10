@@ -123,9 +123,6 @@
             "1B"
         ]
     },
-    "24_mm64_tutorial": [
-        "mm64_tutorial"
-    ],
     "25_mm64_main": [
         "mm64_main"
     ],
@@ -135,7 +132,28 @@
     "27_mm64_boss": [
         "mm64_boss"
     ],
+    "28_shop": [
+        "shop"
+    ],
     "23_mm64_intro": [
-        "mm64_intro"
+        "intro"
+    ],
+    "24_mm64_tutorial": [
+        "before"
+    ],
+    "29_mm64_title": [
+        "loopmm"
+    ],
+    "2A_fauximedes": [
+        "cool_guitar"
+    ],
+    "2B_tense": [
+        "tense"
+    ],
+    "2C_wiggler": [
+        "wiggler"
+    ],
+    "2D_uh": [
+        "uh"
     ]
 }

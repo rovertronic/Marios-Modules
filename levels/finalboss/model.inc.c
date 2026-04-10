@@ -2735,7 +2735,7 @@ Gfx mat_revert_finalboss_dl_gake_wall[] = {
 };
 
 Gfx mat_finalboss_dl_blood[] = {
-	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(PRIMITIVE, TEXEL0, SHADE, 0, SHADE, 0, PRIMITIVE, 0, PRIMITIVE, TEXEL0, SHADE, 0, SHADE, 0, PRIMITIVE, 0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -2750,7 +2750,7 @@ Gfx mat_finalboss_dl_blood[] = {
 };
 
 Gfx mat_revert_finalboss_dl_blood[] = {
-	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsSPEndDisplayList(),

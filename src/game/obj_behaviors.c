@@ -36,6 +36,7 @@
 #include "levels/temple/header.h"
 #include "dungeon.h"
 #include "shitcull.h"
+#include "seq_ids.h"
 
 /**
  * @file obj_behaviors.c
@@ -1212,6 +1213,10 @@ void bhv_dungeon_manager(void) {
             if (gMainMenuState != MAIN_MENU_OPENING_CUTSCENE) {
                 spline_prog = 0;
                 spline_seg = 0;
+            } else {
+                if (o->oTimer == 1) {
+                    play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_MM64_INTRO), 0);
+                }
             }
             if (move_point_along_spline(gLakituState.goalPos,segmented_to_virtual(temple_area_1_spline_ic_pos),&spline_seg,&spline_prog)) {
                 gCamera->cutscene = 0;

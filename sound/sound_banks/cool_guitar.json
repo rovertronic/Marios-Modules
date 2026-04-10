@@ -1,0 +1,23 @@
+{
+    "date": "2026-04-10",
+    "sample_bank": "streamed_audio",
+    "envelopes": {
+        "envelope": [
+            [
+                1,
+                32700
+            ],
+            "hang"
+        ]
+    },
+    "instruments": {
+        "channel_1": {
+            "release_rate": 10,
+            "envelope": "envelope",
+            "sound": "cool_guitar"
+        }
+    },
+    "instrument_list": [
+        "channel_1"
+    ]
+}
