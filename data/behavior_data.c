@@ -6731,3 +6731,12 @@ const BehaviorScript bhvFappingDoor[] = {
         CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };
+
+extern void bhv_store_speaker(void);
+const BehaviorScript bhvStoreSpeaker[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    OR_LONG(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO)),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_store_speaker),
+    END_LOOP(),
+};

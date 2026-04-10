@@ -2324,3 +2324,24 @@ void bhv_fp_tile(void) {
 void bhv_has_star_init(void) {
     obj_save_bin_count(SAVE_BIN_STARS);
 }
+
+void bhv_store_speaker(void) {
+    if (o->oAction == 0 && o->oDistanceToMario < 1000.0f) {
+        o->oAction++;
+        u16 randomMessage = random_u16()%3;
+        switch(randomMessage) {
+            case 0:
+                // Baron 3 by Yal / A_Penn
+                display_generic_message("Buy something will ya?");
+                break;
+            case 1:
+                // Baldi's Basics. Plus!
+                display_generic_message("Hi! I'm Baron. Weclome to my store.");
+                break;
+            case 2:
+                // Blade and sorcery
+                display_generic_message("Best wares in the Shattered Kingdom!");
+                break;
+        }
+    }
+}

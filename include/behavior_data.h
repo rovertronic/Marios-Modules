@@ -596,5 +596,6 @@ extern const BehaviorScript bhvFlipPuzzle[];
 extern const BehaviorScript bhvFpTile[];
 extern const BehaviorScript bhvFpBar[];
 extern const BehaviorScript bhvFappingDoor[];
+extern const BehaviorScript bhvStoreSpeaker[];
 
 #endif // BEHAVIOR_DATA_H
