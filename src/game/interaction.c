@@ -852,7 +852,9 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
                 save_set_meta_flag(METAFLAGS_CAMPAIGN_STARS, obj->saveBinId);
             } else {
                 // Rogue stars are counted linearly
-                save_set_meta_flag(METAFLAGS_ROGUE_STARS, m->numStars);
+                if (gMariosModulesSaveIndex != 3) {
+                    save_set_meta_flag(METAFLAGS_ROGUE_STARS, m->numStars);
+                }
             }
 
             m->numStars = save_bin_get_star_all_levels();
@@ -934,6 +936,13 @@ u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *
 #endif
 
             mario_stop_riding_object(m);
+
+            if (gMariosModulesSave.file[gMariosModulesSaveIndex].level == 3) {
+                gResultsScreenDisplay = 5;
+                set_mario_action(gMarioState,ACT_DISAPPEARED,0);
+                return FALSE;
+            }
+
             save_marios_modules_silent(gVec3fZero);
             return set_mario_action(m, ACT_DISAPPEARED, (WARP_OP_WARP_OBJECT << 16) + 2);
         }

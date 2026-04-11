@@ -1194,7 +1194,7 @@ void dungeon_generate_personalized(void) {
     //}
 
     // Place the boss room
-    dungeon_generate_boss_room(&sRoomBoss);
+    dungeon_generate_boss_room(&sRoomPersonalizedEnd);
 
     if (sDungeonLoopCount < 2 || sDungeonForceRegen || sDungeonRoomCount < sDungeonTargetRoomCount - 10) {
         goto redo_generate;

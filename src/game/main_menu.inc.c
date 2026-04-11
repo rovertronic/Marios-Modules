@@ -1351,7 +1351,9 @@ void logic_main_menu(void) {
                 if (sSurveyEntries[gMainMenuState-MAIN_MENU_SURVEY+1] == NULL) {
                     gMariosModulesSaveIndex = 3; // Slot 3 for minigames
                     save_marios_modules_new_game(0,3);
-                    gMariosModulesSave.file[3].lives = 0;
+                    //gMariosModulesSave.file[3].lives = 0;
+                    //save_marios_modules_silent(gVec3fZero);
+
                     gMainMenuWarpLocation = 4;
                     level_trigger_warp(gMarioState,WARP_OP_LOOK_UP);
                     gMainMenuTargetState = MAIN_MENU_LEVEL_WARP_CONTINUE;

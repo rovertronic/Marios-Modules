@@ -1856,7 +1856,7 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 
     gMarioState->marioObj->shitCullFlags = 0xFFFFFFFF;
 
-    if (gMainMenuState == MAIN_MENU_CLOSED) {
+    if (gMainMenuState == MAIN_MENU_CLOSED && gResultsScreenDisplay == 0) {
         gMariosModulesSave.file[gMariosModulesSaveIndex].gameTime++;
     }
 

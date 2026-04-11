@@ -1654,3 +1654,24 @@ struct DungeonRoomVariant sRoomRfEnd = {
     .objectList = sRoomRfEndObjectList,
     .requiredLoot = NULL,
 };
+
+// Personalized "Ending" room
+struct DungeonObject sRoomPersonalizedEndObjectList[] = {
+    {.bhv = bhvWarpPipe, .model = MODEL_GLOBAL_PIPE, .param = 2,
+    .angle = 0x0, .pos = {0.f,0.f,0.f}},
+    {.end = TRUE},
+};
+
+struct DungeonRoomVariant sRoomPersonalizedEnd = {
+    .minimapDL = &rmapjunc_rmapjunc_mesh,
+
+    .cellList = &sRoomMiniJuncCellList,
+    .model = MODEL_ROOM_MINIJUNC,
+    .doorBlockModel = MODEL_DUNGEON_JUNCBLOCK,
+    .collision = minijunc_collision,
+    .objectList = &sRoomPersonalizedEndObjectList,
+    .maxLootCt = 0,
+    .requiredLoot = NULL,
+    .generateOnce = FALSE,
+    .needKey = TRUE,
+};
