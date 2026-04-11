@@ -94,6 +94,7 @@ struct DungeonRoomVariant * sLv1RoomVariantList[] = {
     &sRoomLobby,
     &sRoomThwomps,
     &sRoomSplitHall,
+    &sRoomSdm,
 
     // Special Rooms
     &sRoomTreasure,
@@ -118,6 +119,7 @@ struct DungeonRoomVariant * sLv2RoomVariantList[] = {
     &sRoomLobby2,
     &sRoomSplitHall,
     &sRoomSpaceworld,
+    &sRoomSdm,
 
     // Special Rooms
     &sRoomTreasure,
@@ -180,6 +182,7 @@ struct DungeonRoomVariant * sPersonalizedRoomVariantList[] = {
     &sRoomLobby,
     &sRoomSplitHall,
     &sRoomThwomps,
+    &sRoomSdm,
 
     // Special Rooms
     &sRoomTreasure,

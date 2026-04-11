@@ -1305,6 +1305,48 @@ struct DungeonRoomVariant sRoomFlipPuzzle = {
     .generateOnce = TRUE,
 };
 
+// Scarlet Devil Mansion Lobby
+
+struct DungeonRoomVariantCellList sRoomSdmCellList[] = {
+    {.x = 0, .y = 0, .doorFlags = DOOR_LEFT},
+    {.x = 1, .y = 0},
+
+    {.x = 0, .y = 1, .doorFlags = DOOR_UP},
+    {.x = 1, .y = 1, .doorFlags = DOOR_UP, .worldY = 1000},
+
+    {.x = 0, .y = -1, .doorFlags = DOOR_DOWN},
+    {.x = 1, .y = -1, .doorFlags = DOOR_DOWN, .worldY = 1000},
+
+    {.end = TRUE},
+};
+
+struct DungeonObject sRoomSdmObjectList[] = {
+    {.bhv = bhvExclamationBox, .model = MODEL_EXCLAMATION_BOX, .param = 6,
+    .angle = 0, .pos = {5.63327f,-25.6026f,14.f}},
+    {.bhv = bhvDungeonElite, .model = MODEL_NONE, .param = 0,
+    .angle = 0, .pos = {-27.1766f,0.0f,10.f}},
+    {.end = TRUE},
+};
+
+Vec4f sRoomSdmLootLocations[] = {
+    {5.63327f,25.6026f,10.f,270.0f},
+};
+
+struct DungeonRoomVariant sRoomSdm = {
+    .metaFlag = 34,
+    .minimapDL = &rmap_sdm_rmap_sdm_mesh,
+
+    .cellList = &sRoomSdmCellList,
+    .model = MODEL_ROOM_SDM,
+    .collision = rsdm_collision,
+    .objectList = &sRoomSdmObjectList,
+    .maxLootCt = 1,
+    .lootLocations = &sRoomSdmLootLocations,
+    .requiredLoot = sRoomSpaceworldRequiredLoot,
+    .generateOnce = TRUE,
+    .safe = TRUE,
+};
+
 // Rogue Final: Paths
 
 struct DungeonObject sRoomRfStraight1ObjectList[] = {

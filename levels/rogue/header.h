@@ -116,4 +116,7 @@ extern const LevelScript level_rogue_entry[];
 #include "fptile/geo_header.h"
 #include "fpbar/collision_header.h"
 #include "fpbar/geo_header.h"
+#include "rsdm/collision_header.h"
+#include "rsdm/geo_header.h"
+#include "rmap_sdm/header.h"
 #endif

@@ -928,7 +928,7 @@ void render_main_menu(void) {
             print_utf8("Crystal Quest Stars:",30,160);
             print_utf8("Completion:",180,160);
             print_utf8("Discovered Modules:",30,120);
-            sprintf(resultScreenStr,"Discovered Rooms: %d/34",
+            sprintf(resultScreenStr,"Discovered Rooms: %d/35",
                 save_tally_meta_flag(METAFLAGS_ROOMS,METAFLAGS_ROOMS_4));
             print_utf8(resultScreenStr,30,30);
 
@@ -1388,6 +1388,9 @@ void render_results_screen(int type) {
         case 4:
             primstr = "Completed File";
             alphaDelta = sMainMenuTransition;
+            break;
+        case 5:
+            primstr = "@Y@SurvAI.exe Personalized Quest COMPLETE!@@";
             break;
     }
 

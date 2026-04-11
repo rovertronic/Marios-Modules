@@ -59,3 +59,4 @@
 #include "rflippuzzle/geo.inc.c"
 #include "fptile/geo.inc.c"
 #include "fpbar/geo.inc.c"
+#include "rsdm/geo.inc.c"

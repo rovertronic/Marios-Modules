@@ -128,3 +128,6 @@ u16 gDungeonTextureCloudBrick2[4096] = {0};
 #include "fptile/model.inc.c"
 #include "fpbar/collision.inc.c"
 #include "fpbar/model.inc.c"
+#include "rsdm/collision.inc.c"
+#include "rsdm/model.inc.c"
+#include "rmap_sdm/model.inc.c"
