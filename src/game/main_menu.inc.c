@@ -600,10 +600,10 @@ char * sSurveyTutorial[] = {
 */
 
 char * sSurveyNeuro[] = {
-    "Which condition best describes you?",
-    "Neurotypical",
-    "Autism",
-    "ADHD",
+    "How do you feel about repetition?",
+    "No thoughts in particular.",
+    "It soothes me.",
+    "I despise it.",
     NULL,
 };
 
