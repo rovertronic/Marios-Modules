@@ -861,7 +861,7 @@ char * module_is_invalid(int x, int y) {
 
     // Not on the socket whitelist? Is invalid!
     if (inventory_row_info[y].type == ROW_SOCKET && !(1 << module_infos[mod].type & inventory_row_info[y].whitelist_flags)) {
-        return "@R@Incompatbile with socket";
+        return "@R@Incompatible with socket";
     }
 
     if (get_inventory(x-1,y) == mod && module_infos[mod].unchainable) {
