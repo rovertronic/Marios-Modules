@@ -666,6 +666,7 @@ void control_module_menu(void) {
 
                 Bool8 foundSameInHistory = TRUE;
                 s8 rerolledModule = random_u16()%MOD_COUNT;
+                u8 rerollCount = 0;
                 while(
                     (module_infos[rerolledModule].loot_tier != module_infos[recycledModule].loot_tier)
                     || (module_infos[rerolledModule].func == module_infos[recycledModule].func)
@@ -679,6 +680,11 @@ void control_module_menu(void) {
                         if (sRerollHistory[i] == rerolledModule) {
                             foundSameInHistory = TRUE;
                         }
+                    }
+                    rerollCount++;
+                    if (rerollCount > 40) {
+                        rerolledModule = MOD_SHORT_CIRCUIT;
+                        break;
                     }
                 }
 

@@ -149,6 +149,7 @@ enum module_type {
 
 #define MOD_EMPTY -1
 enum module_id {
+    MOD_SHORT_CIRCUIT, // Fallback in case a player gets a 0 write in the inventory
     MOD_BUTTON_A,
     MOD_BUTTON_B,
     MOD_JUMP,
@@ -224,7 +225,6 @@ enum module_id {
     MOD_FIREBALL,
 
     MOD_MONITOR,
-    MOD_SHORT_CIRCUIT,
     MOD_COUNT,
 };
 
