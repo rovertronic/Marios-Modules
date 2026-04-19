@@ -460,9 +460,10 @@ void init_mario_after_warp(void) {
     if (is_level_dungeon()) {
         switch(gMariosModulesSave.file[gMariosModulesSaveIndex].level) {
             case 0:
-                set_background_music(0, SEQ_NOSTALGIA, 0);
+                set_background_music(0, SEQ_HEAT_SINK, 0);
                 break;
             case 1:
+            case 3:
                 set_background_music(0, SEQ_NOSTALGIA, 0);
                 break;
         }

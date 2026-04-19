@@ -4,6 +4,7 @@
 #include "engine/graph_node.h"
 #include "camera.h"
 #include "obj_behaviors.h"
+#include "emutest.h"
 
 struct ShitCullVolume sShitCullVolumeList[100];
 int sShitCullVolumeCount = 0;
@@ -52,6 +53,11 @@ void shit_cull_update(void) {
         sShitCullVisibleFlags = 0;
     } else {
         // At least one door open
+        doorOpenReach = 500.0f;
+    }
+
+    if (!(gEmulator & (EMU_CONSOLE|EMU_ARES))) {
+        // Crappy fix for two frames of "black behind the door"
         doorOpenReach = 500.0f;
     }
 

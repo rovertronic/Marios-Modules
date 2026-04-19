@@ -1,0 +1,29 @@
+{
+    "date": "2026-04-19",
+    "sample_bank": "streamed_audio",
+    "envelopes": {
+        "envelope": [
+            [
+                1,
+                32700
+            ],
+            "hang"
+        ]
+    },
+    "instruments": {
+        "channel_1": {
+            "release_rate": 10,
+            "envelope": "envelope",
+            "sound": "bowser_level_1"
+        },
+        "channel_2": {
+            "release_rate": 10,
+            "envelope": "envelope",
+            "sound": "bowser_level_2"
+        }
+    },
+    "instrument_list": [
+        "channel_1",
+        "channel_2"
+    ]
+}

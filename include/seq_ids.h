@@ -57,6 +57,9 @@ enum SeqId {
     SEQ_WIGGLER,  // 0x2C
     SEQ_UH,  // 0x2D
     SEQ_NOSTALGIA,  // 0x2E
+    SEQ_HEAT_SINK,  // 0x2F
+    SEQ_MODIFY,  // 0x30
+    SEQ_ABOVE,  // 0x31
     SEQ_COUNT,
 };
 

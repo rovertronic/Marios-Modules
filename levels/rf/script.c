@@ -62,7 +62,7 @@ const LevelScript level_rf_entry[] = {
 		TERRAIN(rf_area_1_collision),
 		ROOMS(rf_area_1_collision_rooms),
 		MACRO_OBJECTS(rf_area_1_macro_objs),
-		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_KOOPA_ROAD),
+		SET_BACKGROUND_MUSIC(0x00, SEQ_ABOVE),
 		TERRAIN_TYPE(TERRAIN_STONE),
 		/* Fast64 begin persistent block [area commands] */
 		/* Fast64 end persistent block [area commands] */

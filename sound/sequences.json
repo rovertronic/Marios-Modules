@@ -123,12 +123,6 @@
             "1B"
         ]
     },
-    "25_mm64_main": [
-        "mm64_main"
-    ],
-    "26_mm64_upper": [
-        "mm64_upper"
-    ],
     "27_mm64_boss": [
         "mm64_boss"
     ],
@@ -137,12 +131,6 @@
     ],
     "23_mm64_intro": [
         "intro"
-    ],
-    "24_mm64_tutorial": [
-        "before"
-    ],
-    "29_mm64_title": [
-        "loopmm"
     ],
     "2A_fauximedes": [
         "cool_guitar"
@@ -158,5 +146,26 @@
     ],
     "2E_nostalgia": [
         "nostalgia"
+    ],
+    "2F_deserted": [
+        "deserted"
+    ],
+    "25_mm64_main": [
+        "mechanism"
+    ],
+    "26_mm64_upper": [
+        "augment2"
+    ],
+    "30_modify": [
+        "modify"
+    ],
+    "31_bowser_level": [
+        "bowser_level"
+    ],
+    "29_loopmm": [
+        "loopmm"
+    ],
+    "24_before": [
+        "before"
     ]
 }

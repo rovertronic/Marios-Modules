@@ -497,13 +497,13 @@ struct SongEntry sSongEntries[] = {
     .seq = SEQ_MM64_TUTORIAL,
     .unlock = 0},
     {.desc = "Mechanism\nBy: ornevelder",
-    .seq = SEQ_MENU_TITLE_SCREEN,
+    .seq = SEQ_MM64_MAIN,
     .unlock = 0},
     {.desc = "Augment\nBy: ornevelder",
-    .seq = SEQ_MENU_TITLE_SCREEN,
+    .seq = SEQ_MM64_UPPER,
     .unlock = 0},
     {.desc = "Another Module\nBy: ornevelder",
-    .seq = SEQ_MENU_TITLE_SCREEN,
+    .seq = SEQ_MODIFY,
     .unlock = 0},
     {.desc = "Surge Protector\nBy: ornevelder",
     .seq = SEQ_UH,
@@ -513,7 +513,7 @@ struct SongEntry sSongEntries[] = {
     .unlock = 0},
 
     {.desc = "Heat Sink\nBy: ornevelder",
-    .seq = SEQ_MENU_TITLE_SCREEN,
+    .seq = SEQ_HEAT_SINK,
     .unlock = 1},
     {.desc = "Shop\nBy: ornevelder",
     .seq = SEQ_SHOP,
@@ -521,8 +521,8 @@ struct SongEntry sSongEntries[] = {
     {.desc = "Nostalgia.z64\nBy: ornevelder",
     .seq = SEQ_NOSTALGIA,
     .unlock = 1},
-    {.desc = "Reflect\nBy: ornevelder",
-    .seq = SEQ_MENU_TITLE_SCREEN,
+    {.desc = "Above\nBy: ornevelder",
+    .seq = SEQ_ABOVE,
     .unlock = 1},
     {.desc = "Beyond\nBy: ornevelder",
     .seq = SEQ_FAUXIMEDES,
@@ -1323,10 +1323,10 @@ void logic_main_menu(void) {
                 gMariosModulesSaveIndex = 3; // Slot 3 for minigames
                 save_marios_modules_new_game(0,-1 + sMainMenuIndex);
 
-                if (gMariosModulesSave.file[0].level != -1) {
+                if (gMariosModulesSave.file[3].level != -1) {
                     // Roguelite
                     gMainMenuWarpLocation = 4;
-                    if (gMariosModulesSave.file[0].level == 2) {
+                    if (gMariosModulesSave.file[3].level == 2) {
                         gMainMenuWarpLocation = 5;
                     }
                 } else {
