@@ -62,6 +62,7 @@ void cur_obj_play_sound_1(s32 soundMagic) {
 }
 
 void cur_obj_play_sound_2(s32 soundMagic) {
+    if (gMainMenuState != MAIN_MENU_CLOSED) {return;}
     if (gCurrentObject->header.gfx.node.flags & GRAPH_RENDER_ACTIVE) {
         play_sound(soundMagic, gCurrentObject->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
