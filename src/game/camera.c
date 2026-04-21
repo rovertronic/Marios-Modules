@@ -1790,53 +1790,57 @@ s32 update_behind_mario_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     // C-Button input. Note: Camera rotates in the opposite direction of the button (airplane controls)
     //! @bug C-Right and C-Up take precedence due to the way input is handled here
 
+    u8 minimapUp = (gMarioState->passiveFlag & (1 << PASSIVE_FLAG_MINIMAP)) != FALSE;
+
     // Rotate right
-    if (sCButtonsPressed & L_CBUTTONS) {
-        if (gPlayer1Controller->buttonPressed & L_CBUTTONS) {
-            play_sound_cbutton_side();
+    if (!gModuleMenuOpen && !minimapUp) {
+        if (sCButtonsPressed & L_CBUTTONS) {
+            if (gPlayer1Controller->buttonPressed & L_CBUTTONS) {
+                play_sound_cbutton_side();
+            }
+            if (dist < maxDist) {
+                camera_approach_f32_symmetric_bool(&dist, maxDist, 5.f);
+            }
+            goalYawOff = -0x3FF8;
+            sCSideButtonYaw = 30;
+            yawSpeed = 2;
         }
-        if (dist < maxDist) {
-            camera_approach_f32_symmetric_bool(&dist, maxDist, 5.f);
+        // Rotate left
+        if (sCButtonsPressed & R_CBUTTONS) {
+            if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
+                play_sound_cbutton_side();
+            }
+            if (dist < maxDist) {
+                camera_approach_f32_symmetric_bool(&dist, maxDist, 5.f);
+            }
+            goalYawOff = 0x3FF8;
+            sCSideButtonYaw = 30;
+            yawSpeed = 2;
         }
-        goalYawOff = -0x3FF8;
-        sCSideButtonYaw = 30;
-        yawSpeed = 2;
-    }
-    // Rotate left
-    if (sCButtonsPressed & R_CBUTTONS) {
-        if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
-            play_sound_cbutton_side();
+        // Rotate up
+        if (sCButtonsPressed & D_CBUTTONS) {
+            if (gPlayer1Controller->buttonPressed & (U_CBUTTONS | D_CBUTTONS)) {
+                play_sound_cbutton_side();
+            }
+            if (dist < maxDist) {
+                camera_approach_f32_symmetric_bool(&dist, maxDist, 5.f);
+            }
+            goalPitch = -0x3000;
+            sBehindMarioSoundTimer = 30;
+            pitchInc = 0x800;
         }
-        if (dist < maxDist) {
-            camera_approach_f32_symmetric_bool(&dist, maxDist, 5.f);
+        // Rotate down
+        if (sCButtonsPressed & U_CBUTTONS) {
+            if (gPlayer1Controller->buttonPressed & (U_CBUTTONS | D_CBUTTONS)) {
+                play_sound_cbutton_side();
+            }
+            if (dist < maxDist) {
+                camera_approach_f32_symmetric_bool(&dist, maxDist, 5.f);
+            }
+            goalPitch = 0x3000;
+            sBehindMarioSoundTimer = 30;
+            pitchInc = 0x800;
         }
-        goalYawOff = 0x3FF8;
-        sCSideButtonYaw = 30;
-        yawSpeed = 2;
-    }
-    // Rotate up
-    if (sCButtonsPressed & D_CBUTTONS) {
-        if (gPlayer1Controller->buttonPressed & (U_CBUTTONS | D_CBUTTONS)) {
-            play_sound_cbutton_side();
-        }
-        if (dist < maxDist) {
-            camera_approach_f32_symmetric_bool(&dist, maxDist, 5.f);
-        }
-        goalPitch = -0x3000;
-        sBehindMarioSoundTimer = 30;
-        pitchInc = 0x800;
-    }
-    // Rotate down
-    if (sCButtonsPressed & U_CBUTTONS) {
-        if (gPlayer1Controller->buttonPressed & (U_CBUTTONS | D_CBUTTONS)) {
-            play_sound_cbutton_side();
-        }
-        if (dist < maxDist) {
-            camera_approach_f32_symmetric_bool(&dist, maxDist, 5.f);
-        }
-        goalPitch = 0x3000;
-        sBehindMarioSoundTimer = 30;
-        pitchInc = 0x800;
     }
 
     approach_s16_asymptotic_bool(&yaw, marioYaw + goalYawOff, yawSpeed);
@@ -2052,7 +2056,12 @@ s16 update_default_camera(struct Camera *c) {
                                gLakituState.goalPos[2], &ceil);
     s16 yawDir;
 
-    handle_c_button_movement(c);
+    u8 minimapUp = (gMarioState->passiveFlag & (1 << PASSIVE_FLAG_MINIMAP)) != FALSE;
+
+    // Rotate right
+    if (!gModuleMenuOpen && !minimapUp) {
+        handle_c_button_movement(c);
+    }
     vec3f_get_dist_and_angle(sMarioCamState->pos, c->pos, &dist, &pitch, &yaw);
 
     // If C-Down is active, determine what distance the camera should be from Mario
@@ -2659,6 +2668,13 @@ void move_into_c_up(struct Camera *c) {
  * The main update function for C-Up mode
  */
 void mode_c_up_camera(struct Camera *c) {
+    u8 minimapUp = (gMarioState->passiveFlag & (1 << PASSIVE_FLAG_MINIMAP)) != FALSE;
+
+    // Rotate right
+    if (!(!gModuleMenuOpen)) {
+        return;
+    }
+
     // Play a sound when entering C-Up mode
     if (!(sCameraSoundFlags & CAM_SOUND_C_UP_PLAYED)) {
         play_sound_cbutton_up();
