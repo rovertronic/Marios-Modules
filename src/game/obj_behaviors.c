@@ -1051,6 +1051,8 @@ void bhv_mystery_chest(void) {
                 gMysteryModuleState = 1;
                 gMysteryModuleChoice[0] = GET_BPARAM1(o->oMysteryChestContents);
                 gMysteryModuleChoice[1] = GET_BPARAM2(o->oMysteryChestContents);
+
+                gModuleMenuOpen = FALSE;
             }
             break;
         case 2:
