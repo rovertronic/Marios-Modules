@@ -118,6 +118,8 @@ void load_marios_modules(void) {
     int sizeFile = sizeof(struct mariosModulesSaveFile);
 
     if (gSramProbe != 0) {
+        module_in_hand = MOD_EMPTY;
+
         if (gMariosModulesSave.save_magic != SAVE_MAGIC) {
             bzero(&gMariosModulesSave, size);
             gMariosModulesSave.save_magic = SAVE_MAGIC;
