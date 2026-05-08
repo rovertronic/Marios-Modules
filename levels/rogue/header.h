@@ -119,4 +119,5 @@ extern const LevelScript level_rogue_entry[];
 #include "rsdm/collision_header.h"
 #include "rsdm/geo_header.h"
 #include "rmap_sdm/header.h"
+#include "baldidoor_001/collision_header.h"
 #endif

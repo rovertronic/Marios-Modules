@@ -43825,7 +43825,7 @@ Gfx temple_dl_vis_room6_midsection_mesh_layer_1_tri_2[] = {
 	gsSPEndDisplayList(),
 };
 
-Vtx temple_dl_vis_room6_midsection_mesh_layer_1_vtx_3[229] = {
+Vtx temple_dl_vis_room6_midsection_mesh_layer_1_vtx_3[239] = {
 	{{ {4640, -222, -336}, 0, {469, 570}, {96, 96, 96, 255} }},
 	{{ {4640, -222, 638}, 0, {-17, -56}, {213, 178, 144, 255} }},
 	{{ {5382, -222, 638}, 0, {-16, 1930}, {223, 189, 144, 255} }},
@@ -44055,6 +44055,16 @@ Vtx temple_dl_vis_room6_midsection_mesh_layer_1_vtx_3[229] = {
 	{{ {5873, -9, -14}, 0, {500, 1923}, {157, 139, 114, 255} }},
 	{{ {6343, 789, -10}, 0, {1974, -578}, {155, 137, 117, 255} }},
 	{{ {6688, 789, -14}, 0, {3056, -578}, {157, 139, 114, 255} }},
+	{{ {7135, 3171, 3142}, 0, {-1076, -3398}, {0, 0, 0, 255} }},
+	{{ {4382, 3171, 3142}, 0, {2511, -3398}, {0, 0, 0, 255} }},
+	{{ {4446, 3878, 3142}, 0, {2511, -3398}, {0, 0, 0, 255} }},
+	{{ {7135, 3878, 3142}, 0, {-1076, -3398}, {0, 0, 0, 255} }},
+	{{ {7135, 3878, -1112}, 0, {-1076, -3398}, {0, 0, 0, 255} }},
+	{{ {4446, 3878, -1112}, 0, {-1076, -3398}, {0, 0, 0, 255} }},
+	{{ {4446, 3878, 3142}, 0, {-1076, -3398}, {0, 0, 0, 255} }},
+	{{ {4446, 3171, -1112}, 0, {-1076, -3398}, {0, 0, 0, 255} }},
+	{{ {4446, 3171, 3142}, 0, {-1076, -3398}, {0, 0, 0, 255} }},
+	{{ {7135, 3171, -1112}, 0, {-1076, -3398}, {0, 0, 0, 255} }},
 };
 
 Gfx temple_dl_vis_room6_midsection_mesh_layer_1_tri_3[] = {
@@ -44165,9 +44175,14 @@ Gfx temple_dl_vis_room6_midsection_mesh_layer_1_tri_3[] = {
 	gsSP2Triangles(23, 22, 24, 0, 23, 24, 25, 0),
 	gsSP2Triangles(26, 27, 28, 0, 26, 28, 29, 0),
 	gsSP2Triangles(29, 28, 30, 0, 29, 30, 31, 0),
-	gsSPVertex(temple_dl_vis_room6_midsection_mesh_layer_1_vtx_3 + 223, 6, 0),
+	gsSPVertex(temple_dl_vis_room6_midsection_mesh_layer_1_vtx_3 + 223, 16, 0),
 	gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
 	gsSP2Triangles(3, 2, 4, 0, 3, 4, 5, 0),
+	gsSP2Triangles(6, 7, 8, 0, 6, 8, 9, 0),
+	gsSP2Triangles(6, 9, 10, 0, 9, 11, 10, 0),
+	gsSP2Triangles(9, 12, 11, 0, 13, 11, 12, 0),
+	gsSP2Triangles(13, 12, 14, 0, 15, 11, 13, 0),
+	gsSP2Triangles(15, 10, 11, 0, 6, 10, 15, 0),
 	gsSPEndDisplayList(),
 };
 
@@ -60506,7 +60521,7 @@ Gfx mat_revert_temple_dl_dots[] = {
 };
 
 Gfx mat_temple_dl_fence[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -60524,7 +60539,7 @@ Gfx mat_temple_dl_fence[] = {
 };
 
 Gfx mat_revert_temple_dl_fence[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -60843,7 +60858,7 @@ Gfx mat_revert_temple_dl_cactus[] = {
 };
 
 Gfx mat_temple_dl_cacflower[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, TEXEL0, 0, ENVIRONMENT, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, ENVIRONMENT, 0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -60857,7 +60872,7 @@ Gfx mat_temple_dl_cacflower[] = {
 };
 
 Gfx mat_revert_temple_dl_cacflower[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsSPEndDisplayList(),
@@ -61158,7 +61173,7 @@ Gfx mat_revert_temple_dl_f3dlite_material_014_layer0[] = {
 };
 
 Gfx mat_temple_dl_vine[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -61176,7 +61191,7 @@ Gfx mat_temple_dl_vine[] = {
 };
 
 Gfx mat_revert_temple_dl_vine[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -61247,7 +61262,7 @@ Gfx mat_revert_temple_dl_rock[] = {
 };
 
 Gfx mat_temple_dl_grate[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -61261,7 +61276,7 @@ Gfx mat_temple_dl_grate[] = {
 };
 
 Gfx mat_revert_temple_dl_grate[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsSPEndDisplayList(),
@@ -61491,7 +61506,7 @@ Gfx mat_revert_temple_dl_white_light_strip[] = {
 };
 
 Gfx mat_temple_dl_gear[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -61509,7 +61524,7 @@ Gfx mat_temple_dl_gear[] = {
 };
 
 Gfx mat_revert_temple_dl_gear[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -61569,7 +61584,7 @@ Gfx mat_revert_temple_dl_pillar[] = {
 };
 
 Gfx mat_temple_dl_rays_layer5[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, 0, 0, 0, SHADE, TEXEL0, TEXEL1, PRIMITIVE, TEXEL1),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -61588,7 +61603,7 @@ Gfx mat_temple_dl_rays_layer5[] = {
 };
 
 Gfx mat_revert_temple_dl_rays_layer5[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetCycleType(G_CYC_1CYCLE),
@@ -61634,7 +61649,7 @@ Gfx mat_revert_temple_dl_cobble[] = {
 };
 
 Gfx mat_temple_dl_flower[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -61652,7 +61667,7 @@ Gfx mat_temple_dl_flower[] = {
 };
 
 Gfx mat_revert_temple_dl_flower[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -61713,7 +61728,7 @@ Gfx mat_revert_temple_dl_warning[] = {
 };
 
 Gfx mat_temple_dl_pipeDS[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0, TEXEL0, 0, SHADE, 0, ENVIRONMENT, 0, SHADE, 0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -61731,7 +61746,7 @@ Gfx mat_temple_dl_pipeDS[] = {
 };
 
 Gfx mat_revert_temple_dl_pipeDS[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -61849,7 +61864,7 @@ Gfx mat_revert_temple_dl_pipeOpaqueDecal[] = {
 };
 
 Gfx mat_temple_dl_droplet[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -61867,7 +61882,7 @@ Gfx mat_temple_dl_droplet[] = {
 };
 
 Gfx mat_revert_temple_dl_droplet[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -62010,7 +62025,7 @@ Gfx mat_revert_temple_dl_crate[] = {
 };
 
 Gfx mat_temple_dl_pick[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -62028,7 +62043,7 @@ Gfx mat_temple_dl_pick[] = {
 };
 
 Gfx mat_revert_temple_dl_pick[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -62036,7 +62051,7 @@ Gfx mat_revert_temple_dl_pick[] = {
 };
 
 Gfx mat_temple_dl_web[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -62054,7 +62069,7 @@ Gfx mat_temple_dl_web[] = {
 };
 
 Gfx mat_revert_temple_dl_web[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -62107,7 +62122,7 @@ Gfx mat_revert_temple_dl_lantern[] = {
 };
 
 Gfx mat_temple_dl_chain[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -62121,7 +62136,7 @@ Gfx mat_temple_dl_chain[] = {
 };
 
 Gfx mat_revert_temple_dl_chain[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsSPEndDisplayList(),
@@ -62149,7 +62164,7 @@ Gfx mat_revert_temple_dl_rockSiding[] = {
 };
 
 Gfx mat_temple_dl_rail[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -62167,7 +62182,7 @@ Gfx mat_temple_dl_rail[] = {
 };
 
 Gfx mat_revert_temple_dl_rail[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -62305,7 +62320,7 @@ Gfx mat_revert_temple_dl_f3dlite_material_003[] = {
 };
 
 Gfx mat_temple_dl_leaf[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -62323,7 +62338,7 @@ Gfx mat_temple_dl_leaf[] = {
 };
 
 Gfx mat_revert_temple_dl_leaf[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -62331,7 +62346,7 @@ Gfx mat_revert_temple_dl_leaf[] = {
 };
 
 Gfx mat_temple_dl_weed[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -62349,7 +62364,7 @@ Gfx mat_temple_dl_weed[] = {
 };
 
 Gfx mat_revert_temple_dl_weed[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsDPSetTextureLUT(G_TT_NONE),
@@ -62426,7 +62441,7 @@ Gfx mat_revert_temple_dl_dirt[] = {
 };
 
 Gfx mat_temple_dl_grate2[] = {
-	gsSPClearGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0),
 	gsDPSetAlphaDither(G_AD_NOISE),
@@ -62440,7 +62455,7 @@ Gfx mat_temple_dl_grate2[] = {
 };
 
 Gfx mat_revert_temple_dl_grate2[] = {
-	gsSPSetGeometryMode(G_CULL_BACK | G_LIGHTING),
+	gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
 	gsDPPipeSync(),
 	gsDPSetAlphaDither(G_AD_DISABLE),
 	gsSPEndDisplayList(),

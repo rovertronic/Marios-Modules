@@ -512,7 +512,7 @@ extern Vtx temple_dl_vis_room6_midsection_mesh_layer_1_vtx_1[20];
 extern Gfx temple_dl_vis_room6_midsection_mesh_layer_1_tri_1[];
 extern Vtx temple_dl_vis_room6_midsection_mesh_layer_1_vtx_2[16];
 extern Gfx temple_dl_vis_room6_midsection_mesh_layer_1_tri_2[];
-extern Vtx temple_dl_vis_room6_midsection_mesh_layer_1_vtx_3[229];
+extern Vtx temple_dl_vis_room6_midsection_mesh_layer_1_vtx_3[239];
 extern Gfx temple_dl_vis_room6_midsection_mesh_layer_1_tri_3[];
 extern Vtx temple_dl_vis_room6_midsection_mesh_layer_1_vtx_4[8];
 extern Gfx temple_dl_vis_room6_midsection_mesh_layer_1_tri_4[];
